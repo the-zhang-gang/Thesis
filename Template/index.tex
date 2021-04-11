@@ -27,7 +27,7 @@
 % This one will format for PDF output (ie equal margins, no extra blank pages):
 %\documentclass[a4paper,nobind]{templates/ociamthesis}
 %UL 2 Dec 2018: pass this in from YAML
-\documentclass[a4paper, $if(page-layout)$$page-layout$$endif$]{templates/ociamthesis}
+\documentclass[a4paper, nobind]{templates/ociamthesis}
 
 % UL 5 January 2021 - add packages used by kableExtra
 \usepackage{booktabs}
@@ -42,7 +42,7 @@
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
-\usepackage[colorlinks=false,pdfpagelabels,hidelinks=$hidelinks$]{hyperref}
+\usepackage[colorlinks=false,pdfpagelabels,hidelinks=true]{hyperref}
 \usepackage{float}
 
 
@@ -56,19 +56,6 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
  
 % UL 1 Dec 2018, fix to include code in shaded environments
-$if(highlighting-macros)$
-$highlighting-macros$
-
-%UL set white space before and after code blocks
-\renewenvironment{Shaded}
-{
-  \vspace{$space-before-code-block$}%
-  \begin{snugshade}%
-}{%
-  \end{snugshade}%
-  \vspace{$space-after-code-block$}%
-}
-$endif$
 
 %UL set whitespace around verbatim environments
 \usepackage{etoolbox}
@@ -105,45 +92,31 @@ $endif$
 \renewcommand{\sectionmark}[1]{\markright{\thesection. #1}} 
 \renewcommand{\headrulewidth}{0pt}
 
-$if(running-header)$
-\fancy$running-header-foot-or-head$[$running-header-position-leftmark$]{\emph{\leftmark}} 
-\fancy$running-header-foot-or-head$[$running-header-position-rightmark$]{\emph{\rightmark}} 
-$endif$
 
 % UL page number position 
-\fancy$ordinary-page-number-foot-or-head$[$ordinary-page-number-position$]{\emph{\thepage}} %regular pages
-\fancypagestyle{plain}{\fancyhf{}\fancy$chapter-page-number-foot-or-head$[$chapter-page-number-position$]{\emph{\thepage}}} %chapter pages
+\fancy[]{\emph{\thepage}} %regular pages
+\fancypagestyle{plain}{\fancyhf{}\fancy[]{\emph{\thepage}}} %chapter pages
 
 % JEM fix header on cleared pages for openright
 \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
    \hbox{}
-   \fancy$ordinary-page-number-foot-or-head$[$ordinary-page-number-position$]{}
+   \fancy[]{}
    \newpage
    \if@twocolumn\hbox{}\newpage
    \fi
-   \fancy$running-header-foot-or-head$[$running-header-position-leftmark$]{\emph{\leftmark}} 
-   \fancy$running-header-foot-or-head$[$running-header-position-rightmark$]{\emph{\rightmark}} 
+   \fancy[]{\emph{\leftmark}} 
+   \fancy[]{\emph{\rightmark}} 
    \fi\fi}
 
 
 %%%%% SELECT YOUR DRAFT OPTIONS
 % This adds a "DRAFT" footer to every normal page.  (The first page of each chapter is not a "normal" page.)
-$if(draft-mark)$
-\fancy$draft-mark-foot-or-head$[$draft-mark-position$]{\emph{DRAFT Printed on \today}}
-$endif$
 
 % This highlights (in blue) corrections marked with (for words) \mccorrect{blah} or (for whole
 % paragraphs) \begin{mccorrection} . . . \end{mccorrection}.  This can be useful for sending a PDF of
 % your corrected thesis to your examiners for review.  Turn it off, and the blue disappears.
-$if(corrections)$
-\correctionstrue
-$endif$
 
 % IP feb 2021: option to include line numbers in PDF
-% $if(includeline-num)$
-% \usepackage{lineno}
-% \linenumbers
-% $endif$
 
 %%%%% BIBLIOGRAPHY SETUP
 % Note that your bibliography will require some tweaking depending on your department, preferred format, etc.
@@ -152,23 +125,7 @@ $endif$
 % Either way, you'll have to choose and configure an appropriate bibliography format...
 
 
-$if(use-biblatex)$
-\usepackage[$bib-latex-options$]{biblatex}
-\newcommand*{\bibtitle}{$bibliography-heading-in-pdf$}
 
-$for(bibliography)$
-\addbibresource{$bibliography$}
-$endfor$
-$endif$
-
-$if(use-natbib)$
-\usepackage{natbib}
-\setcitestyle{$natbib-citation-style$}
-\bibliographystyle{$natbib-bibliography-style$}
-\addto\captionsenglish{%
-  \renewcommand{\bibname}{$bibliography-heading-in-pdf$}
-}
-$endif$
 
 % This makes the bibliography left-aligned (not 'justified') and slightly smaller font.
 \renewcommand*{\bibfont}{\raggedright\small}
@@ -180,24 +137,19 @@ $endif$
 
 %%%%% THESIS / TITLE PAGE INFORMATION
 % Everybody needs to complete the following:
-\title{$title$}
-\author{$author$}
-\college{$college$}
+\title{Thesis title}
+\author{Faes, E.}
+\college{Master in Finance}
 
 % Master's candidates who require the alternate title page (with candidate number and word count)
 % must also un-comment and complete the following three lines:
-$if(masters-submission)$
-\masterssubmissiontrue
-\candidateno{$candidate-number$}
-\wordcount{$word-count$}
-$endif$
 
 % Uncomment the following line if your degree also includes exams (eg most masters):
 %\renewcommand{\submittedtext}{Submitted in partial completion of the}
 % Your full degree name.  (But remember that DPhils aren't "in" anything.  They're just DPhils.)
-\degree{$degree$}
+\degree{Master in Finance}
 % Term and year of submission, or date if your board requires (eg most masters)
-\degreedate{$degreedate$}
+\degreedate{June 2021}
 
 
 %%%%% YOUR OWN PERSONAL MACROS
@@ -214,12 +166,12 @@ $endif$
 
 %%%%% CHOOSE YOUR LINE SPACING HERE
 % This is the official option.  Use it for your submission copy and library copy:
-\setlength{\textbaselineskip}{$linespacing$}
+\setlength{\textbaselineskip}{}
 % This is closer spacing (about 1.5-spaced) that you might prefer for your personal copies:
 %\setlength{\textbaselineskip}{18pt plus2pt minus1pt}
 
 % You can set the spacing here for the roman-numbered pages (acknowledgements, table of contents, etc.)
-\setlength{\frontmatterbaselineskip}{$frontmatter-linespacing$}
+\setlength{\frontmatterbaselineskip}{}
 
 % UL: You can set the line and paragraph spacing here for the separate abstract page to be handed in to Examination schools
 \setlength{\abstractseparatelineskip}{13pt plus1pt minus1pt}
@@ -232,9 +184,9 @@ $endif$
 %
 % Oxford University logo on title page
 %
-\def\crest{{\includegraphics{$university-logo$}}}
-\renewcommand{\university}{$university$}
-\renewcommand{\submittedtext}{$submitted-text$}
+\def\crest{{\includegraphics{templates/beltcrest.pdf}}}
+\renewcommand{\university}{Antwerp Management School}
+\renewcommand{\submittedtext}{A thesis submitted for the degree of}
 
 
 % Leave this line alone; it gets things started for the real document.
@@ -248,64 +200,55 @@ $endif$
 % do.  Throughout, 0 = chapter; 1 = section; 2 = subsection; 3 = subsubsection, 4 = paragraph...
 
 % The level that gets a number:
-\setcounter{secnumdepth}{$section-numbering-depth$}
+\setcounter{secnumdepth}{}
 % The level that shows up in the ToC:
-\setcounter{tocdepth}{$toc-depth$}
+\setcounter{tocdepth}{0}
 
 
 %%%%% ABSTRACT SEPARATE
 % This is used to create the separate, one-page abstract that you are required to hand into the Exam
 % Schools.  You can comment it out to generate a PDF for printing or whatnot.
-$if(abstractseparate)$
-\begin{abstractseparate}
-  $abstract$
-\end{abstractseparate}
-$endif$
 
 % JEM: Pages are roman numbered from here, though page numbers are invisible until ToC.  This is in
 % keeping with most typesetting conventions.
 \begin{romanpages}
 
 % Title page is created here
-$if(alternative-title-page)$
-\input{$alternative-title-page$}
-$else$
 \maketitle
-$endif$
 
 %%%%% DEDICATION -- If you'd like one, un-comment the following.
-$if(dedication)$
 \begin{dedication}
-  $dedication$
+  For Yihui Xie
 \end{dedication}
-$endif$
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
-$if(acknowledgements)$
 \begin{acknowledgements}
- 	$acknowledgements$
+ 	This is where you will normally thank your advisor, colleagues, family and friends, as well as funding and institutional support.\\
+  Thanks. Thanks
+
+  We must be grateful to John Gruber for inventing the original version of Markdown, to John MacFarlane for creating Pandoc which converts Markdown to a large number of output formats, and to Yihui Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.
+
+  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the ``thesisdown'' package that helped many a PhD student write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in LaTeX provided the template that Ulrik Lyngs in turn adapted for R Markdown.
+
+  Finally, profuse thanks to JJ Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}, and Hadley Wickham, the mastermind of the tidyverse without whom we'd all just given up and done data science in Python instead. Thanks for making data science easier, more accessible, and more fun for us all.
+
+  \begin{flushright}
+  Enjo Faes \\
+  Antwerp Management School, Antwerp \\
+  27 June 2021
+  \end{flushright}
 \end{acknowledgements}
-$endif$
 
 
 %%%%% ABSTRACT -- Nothing to do here except comment out if you don't want it.
 \begin{abstract}
-	$abstract$
+	The greatest abstract all times
 \end{abstract}
 
 %%%%% MINI TABLES
 % This lays the groundwork for per-chapter, mini tables of contents.  Comment the following line
 % (and remove \minitoc from the chapter files) if you don't want this.  Un-comment either of the
 % next two lines if you want a per-chapter list of figures or tables.
-$if(mini-toc)$
-  \dominitoc % include a mini table of contents
-$endif$
-$if(mini-lof)$
-  \dominilof  % include a mini list of figures
-$endif$
-$if(mini-lot)$
-  \dominilot  % include a mini list of tables
-$endif$
 
 % This aligns the bottom of the text of each page.  It generally makes things look better.
 \flushbottom
@@ -313,24 +256,13 @@ $endif$
 % This is where the whole-document ToC appears:
 \tableofcontents
 
-$if(lof)$
-\listoffigures
-	\mtcaddchapter
-  	% \mtcaddchapter is needed when adding a non-chapter (but chapter-like) entity to avoid confusing minitoc
-$endif$
 
 % Uncomment to generate a list of tables:
-$if(lot)$
-\listoftables
-  \mtcaddchapter
-$endif$
 %%%%% LIST OF ABBREVIATIONS
 % This example includes a list of abbreviations.  Look at text/abbreviations.tex to see how that file is
 % formatted.  The template can handle any kind of list though, so this might be a good place for a
 % glossary, etc.
-$if(abbreviations)$
-\include{$abbreviations$}
-$endif$
+\include{front-and-back-matter/abbreviations}
 
 % The Roman pages, like the Roman Empire, must come to its inevitable close.
 \end{romanpages}
@@ -340,7 +272,7 @@ $endif$
 \flushbottom
 
 % all your chapters and appendices will appear here
-$body$
+
 
 
 %%%%% REFERENCES
@@ -351,15 +283,6 @@ $body$
 %   \qauthor{--- Sir Isaiah Berlin \cite{berlin_hedgehog_2013}}
 % \end{savequote}
 
-$if(use-biblatex)$
-\setlength{\baselineskip}{0pt} % JEM: Single-space References
 
-{\renewcommand*\MakeUppercase[1]{#1}%
-\printbibliography[heading=bibintoc,title={\bibtitle}]}
-$endif$
-
-$if(use-natbib)$
-\bibliography{$bibliography$}
-$endif$
 
 \end{document}

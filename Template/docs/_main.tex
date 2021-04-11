@@ -27,7 +27,7 @@
 % This one will format for PDF output (ie equal margins, no extra blank pages):
 %\documentclass[a4paper,nobind]{templates/ociamthesis}
 %UL 2 Dec 2018: pass this in from YAML
-\documentclass[a4paper, nobind]{templates/ociamthesis}
+\documentclass[a4paper, twoside]{templates/ociamthesis}
 
 % UL 5 January 2021 - add packages used by kableExtra
 \usepackage{booktabs}
@@ -167,32 +167,26 @@
 % This highlights (in blue) corrections marked with (for words) \mccorrect{blah} or (for whole
 % paragraphs) \begin{mccorrection} . . . \end{mccorrection}.  This can be useful for sending a PDF of
 % your corrected thesis to your examiners for review.  Turn it off, and the blue disappears.
-\correctionstrue
 
+% IP feb 2021: option to include line numbers in PDF
+% % \usepackage{lineno}
+% \linenumbers
+% 
 %%%%% BIBLIOGRAPHY SETUP
 % Note that your bibliography will require some tweaking depending on your department, preferred format, etc.
-% The options included below are just very basic "sciencey" and "humanitiesey" options to get started.
 % If you've not used LaTeX before, I recommend reading a little about biblatex/biber and getting started with it.
 % If you're already a LaTeX pro and are used to natbib or something, modify as necessary.
 % Either way, you'll have to choose and configure an appropriate bibliography format...
 
-% The science-type option: numerical in-text citation with references in order of appearance.
-% \usepackage[style=numeric-comp, sorting=none, backend=biber, doi=false, isbn=false]{biblatex}
-% \newcommand*{\bibtitle}{References}
 
-% The humanities-type option: author-year in-text citation with an alphabetical works cited.
-% \usepackage[style=authoryear, sorting=nyt, backend=biber, maxcitenames=2, useprefix, doi=false, isbn=false]{biblatex}
-% \newcommand*{\bibtitle}{Works Cited}
-
-%UL 3 Dec 2018: set this from YAML in index.Rmd
 \usepackage[style=authoryear, sorting=nyt, backend=biber, maxcitenames=2, useprefix, doi=true, isbn=false, uniquename=false]{biblatex}
 \newcommand*{\bibtitle}{Works Cited}
 
+\addbibresource{references.bib}
+
+
 % This makes the bibliography left-aligned (not 'justified') and slightly smaller font.
 \renewcommand*{\bibfont}{\raggedright\small}
-
-% Change this to the name of your .bib file (usually exported from a citation manager like Zotero or EndNote).
-\addbibresource{references.bib}
 
 
 % Uncomment this if you want equation numbers per section (2.3.12), instead of per chapter (2.18):
@@ -201,11 +195,9 @@
 
 %%%%% THESIS / TITLE PAGE INFORMATION
 % Everybody needs to complete the following:
-\title{\texttt{oxforddown}:\\
-An Oxford University Thesis\\
-Template for R Markdown}
-\author{Author Name}
-\college{Your College}
+\title{Thesis title}
+\author{Faes,Mertens de Wilmars,Pratesi}
+\college{Master in Finance}
 
 % Master's candidates who require the alternate title page (with candidate number and word count)
 % must also un-comment and complete the following three lines:
@@ -213,9 +205,9 @@ Template for R Markdown}
 % Uncomment the following line if your degree also includes exams (eg most masters):
 %\renewcommand{\submittedtext}{Submitted in partial completion of the}
 % Your full degree name.  (But remember that DPhils aren't "in" anything.  They're just DPhils.)
-\degree{Doctor of Philosophy}
+\degree{Master in Finance}
 % Term and year of submission, or date if your board requires (eg most masters)
-\degreedate{Michaelmas 2018}
+\degreedate{June 2021}
 
 
 %%%%% YOUR OWN PERSONAL MACROS
@@ -250,8 +242,8 @@ Template for R Markdown}
 %
 % Oxford University logo on title page
 %
-\def\crest{{\includegraphics{templates/beltcrest.pdf}}}
-\renewcommand{\university}{University of Oxford}
+\def\crest{{\includegraphics{templates/AMSLOGO.jpg}}}
+\renewcommand{\university}{Antwerp Management School}
 \renewcommand{\submittedtext}{A thesis submitted for the degree of}
 
 
@@ -268,19 +260,12 @@ Template for R Markdown}
 % The level that gets a number:
 \setcounter{secnumdepth}{2}
 % The level that shows up in the ToC:
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 
 
 %%%%% ABSTRACT SEPARATE
 % This is used to create the separate, one-page abstract that you are required to hand into the Exam
 % Schools.  You can comment it out to generate a PDF for printing or whatnot.
-\begin{abstractseparate}
-  This \emph{R Markdown} template is for writing an Oxford University thesis. The template is built using Yihui Xie's \texttt{bookdown} package, with heavy inspiration from Chester Ismay's \texttt{thesisdown} and the \texttt{OxThesis} \LaTeX~template (most recently adapted by John McManigle).
-
-  This template's sample content include illustrations of how to write a thesis in R Markdown, and largely follows the structure from \href{https://ulyngs.github.io/rmarkdown-workshop-2019/}{this R Markdown workshop}.
-
-  Congratulations for taking a step further into the lands of open, reproducible science by writing your thesis using a tool that allows you to transparently include tables and dynamically generated plots directly from the underlying data. Hip hooray!
-\end{abstractseparate}
 
 % JEM: Pages are roman numbered from here, though page numbers are invisible until ToC.  This is in
 % keeping with most typesetting conventions.
@@ -296,36 +281,32 @@ Template for R Markdown}
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
- 	This is where you will normally thank your advisor, colleagues, family and friends, as well as funding and institutional support. In our case, we will give our praises to the people who developed the ideas and tools that allow us to push open science a little step forward by writing plain-text, transparent, and reproducible theses in R Markdown.
+ 	This is where you will normally thank your advisor, colleagues, family and friends, as well as funding and institutional support.\\
+  Thanks. Thanks
 
-  We must be grateful to John Gruber for inventing the original version of Markdown, to John MacFarlane for creating Pandoc (\url{http://pandoc.org}) which converts Markdown to a large number of output formats, and to Yihui Xie for creating \texttt{knitr} which introduced R Markdown as a way of embedding code in Markdown documents, and \texttt{bookdown} which added tools for technical and longer-form writing.
+  We must be grateful to John Gruber for inventing the original version of Markdown, to John MacFarlane for creating Pandoc which converts Markdown to a large number of output formats, and to Yihui Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.
 
-  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the \texttt{thesisdown} package that helped many a PhD student write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in LaTeX provided the template that I in turn adapted for R Markdown.
+  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the ``thesisdown'' package that helped many a PhD student write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in LaTeX provided the template that Ulrik Lyngs in turn adapted for R Markdown.
 
   Finally, profuse thanks to JJ Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}, and Hadley Wickham, the mastermind of the tidyverse without whom we'd all just given up and done data science in Python instead. Thanks for making data science easier, more accessible, and more fun for us all.
 
   \begin{flushright}
-  Ulrik Lyngs \\
-  Linacre College, Oxford \\
-  2 December 2018
+  Enjo Faes \\
+  Antwerp Management School, Antwerp \\
+  27 June 2021
   \end{flushright}
 \end{acknowledgements}
 
 
 %%%%% ABSTRACT -- Nothing to do here except comment out if you don't want it.
 \begin{abstract}
-	This \emph{R Markdown} template is for writing an Oxford University thesis. The template is built using Yihui Xie's \texttt{bookdown} package, with heavy inspiration from Chester Ismay's \texttt{thesisdown} and the \texttt{OxThesis} \LaTeX~template (most recently adapted by John McManigle).
-
- This template's sample content include illustrations of how to write a thesis in R Markdown, and largely follows the structure from \href{https://ulyngs.github.io/rmarkdown-workshop-2019/}{this R Markdown workshop}.
-
- Congratulations for taking a step further into the lands of open, reproducible science by writing your thesis using a tool that allows you to transparently include tables and dynamically generated plots directly from the underlying data. Hip hooray!
+	The greatest abstract all times
 \end{abstract}
 
 %%%%% MINI TABLES
 % This lays the groundwork for per-chapter, mini tables of contents.  Comment the following line
 % (and remove \minitoc from the chapter files) if you don't want this.  Un-comment either of the
 % next two lines if you want a per-chapter list of figures or tables.
-  \dominitoc % include a mini table of contents
 
 % This aligns the bottom of the text of each page.  It generally makes things look better.
 \flushbottom
@@ -624,14 +605,11 @@ f\left(k\right)=\binom{n}{k}p^k\left(1-p\right)^{n-k}
 For more (e.g.~how to theorems), see e.g.~the documentation on \href{https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html\#equations}{bookdown.org}
 
 \hypertarget{code}{%
-\section{Adding code}\label{code}}
+\section{Executable code chunks}\label{code}}
 
-The magic of R Markdown is that we can add code within our document to make it dynamic.
+The magic of R Markdown is that we can add executable code within our document to make it dynamic.
 
 We do this either as \emph{code chunks} (generally used for loading libraries and data, performing calculations, and adding images, plots, and tables), or \emph{inline code} (generally used for dynamically reporting results within our text).
-
-\hypertarget{code-chunks}{%
-\subsection{Code chunks}\label{code-chunks}}
 
 The syntax of a code chunk is shown in Figure \ref{fig:chunk-parts}.
 
@@ -658,7 +636,7 @@ Common chunk options include (see e.g.~\href{https://bookdown.org/yihui/rmarkdow
 \textbf{IMPORTANT}: Do \emph{not} use underscoores in your chunk labels - if you do, you are likely to get an error in PDF output saying something like ``! Package caption Error: \textbackslash caption outside float''.
 
 \hypertarget{setup-chunks---setup-images-plots}{%
-\subsubsection{Setup chunks - setup, images, plots}\label{setup-chunks---setup-images-plots}}
+\subsection{Setup chunks - setup, images, plots}\label{setup-chunks---setup-images-plots}}
 
 An R Markdown document usually begins with a chunk that is used to \textbf{load libraries}, and to \textbf{set default chunk options} with \texttt{knitr::opts\_chunk\$set}.
 
@@ -674,7 +652,7 @@ library(tidyverse)
 \end{verbatim}
 
 \hypertarget{including-images}{%
-\subsubsection{Including images}\label{including-images}}
+\subsection{Including images}\label{including-images}}
 
 Code chunks are also used for including images, with \texttt{include\_graphics} from the \texttt{knitr} package, as in Figure \ref{fig:oxford-logo}
 
@@ -704,8 +682,8 @@ Useful chunk options for figures include:
 \end{itemize}
 
 \hypertarget{figure-rotation}{%
-\paragraph*{Figure rotation}\label{figure-rotation}}
-\addcontentsline{toc}{paragraph}{Figure rotation}
+\subsubsection*{Figure rotation}\label{figure-rotation}}
+\addcontentsline{toc}{subsubsection}{Figure rotation}
 
 You can use the chunk option \texttt{out.extra} to rotate images.
 
@@ -733,7 +711,7 @@ Then you can reference that variable as the value of \texttt{out.extra} to rotat
 \end{figure}
 
 \hypertarget{including-plots}{%
-\subsubsection{Including plots}\label{including-plots}}
+\subsection{Including plots}\label{including-plots}}
 
 Similarly, code chunks are used for including dynamically generated plots.
 You use ordinary code in R or other languages - Figure \ref{fig:cars-plot} shows a plot of the \texttt{cars} dataset of stopping distances for cars at various speeds (this dataset is built in to \textbf{R}).
@@ -756,7 +734,7 @@ You use ordinary code in R or other languages - Figure \ref{fig:cars-plot} shows
 Under the hood, plots are included in your document in the same way as images - when you build the book or knit a chapter, the plot is automatically generated from your code, saved as an image, then included into the output document.
 
 \hypertarget{including-tables}{%
-\subsubsection{Including tables}\label{including-tables}}
+\subsection{Including tables}\label{including-tables}}
 
 Tables are usually included with the \texttt{kable} function from the \texttt{knitr} package.
 
@@ -802,7 +780,7 @@ speed & dist\\
 \end{itemize}
 
 \hypertarget{control-positioning}{%
-\subsubsection{Control positioning}\label{control-positioning}}
+\subsection{Control positioning}\label{control-positioning}}
 
 One thing that may be annoying is the way \emph{R Markdown} handles ``floats'' like tables and figures.
 In your PDF output, LaTeX will try to find the best place to put your object based on the text around it and until you're really, truly done writing you should just leave it where it lies.
@@ -828,8 +806,8 @@ As anyone who has tried to manually play around with the placement of figures in
 Therefore, it is not generally a good idea to do this - only do it when you really need to ensure that an image follows directly under text where you refer to it (in this document, I needed to do this for Figure \ref{fig:latex-font-sizing} in section \ref{max-power}).
 For more details, read the relevant section of the {[}R Markdown Cookbook{]}\url{https://bookdown.org/yihui/rmarkdown-cookbook/figure-placement.html}).
 
-\hypertarget{inline-code-1}{%
-\subsection{Inline code}\label{inline-code-1}}
+\hypertarget{executable-inline-code}{%
+\section{Executable inline code}\label{executable-inline-code}}
 
 `Inline code' simply means inclusion of code inside text.
 The syntax for doing this is \texttt{\textasciigrave{}r\ R\_CODE\textasciigrave{}}
@@ -850,10 +828,10 @@ We might then write:\\
 Which would output:\\
 ``In the \texttt{cars} dataset, we have 50 observations.''
 
-\hypertarget{referring-to-results-computed-in-other-languages-than-r}{%
-\subsubsection{Referring to results computed in other languages than R}\label{referring-to-results-computed-in-other-languages-than-r}}
+\hypertarget{executable-code-in-other-languages-than-r}{%
+\section{Executable code in other languages than R}\label{executable-code-in-other-languages-than-r}}
 
-If you want to use other languages than R, such as Python, Julia C++, or SQL, see \href{https://bookdown.org/yihui/rmarkdown-cookbook/other-languages.html}{the relevant section in the \emph{R Markdown Cookbook}}
+If you want to use other languages than R, such as Python, Julia C++, or SQL, see \href{https://bookdown.org/yihui/rmarkdown-cookbook/other-languages.html}{the relevant section of the \emph{R Markdown Cookbook}}
 
 \hypertarget{cites-and-refs}{%
 \chapter{Citations, cross-references, and collaboration}\label{cites-and-refs}}
@@ -1879,20 +1857,22 @@ You can do so like this:
 \hypertarget{short-inline-corrections}{%
 \subsection{Short, inline corrections}\label{short-inline-corrections}}
 
-Highlight \textbf{short, inline corrections} by doing \texttt{{[}like\ this{]}\{.correction\}} --- the text between the square brackets will then \hl{be highlighted in blue} in the output.
-This should work, also with \hl{cross references (do you remember chapter \ref{rmd-basics}?)} or even \hl{citations \autocite{Shea2014}}.
+Highlight \textbf{short, inline corrections} by doing \texttt{{[}like\ this{]}\{.correction\}} --- the text between the square brackets will then {be highlighted in blue} in the output.
 
-However, pandoc might get confused by citations and cross-references.
-In particular, it might get confused by \autocite[this][]{Shea2014}\{.correction\}
-In such cases, you could use LaTeX syntax directly.
-The correction highlighting is supplied by the \href{https://ctan.org/pkg/soul}{soul} package, so you can do like this:
+Note that pandoc might get confused by citations and cross-references inside inline corrections.
+In particular, it might get confused by \texttt{"{[}what\ @Shea2014\ said{]}\{.correction\}"} which becomes \autocite[what][ said]{Shea2014}\{.correction\}
+In such cases, you can use LaTeX syntax directly.
+The correction highlighting uses the \href{https://ctan.org/pkg/soul}{soul} package, so you can do like this:
 
-\begin{quote}
-\texttt{It\ doesn\textquotesingle{}t\ get\ confused\ by\ \textbackslash{}hl\{this\ \textbackslash{}textcite\{Shea2014\}\}}~\\
-Becomes: It doesn't get confused by \hl{this \textcite{Shea2014}}.
-\end{quote}
+\begin{itemize}
+\tightlist
+\item
+  If using biblatex for references, use \texttt{"\textbackslash{}hl\{what\ \textbackslash{}textcite\{Shea2014\}\ said\}}
+\item
+  If using natbib for references, use \texttt{"\textbackslash{}hl\{what\ \textbackslash{}cite\{Shea2014\}\ said\}}
+\end{itemize}
 
-This has the drawback of corrections then not showing up in HTML output at all, but you may only care about correction highlighting in the PDF for your examiners anyway!
+Using raw LaTeX has the drawback of corrections then not showing up in HTML output at all, but you might only care about correction highlighting in the PDF for your examiners anyway!
 
 \hypertarget{blocks-of-added-or-changed-material}{%
 \subsection{Blocks of added or changed material}\label{blocks-of-added-or-changed-material}}
@@ -1931,24 +1911,24 @@ The syntax is as follows:
 
 \begin{quote}
 Here's \texttt{{[}some\ text\ in\ pink\ highlighting{]}\{highlight="pink"\}}\\
-Becomes: Here's \sethlcolor{pink}\hl{some text in pink highlighting}\sethlcolor{correctioncolor}.
+Becomes: Here's {some text in pink highlighting}.
 \end{quote}
 
 \begin{quote}
 \texttt{{[}Here\textquotesingle{}s\ some\ text\ with\ blue\ font{]}\{color="blue"\}}~\\
-Becomes: \textcolor{blue}{Here's some text with blue font}
+Becomes: {Here's some text with blue font}
 \end{quote}
 
 \begin{quote}
 Finally --- never, ever actually do this -- \texttt{{[}here\textquotesingle{}s\ some\ text\ with\ black\ highlighting\ and\ yellow\ font{]}\{highlight="black"\ color="yellow"\}}\\
-Becomes: \textcolor{yellow}{\sethlcolor{black}\hl{here's some text with black highlighting and yellow font}\sethlcolor{correctioncolor}}
+Becomes: {here's some text with black highlighting and yellow font}
 \end{quote}
 
 The file \textbf{scripts\_and\_filters/colour\_and\_highlight.lua} implements this, if you want to fiddle around with it.
 It works with both PDF and HTML output.
 
 \hypertarget{embed-pdf}{%
-\section{Including another paper in your thesis - embedding a PDF document}\label{embed-pdf}}
+\section{Including another paper in your thesis - embed a PDF document}\label{embed-pdf}}
 
 You may want to embed existing PDF documents into the thesis, for example if your department allows a `portfolio' style thesis and you need to include an existing typeset publication as a chapter.
 
@@ -1995,7 +1975,7 @@ You may also want to remove margins from the PDF files, which you can do with Ad
 \newpage \begin{center} \makebox[\linewidth][c]{\includegraphics[width=1.2\linewidth]{figures/sample-content/pdf_embed_example/split/_000000000000001.pdf}} \end{center} \newpage \begin{center} \makebox[\linewidth][c]{\includegraphics[width=1.2\linewidth]{figures/sample-content/pdf_embed_example/split/_000000000000011.pdf}} \end{center}
 
 \hypertarget{embed-rmd}{%
-\section{Including another paper in your thesis - include an R Markdown child document}\label{embed-rmd}}
+\section{Including another paper in your thesis - R Markdown child document}\label{embed-rmd}}
 
 Sometimes you want to include another paper you are currently writing as a chapter in your thesis.
 Above \ref{embed-pdf}, we described the simplest way to do this: include the other paper as a pdf.
@@ -2161,7 +2141,9 @@ Then, make sure use that parameter to set the output width when you include figu
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{include\_graphics}\NormalTok{(}\FunctionTok{str\_c}\NormalTok{(params}\SpecialCharTok{$}\NormalTok{other\_path, }\StringTok{"figures/cat.jpg"}\NormalTok{))}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}\{r, out.width=params$out\_width, fig.cap="A very funny cat"\}}
+\InformationTok{include\_graphics(str\_c(params$other\_path, "figures/cat.jpg"))}
+\InformationTok{\textasciigrave{}\textasciigrave{}\textasciigrave{}}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2349,28 +2331,28 @@ Try doing this:
 \item
   type \texttt{make\ clean-knits} in the terminal tab (or run \texttt{file.remove(list.files(pattern\ =\ "*.(log\textbar{}mtc\textbar{}maf\textbar{}aux\textbar{}bbl\textbar{}blg\textbar{}xml)"))} in the R console) to clean up files generated by LaTeX during a build
 \item
-  then restart your computer
+  restart your computer
 \end{enumerate}
 
-This solved the problem for me, when I suddenly ran into this error after RStudio was abruptly shut down during a PDF build.
+If this does not solve the problem, try using the \href{https://www.overleaf.com/learn/latex/Bibliography_management_with_natbib}{natbib} LaTeX package instead of \href{https://www.overleaf.com/learn/latex/Articles/Getting_started_with_BibLaTeX}{biblatex} for handling references.
+To do this, go to \textbf{index.Rmd} and
 
-\hypertarget{todo-the-thing-about-icloud-drive}{%
-\section{TODO: the thing about icloud drive}\label{todo-the-thing-about-icloud-drive}}
-
-\begin{itemize}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  and how symlinks can help
-\end{itemize}
-
-\hypertarget{todo-add-the-thing-about-bibliography-paths}{%
-\section{TODO: Add the thing about bibliography paths}\label{todo-add-the-thing-about-bibliography-paths}}
-
-\begin{itemize}
-\tightlist
+  set \texttt{use-biblatex:\ false} and \texttt{use-natbib:\ true}
 \item
-  remove them in the individual chapter bibliography so that it doesn't override what is in index.Rmd
-\end{itemize}
+  set \texttt{citation\_package:\ natbib} under
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{output}\KeywordTok{:}
+\AttributeTok{  bookdown:}\FunctionTok{:pdf\_book}\KeywordTok{:}
+\AttributeTok{    }\FunctionTok{citation\_package}\KeywordTok{:}\AttributeTok{ natbib}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{savequote}
 Alles Gescheite ist schon gedacht worden.\\
@@ -2439,5 +2421,6 @@ This first appendix includes an R chunk that was hidden in the document (using \
 
 {\renewcommand*\MakeUppercase[1]{#1}%
 \printbibliography[heading=bibintoc,title={\bibtitle}]}
+
 
 \end{document}
