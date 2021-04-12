@@ -1,0 +1,46 @@
+---
+output:
+  #bookdown::html_document2: default
+  #bookdown::word_document2: default
+  bookdown::pdf_document2:
+    template: templates/brief_template.tex
+    citation_package: biblatex
+bib-humanities: true
+documentclass: book
+bibliography: references.bib
+---
+
+# Data and methodology {#dat-and-meth} 
+\chaptermark{Data and methodology}
+\minitoc <!-- this will include a mini table of contents-->
+
+## Data
+Here comes text... 
+
+### Descriptives
+#### Table of summary statistics
+Here comes a table and description of the stats
+
+#### Correlation
+Here comes a table and description of the correlations
+
+\newpage
+### Methodology
+Here comes text...
+
+
+\clearpage
+<!-- clearpage ends the page, and also dumps out all floats.
+  Floats are things like tables and figures. -->
+
+
+```{r citr, echo=FALSE, fig.cap="The `citr` add-in", out.width="80%", fig.align='center'}
+# include dynamic gif if output is HTML; otherwise screenshot
+# knitr::include_graphics("figures/sample-content/citr.png")
+```
+
+Let's add an image:
+```{r captain, fig.align='center', fig.cap="A marvel-lous meme", out.width="65%"}
+# knitr::include_graphics("figures/sample-content/captain.jpeg")
+```
+
