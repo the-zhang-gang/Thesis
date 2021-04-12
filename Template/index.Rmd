@@ -13,6 +13,7 @@ university-logo: templates/amslogo.pdf
 submitted-text: A thesis submitted for the degree of
 degree: Master in Finance
 degreedate: June 2021
+text: "Prof. dr. Annaert \\ Prof. dr. De Ceuster \\ Prof. dr. Zhang"
 abstract: |
   `r paste(readLines("front-and-back-matter/_abstract.Rmd"), collapse = '\n  ')`
 acknowledgements: |

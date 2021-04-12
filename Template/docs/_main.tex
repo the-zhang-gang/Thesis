@@ -243,6 +243,7 @@
 \def\crest{{\includegraphics{templates/amslogo.pdf}}}
 \renewcommand{\university}{Antwerp Management School}
 \renewcommand{\submittedtext}{A thesis submitted for the degree of}
+\renewcommand{\submittedtext}{Prof.~dr. Annaert ~Prof.~dr. De Ceuster ~Prof.~dr. Zhang}
 
 
 % Leave this line alone; it gets things started for the real document.
@@ -283,7 +284,7 @@
 
   We must also be grateful to John Gruber for inventing ``Markdown'', to John MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Yihui Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.
 
-  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format.
+  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}.
 
   Finally, profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and more fun for us all.
 
@@ -407,32 +408,9 @@ Here comes our main part
 
 \minitoc 
 
-\begin{savequote}
-Alles Gescheite ist schon gedacht worden.\\
-Man muss nur versuchen, es noch einmal zu denken.
-
-All intelligent thoughts have already been thought;\\
-what is necessary is only to try to think them again.
-\qauthor{--- Johann Wolfgang von Goethe \autocite{von_goethe_wilhelm_1829}}\end{savequote}
-
-
-
 \hypertarget{conclusion}{%
 \chapter*{Conclusion}\label{conclusion}}
 \addcontentsline{toc}{chapter}{Conclusion}
-
-If we don't want Conclusion to have a chapter number next to it, we can add the \texttt{\{-\}} attribute.
-
-\hypertarget{more-info}{%
-\section*{More info}\label{more-info}}
-\addcontentsline{toc}{section}{More info}
-
-And here's some other random info:
-the first paragraph after a chapter title or section head \emph{shouldn't be} indented, because indents are to tell the reader that you're starting a new paragraph.
-Since that's obvious after a chapter or section title, proper typesetting doesn't add an indent there.
-
-This paragraph, by contrast, \emph{will} be indented as it should because it is not the first one after the `More info' heading.
-All hail LaTeX. (If you're reading the HTML version, you won't see any indentation - have a look at the PDF version to understand what in the earth this section is babbling on about).
 
 \startappendices
 
