@@ -1,0 +1,21 @@
+---
+#########################################
+# options for knitting a single chapter #
+#########################################
+output:
+  bookdown::pdf_document2:
+    template: templates/brief_template.tex
+    citation_package: biblatex
+  bookdown::html_document2: default
+  bookdown::word_document2: default
+documentclass: book
+bibliography: references.bib
+---
+
+# Literature review {#lit-rev}
+\minitoc <!-- this will include a mini table of contents-->
+
+<!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
+\noindent Here is a simple introduction of this part of our thesis
+
+

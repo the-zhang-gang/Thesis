@@ -50,10 +50,10 @@ h1 a[title] {
   background-color: var(--theme-color2) !important;
 }
 
-
 .thesis-cover p {
   text-align: center;
 }
+
 .thesis-cover img {
   width: 95%;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
