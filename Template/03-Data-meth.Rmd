@@ -2,14 +2,13 @@
 output:
   #bookdown::html_document2: default
   #bookdown::word_document2: default
-  bookdown::pdf_document2:
+  bookdown::pdf_document2: 
     template: templates/brief_template.tex
     citation_package: biblatex
-bib-humanities: true
 documentclass: book
 bibliography: references.bib
 ---
-
+  
 # Data and methodology {#dat-and-meth} 
 \chaptermark{Data and methodology}
 \minitoc <!-- this will include a mini table of contents-->
@@ -43,4 +42,3 @@ Let's add an image:
 ```{r captain, fig.align='center', fig.cap="A marvel-lous meme", out.width="65%"}
 # knitr::include_graphics("figures/sample-content/captain.jpeg")
 ```
-
