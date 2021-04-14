@@ -32,7 +32,6 @@ Here comes text...
 <!-- clearpage ends the page, and also dumps out all floats.
   Floats are things like tables and figures. -->
 
-
 ```{r citr, echo=FALSE, fig.cap="The `citr` add-in", out.width="80%", fig.align='center'}
 # include dynamic gif if output is HTML; otherwise screenshot
 # knitr::include_graphics("figures/sample-content/citr.png")
