@@ -19,18 +19,7 @@ bibliography: references.bib
 \markboth{Introduction}{}
 ```
 <!-- For PDF output, include these two LaTeX commands after unnumbered chapter headings, otherwise the mini table of contents and the running header will show the previous chapter -->
-
-Here comes text...2021
-
-
-Filippo did something ><><><><><><><
-
-
-Hello Hello asd
-
-Test 2 merge 
-
-
-
-Enjo is making some changes..
+\\
+Here comes text...2021. 
+Filippo did something. Hello Hello asd. Test 2 merge. Enjo is making some changes..
 
