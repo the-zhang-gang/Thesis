@@ -23,14 +23,4 @@ bibliography: references.bib
 Here comes text...2021
 
 
-Filippo did something ><><><><><><><
-
-
-Hello Hello asd
-
-Test 2 merge 
-
-
-
-Enjo is making some changes..
 
