@@ -130,7 +130,6 @@ knit: (function(input, ...) {bookdown::render_book(input, output_format = "bookd
 #knit: (function(input, ...) {bookdown::render_book(input, output_format = "bookdown::word_document2")})
 ---
 
-
 ```{r install_packages, include=FALSE}
 source('scripts_and_filters/install_packages_if_missing.R')
 ```
@@ -140,13 +139,15 @@ source('scripts_and_filters/create_chunk_options.R')
 source('scripts_and_filters/wrap_lines.R')
 ```
 
+```{=html}
 <!--
 Include the create_chunk_options chunk above at the top of your index.Rmd file
 This will include code to create additional chunk options (e.g. for adding author references to savequotes)
 and to make sure lines in code soft wrap
 If you need to create your own additional chunk options, edit the file scripts/create_chunk_options.R
 -->
-
+```
 <!-- This chunk includes the front page content in HTML output -->
+
 ```{r ebook-welcome, child = 'front-and-back-matter/_welcome-ebook.Rmd', eval=knitr::is_html_output()}
 ```

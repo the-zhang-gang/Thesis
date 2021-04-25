@@ -15,4 +15,4 @@ bibliography: references.bib
 
 ## Main analysis title
 
-Here comes our main part [@abeywardhana2017][@acs2006]
+Here comes our main part

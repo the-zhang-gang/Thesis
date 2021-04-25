@@ -1,10 +1,12 @@
+---
+bibliography: references.bib
+---
+
 First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors [Zhang](https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang), [Annaert](https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert) and [De Ceuster](https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster) for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang.
 
-We must also be grateful to John Gruber for inventing "Markdown", to John MacFarlane for creating "Pandoc" which converts Markdown to a large number of output formats, and to Yihui Xie for creating "knitr" which introduced R Markdown as a way of embedding code in Markdown documents, and "bookdown" which added tools for technical and longer-form writing.
+Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of [RStudio](http://rstudio.com). Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing "Markdown", to MacFarlane for creating "Pandoc" which converts Markdown to a large number of output formats, and to Xie for creating "knitr" which introduced R Markdown as a way of embedding code in Markdown documents, and "bookdown" which added tools for technical and longer-form writing.Special thanks to [Ismay](http://chester.rbind.io), who created the "thesisdown" package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in "LaTeX" provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format [@lyngsOxforddown2019].
 
-Special thanks to [Chester Ismay](http://chester.rbind.io), who created the "thesisdown" package that helped many PhD students write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in "LaTeX" provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format [@lyngsOxforddown2019].
-
-Finally, profuse thanks to Allaire, the founder and CEO of [RStudio](http://rstudio.com). Thanks for making data science easier, more accessible and more fun for us all.
+Finally, we thank @alexios2020 for making the implementation of GARCH models integrated in R via his package "Rugarch". By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis.
 
 ```{=tex}
 \begin{flushright}
