@@ -18,4 +18,16 @@ bibliography: references.bib
 <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
 \noindent Here is a simple introduction of this part of our thesis
 
+Points to mention: 
+## Risk measures
+
+### Volatility
+
+#### Rolling volatility?
+
+#### GARCH models
+
+### Value at Risk 
+
+### Conditional Value at risk
 

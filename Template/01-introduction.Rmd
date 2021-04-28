@@ -18,8 +18,6 @@ bibliography: references.bib
 \adjustmtc
 \markboth{Introduction}{}
 ```
-<!-- For PDF output, include these two LaTeX commands after unnumbered chapter headings, otherwise the mini table of contents and the running header will show the previous chapter -->
+It has been shown that stock returns are not normally distributed and exhibit fat-tails and peakedness (...), these are called the stylized facts of returns. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by its past returns (i.e. have very little serial correlation) because they simply follow a Random Walk process (...). On the other hand, Lo & MacKinlay mention that "financial markets *are* predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism" . Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample [@welch2008]. This makes it difficult for corporations to manage market risk, i.e. the variability of stock prices.
 
-\\ Here comes text...2021. Filippo did something. Hello Hello asd. Test 2 merge. Enjo is making some changes..
-
-Here comes text...2021
+Risk in general can be defined as the volatility of unexpected outcomes [@jorion2007]. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement.
