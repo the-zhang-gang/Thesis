@@ -8,26 +8,36 @@ output:
 documentclass: book
 bibliography: references.bib
 ---
-  
-# Data and methodology {#dat-and-meth} 
+
+# Data and methodology {#dat-and-meth}
+
 \chaptermark{Data and methodology}
+
 \minitoc <!-- this will include a mini table of contents-->
 
 ## Data
+
 <!-- uncomment this codes -->
-Here comes text... 
+
+Here comes text...
+
 ```{r dataloading, include=F}
 require(readxl)
 require(xts)
-# data <- read_excel("data/datastream.xlsx", col_types = c("date", rep("numeric", 6))) # to check with data
-# data.xts <- as.xts(data[,-1], order.by = data$...1)
-# Estoxx <- data.xts[,2] #see if price index
+data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
+                                       skip = 2)
+colnames(data) <- c("Date",gsub(pattern = " ", replacement = "_",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7])))
+Price_indices <- as.xts(data[,-1], order.by = data$Date)
+# Estoxx <- Price_indices[,2] #see if price index
 # R <- diff(Estoxx, log = TRUE, na.pad = FALSE) * 100
 ```
 
 ### Descriptives
+
 #### Table of summary statistics
+
 Here comes a table and description of the stats
+
 ```{r stats, echo=F, results='asis'}
 # x <-  table.Stats(R)
 # x <- x[c(3,5:7,9,14:16),] #selecting relevant columns only
@@ -46,7 +56,9 @@ Here comes a table and description of the stats
 ```
 
 #### Correlation
+
 Here comes a table and description of the correlations
+
 ```{r correlation, echo=F}
 # mcor <- cor(R)
 # upper <- round(mcor,3)
@@ -85,30 +97,36 @@ Here comes a table and description of the correlations
 \textit{Notes:} This figure plots the price and price log return respectively for the EuroStoxx 50 index
 \end{figure}
 ```
+As can be seen
 
-
-As can be seen 
 ```{r acfplots, echo=F}
 # acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
 ```
 
-
 \newpage
+
 ### Methodology
+
 Here comes text...
 
+As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
+
+They will be estimated using maximum likelyhood. Fortunately Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
 \clearpage
+
+```{=html}
 <!-- clearpage ends the page, and also dumps out all floats.
   Floats are things like tables and figures. -->
-
+```
 ```{r citr, echo=FALSE, fig.cap="The `citr` add-in", out.width="80%", fig.align='center'}
 # include dynamic gif if output is HTML; otherwise screenshot
 # knitr::include_graphics("figures/sample-content/citr.png")
 ```
 
 Let's add an image:
+
 ```{r captain, fig.align='center', fig.cap="A marvel-lous meme", out.width="65%"}
 # knitr::include_graphics("figures/sample-content/captain.jpeg")
 ```
