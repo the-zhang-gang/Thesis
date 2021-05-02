@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  2 MAY 2021 16:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  2 MAY 2021 19:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1606,13 +1606,18 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
 46.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [3] [4] [5]
+) [3] [4]
+Overfull \hbox (82.94714pt too wide) detected at line 277
+[]
+ []
+
+[5] [6]
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 02-literature-review.maf file.
 \openout3 = `02-literature-review.maf'.
 
-[6
+[7
 
 ] (./02-literature-review.aux)
 Package rerunfilecheck Info: File `02-literature-review.out' has not changed.
@@ -1622,13 +1627,13 @@ Package logreq Info: Writing requests to '02-literature-review.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29595 strings out of 478994
- 490232 string characters out of 5858184
- 1324453 words of memory out of 5000000
- 46262 multiletter control sequences out of 15000+600000
- 460129 words of font info for 107 fonts, out of 8000000 for 9000
+ 29596 strings out of 478994
+ 490248 string characters out of 5858184
+ 1324537 words of memory out of 5000000
+ 46264 multiletter control sequences out of 15000+600000
+ 459951 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,9n,89p,1741b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,9n,89p,1746b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
 texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021/
 texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/2021/texmf-dist
@@ -1647,10 +1652,10 @@ texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/20
 ist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
 ype1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2021/texmf-dist/fon
 ts/type1/adobe/utopia/putb8a.pfb>
-Output written on 02-literature-review.pdf (6 pages, 186570 bytes).
+Output written on 02-literature-review.pdf (7 pages, 190850 bytes).
 PDF statistics:
- 192 PDF objects out of 1000 (max. 8388607)
- 169 compressed objects within 2 object streams
- 45 named destinations out of 1000 (max. 500000)
+ 204 PDF objects out of 1000 (max. 8388607)
+ 180 compressed objects within 2 object streams
+ 48 named destinations out of 1000 (max. 500000)
  27729 words of extra memory for PDF output out of 29859 (max. 10000000)
 

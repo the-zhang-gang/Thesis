@@ -15,3 +15,28 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 
 <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
+
+## Specification checks
+
+In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
+$$ 
+\hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
+$$
+### Residual heteroscedasticity
+Ljung-Box test on the squared or absolute standardized residuals.  
+
+### Eye-balling econometrics
+Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+
+Then the density can be examined standardized residuals and compared with the normal distribution. 
+
+Also the QQ-plot can be examined. 
+
+### GMM test
+zero-mean
+unit-variance
+not skewed
+no excess kurtosis
+no serial correlation in the squares
+no serial correlation in the cubes
+no serial correlation in the squares

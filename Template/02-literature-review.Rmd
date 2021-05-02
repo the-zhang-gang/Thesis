@@ -78,7 +78,7 @@ var_{t-1}(R_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq7)
 \end{align}
 ```
-The unconditional variance is also interesting to derive, while this is the long-run variance in the symmetric standard GARCH models. After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
+The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
 
 ```{=tex}
 \begin{align} 
@@ -114,8 +114,23 @@ Another property of ARCH models is that it takes into account volatility cluster
 ```
 Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we will see in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
 
-The estimation of ARCH model and in a next step GARCH models will be explained in the methodology...
+The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2$ from equation \@ref(eq:eq3).
 
+```{=tex}
+\begin{align} 
+\mathbb{E}_T(\varepsilon_{T+k}^2) &= \omega*(1+\alpha_1 + ... + \alpha^{k-2}) + \alpha^{k-1}*\sigma_{T+1}^2
+\mathbb{E}_T(\varepsilon_{T+k}^2) &= \omega*(1+\alpha_1 + ... + \alpha^{k-1}) + \alpha^{k}*\sigma_{T}^2
+ (\#eq:eq11)
+\end{align}
+```
+It can be shown that then the conditional variance in period $T+k$ is equal to equation \@ref(eq:eq12). The LHS is the predicted conditional variance $k$-periods ahead above its unconditional variance, $\sigma^2$. The RHS is the difference current last-observed return residual $\varepsilon_T^2$ above the unconditional average multiplied by $\alpha_1^k$, a decreasing function of $k$ (given that $0 \le\alpha_1 <1$). The further ahead predicting the variance, the closer $\alpha_1^k$ comes to zero, the closer to the unconditional variance, i.e. the long-run variance.
+
+```{=tex}
+\begin{align} 
+\mathbb{E}_T(\varepsilon_{T+k}^2) - \sigma^2 = \alpha_1^k*(\varepsilon_T^2 - \sigma^2)
+ (\#eq:eq12)
+\end{align}
+```
 ### Univariate GARCH models
 
 Generalised Autoregressive Conditional Heteroscedasticity (GARCH) models come in because of the fact that rolling period standard deviations give an equal weight to the deviations, by such not taking into account volatility clustering, which can be identified as positive autocorrelation in the absolute returns.
