@@ -118,8 +118,11 @@ The estimation of ARCH model and in a next step GARCH models will be explained i
 
 ```{=tex}
 \begin{align} 
-\mathbb{E}_T(\varepsilon_{T+k}^2) &= \omega*(1+\alpha_1 + ... + \alpha^{k-2}) + \alpha^{k-1}*\sigma_{T+1}^2
-\mathbb{E}_T(\varepsilon_{T+k}^2) &= \omega*(1+\alpha_1 + ... + \alpha^{k-1}) + \alpha^{k}*\sigma_{T}^2
+\begin{split}
+\mathbb{E}_T(\varepsilon_{T+k}^2) 
+&= \omega*(1+\alpha_1 + ... + \alpha^{k-2}) + \alpha^{k-1}*\sigma_{T+1}^2 \\
+&= \omega*(1+\alpha_1 + ... + \alpha^{k-1}) + \alpha^{k}*\sigma_{T}^2
+\end{split}
  (\#eq:eq11)
 \end{align}
 ```
@@ -131,23 +134,75 @@ It can be shown that then the conditional variance in period $T+k$ is equal to e
  (\#eq:eq12)
 \end{align}
 ```
+\newpage
+
 ### Univariate GARCH models
 
-Generalised Autoregressive Conditional Heteroscedasticity (GARCH) models come in because of the fact that rolling period standard deviations give an equal weight to the deviations, by such not taking into account volatility clustering, which can be identified as positive autocorrelation in the absolute returns.
+Generalised Autoregressive Conditional Heteroscedasticity (GARCH) models come in because of the fact that rolling period standard deviations give an equal weight to the deviations, by such not taking into account volatility clustering, which can be identified as positive autocorrelation in the absolute returns. All these GARCH models are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020.
 
 #### sGARCH model
 
+The standard GARCH model [@bollerslev1986] is written consistent with Alexios @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
+
+```{=tex}
+\begin{align}
+\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
+ (\#eq:eq13)
+\end{align}
+```
+where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$" specified as in equation \@ref(eq:eq14).
+
+```{=tex}
+\begin{align}
+\hat{P} = \sum\limits_{j = 1}^q {{\alpha_j}}  + \sum\limits_{j = 1}^p {{\beta_j}}.
+ (\#eq:eq14)
+\end{align}
+```
+The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameters ($\beta$'s) included as in equation \@ref(eq:eq15).
+
+```{=tex}
+\begin{equation}
+\begin{split}
+\hat{\sigma}^2 
+&= \dfrac{\hat{\omega}}{1 - \hat{P}} \\
+&= \dfrac{\hat{\omega}}{1 - \alpha - \beta}
+\end{split}
+ (\#eq:eq15)
+\end{equation}
+```
+#### iGARCH model
+
+Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
+
 #### eGARCH model
 
-#### iGARCH model
+The eGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16),
+
+```{=tex}
+\begin{align}
+\log_e(\sigma_t^2) = \omega + \sum\limits_{j=1}^q (\alpha_j z_{t-j} + \gamma_j (|z_{t-j}| - E|z_{t-j}|))+ \sum\limits_{j = 1}^p \beta_j \log_e(\sigma_{t-j}^2)
+ (\#eq:eq16)
+\end{align}
+```
+where $\alpha_j$ captures the sign effect and $\gamma_j$ the size effect.
 
 #### gjrGARCH model
 
-#### nGARCH model
+The gjrGARCH model [@glosten1993] models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable $I$, it is specified as in equation \@ref(eq:eq17).
 
-#### tGARCH model
+```{=tex}
+\begin{align}
+\sigma_t^2 &= \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ (\#eq:eq17)
+\end{align}
+```
+where $\gamma_j$ represents the *leverage* term. The indicator function $I$ takes on value 1 for $\varepsilon \le 0$, 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to @ghalanos2020.
 
-#### tsGARCH model
+#### naGARCH model (Engle & Ng)
+
+#### tGARCH model (Zakoian)
+
+#### avGARCH model (in our paper: TS-paper to Taylor and Schwert)
 
 ### Conditional distributions {#conditional-distributions}
 

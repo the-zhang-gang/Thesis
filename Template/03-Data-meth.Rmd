@@ -112,7 +112,7 @@ Here comes text...
 
 As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
 
-They will be estimated using maximum likelyhood. Fortunately Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
+They will be estimated using maximum likelyhood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
 \clearpage
 

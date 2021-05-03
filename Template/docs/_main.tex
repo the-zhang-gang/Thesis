@@ -169,6 +169,8 @@
 % your corrected thesis to your examiners for review.  Turn it off, and the blue disappears.
 
 % IP feb 2021: option to include line numbers in PDF
+\usepackage{lineno}
+\linenumbers
 
 %%%%% BIBLIOGRAPHY SETUP
 % Note that your bibliography will require some tweaking depending on your department, preferred format, etc.
@@ -282,11 +284,9 @@
 \begin{acknowledgements}
  	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors \href{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}{Zhang}, \href{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}{Annaert} and \href{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}{De Ceuster} for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang.
 
-  We must also be grateful to John Gruber for inventing ``Markdown'', to John MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Yihui Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.
+  Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing ``Markdown'', to MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.Special thanks to \href{http://chester.rbind.io}{Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}.
 
-  Special thanks to \href{http://chester.rbind.io}{Chester Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to John McManigle, whose adaption of Sam Evans' adaptation of Keith Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}.
-
-  Finally, profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and more fun for us all.
+  Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``Rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis.
 
   \begin{flushright}
   Enjo Faes, \\
@@ -342,18 +342,207 @@
 \adjustmtc
 \markboth{Introduction}{}
 
-\textbackslash{}
-Here comes text\ldots2021.
-Filippo did something. Hello Hello asd. Test 2 merge. Enjo is making some changes..
+It has been shown that stock returns are not normally distributed and exhibit fat-tails and peakedness (\ldots), these are called the stylized facts of returns. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by its past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process (\ldots). On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism'' . Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices.
 
-Here comes text\ldots2021
+Risk in general can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement.
 
 \hypertarget{lit-rev}{%
 \chapter{Literature review}\label{lit-rev}}
 
 \minitoc 
 
-\noindent Here is a simple introduction of this part of our thesis
+\hypertarget{stylized-facts-of-returns}{%
+\section{Stylized facts of returns}\label{stylized-facts-of-returns}}
+
+\hypertarget{volatility}{%
+\section{Volatility}\label{volatility}}
+
+\hypertarget{rolling-volatility}{%
+\subsection{Rolling volatility}\label{rolling-volatility}}
+
+When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. \textcite{engle2001} explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations. For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e.~residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined. Engle regards this formulation as the first ARCH model.
+
+\newpage
+
+\hypertarget{arch-model}{%
+\subsection{ARCH model}\label{arch-model}}
+
+Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns. the innovation process and the variance process (or volatility function), written out in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
+
+\begin{align} 
+R_{t} &= \mu + \varepsilon_t
+ \label{eq:eq1}
+\end{align}
+
+\begin{align} 
+\varepsilon_{t} &= \sigma_t * z_t, \ where \ z_t \stackrel{iid}{\sim} (0,1)
+ \label{eq:eq2}
+\end{align} 
+
+\begin{align} 
+\sigma_{t}^{2} &= \omega + \alpha_1 *  \varepsilon_{t-1}^2 
+ \label{eq:eq3}
+\end{align}
+
+From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component \(\sigma_t\) into the conditional mean innovation \(\varepsilon_{t}\) and use the conditional mean innovation to examine the conditional mean return. In equation \eqref{eq:eq4} and \eqref{eq:eq5} they are derived. Because the random variable \(z_t\) is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \eqref{eq:eq5} is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
+
+\begin{align} 
+\mathbb{E}_{t-1}(\varepsilon_{t}) = \mathbb{E}_{t-1}(\sqrt{\omega + \alpha_1 *  \varepsilon_{t-1}^2} * z_t) = \sigma_t\mathbb{E}_{t-1}(z_t) = 0
+ \label{eq:eq4}
+\end{align} 
+
+\begin{align} 
+\mathbb{E}_{t-1}(R_{t}) = \mu + \mathbb{E}_{t-1}(\varepsilon_{t}) = \mu
+ \label{eq:eq5}
+\end{align}
+
+For the conditional variance, knowing everything that happened until and including period \(t-1\) the condiitional innovation variance is given by equation \eqref{eq:eq6}. This is equal to \(\sigma_t^2\), while the variance of \(z_t\) is equal to 1. Then it is easy to derive the conditional variance of returns in equation \eqref{eq:eq7}, that is why equation \eqref{eq:eq3} is called the variance equation.
+
+\begin{align} 
+var_{t-1}(\varepsilon_t) = \mathbb{E}_{t-1}(\varepsilon_{t}^2) = \mathbb{E}_{t-1}(\sigma_t^2 * z_t^2) = \sigma_t^2\mathbb{E}_{t-1}(z_t^2) = \sigma_t^2
+ \label{eq:eq6}
+\end{align} 
+
+\begin{align} 
+var_{t-1}(R_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
+ \label{eq:eq7}
+\end{align}
+
+The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \eqref{eq:eq11}. After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \eqref{eq:eq8} for the unconditional variance, equal to the constant \(c\) and divided by \(1-\alpha_1\), the slope of the variance equation.
+
+\begin{align} 
+\sigma^2 = \dfrac{\omega}{1-\alpha_1}
+ \label{eq:eq8}
+\end{align}
+
+This leads to the properties of ARCH models.
+
+\begin{itemize}
+\item
+  Stationarity condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\).
+\item
+  Zero-mean innovations
+\item
+  Uncorrelated innovations
+\end{itemize}
+
+Thus a weak white noise process \(\varepsilon_t\)
+
+The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates that the fat-tails (a stylised fact of returns).
+
+\begin{align} 
+3\dfrac{1-\alpha_1^2}{1-3\alpha_1^2}
+ \label{eq:eq9}
+\end{align}
+
+Another property of ARCH models is that it takes into account volatility clustering. Because we know that \(var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)\), we can plug in \(\omega\) for the conditional variance \(var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1*\varepsilon_t^2\). Thus it follows that equation \eqref{eq:eq10} displays volatility clustering. If we examine the RHS, as \(\alpha_1>0\) (condition for stationarity), when shock \(\varepsilon_t^2\) is larger than what you expect it to be on average \(\sigma^2\) the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
+
+\begin{align} 
+\sigma_{t+1}^2 - \sigma^2 = \alpha_1*(\varepsilon_t^2 - \sigma^2)
+ \label{eq:eq10}
+\end{align}
+
+Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we will see in part \ref{conditional-distributions}. The serial correlation for squared innovations is positive if fourth moment exists (equation \eqref{eq:eq9}, this is volatility clustering once again.
+
+The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the \(k\)-periods ahead , denoted as period \(T+k\), is given by equation \eqref{eq:eq11}. This can already be simplified, while we know that \(\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2\) from equation \eqref{eq:eq3}.
+
+\begin{align} 
+\begin{split}
+\mathbb{E}_T(\varepsilon_{T+k}^2) 
+&= \omega*(1+\alpha_1 + ... + \alpha^{k-2}) + \alpha^{k-1}*\sigma_{T+1}^2 \\
+&= \omega*(1+\alpha_1 + ... + \alpha^{k-1}) + \alpha^{k}*\sigma_{T}^2
+\end{split}
+ \label{eq:eq11}
+\end{align}
+
+It can be shown that then the conditional variance in period \(T+k\) is equal to equation \eqref{eq:eq12}. The LHS is the predicted conditional variance \(k\)-periods ahead above its unconditional variance, \(\sigma^2\). The RHS is the difference current last-observed return residual \(\varepsilon_T^2\) above the unconditional average multiplied by \(\alpha_1^k\), a decreasing function of \(k\) (given that \(0 \le\alpha_1 <1\)). The further ahead predicting the variance, the closer \(\alpha_1^k\) comes to zero, the closer to the unconditional variance, i.e.~the long-run variance.
+
+\begin{align} 
+\mathbb{E}_T(\varepsilon_{T+k}^2) - \sigma^2 = \alpha_1^k*(\varepsilon_T^2 - \sigma^2)
+ \label{eq:eq12}
+\end{align}
+
+\newpage
+
+\hypertarget{univariate-garch-models}{%
+\subsection{Univariate GARCH models}\label{univariate-garch-models}}
+
+Generalised Autoregressive Conditional Heteroscedasticity (GARCH) models come in because of the fact that rolling period standard deviations give an equal weight to the deviations, by such not taking into account volatility clustering, which can be identified as positive autocorrelation in the absolute returns. All these GARCH models are estimated using the package rugarch by Alexios \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}.
+
+\hypertarget{sgarch-model}{%
+\subsubsection{sGARCH model}\label{sgarch-model}}
+
+The standard GARCH model \autocite{bollerslev1986} is written consistent with Alexios \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
+
+\begin{align}
+\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
+ \label{eq:eq13}
+\end{align}
+
+where \(\sigma_t^2\) denotes the conditional variance, \(\omega\) the intercept and \(\varepsilon_t^2\) the residuals from the used mean process. The GARCH order is defined by \((q, p)\) (ARCH, GARCH). As \textcite{ghalanos2020} describes: ``one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter \(\hat{P}\)'' specified as in equation \eqref{eq:eq14}.
+
+\begin{align}
+\hat{P} = \sum\limits_{j = 1}^q {{\alpha_j}}  + \sum\limits_{j = 1}^p {{\beta_j}}.
+ \label{eq:eq14}
+\end{align}
+
+The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameters (\(\beta\)'s) included as in equation \eqref{eq:eq15}.
+
+\begin{equation}
+\begin{split}
+\hat{\sigma}^2 
+&= \dfrac{\hat{\omega}}{1 - \hat{P}} \\
+&= \dfrac{\hat{\omega}}{1 - \alpha - \beta}
+\end{split}
+ \label{eq:eq15}
+\end{equation}
+
+\hypertarget{igarch-model}{%
+\subsubsection{iGARCH model}\label{igarch-model}}
+
+Following Alexios \textcite{ghalanos2020}, the integrated GARCH model \autocite{bollerslev1986} can also be estimated. This model assumes the persistence \(\hat{P} = 1\). This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
+
+\hypertarget{egarch-model}{%
+\subsubsection{eGARCH model}\label{egarch-model}}
+
+The eGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16},
+
+\begin{align}
+\log_e(\sigma_t^2) = \omega + \sum\limits_{j=1}^q (\alpha_j z_{t-j} + \gamma_j (|z_{t-j}| - E|z_{t-j}|))+ \sum\limits_{j = 1}^p \beta_j \log_e(\sigma_{t-j}^2)
+ \label{eq:eq16}
+\end{align}
+
+where \(\alpha_j\) captures the sign effect and \(\gamma_j\) the size effect.
+
+\hypertarget{gjrgarch-model}{%
+\subsubsection{gjrGARCH model}\label{gjrgarch-model}}
+
+The gjrGARCH model \autocite{glosten1993} models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I\), it is specified as in equation \eqref{eq:eq17}.
+
+\begin{align}
+\sigma_t^2 &= \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ \label{eq:eq17}
+\end{align}
+
+where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \(I\) takes on value 1 for \(\varepsilon \le 0\), 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to \textcite{ghalanos2020}.
+
+\hypertarget{nagarch-model-engle-ng}{%
+\subsubsection{naGARCH model (Engle \& Ng)}\label{nagarch-model-engle-ng}}
+
+\hypertarget{tgarch-model-zakoian}{%
+\subsubsection{tGARCH model (Zakoian)}\label{tgarch-model-zakoian}}
+
+\hypertarget{avgarch-model-in-our-paper-ts-paper-to-taylor-and-schwert}{%
+\subsubsection{avGARCH model (in our paper: TS-paper to Taylor and Schwert)}\label{avgarch-model-in-our-paper-ts-paper-to-taylor-and-schwert}}
+
+\hypertarget{conditional-distributions}{%
+\subsection{Conditional distributions}\label{conditional-distributions}}
+
+\hypertarget{value-at-risk}{%
+\section{Value at Risk}\label{value-at-risk}}
+
+\hypertarget{conditional-value-at-risk}{%
+\section{Conditional Value at risk}\label{conditional-value-at-risk}}
 
 \hypertarget{dat-and-meth}{%
 \chapter{Data and methodology}\label{dat-and-meth}}
@@ -380,12 +569,28 @@ Here comes a table and description of the stats
 
 Here comes a table and description of the correlations
 
+\hypertarget{visualizations-eye-balling}{%
+\subsubsection{Visualizations (eye-balling)}\label{visualizations-eye-balling}}
+
+\begin{figure}[h]
+
+\caption{EuroStoxx 50 price and price log return evolution
+\label{fig:fig1}}
+\textit{Notes:} This figure plots the price and price log return respectively for the EuroStoxx 50 index
+\end{figure}
+
+As can be seen
+
 \newpage
 
 \hypertarget{methodology}{%
 \subsection{Methodology}\label{methodology}}
 
 Here comes text\ldots{}
+
+As already mentioned in \ldots, GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
+
+They will be estimated using maximum likelyhood. As already mentioned, fortunately, Alexios \textcite{alexios2020} has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
 \clearpage
 
@@ -405,12 +610,42 @@ Let's add an image:
 \hypertarget{main-analysis-title}{%
 \section{Main analysis title}\label{main-analysis-title}}
 
-Here comes our main part \autocite{abeywardhana2017}\autocite{acs2006}
+Here comes our main part
 
 \hypertarget{robustness-analysis}{%
 \chapter{Robustness Analysis}\label{robustness-analysis}}
 
 \minitoc 
+
+\hypertarget{specification-checks}{%
+\section{Specification checks}\label{specification-checks}}
+
+In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation:
+\[ 
+\hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
+\]
+\#\#\# Residual heteroscedasticity
+Ljung-Box test on the squared or absolute standardized residuals.
+
+\hypertarget{eye-balling-econometrics}{%
+\subsection{Eye-balling econometrics}\label{eye-balling-econometrics}}
+
+Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+
+Then the density can be examined standardized residuals and compared with the normal distribution.
+
+Also the QQ-plot can be examined.
+
+\hypertarget{gmm-test}{%
+\subsection{GMM test}\label{gmm-test}}
+
+zero-mean
+unit-variance
+not skewed
+no excess kurtosis
+no serial correlation in the squares
+no serial correlation in the cubes
+no serial correlation in the squares
 
 \hypertarget{conclusion}{%
 \chapter*{Conclusion}\label{conclusion}}
