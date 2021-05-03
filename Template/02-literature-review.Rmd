@@ -202,9 +202,11 @@ where $\gamma_j$ represents the *leverage* term. The indicator function $I$ take
 
 #### tGARCH model (Zakoian)
 
-#### avGARCH model (in our paper: TS-paper to Taylor and Schwert)
+#### avGARCH model (in our paper: TS-GARCH to Taylor and Schwert)
 
 ### Conditional distributions {#conditional-distributions}
+
+#### Normal distribution
 
 ## Value at Risk
 
