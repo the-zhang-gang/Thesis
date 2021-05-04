@@ -26,6 +26,7 @@ require(readxl)
 require(xts)
 require(PerformanceAnalytics)
 require(kableExtra)
+
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
                                        skip = 2)
@@ -94,6 +95,25 @@ plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
+```{=latex}
+\begin{figure}[h]
+```
+```{r plot1, echo=F}
+#Histogram to eyeball normality
+
+h <- hist(R, breaks = 50, density = 10,
+          col = "lightgray", xlab = "Accuracy", main = "Barplot") 
+xfit <- seq(min(R), max(R), length = 40) 
+yfit <- dnorm(xfit, mean = mean(R), sd = sd(R)) 
+yfit <- yfit * diff(h$mids[1:2]) * length(R) 
+lines(xfit, yfit, col = "black", lwd = 1)
+
+#Plotting volatility
+
+chart.RollingPerformance(R = R, width = 22,
+     FUN = "sd.annualized", scale = 252, main = "One month rolling volatility")
+
+```
 
 ```{=latex}
 \caption{EuroStoxx 50 price and price log return evolution
@@ -104,8 +124,41 @@ plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 As can be seen
 
 ```{r acfplots, echo=F}
-acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
-acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
+
+# Compute the mean daily return
+m <- mean(R)
+
+# Define the series of prediction errors
+e <- R - m
+
+# Plot the absolute value of the prediction errors
+par(mfrow = c(2,1),mar = c(3, 2, 2, 2))
+plot(abs(e), main = "Absolute Prediction Error")
+
+# Plot the acf of the absolute prediction errors
+acf(abs(e), main = "")
+
+# acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
+# acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
+```
+```{r}
+# Compute the predicted variances
+
+predvar[1] <- var(R) 
+for(t in 2:nobs){
+   predvar[t] <- omega + alpha * e2[t-1] + beta * predvar[t-1]
+}
+
+# Create annualized predicted volatility
+ann_predvol <- xts(sqrt(252) * sqrt(predvar), order.by = time(R))
+
+# Plot the annual predicted volatility in 2008 and 2009
+plot(ann_predvol["2008::2009"], main = "Ann. S&P 500 vol in 2008-2009")
+# Specify a standard GARCH model with constant mean
+garchspec <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
+                 variance.model = list(model = "sGARCH"), 
+                 distribution.model = "norm")
+
 ```
 
 \newpage
