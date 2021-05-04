@@ -36,7 +36,7 @@ When analyzing returns as a time-series, we look at log returns. The log returns
 
 Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. Well, it all requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. What distribution is then appropriate?
 
-### Alternative distributions than the normal
+### Alternative distributions than the normal {#conditional-distributions}
 
 #### Student t distribution
 
@@ -170,7 +170,7 @@ Another property of ARCH models is that it takes into account volatility cluster
  (\#eq:eq10)
 \end{align}
 ```
-Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we will see in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
+Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
 
 The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2$ from equation \@ref(eq:eq3).
 
