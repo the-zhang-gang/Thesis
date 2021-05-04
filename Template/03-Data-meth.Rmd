@@ -133,11 +133,11 @@ m <- mean(R)
 e <- R - m
 
 # Plot the absolute value of the prediction errors
-par(mfrow = c(2,1),mar = c(3, 2, 2, 2))
+par(mfrow = c(2,1),mar = c(1, 2, 2, 1))
 plot(abs(e), main = "Absolute Prediction Error")
 
 # Plot the acf of the absolute prediction errors
-acf(abs(e), main = "")
+acf(abs(e), main = "", xaxt = "n")
 
 # acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
@@ -150,7 +150,7 @@ garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
-                     variance.model = list(model = "sGARCH"), 
+                     variance.model = list(model = "sGARCH", variance.targeting = T), 
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
@@ -161,10 +161,6 @@ stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
 # Compute stdret using fitted() and sigma()
 stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
 
-#Remove the chart histogram from the loop
-
-chart.Histogram(stdret[[i]], methods = c("add.normal","add.density" ), 
-                colorset = c("gray","red","blue"))
 }
 
 
@@ -187,11 +183,14 @@ chart.Histogram(stdret[[i]], methods = c("add.normal","add.density" ),
 # # Extract the predicted volatilities and print them
 # print(sigma(garchforecast))
 
-# Compute stdret using residuals()
-stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
 
-# Compute stdret using fitted() and sigma()
-stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]])
+
+
+# # Compute stdret using residuals()
+# stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+# 
+# # Compute stdret using fitted() and sigma()
+# stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]])
 
 
 
@@ -200,7 +199,7 @@ stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]])
 
 #  make the histogram
 
-chart.Histogram(stdret, methods = c("add.normal","add.density" ), 
+chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
                 colorset = c("gray","red","blue"))
 
 
