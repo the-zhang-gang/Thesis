@@ -95,6 +95,7 @@ plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
+
 ```{=latex}
 \begin{figure}[h]
 ```
@@ -141,23 +142,67 @@ acf(abs(e), main = "")
 # acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
 ```
-```{r}
-# Compute the predicted variances
 
-predvar[1] <- var(R) 
-for(t in 2:nobs){
-   predvar[t] <- omega + alpha * e2[t-1] + beta * predvar[t-1]
+```{r}
+distributions <- c("norm", "snorm", "std", "sstd", "sged")
+garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
+
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
+                     variance.model = list(model = "sGARCH"), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
+
+# Compute stdret using residuals()
+stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+
+# Compute stdret using fitted() and sigma()
+stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+
+#Remove the chart histogram from the loop
+
+chart.Histogram(stdret[[i]], methods = c("add.normal","add.density" ), 
+                colorset = c("gray","red","blue"))
 }
 
-# Create annualized predicted volatility
-ann_predvol <- xts(sqrt(252) * sqrt(predvar), order.by = time(R))
 
-# Plot the annual predicted volatility in 2008 and 2009
-plot(ann_predvol["2008::2009"], main = "Ann. S&P 500 vol in 2008-2009")
-# Specify a standard GARCH model with constant mean
-garchspec <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
-                 variance.model = list(model = "sGARCH"), 
-                 distribution.model = "norm")
+# # Use the method sigma to retrieve the estimated volatilities 
+# garchvol <- sigma(garchfit) 
+# 
+# # Plot the volatility for 2017
+# plot(garchvol)
+# 
+# # Compute unconditional volatility
+# sqrt(uncvariance(garchfit))
+# 
+# # Print last 10 ones in garchvol
+# tail(garchvol, 10)
+
+# # Forecast volatility 5 days ahead and add 
+# garchforecast <- ugarchforecast(fitORspec = garchfit, 
+#                      n.ahead = 5)
+# 
+# # Extract the predicted volatilities and print them
+# print(sigma(garchforecast))
+
+# Compute stdret using residuals()
+stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+
+# Compute stdret using fitted() and sigma()
+stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]])
+
+
+
+
+
+
+#  make the histogram
+
+chart.Histogram(stdret, methods = c("add.normal","add.density" ), 
+                colorset = c("gray","red","blue"))
+
 
 ```
 
