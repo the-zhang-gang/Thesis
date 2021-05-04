@@ -20,7 +20,65 @@ bibliography: references.bib
 
 ## Stylized facts of returns
 
-## Volatility
+When analyzing returns as a time-series, we look at log returns. The log returns are very similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or indepently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^literature-review-1] following @annaert2021 for returns are given.
+
+[^literature-review-1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
+
+-   Returns are *small and volatile* (with the standard deviation being larger than the mean on average)
+
+-   Returns have very little serial correlation as mentioned by for example @bollerslev1987.
+
+-   Returns exhibit conditional heteroskedasticity, or *volatility clustering*. There is no constant variance, but it is time-varying (homoskedasticity). @bollerslev1987 describes it as "rates of return data are characterized by volatile and tranquil periods".
+
+-   Returns also exhibit *asymmetric volatility*, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the *leverage effect.*
+
+-   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have fat tails or show leptokurtosis and thus riskier than under the normal distribution (excess kurtosis that is larger than 3). Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns are log-normally distributed, which is a skewed density distribution.
+
+Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. Well, it all requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. What distribution is then appropriate?
+
+### Alternative distributions than the normal
+
+#### Student t distribution
+
+One, often used alternative for the normal distribution is the Student t distribution. It is also a symmetric distribution, this means skewness is equal to zero. The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student model as an alternative to the standard Normal distribution.
+
+```{=tex}
+\begin{align}
+f(x) = \dfrac{\Gamma(\dfrac{n+1}{2}}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfrac{x^2}{n})^{-(n+1)/2}
+ (\#eq:std)
+\end{align}
+```
+As can be seen the pdf depends on degree of freedom parameter $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos)
+
+```{=tex}
+\begin{align}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2}}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} (1+\dfrac{(x-\alpha)^2}{\beta \nu})^{-(\nu+1)/2}
+ (\#eq:stdghalanos)
+\end{align}
+```
+where $\alpha, \beta$ and $\nu$ are the location parameters (scale and shape parameters). The symbol $\Gamma$ is the Gamma function.
+
+Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus has a kurtosis coefficient). This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
+
+```{=tex}
+\begin{align}
+\kappa = 3 + \dfrac{6}{n-4}
+ (\#eq:kurt)
+\end{align}
+```
+#### General Error Distribution
+
+The GED distribution is used in the GED-GARCH model by @nelson1991. This model replaced the assumption of conditional normally distributed error terms by
+
+#### Skewed-t Distribution
+
+#### Skewed Generalized Error Distribution
+
+#### Skewed Generalized t distribution
+
+The SGT distribution, introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. The generalized-T distribution was introduced by
+
+## Volatility modeling {#vol-mod}
 
 ### Rolling volatility
 
@@ -203,10 +261,6 @@ where $\gamma_j$ represents the *leverage* term. The indicator function $I$ take
 #### tGARCH model (Zakoian)
 
 #### avGARCH model (in our paper: TS-GARCH to Taylor and Schwert)
-
-### Conditional distributions {#conditional-distributions}
-
-#### Normal distribution
 
 ## Value at Risk
 
