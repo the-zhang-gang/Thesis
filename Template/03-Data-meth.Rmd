@@ -26,6 +26,7 @@ require(readxl)
 require(xts)
 require(PerformanceAnalytics)
 require(kableExtra)
+options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
                                        skip = 2)
 colnames(data) <- c("Date",gsub(pattern = " ", replacement = "_",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7])))
@@ -42,20 +43,20 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)
 Here comes a table and description of the stats
 
 ```{r stats, echo=F, results='asis'}
-x <-  table.Stats(R)
-x <- x[-c(1,2,4,8,10:13),] #selecting relevant columns only
+Statistics <-  table.Stats(R)
+Stats.names <- rownames(Statistics)[-c(1,2,4,8,10:13)]
+Statistics <- Statistics[-c(1,2,4,8,10:13),] #selecting relevant columns only
+names(Statistics) <- Stats.names
 
-  kbl(x, format='latex',
-      caption = "Summary statistics of the returns",
+kable(Statistics, caption = "Summary statistics of the returns",
       label = 'dsTable',
       booktabs = T,
       position = "h!",
-      digits = 3) %>%
-  kable_classic(full_width = F) %>%
-  footnote(general = sprintf('This table shows the descriptive statistics of the returns of the 5 asset classes over the period %s to %s', gsub(" UTC", "", data$...1[2]),gsub(" UTC", "", data$...1[nrow(data)]) ),
-           footnote_as_chunk = T,
-           general_title = 'Note: ',
-           threeparttable = TRUE)
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote('This table shows the descriptive statistics of the returns of the 5 asset classes over the period %s to %s',
+           footnote_as_chunk = T, general_title = "Note: ")
+
 ```
 
 #### Correlation
@@ -63,22 +64,22 @@ x <- x[-c(1,2,4,8,10:13),] #selecting relevant columns only
 Here comes a table and description of the correlations
 
 ```{r correlation, echo=F}
-mcor <- cor(R)
-upper <- round(mcor,3)
-library(xtable)
-upper[upper.tri(mcor)] <-""
-upper<-as.data.frame(upper)
-upper %>% kbl(format='latex',
-      caption = "Correlation table between the different blue chip indices",
-      label = 'dsTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3) %>%
-  kable_classic(full_width = F) %>%
-  footnote(general = sprintf('This table shows the descriptive statistics of the returns of the %s asset classes over the period %s to %s', ncol(data), data$...1[2],data$...1[nrow(data)]),
-           footnote_as_chunk = T,
-           general_title = 'Note: ',
-           threeparttable = TRUE)
+# mcor <- cor(R)
+# upper <- round(mcor,3)
+# library(xtable)
+# upper[upper.tri(mcor)] <-""
+# upper<-as.data.frame(upper)
+# upper %>% kbl(format='latex',
+#       caption = "Correlation table between the different blue chip indices",
+#       label = 'dsTable',
+#       booktabs = T,
+#       position = "h!",
+#       digits = 3) %>%
+#   kable_classic(full_width = F) %>%
+#   footnote(general = sprintf('This table shows the descriptive statistics of the returns of the %s asset classes over the period %s to %s', ncol(data), data$...1[2],data$...1[nrow(data)]),
+#            footnote_as_chunk = T,
+#            general_title = 'Note: ',
+#            threeparttable = TRUE)
 ```
 
 #### Visualizations (eye-balling)
@@ -87,10 +88,10 @@ upper %>% kbl(format='latex',
 \begin{figure}[h]
 ```
 ```{r plot1, echo=F}
-par(mfrow = c(2,1))
+#par(mfrow = c(1,1))
 plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Index")
-plot(RM, major.ticks = "years", grid.ticks.on = "years", col = "blue",
+plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
 
