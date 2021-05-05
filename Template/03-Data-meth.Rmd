@@ -150,6 +150,9 @@ acf(abs(e), main = "", xaxt = "n")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
 ```
 
+
+
+
 ```{r}
 distributions <- c("norm", "std", "sstd", "sged", "ged")
 garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
