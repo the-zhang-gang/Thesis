@@ -101,7 +101,7 @@ What also will be interesting to examine is the SGED distribution of @theodossio
 
 #### Skewed Generalized t-distribution
 
-The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt).
+The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt) [@bollerslev1994].
 
 ```{=tex}
 \begin{align}
