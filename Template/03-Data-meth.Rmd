@@ -99,12 +99,14 @@ plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 ```{r plot2, echo=F}
 #Histogram to eyeball normality
 
-h <- hist(R, breaks = 50, density = 10,
-          col = "lightgray", xlab = "Accuracy", main = "Barplot") 
-xfit <- seq(min(R), max(R), length = 40) 
-yfit <- dnorm(xfit, mean = mean(R), sd = sd(R)) 
-yfit <- yfit * diff(h$mids[1:2]) * length(R) 
-lines(xfit, yfit, col = "black", lwd = 1)
+# h <- hist(R, breaks = 75, density = 10,
+#           col = "lightgray", xlab = "Accuracy", main = "Barplot") 
+# xfit <- seq(min(R), max(R), length = 40) 
+# yfit <- dnorm(xfit, mean = mean(R), sd = sd(R)) 
+# yfit <- yfit * diff(h$mids[1:2]) * length(R) 
+# lines(xfit, yfit, col = "black", lwd = 1)
+
+chart.Histogram(R = R, methods = "add.normal", breaks = 100, main = "Returns Histogram Vs. Normal")
 
 #Plotting volatility
 
