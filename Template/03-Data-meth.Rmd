@@ -34,7 +34,7 @@ data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6
 colnames(data) <- c("Date",gsub(pattern = " ", replacement = "_",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7])))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
-R <- diff(Estoxx, log = TRUE, na.pad = FALSE) 
+R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
 ```
 
@@ -50,7 +50,23 @@ Stats.names <- rownames(Statistics)[-c(1,2,4,8,10:13)]
 Statistics <- Statistics[-c(1,2,4,8,10:13),] #selecting relevant columns only
 names(Statistics) <- Stats.names
 
-kable(Statistics, caption = "Summary statistics of the returns",
+
+garchspec.R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "sGARCH", variance.targeting = F), 
+                     distribution.model = "norm")
+# Estimate the model
+garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
+
+# Compute stdret using residuals()
+stdret.R <- residuals(garchfit.R, standardize = TRUE)
+
+Statistics.S <-  table.Stats(stdret.R)
+Statistics.S <- Statistics.S[-c(1,2,4,8,10:13),] #selecting relevant columns only
+names(Statistics.S) <- Stats.names
+
+
+
+kable(cbind(Statistics, Statistics.S), caption = "Summary statistics of the returns",
       label = 'dsTable',
       booktabs = T,
       position = "h!",
@@ -86,7 +102,6 @@ Here comes a table and description of the correlations
 
 #### Visualizations (eye-balling)
 
-
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 rolling volatility'}
 #par(mfrow = c(1,1))
 plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
@@ -94,7 +109,6 @@ plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
-
 
 ```{r plot2, echo=F}
 #Histogram to eyeball normality
