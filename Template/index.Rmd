@@ -25,7 +25,7 @@ abbreviations: "front-and-back-matter/abbreviations" # path to .tex file with ab
 ## bibliography path ##
 #######################
 bibliography: references.bib
-
+csl: templates/apa.csl
 ########################
 ## PDF layout options ###
 #########################

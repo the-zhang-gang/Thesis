@@ -282,11 +282,11 @@
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
- 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors \href{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}{Zhang}, \href{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}{Annaert} and \href{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}{De Ceuster} for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang.
+ 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors \href{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}{Zhang}, \href{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}{Annaert} and \href{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}{De Ceuster} for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang. ~\\
 
-  Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing ``Markdown'', to MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.Special thanks to \href{http://chester.rbind.io}{Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}.
+  \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing ``Markdown'', to MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.Special thanks to \href{http://chester.rbind.io}{Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
 
-  Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``Rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis.
+  \noindent Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``Rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
 
   \begin{flushright}
   Enjo Faes, \\
@@ -342,7 +342,9 @@
 \adjustmtc
 \markboth{Introduction}{}
 
-It has been shown that stock returns are not normally distributed and exhibit fat-tails and peakedness (\ldots), these are called the stylized facts of returns. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by its past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process (\ldots). On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism'' . Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices.
+A general assumption in finance is that stock returns are normally distributed (\ldots). However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed (\ldots). For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness (\ldots), these are some of the so-called stylized facts of returns.
+
+Additionally a point of interest is the predictability of stock prices. \textcite{fama1965} explains that the question in academic and business circles is: ``To what extent can the past history of a common stock's price be used to make meaningful predictions concerning the future price of the stock?''. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by its past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process (\ldots). On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism''. Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices.
 
 Risk in general can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement.
 
@@ -354,8 +356,102 @@ Risk in general can be defined as the volatility of unexpected outcomes \autocit
 \hypertarget{stylized-facts-of-returns}{%
 \section{Stylized facts of returns}\label{stylized-facts-of-returns}}
 
-\hypertarget{volatility}{%
-\section{Volatility}\label{volatility}}
+When analyzing returns as a time-series, we look at log returns. The log returns are very similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or indepently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
+
+\begin{itemize}
+\item
+  Returns are \emph{small and volatile} (with the standard deviation being larger than the mean on average)
+\item
+  Returns have very little serial correlation as mentioned by for example \textcite{bollerslev1987}.
+\item
+  Returns exhibit conditional heteroskedasticity, or \emph{volatility clustering}. There is no constant variance, but it is time-varying (homoskedasticity). \textcite{bollerslev1987} describes it as ``rates of return data are characterized by volatile and tranquil periods''.
+\item
+  Returns also exhibit \emph{asymmetric volatility}, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the \emph{leverage effect.}
+\item
+  Returns are \emph{not normally distributed} which is also one of the conclusions by \textcite{fama1965}. Returns have fat tails or show leptokurtosis and thus riskier than under the normal distribution (excess kurtosis that is larger than 3). Log returns \textbf{can} be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns are log-normally distributed, which is a skewed density distribution.
+\end{itemize}
+
+Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. Well, it all requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. What distribution is then appropriate?
+
+\hypertarget{conditional-distributions}{%
+\subsection{Alternative distributions than the normal}\label{conditional-distributions}}
+
+\hypertarget{students-t-distribution}{%
+\subsubsection{Student's t-distribution}\label{students-t-distribution}}
+
+One, often used alternative for the normal distribution is the Student t distribution. It is also a symmetric distribution, this means skewness is equal to zero. The probability density function (pdf), again following \textcite{annaert2021}, is given by equation \eqref{eq:std}. As will be seen in \ref{vol-mod}, GARCH models are used for volatility modeling in practice. \textcite{bollerslev1987} examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution \autocite{bollerslev2008}.
+
+\begin{align}
+f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfrac{x^2}{n})^{-(n+1)/2}
+ \label{eq:std}
+\end{align}
+
+As can be seen the pdf depends on degree of freedom parameter \(n\). To be consistent with \textcite{ghalanos2020}, the following general equation is used for the pdf \eqref{eq:stdghalanos}.
+
+\begin{align}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
+ \label{eq:stdghalanos}
+\end{align}
+
+where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. The symbol \(\Gamma\) is the Gamma function.
+
+Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus has a kurtosis coefficient). This kurtosis coefficient is given by equation \eqref{eq:kurt}. This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
+
+\begin{align}
+kurt = 3 + \dfrac{6}{n-4}
+ \label{eq:kurt}
+\end{align}
+
+\hypertarget{generalized-error-distribution}{%
+\subsubsection{Generalized Error Distribution}\label{generalized-error-distribution}}
+
+The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
+
+\begin{align}
+f(x) = \dfrac{\kappa e^{\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+\kappa^(-1)}\beta\Gamma(\kappa^{-1})}
+ \label{eq:ged}
+\end{align}
+
+where \(\alpha, \beta\) and \(\kappa\) are again respectively location, scale and shape parameters.
+
+\hypertarget{skewed-t-distribution}{%
+\subsubsection{Skewed t-Distribution}\label{skewed-t-distribution}}
+
+The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. Equation 1 from \textcite{trottier2015}, here equation \eqref{eq:skeweddist} gives this specification.
+
+\begin{align}
+f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right), \quad z_{\xi} \equiv\left\{\begin{array}{ll}
+\xi^{-1}\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z \geq-\mu_{\xi} / \sigma_{\xi} \\
+\xi\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z<-\mu_{\xi} / \sigma_{\xi}
+\end{array}\right.
+ \label{eq:skeweddist}
+\end{align}
+
+where \(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\) and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case equation \eqref{eq:std}, the pdf of the student t distribution.
+
+According to \textcite{giot2003}; \textcite{giot2004}, the skewed t-distribution outperforms the symmetric density distributions.
+
+\hypertarget{skewed-generalized-error-distribution}{%
+\subsubsection{Skewed Generalized Error Distribution}\label{skewed-generalized-error-distribution}}
+
+What also will be interesting to examine is the SGED distribution of \textcite{theodossiou2000} in GARCH models, like \textcite{lee2008} did. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}.
+
+\hypertarget{skewed-generalized-t-distribution}{%
+\subsubsection{Skewed Generalized t-distribution}\label{skewed-generalized-t-distribution}}
+
+The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt}.
+
+\begin{align}
+f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \ \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}
+ \label{eq:gt}
+\end{align}
+
+where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(\kappa\).
+
+Again the skewed variant is given by equation \eqref{eq:skeweddist} but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
+
+\hypertarget{vol-mod}{%
+\section{Volatility modeling}\label{vol-mod}}
 
 \hypertarget{rolling-volatility}{%
 \subsection{Rolling volatility}\label{rolling-volatility}}
@@ -442,7 +538,7 @@ Another property of ARCH models is that it takes into account volatility cluster
  \label{eq:eq10}
 \end{align}
 
-Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we will see in part \ref{conditional-distributions}. The serial correlation for squared innovations is positive if fourth moment exists (equation \eqref{eq:eq9}, this is volatility clustering once again.
+Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \ref{conditional-distributions}. The serial correlation for squared innovations is positive if fourth moment exists (equation \eqref{eq:eq9}, this is volatility clustering once again.
 
 The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the \(k\)-periods ahead , denoted as period \(T+k\), is given by equation \eqref{eq:eq11}. This can already be simplified, while we know that \(\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2\) from equation \eqref{eq:eq3}.
 
@@ -532,11 +628,8 @@ where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \
 \hypertarget{tgarch-model-zakoian}{%
 \subsubsection{tGARCH model (Zakoian)}\label{tgarch-model-zakoian}}
 
-\hypertarget{avgarch-model-in-our-paper-ts-paper-to-taylor-and-schwert}{%
-\subsubsection{avGARCH model (in our paper: TS-paper to Taylor and Schwert)}\label{avgarch-model-in-our-paper-ts-paper-to-taylor-and-schwert}}
-
-\hypertarget{conditional-distributions}{%
-\subsection{Conditional distributions}\label{conditional-distributions}}
+\hypertarget{avgarch-model-in-our-paper-ts-garch-to-taylor-and-schwert}{%
+\subsubsection{avGARCH model (in our paper: TS-GARCH to Taylor and Schwert)}\label{avgarch-model-in-our-paper-ts-garch-to-taylor-and-schwert}}
 
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
@@ -564,6 +657,28 @@ Here comes text\ldots{}
 
 Here comes a table and description of the stats
 
+\begin{table}[h!]
+
+\caption{\label{tab:dsTable}Summary statistics of the returns}
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+  & x\\
+\midrule
+Minimum & -0.132\\
+Median & 0.000\\
+Arithmetic Mean & 0.000\\
+Geometric Mean & 0.000\\
+Maximum & 0.104\\
+\addlinespace
+Stdev & 0.013\\
+Skewness & -0.310\\
+Kurtosis & 7.208\\
+\bottomrule
+\multicolumn{2}{l}{\rule{0pt}{1em}\textit{Note: } This table shows the descriptive statistics of the returns of the 5 asset classes over the period \%s to \%s}\\
+\end{tabular}
+\end{table}
+
 \hypertarget{correlation}{%
 \subsubsection{Correlation}\label{correlation}}
 
@@ -572,14 +687,77 @@ Here comes a table and description of the correlations
 \hypertarget{visualizations-eye-balling}{%
 \subsubsection{Visualizations (eye-balling)}\label{visualizations-eye-balling}}
 
-\begin{figure}[h]
+\includegraphics{_main_files/figure-latex/plot1-1.pdf} \includegraphics{_main_files/figure-latex/plot1-2.pdf}
 
-\caption{EuroStoxx 50 price and price log return evolution
-\label{fig:fig1}}
-\textit{Notes:} This figure plots the price and price log return respectively for the EuroStoxx 50 index
-\end{figure}
+\includegraphics{_main_files/figure-latex/plot2-1.pdf} \includegraphics{_main_files/figure-latex/plot2-2.pdf}
 
 As can be seen
+
+\includegraphics{_main_files/figure-latex/acfplots-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"snorm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"sged"}\NormalTok{)}
+\NormalTok{garchspec }\OtherTok{\textless{}{-}}\NormalTok{ garchfit }\OtherTok{\textless{}{-}}\NormalTok{ garchforecast }\OtherTok{\textless{}{-}}\NormalTok{ stdret }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions))}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
+\CommentTok{\# Specify a GARCH model with constant mean}
+\NormalTok{garchspec[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
+                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ T), }
+                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
+\CommentTok{\# Estimate the model}
+\NormalTok{garchfit[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec[[i]])}
+
+\CommentTok{\# Compute stdret using residuals()}
+\NormalTok{stdret[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Compute stdret using fitted() and sigma()}
+\NormalTok{stdret[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ (R }\SpecialCharTok{{-}} \FunctionTok{fitted}\NormalTok{(garchfit[[i]])) }\SpecialCharTok{/} \FunctionTok{sigma}\NormalTok{(garchfit[[i]]) }
+
+\NormalTok{\}}
+
+
+\CommentTok{\# \# Use the method sigma to retrieve the estimated volatilities }
+\CommentTok{\# garchvol \textless{}{-} sigma(garchfit) }
+\CommentTok{\# }
+\CommentTok{\# \# Plot the volatility for 2017}
+\CommentTok{\# plot(garchvol)}
+\CommentTok{\# }
+\CommentTok{\# \# Compute unconditional volatility}
+\CommentTok{\# sqrt(uncvariance(garchfit))}
+\CommentTok{\# }
+\CommentTok{\# \# Print last 10 ones in garchvol}
+\CommentTok{\# tail(garchvol, 10)}
+
+\CommentTok{\# \# Forecast volatility 5 days ahead and add }
+\CommentTok{\# garchforecast \textless{}{-} ugarchforecast(fitORspec = garchfit, }
+\CommentTok{\#                      n.ahead = 5)}
+\CommentTok{\# }
+\CommentTok{\# \# Extract the predicted volatilities and print them}
+\CommentTok{\# print(sigma(garchforecast))}
+
+
+
+
+\CommentTok{\# \# Compute stdret using residuals()}
+\CommentTok{\# stdret[[i]] \textless{}{-} residuals(garchfit[[i]], standardize = TRUE)}
+\CommentTok{\# }
+\CommentTok{\# \# Compute stdret using fitted() and sigma()}
+\CommentTok{\# stdret[[i]] \textless{}{-} (R {-} fitted(garchfit[[i]])) / sigma(garchfit[[i]])}
+
+
+
+
+
+
+\CommentTok{\#  make the histogram}
+
+\FunctionTok{chart.Histogram}\NormalTok{(stdret[[}\DecValTok{1}\NormalTok{]], }\AttributeTok{methods =} \FunctionTok{c}\NormalTok{(}\StringTok{"add.normal"}\NormalTok{,}\StringTok{"add.density"}\NormalTok{ ), }
+                \AttributeTok{colorset =} \FunctionTok{c}\NormalTok{(}\StringTok{"gray"}\NormalTok{,}\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-1-1.pdf}
 
 \newpage
 
