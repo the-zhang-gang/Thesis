@@ -26,6 +26,7 @@ require(readxl)
 require(xts)
 require(PerformanceAnalytics)
 require(kableExtra)
+require(rugarch)
 
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
@@ -85,10 +86,8 @@ Here comes a table and description of the correlations
 
 #### Visualizations (eye-balling)
 
-```{=latex}
-\begin{figure}[h]
-```
-```{r plot1, echo=F}
+
+```{r plot1, echo=F, fig.cap='Eurostoxx 50 rolling volatility'}
 #par(mfrow = c(1,1))
 plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Index")
@@ -96,10 +95,8 @@ plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
 
-```{=latex}
-\begin{figure}[h]
-```
-```{r plot1, echo=F}
+
+```{r plot2, echo=F}
 #Histogram to eyeball normality
 
 h <- hist(R, breaks = 50, density = 10,
@@ -116,12 +113,6 @@ chart.RollingPerformance(R = R, width = 22,
 
 ```
 
-```{=latex}
-\caption{EuroStoxx 50 price and price log return evolution
-\label{fig:fig1}}
-\textit{Notes:} This figure plots the price and price log return respectively for the EuroStoxx 50 index
-\end{figure}
-```
 As can be seen
 
 ```{r acfplots, echo=F}

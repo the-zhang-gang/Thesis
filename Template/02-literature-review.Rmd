@@ -38,45 +38,80 @@ Firms holding a portfolio have a lot of things to consider: expected return of a
 
 ### Alternative distributions than the normal {#conditional-distributions}
 
-#### Student t distribution
+#### Student's t-distribution
 
-One, often used alternative for the normal distribution is the Student t distribution. It is also a symmetric distribution, this means skewness is equal to zero. The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student model as an alternative to the standard Normal distribution.
+One, often used alternative for the normal distribution is the Student t distribution. It is also a symmetric distribution, this means skewness is equal to zero. The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{n+1}{2}}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfrac{x^2}{n})^{-(n+1)/2}
+f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfrac{x^2}{n})^{-(n+1)/2}
  (\#eq:std)
 \end{align}
 ```
-As can be seen the pdf depends on degree of freedom parameter $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos)
+As can be seen the pdf depends on degree of freedom parameter $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos).
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2}}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} (1+\dfrac{(x-\alpha)^2}{\beta \nu})^{-(\nu+1)/2}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
  (\#eq:stdghalanos)
 \end{align}
 ```
-where $\alpha, \beta$ and $\nu$ are the location parameters (scale and shape parameters). The symbol $\Gamma$ is the Gamma function.
+where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
 
 Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus has a kurtosis coefficient). This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
 ```{=tex}
 \begin{align}
-\kappa = 3 + \dfrac{6}{n-4}
+kurt = 3 + \dfrac{6}{n-4}
  (\#eq:kurt)
 \end{align}
 ```
-#### General Error Distribution
+#### Generalized Error Distribution
 
-The GED distribution is used in the GED-GARCH model by @nelson1991. This model replaced the assumption of conditional normally distributed error terms by
+The GED distribution is nested in the generalized t distribution by @mcdonald1988 is used in the GED-GARCH model by @nelson1991 to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution [@bollerslev2008]. The conditional density (pdf) is given by equation \@ref(eq:ged) following @ghalanos2020.
 
-#### Skewed-t Distribution
+```{=tex}
+\begin{align}
+f(x) = \dfrac{\kappa e^{\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+\kappa^(-1)}\beta\Gamma(\kappa^{-1})}
+ (\#eq:ged)
+\end{align}
+```
+where $\alpha, \beta$ and $\kappa$ are again respectively location, scale and shape parameters.
+
+#### Skewed t-Distribution
+
+The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. Equation 1 from @trottier2015, here equation \@ref(eq:skeweddist) gives this specification.
+
+```{=tex}
+\begin{align}
+f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right), \quad z_{\xi} \equiv\left\{\begin{array}{ll}
+\xi^{-1}\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z \geq-\mu_{\xi} / \sigma_{\xi} \\
+\xi\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z<-\mu_{\xi} / \sigma_{\xi}
+\end{array}\right.
+ (\#eq:skeweddist)
+\end{align}
+```
+where $\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u$ and $\xi$ between $0$ and $\infty$. $f_1(\cdot)$ is in this case equation \@ref(eq:std), the pdf of the student t distribution.
+
+According to @giot2003; @giot2004, the skewed t-distribution outperforms the symmetric density distributions.
 
 #### Skewed Generalized Error Distribution
 
-#### Skewed Generalized t distribution
+What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, like @lee2008 did. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
 
-The SGT distribution, introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. The generalized-T distribution was introduced by
+#### Skewed Generalized t-distribution
+
+The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt).
+
+```{=tex}
+\begin{align}
+f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \ \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}
+ (\#eq:gt)
+\end{align}
+```
+where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $\kappa$.
+
+Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
 ## Volatility modeling {#vol-mod}
 
