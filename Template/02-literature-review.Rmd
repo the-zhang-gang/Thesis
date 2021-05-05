@@ -231,12 +231,11 @@ It can be shown that then the conditional variance in period $T+k$ is equal to e
 ```
 \newpage
 
-
 ### Univariate GARCH models
 
-An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. 
+An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.
 
-All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the eGARCH model, as this model does not mathematically allow for a negative output. 
+All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the eGARCH model, as this model does not mathematically allow for a negative output.
 
 #### sGARCH model
 
@@ -249,8 +248,6 @@ The standard GARCH model [@bollerslev1986] is written consistent with Alexios @g
 \end{align}
 ```
 where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$" specified as in equation \@ref(eq:eq14).
-
-
 
 ```{=tex}
 \begin{align}
@@ -292,31 +289,31 @@ The gjrGARCH model [@glosten1993] models both positive as negative shocks on the
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 &= \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
  (\#eq:eq17)
 \end{align}
 ```
 where $\gamma_j$ represents the *leverage* term. The indicator function $I$ takes on value 1 for $\varepsilon \le 0$, 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to @ghalanos2020.
 
-#### naGARCH model (Engle & Ng)
+#### naGARCH model
 
 The naGarch or nonlinear assymetric model [Engle1993]. It is specified as in equation \@ref(eq:eq18). The model is *asymmetric* as it allows for positive and negative shocks to differently affect conditional variance and *nonlinear* because a large shock is not a linear transformation of a small shock.
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 &= \omega + \sum\limits_{j=1}^q (\alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt(sigma_{t-j}))^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
  (\#eq:eq18)
 \end{align}
 ```
 As before, $\gamma_j$ represents the *leverage* term.
 
-#### tGARCH model (Zakoian)
+#### tGARCH model
 
 The tGarch or threshold model [Zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the gjrGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
 
 ```{=tex}
 \begin{align}
-\sigma_t &= \omega + \sum\limits_{j=1}^q (\alpha_j^+ \varepsilon_{t-j}^+ \alpha_j^- + \varepsilon_{t-j}^-) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j^+ \varepsilon_{t-j}^+ \alpha_j^{-} + \varepsilon_{t-j}^{-}) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
  (\#eq:eq19)
 \end{align}
 ```
@@ -328,60 +325,47 @@ The absolute value Garch model or TS-Garch model as named after [Taylor1986] & [
 
 ```{=tex}
 \begin{align}
-\sigma_t &= \omega + \sum\limits_{j=1}^q (\alpha_j \abs(\varepsilon_{t-j}) +
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +
 \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
-
  (\#eq:eq20)
 \end{align}
 ```
-
 #### EWMA
 
 A alternative to the series of GARCH models is the Exponentially weighted moving average model or EWMA. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods.It is specified as in \@ref(eq:eq21).
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 &= (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \\varepsilon_{t-j}^2
-
+\sigma_t^2 = (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \varepsilon_{t-j}^2)
  (\#eq:eq21)
 \end{align}
 ```
-
 In practice a $\lambda$ of 0.94 is often used, such as by the RiskMetrics model of J.P. Morgan.
-
 
 ## Value at Risk
 
 Value-at-Risk (VaR) is a risk metric developed to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn. According to @Holton2002 VaR was adopted in 1998 when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22).
 
-
 ```{=tex}
 \begin{align}
-
 Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \phi
-
  (\#eq:eq22)
 \end{align}
 ```
-
 With $R_t$ expected returns in period t, $\Omega_{t-1}$ the information set available in the previous period and $\phi$ the chosen confidence level.
-
 
 ## Conditional Value at risk
 
-One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a $cVaR_{99}$ is the average of all the $VaR$ with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by @Bertsimas2004.It is specified as in \@ref(eq:eq23). 
+One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a $cVaR_{99}$ is the average of all the $VaR$ with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by [@bertsimas2004]. It is specified as in \@ref(eq:eq23).
 
 To calculate $\theta_t$, VaR and cVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
 
-
 ```{=tex}
 \begin{align}
-
 Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(R_t | \Omega_{t-1}) \, \mathrm{d}R_t = \phi
  (\#eq:eq23)
- 
 \end{align}
 ```
 With the same notations as before, and $f$ the (conditional) probability density function of $R_t$.
 
-According to the BIS framework @BIS2019, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
+According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.

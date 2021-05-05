@@ -439,7 +439,7 @@ What also will be interesting to examine is the SGED distribution of \textcite{t
 \hypertarget{skewed-generalized-t-distribution}{%
 \subsubsection{Skewed Generalized t-distribution}\label{skewed-generalized-t-distribution}}
 
-The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt}.
+The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt} \autocite{bollerslev1994}.
 
 \begin{align}
 f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \ \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}
@@ -463,7 +463,7 @@ When volatility needs to be estimated on a specific trading day, the method used
 \hypertarget{arch-model}{%
 \subsection{ARCH model}\label{arch-model}}
 
-Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns. the innovation process and the variance process (or volatility function), written out in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
+Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
 
 \begin{align} 
 R_{t} &= \mu + \varepsilon_t
@@ -492,7 +492,7 @@ From these components we could look at the conditional moments (or expected retu
  \label{eq:eq5}
 \end{align}
 
-For the conditional variance, knowing everything that happened until and including period \(t-1\) the condiitional innovation variance is given by equation \eqref{eq:eq6}. This is equal to \(\sigma_t^2\), while the variance of \(z_t\) is equal to 1. Then it is easy to derive the conditional variance of returns in equation \eqref{eq:eq7}, that is why equation \eqref{eq:eq3} is called the variance equation.
+For the conditional variance, knowing everything that happened until and including period \(t-1\) the conditional innovation variance is given by equation \eqref{eq:eq6}. This is equal to \(\sigma_t^2\), while the variance of \(z_t\) is equal to 1. Then it is easy to derive the conditional variance of returns in equation \eqref{eq:eq7}, that is why equation \eqref{eq:eq3} is called the variance equation.
 
 \begin{align} 
 var_{t-1}(\varepsilon_t) = \mathbb{E}_{t-1}(\varepsilon_{t}^2) = \mathbb{E}_{t-1}(\sigma_t^2 * z_t^2) = \sigma_t^2\mathbb{E}_{t-1}(z_t^2) = \sigma_t^2
@@ -523,6 +523,8 @@ This leads to the properties of ARCH models.
 \end{itemize}
 
 Thus a weak white noise process \(\varepsilon_t\)
+
+Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
 
 The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates that the fat-tails (a stylised fact of returns).
 
@@ -563,7 +565,9 @@ It can be shown that then the conditional variance in period \(T+k\) is equal to
 \hypertarget{univariate-garch-models}{%
 \subsection{Univariate GARCH models}\label{univariate-garch-models}}
 
-Generalised Autoregressive Conditional Heteroscedasticity (GARCH) models come in because of the fact that rolling period standard deviations give an equal weight to the deviations, by such not taking into account volatility clustering, which can be identified as positive autocorrelation in the absolute returns. All these GARCH models are estimated using the package rugarch by Alexios \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}.
+An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.
+
+All the GARCH models below are estimated using the package rugarch by Alexios \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the eGARCH model, as this model does not mathematically allow for a negative output.
 
 \hypertarget{sgarch-model}{%
 \subsubsection{sGARCH model}\label{sgarch-model}}
@@ -601,7 +605,7 @@ Following Alexios \textcite{ghalanos2020}, the integrated GARCH model \autocite{
 \hypertarget{egarch-model}{%
 \subsubsection{eGARCH model}\label{egarch-model}}
 
-The eGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16},
+The eGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16}. The advantage of the eGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
 \begin{align}
 \log_e(\sigma_t^2) = \omega + \sum\limits_{j=1}^q (\alpha_j z_{t-j} + \gamma_j (|z_{t-j}| - E|z_{t-j}|))+ \sum\limits_{j = 1}^p \beta_j \log_e(\sigma_{t-j}^2)
@@ -616,7 +620,7 @@ where \(\alpha_j\) captures the sign effect and \(\gamma_j\) the size effect.
 The gjrGARCH model \autocite{glosten1993} models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I\), it is specified as in equation \eqref{eq:eq17}.
 
 \begin{align}
-\sigma_t^2 &= \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
  \label{eq:eq17}
 \end{align}
 
@@ -625,17 +629,77 @@ where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \
 \hypertarget{nagarch-model-engle-ng}{%
 \subsubsection{naGARCH model (Engle \& Ng)}\label{nagarch-model-engle-ng}}
 
+The naGarch or nonlinear assymetric model {[}Engle1993{]}. It is specified as in equation \eqref{eq:eq18}. The model is \emph{asymmetric} as it allows for positive and negative shocks to differently affect conditional variance and \emph{nonlinear} because a large shock is not a linear transformation of a small shock.
+
+\begin{align}
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt(sigma_{t-j}))^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ \label{eq:eq18}
+\end{align}
+
+As before, \(\gamma_j\) represents the \emph{leverage} term.
+
 \hypertarget{tgarch-model-zakoian}{%
 \subsubsection{tGARCH model (Zakoian)}\label{tgarch-model-zakoian}}
 
-\hypertarget{avgarch-model-in-our-paper-ts-garch-to-taylor-and-schwert}{%
-\subsubsection{avGARCH model (in our paper: TS-GARCH to Taylor and Schwert)}\label{avgarch-model-in-our-paper-ts-garch-to-taylor-and-schwert}}
+The tGarch or threshold model {[}Zakoian1994{]} also models assymetries in volatility depending on the sign of the shock, but contrary to the gjrGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
+
+\begin{align}
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j^+ \varepsilon_{t-j}^+ \alpha_j^{-} + \varepsilon_{t-j}^{-}) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+ \label{eq:eq19}
+\end{align}
+
+where \(\varepsilon_{t-j}^+\) is equal to \(\varepsilon_{t-j}\) if the term is negative and equal to 0 if the term is positive. The reverse applies to \(\varepsilon_{t-j}^-\). They cite {[}Davidian1987{]} who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
+
+\hypertarget{ts-garch-model}{%
+\subsubsection{TS-Garch model}\label{ts-garch-model}}
+
+The absolute value Garch model or TS-Garch model as named after {[}Taylor1986{]} \& {[}Schwert1990{]} models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \eqref{eq:eq20}.
+
+\begin{align}
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +
+\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+ \label{eq:eq20}
+\end{align}
+
+\hypertarget{ewma}{%
+\subsubsection{EWMA}\label{ewma}}
+
+A alternative to the series of GARCH models is the Exponentially weighted moving average model or EWMA. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\lambda\) more weight is assigned to recent periods than distant periods.It is specified as in \eqref{eq:eq21}.
+
+\begin{align}
+\sigma_t^2 = (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \varepsilon_{t-j}^2)
+ \label{eq:eq21}
+\end{align}
+
+In practice a \(\lambda\) of 0.94 is often used, such as by the RiskMetrics model of J.P. Morgan.
 
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
 
+Value-at-Risk (VaR) is a risk metric developed to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn. According to \textcite{Holton2002} VaR was adopted in 1998 when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\theta_t\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}.
+
+\begin{align}
+Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \phi
+ \label{eq:eq22}
+\end{align}
+
+With \(R_t\) expected returns in period t, \(\Omega_{t-1}\) the information set available in the previous period and \(\phi\) the chosen confidence level.
+
 \hypertarget{conditional-value-at-risk}{%
 \section{Conditional Value at risk}\label{conditional-value-at-risk}}
+
+One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by \textcite{Bertsimas2004.It} is specified as in \eqref{eq:eq23}.
+
+To calculate \(\theta_t\), VaR and cVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
+
+\begin{align}
+Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(R_t | \Omega_{t-1}) \, \mathrm{d}R_t = \phi
+ \label{eq:eq23}
+\end{align}
+
+With the same notations as before, and \(f\) the (conditional) probability density function of \(R_t\).
+
+According to the BIS framework \textcite{BIS2019}, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(cVaR_{97.5}\).
 
 \hypertarget{dat-and-meth}{%
 \chapter{Data and methodology}\label{dat-and-meth}}
