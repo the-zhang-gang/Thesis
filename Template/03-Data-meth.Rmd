@@ -137,13 +137,13 @@ acf(abs(e), main = "", xaxt = "n")
 ```
 
 ```{r}
-distributions <- c("norm", "snorm", "std", "sstd", "sged")
+distributions <- c("norm", "std", "sstd", "sged", "ged")
 garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
-                     variance.model = list(model = "sGARCH", variance.targeting = T), 
+garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "sGARCH", variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
@@ -155,40 +155,6 @@ stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
 stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
 
 }
-
-
-# # Use the method sigma to retrieve the estimated volatilities 
-# garchvol <- sigma(garchfit) 
-# 
-# # Plot the volatility for 2017
-# plot(garchvol)
-# 
-# # Compute unconditional volatility
-# sqrt(uncvariance(garchfit))
-# 
-# # Print last 10 ones in garchvol
-# tail(garchvol, 10)
-
-# # Forecast volatility 5 days ahead and add 
-# garchforecast <- ugarchforecast(fitORspec = garchfit, 
-#                      n.ahead = 5)
-# 
-# # Extract the predicted volatilities and print them
-# print(sigma(garchforecast))
-
-
-
-
-# # Compute stdret using residuals()
-# stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
-# 
-# # Compute stdret using fitted() and sigma()
-# stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]])
-
-
-
-
-
 
 #  make the histogram
 
