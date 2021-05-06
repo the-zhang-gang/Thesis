@@ -13,6 +13,8 @@ bibliography: references.bib
 
 \minitoc <!-- this will include a mini table of contents-->
 
-## Main analysis title
+## Results of GARCH with constant higher moments
 
 Here comes our main part
+
+## Results of GARCH with time-varying higher moments

@@ -46,8 +46,9 @@ Here comes a table and description of the stats
 
 ```{r stats, echo=F, results='asis'}
 Statistics <-  table.Stats(R)
-Stats.names <- rownames(Statistics)[-c(1,2,4,8,10:13)]
-Statistics <- Statistics[-c(1,2,4,8,10:13),] #selecting relevant columns only
+
+Stats.names <- rownames(Statistics)[-c(1,2,4,7,8,10:13)]
+Statistics <- Statistics[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 names(Statistics) <- Stats.names
 
 
@@ -61,8 +62,8 @@ garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
 stdret.R <- residuals(garchfit.R, standardize = TRUE)
 
 Statistics.S <-  table.Stats(stdret.R)
-Statistics.S <- Statistics.S[-c(1,2,4,8,10:13),] #selecting relevant columns only
-names(Statistics.S) <- Stats.names
+Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
+# Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
 
 
 
