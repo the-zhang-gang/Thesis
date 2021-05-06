@@ -626,20 +626,20 @@ The gjrGARCH model \autocite{glosten1993} models both positive as negative shock
 
 where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \(I\) takes on value 1 for \(\varepsilon \le 0\), 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to \textcite{ghalanos2020}.
 
-\hypertarget{nagarch-model-engle-ng}{%
-\subsubsection{naGARCH model (Engle \& Ng)}\label{nagarch-model-engle-ng}}
+\hypertarget{nagarch-model}{%
+\subsubsection{naGARCH model}\label{nagarch-model}}
 
 The naGarch or nonlinear assymetric model {[}Engle1993{]}. It is specified as in equation \eqref{eq:eq18}. The model is \emph{asymmetric} as it allows for positive and negative shocks to differently affect conditional variance and \emph{nonlinear} because a large shock is not a linear transformation of a small shock.
 
 \begin{align}
-\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt(sigma_{t-j}))^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
  \label{eq:eq18}
 \end{align}
 
 As before, \(\gamma_j\) represents the \emph{leverage} term.
 
-\hypertarget{tgarch-model-zakoian}{%
-\subsubsection{tGARCH model (Zakoian)}\label{tgarch-model-zakoian}}
+\hypertarget{tgarch-model}{%
+\subsubsection{tGARCH model}\label{tgarch-model}}
 
 The tGarch or threshold model {[}Zakoian1994{]} also models assymetries in volatility depending on the sign of the shock, but contrary to the gjrGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
 
@@ -688,7 +688,7 @@ With \(R_t\) expected returns in period t, \(\Omega_{t-1}\) the information set 
 \hypertarget{conditional-value-at-risk}{%
 \section{Conditional Value at risk}\label{conditional-value-at-risk}}
 
-One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by \textcite{Bertsimas2004.It} is specified as in \eqref{eq:eq23}.
+One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.
 
 To calculate \(\theta_t\), VaR and cVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
 
@@ -699,7 +699,7 @@ Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(R_t | 
 
 With the same notations as before, and \(f\) the (conditional) probability density function of \(R_t\).
 
-According to the BIS framework \textcite{BIS2019}, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(cVaR_{97.5}\).
+According to the BIS framework, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations \autocite{baselcommitteeonbankingsupervision2016}. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(cVaR_{97.5}\).
 
 \hypertarget{dat-and-meth}{%
 \chapter{Data and methodology}\label{dat-and-meth}}
@@ -725,21 +725,20 @@ Here comes a table and description of the stats
 
 \caption{\label{tab:dsTable}Summary statistics of the returns}
 \centering
-\begin{tabular}[t]{lr}
+\begin{tabular}[t]{lrr}
 \toprule
-  & x\\
+  & Statistics & Statistics.S\\
 \midrule
-Minimum & -0.132\\
-Median & 0.000\\
-Arithmetic Mean & 0.000\\
-Geometric Mean & 0.000\\
-Maximum & 0.104\\
+Minimum & -13.240 & -11.773\\
+Median & 0.036 & -0.019\\
+Arithmetic Mean & 0.017 & -0.041\\
+Maximum & 10.438 & 5.713\\
+Stdev & 1.307 & 0.999\\
 \addlinespace
-Stdev & 0.013\\
-Skewness & -0.310\\
-Kurtosis & 7.208\\
+Skewness & -0.310 & -0.633\\
+Kurtosis & 7.208 & 5.134\\
 \bottomrule
-\multicolumn{2}{l}{\rule{0pt}{1em}\textit{Note: } This table shows the descriptive statistics of the returns of the 5 asset classes over the period \%s to \%s}\\
+\multicolumn{3}{l}{\rule{0pt}{1em}\textit{Note: } This table shows the descriptive statistics of the returns of the 5 asset classes over the period \%s to \%s}\\
 \end{tabular}
 \end{table}
 
@@ -761,13 +760,13 @@ As can be seen
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"snorm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"sged"}\NormalTok{)}
+\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"sged"}\NormalTok{, }\StringTok{"ged"}\NormalTok{)}
 \NormalTok{garchspec }\OtherTok{\textless{}{-}}\NormalTok{ garchfit }\OtherTok{\textless{}{-}}\NormalTok{ garchforecast }\OtherTok{\textless{}{-}}\NormalTok{ stdret }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions))}
 
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
 \CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ T), }
+\NormalTok{garchspec[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
+                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
                      \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
 \CommentTok{\# Estimate the model}
 \NormalTok{garchfit[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec[[i]])}
@@ -779,40 +778,6 @@ As can be seen
 \NormalTok{stdret[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ (R }\SpecialCharTok{{-}} \FunctionTok{fitted}\NormalTok{(garchfit[[i]])) }\SpecialCharTok{/} \FunctionTok{sigma}\NormalTok{(garchfit[[i]]) }
 
 \NormalTok{\}}
-
-
-\CommentTok{\# \# Use the method sigma to retrieve the estimated volatilities }
-\CommentTok{\# garchvol \textless{}{-} sigma(garchfit) }
-\CommentTok{\# }
-\CommentTok{\# \# Plot the volatility for 2017}
-\CommentTok{\# plot(garchvol)}
-\CommentTok{\# }
-\CommentTok{\# \# Compute unconditional volatility}
-\CommentTok{\# sqrt(uncvariance(garchfit))}
-\CommentTok{\# }
-\CommentTok{\# \# Print last 10 ones in garchvol}
-\CommentTok{\# tail(garchvol, 10)}
-
-\CommentTok{\# \# Forecast volatility 5 days ahead and add }
-\CommentTok{\# garchforecast \textless{}{-} ugarchforecast(fitORspec = garchfit, }
-\CommentTok{\#                      n.ahead = 5)}
-\CommentTok{\# }
-\CommentTok{\# \# Extract the predicted volatilities and print them}
-\CommentTok{\# print(sigma(garchforecast))}
-
-
-
-
-\CommentTok{\# \# Compute stdret using residuals()}
-\CommentTok{\# stdret[[i]] \textless{}{-} residuals(garchfit[[i]], standardize = TRUE)}
-\CommentTok{\# }
-\CommentTok{\# \# Compute stdret using fitted() and sigma()}
-\CommentTok{\# stdret[[i]] \textless{}{-} (R {-} fitted(garchfit[[i]])) / sigma(garchfit[[i]])}
-
-
-
-
-
 
 \CommentTok{\#  make the histogram}
 
@@ -849,10 +814,13 @@ Let's add an image:
 
 \minitoc 
 
-\hypertarget{main-analysis-title}{%
-\section{Main analysis title}\label{main-analysis-title}}
+\hypertarget{results-of-garch-with-constant-higher-moments}{%
+\section{Results of GARCH with constant higher moments}\label{results-of-garch-with-constant-higher-moments}}
 
 Here comes our main part
+
+\hypertarget{results-of-garch-with-time-varying-higher-moments}{%
+\section{Results of GARCH with time-varying higher moments}\label{results-of-garch-with-time-varying-higher-moments}}
 
 \hypertarget{robustness-analysis}{%
 \chapter{Robustness Analysis}\label{robustness-analysis}}
