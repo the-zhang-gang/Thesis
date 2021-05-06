@@ -20,7 +20,7 @@ bibliography: references.bib
 
 ## Stylized facts of returns
 
-When analyzing returns as a time-series, we look at log returns. The log returns are very similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or indepently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^literature-review-1] following @annaert2021 for returns are given.
+When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^literature-review-1] following @annaert2021 for returns are given.
 
 [^literature-review-1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
 
@@ -32,15 +32,15 @@ When analyzing returns as a time-series, we look at log returns. The log returns
 
 -   Returns also exhibit *asymmetric volatility*, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the *leverage effect.*
 
--   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have fat tails or show leptokurtosis and thus riskier than under the normal distribution (excess kurtosis that is larger than 3). Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns are log-normally distributed, which is a skewed density distribution.
+-   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution.
 
-Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. Well, it all requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. What distribution is then appropriate?
+Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. Below we summarize some alternative distributions that could be a better approximation of returns than the normal one.
 
 ### Alternative distributions than the normal {#conditional-distributions}
 
 #### Student's t-distribution
 
-One, often used alternative for the normal distribution is the Student t distribution. It is also a symmetric distribution, this means skewness is equal to zero. The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
+A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero). The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
 
 ```{=tex}
 \begin{align}
@@ -48,7 +48,7 @@ f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfra
  (\#eq:std)
 \end{align}
 ```
-As can be seen the pdf depends on degree of freedom parameter $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos).
+As can be seen the pdf depends on the degrees of freedom $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos).
 
 ```{=tex}
 \begin{align}
@@ -58,7 +58,7 @@ f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \n
 ```
 where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
 
-Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus has a kurtosis coefficient). This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
+Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
 ```{=tex}
 \begin{align}
@@ -76,11 +76,11 @@ f(x) = \dfrac{\kappa e^{\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+\kapp
  (\#eq:ged)
 \end{align}
 ```
-where $\alpha, \beta$ and $\kappa$ are again respectively location, scale and shape parameters.
+where $\alpha, \beta$ and $\kappa$ are respectively the location, scale and shapeparameters .
 
-#### Skewed t-Distribution
+#### Skewed t-distribution
 
-The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. Equation 1 from @trottier2015, here equation \@ref(eq:skeweddist) gives this specification.
+The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. The first equation from @trottier2015, here equation \@ref(eq:skeweddist) presents the skewed t-distribution.
 
 ```{=tex}
 \begin{align}
@@ -97,7 +97,7 @@ According to @giot2003; @giot2004, the skewed t-distribution outperforms the sym
 
 #### Skewed Generalized Error Distribution
 
-What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, like @lee2008 did. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
+What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, as in the work of @lee2008. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
 
 #### Skewed Generalized t-distribution
 
@@ -369,3 +369,7 @@ Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(R_t | 
 With the same notations as before, and $f$ the (conditional) probability density function of $R_t$.
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
+
+#Past literature on the consequences of higher moments for VaR determination
+
+
