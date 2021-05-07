@@ -27,6 +27,7 @@ require(xts)
 require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
+require(fitdistrplus)
 
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
@@ -193,7 +194,50 @@ As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGAR
 ##
 They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function. This function is based on the joint probability distribution of the observed data, and allows the parameters to vary.
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters $\theta$ that generates the data (\@ref(eq:eq1)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:eq2)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:eq3)).
+
+```{=tex}
+\begin{align} 
+     y_1,y_2,...,y_N \sim i.i.d
+    \\
+    y_i \sim f(y|\theta)
+ (\#eq:eq1)
+\end{align}
+```
+```{=tex}
+\begin{align} 
+
+ L(\theta) = \prod^{N}_{i=1}f(y_i|\theta)\\
+\log(L(\theta)) = \sum^{N}_{i=1} \log f(y_i |\theta)
+
+ (\#eq:eq2)
+\end{align}
+```
+```{=tex}
+\begin{align} 
+
+\theta^{*} = arg \max_{\theta} \bigg[ {(L)} \bigg]
+\\theta^{*} = arg \max_{\theta} \bigg[ \log{(L)} \bigg]
+
+ (\#eq:eq3)
+\end{align}
+```
+
+```{r MLE exampe}
+n_samples <- 25; true_rate <- 1; set.seed(1)
+exp_samples <- rexp(n = n_samples,
+                    rate = true_rate)
+
+sample_data <- exp_samples
+rate_fit_R <- fitdist(data = sample_data, 
+                      distr = 'exp', 
+                      method = 'mle')
+
+rate_fit_R$
+```
+
+
+
 
 \clearpage
 
