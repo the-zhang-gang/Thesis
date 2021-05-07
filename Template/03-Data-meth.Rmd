@@ -28,6 +28,10 @@ require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
 require(fitdistrplus)
+require(fGarch)
+require(sn)
+require(tree)
+
 
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
@@ -224,18 +228,92 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 ```
 
 ```{r MLE exampe}
+
+
+
+
 n_samples <- 25; true_rate <- 1; set.seed(1)
 exp_samples <- rexp(n = n_samples,
                     rate = true_rate)
 
 sample_data <- exp_samples
-rate_fit_R <- fitdist(data = sample_data, 
+rate_fit_R <- fitdistrplus::fitdist(data = sample_data, 
                       distr = 'exp', 
                       method = 'mle')
 
-rate_fit_R$
+rate_fit_R$estimate
 ```
 
+```{r MLE normdist}
+normfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "norm",
+                      method = "mle")
+
+normfit_R$estimate #estimated parameters
+normfit_R$sd #estimated standard errors
+normfit_R$loglik #max log-likelihood 
+#? # LR statistic
+
+
+
+tstart <- list(df=1, ncp = 1)
+
+tfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "t",
+                      method = "mle", start = tstart)
+
+tfit_R$estimate
+tfit_R$sd
+normfit_R$loglik
+#? # LR statistic
+
+
+tfit_R$estimate #estimated parameters
+tfit_R$sd #estimated standard errors
+tfit_R$loglik #max log-likelihood 
+#? # LR statistic
+
+gedstart <- list(mean=1, sd=1, nu=1)
+gedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "ged",
+                      method = "mle", start = gedstart)
+gedfit_R$estimate
+gedfit_R$sd
+gedfit_R$loglik
+#? # LR statistic
+
+skewtstart <- list(xi=1, omega=1, alpha=1, nu=1)
+skewtfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "st",
+                      method = "mle", skewtstart)
+
+skewtfit_R$estimate
+skewtfit_R$sd
+skewtfit_R$loglik
+#? # LR statistic
+
+
+
+#example for professors
+#data example 
+
+x <- c(1,2,-3,1,1,1,-1,-1,1,0,1)
+#t distribution
+tstart <- list(df=1, ncp = 1)
+
+tfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "t",
+                      method = "mle", start = tstart)
+
+#SGT distribution
+
+
+SGTstart <- list(mu=0.,sigma=1, lambda = 0.5, p=2, q=Inf)
+SGTfit_R <- fitdistrplus::fitdist(data = x, 
+                      distr = "sgt",
+                      method = "mle", SGTstart)
+
+```
 
 
 
