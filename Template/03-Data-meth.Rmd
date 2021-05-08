@@ -156,9 +156,6 @@ acf(abs(e), main = "", xaxt = "n")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
 ```
 
-
-
-
 ```{r}
 distributions <- c("norm", "std", "sstd", "sged", "ged")
 garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
@@ -191,10 +188,9 @@ chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ),
 
 ### Methodology
 
-Here comes text...
-
 As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
 
+<<<<<<< Updated upstream
 ##
 They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
@@ -316,20 +312,24 @@ SGTfit_R <- fitdistrplus::fitdist(data = x,
 ```
 
 
+=======
+They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
+>>>>>>> Stashed changes
+
+#### Maximum likelihood estimation
+
+#### Control Tests
+
+##### Unconditional coverage test of @kupiec1995
+
+A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedances follow a binomial distribution under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedance for a confidence level and $N$ the sample size. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom.
+
+```{=tex}
+\begin{aligned}
+L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}\left(\frac{X}{N}\right)^{X}}\right)
+(\#eq:uccov)
+\end{aligned}
+```
+##### Conditional coverage test of @christoffersen2001
 
 \clearpage
-
-```{=html}
-<!-- clearpage ends the page, and also dumps out all floats.
-  Floats are things like tables and figures. -->
-```
-```{r citr, echo=FALSE, fig.cap="The `citr` add-in", out.width="80%", fig.align='center'}
-# include dynamic gif if output is HTML; otherwise screenshot
-# knitr::include_graphics("figures/sample-content/citr.png")
-```
-
-Let's add an image:
-
-```{r captain, fig.align='center', fig.cap="A marvel-lous meme", out.width="65%"}
-# knitr::include_graphics("figures/sample-content/captain.jpeg")
-```
