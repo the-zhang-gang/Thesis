@@ -28,8 +28,7 @@ require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
 require(fitdistrplus)
-require(fGarch) # do we need this?
-require(sn)  # do we need this?
+require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
 
@@ -40,7 +39,9 @@ colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , col
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
-
+require("xlsx")
+write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50", 
+  col.names = TRUE, row.names = TRUE, append = FALSE)
 ```
 
 ### Descriptives
@@ -197,7 +198,6 @@ Maximum likelihood estimation is a method to find the distribution parameters th
  (\#eq:eq3)
 \end{align}
 ```
-
 ```{r MLE exampe}
 n_samples <- 25; true_rate <- 1; set.seed(1)
 exp_samples <- rexp(n = n_samples,
@@ -212,6 +212,7 @@ rate_fit_R$estimate
 ```
 
 ```{r MLE normdist}
+# Normal
 normfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
                       distr = "norm",
                       method = "mle")
@@ -220,25 +221,18 @@ normfit_R$sd #estimated standard errors
 normfit_R$loglik #max log-likelihood 
 #? # LR statistic
 
-
-
+# T-dist
 tstart <- list(df=1, ncp = 1)
 
 tfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
                       distr = "t",
                       method = "mle", start = tstart)
-
-tfit_R$estimate
-tfit_R$sd
-normfit_R$loglik
-#? # LR statistic
-
-
 tfit_R$estimate #estimated parameters
 tfit_R$sd #estimated standard errors
 tfit_R$loglik #max log-likelihood 
 #? # LR statistic
 
+# GED distribution 
 gedstart <- list(mean=1, sd=1, nu=1)
 gedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
                       distr = "ged",
@@ -248,45 +242,46 @@ gedfit_R$sd
 gedfit_R$loglik
 #? # LR statistic
 
-skewtstart <- list(xi=1, omega=1, alpha=1, nu=1)
-skewtfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "st",
-                      method = "mle", skewtstart)
-
-skewtfit_R$estimate
-skewtfit_R$sd
-skewtfit_R$loglik
-#? # LR statistic
 
 
+# ST distribution
+## Stephane's skewed student t is different from the rugarch package, so I would skip it? maybe it is just because of the different estimates
+## skewtstart <- list(xi=0, omega=2, alpha=2, nu=8)
+## skewtfit_R <- fitdistrplus::fitdist(data = as.vector(R),
+##                       distr = "st",
+##                       method = "mle", skewtstart)
+## skewtfit_R$estimate
+## skewtfit_R$sd
+## skewtfit_R$loglik
 
-#example for professors
-#data example 
+STstart <- list(mean=0,sd=2, nu = 8, xi=2)
+STfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", STstart)
+STfit_R$estimate
+STfit_R$sd
+STfit_R$loglik
+## ? # LR statistic
 
-x <- c(1,2,-3,1,1,1,-1,-1,1,0,1)
-#t distribution
-tstart <- list(df=1, ncp = 1)
-
-tfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "t",
-                      method = "mle", start = tstart)
+# ST <- rugarch::fitdist("sstd", x = R)
+# ST$pars # parameters are very similar to the ones we got with fitdistrplus, which is good
 
 #SGT distribution
-
 X.f = X ~ coredata(R)
-start = list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5, p=2, q=12)
+start = list(mu=0,sigma=2, lambda = 0, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5, p=2, q=12)
 result = sgt.mle(X.f = X.f, start = start)
 summary(result)
+
 SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
-SGTfit_R <- fitdistrplus::fitdist(data = as.vector(R), distr = "sgt",method = "mle", SGTstart)
+SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
 summary(SGTfit_R)
+## ? # LR statistic
+
 ```
 
 #### Control Tests
 
 ##### Unconditional coverage test of @kupiec1995
 
-A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedances follow a binomial distribution under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedance for a confidence level and $N$ the sample size. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom.
+A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
 
 ```{=tex}
 \begin{aligned}
@@ -295,5 +290,18 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 \end{aligned}
 ```
 ##### Conditional coverage test of @christoffersen2001
+
+@christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
+
+```{=tex}
+\begin{aligned}
+I_{t}(\alpha)=\left\{\begin{array}{ll}
+1 & \text { if exceedence occurs } \\
+0 & \text { if no exceedence occurs }
+\end{array} .\right.
+(\#eq:ccov)
+\end{aligned}
+```
+It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
 \clearpage
