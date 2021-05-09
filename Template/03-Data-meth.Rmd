@@ -28,15 +28,15 @@ require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
 require(fitdistrplus)
-require(fGarch)
-require(sn)
-require(tree)
-
+require(fGarch) # do we need this?
+require(sn)  # do we need this?
+require(tree)  # do we need this?
+require(sgt)
 
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
                                        skip = 2)
-colnames(data) <- c("Date",gsub(pattern = " ", replacement = "_",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7])))
+colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
@@ -69,41 +69,18 @@ stdret.R <- residuals(garchfit.R, standardize = TRUE)
 Statistics.S <-  table.Stats(stdret.R)
 Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 # Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
+table1 <- data.frame(`Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
+colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
 
-
-
-kable(cbind(Statistics, Statistics.S), caption = "Summary statistics of the returns",
+kable(table1, caption = "Summary statistics of the returns",
       label = 'dsTable',
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote('This table shows the descriptive statistics of the returns of the 5 asset classes over the period %s to %s',
+  footnote(sprintf('This table shows the descriptive statistics of the returns of %s over the period %s to %s. Including minimum, median, arithmetic average, maximum, standard deviation, skewness and excess kurtosis.',colnames(R),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R)))),
            footnote_as_chunk = T, general_title = "Note: ")
 
-```
-
-#### Correlation
-
-Here comes a table and description of the correlations
-
-```{r correlation, echo=F}
-# mcor <- cor(R)
-# upper <- round(mcor,3)
-# library(xtable)
-# upper[upper.tri(mcor)] <-""
-# upper<-as.data.frame(upper)
-# upper %>% kbl(format='latex',
-#       caption = "Correlation table between the different blue chip indices",
-#       label = 'dsTable',
-#       booktabs = T,
-#       position = "h!",
-#       digits = 3) %>%
-#   kable_classic(full_width = F) %>%
-#   footnote(general = sprintf('This table shows the descriptive statistics of the returns of the %s asset classes over the period %s to %s', ncol(data), data$...1[2],data$...1[nrow(data)]),
-#            footnote_as_chunk = T,
-#            general_title = 'Note: ',
-#            threeparttable = TRUE)
 ```
 
 #### Visualizations (eye-balling)
@@ -190,9 +167,7 @@ chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ),
 
 As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
 
-<<<<<<< Updated upstream
-##
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
+They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package "rugarch" version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
 
 Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters $\theta$ that generates the data (\@ref(eq:eq1)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:eq2)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:eq3)).
 
@@ -224,10 +199,6 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 ```
 
 ```{r MLE exampe}
-
-
-
-
 n_samples <- 25; true_rate <- 1; set.seed(1)
 exp_samples <- rexp(n = n_samples,
                     rate = true_rate)
@@ -244,7 +215,6 @@ rate_fit_R$estimate
 normfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
                       distr = "norm",
                       method = "mle")
-
 normfit_R$estimate #estimated parameters
 normfit_R$sd #estimated standard errors
 normfit_R$loglik #max log-likelihood 
@@ -303,20 +273,14 @@ tfit_R <- fitdistrplus::fitdist(data = as.vector(R),
 
 #SGT distribution
 
-
-SGTstart <- list(mu=0.,sigma=1, lambda = 0.5, p=2, q=Inf)
-SGTfit_R <- fitdistrplus::fitdist(data = x, 
-                      distr = "sgt",
-                      method = "mle", SGTstart)
-
+X.f = X ~ coredata(R)
+start = list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5, p=2, q=12)
+result = sgt.mle(X.f = X.f, start = start)
+summary(result)
+SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
+SGTfit_R <- fitdistrplus::fitdist(data = as.vector(R), distr = "sgt",method = "mle", SGTstart)
+summary(SGTfit_R)
 ```
-
-
-=======
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package rugarch version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
->>>>>>> Stashed changes
-
-#### Maximum likelihood estimation
 
 #### Control Tests
 
