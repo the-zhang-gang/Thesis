@@ -31,6 +31,7 @@ require(fitdistrplus)
 require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
+require(tseries)
 
 options(warn = -1, scipen = 999)
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),
@@ -71,7 +72,14 @@ Statistics.S <-  table.Stats(stdret.R)
 Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 # Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
 table1 <- data.frame(`Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
+
 colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
+JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
+                  c(jarque.bera.test(R)$p.value, jarque.bera.test(stdret.R)$p.value))
+rownames(JB.Test) <- c("Jarque - Bera", "JB p-values")
+colnames(JB.Test) <- colnames(table1)
+table1 <- rbind(table1, JB.Test)
+
 
 kable(table1, caption = "Summary statistics of the returns",
       label = 'dsTable',
