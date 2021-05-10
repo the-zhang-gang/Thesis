@@ -13,8 +13,72 @@ bibliography: references.bib
 
 \minitoc <!-- this will include a mini table of contents-->
 
+```{r}
+require(readxl)
+require(xts)
+require(PerformanceAnalytics)
+require(kableExtra)
+require(rugarch)
+require(fitdistrplus)
+require(fGarch) 
+require(tree)  # do we need this?
+require(sgt)
+```
+
 ## Results of GARCH with constant higher moments
 
-Here comes our main part
+<!--# Here comes our main part [FILIPPO] -> to do!  -->
+
+```{r}
+distributions <- c("norm", "std", "sstd", "sged", "ged")
+garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
+
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "sGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
+
+# Compute stdret using residuals()
+stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+
+# Compute stdret using fitted() and sigma()
+stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+}
+
+#  make the histogram
+
+chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
+                colorset = c("gray","red","blue"))
+```
 
 ## Results of GARCH with time-varying higher moments
+
+```{r}
+# distributions
+
+# sGARCH
+sGARCH_RACDspecs <- sGARCH_RACDfit <- sGARCH_RACDforecast <- sGARCH_RACDstdret <- vector(mode = "list", length = length(distributions))
+
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "sGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
+
+# Compute stdret using residuals()
+stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+
+# Compute stdret using fitted() and sigma()
+stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+}
+
+#  make the histogram
+
+chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
+                colorset = c("gray","red","blue"))
+```
