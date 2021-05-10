@@ -57,16 +57,16 @@ chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ),
 ## Results of GARCH with time-varying higher moments
 
 ```{r}
-# distributions
+# ACD specification
+distribution = "sstd"
+meanmodel = list(armaOrder = c(1, 0))
+sGARCH_ACDspec = acdspec(mean.model = , variance.model = list(variance.targeting = TRUE),
 
 # sGARCH
-sGARCH_RACDspecs <- sGARCH_RACDfit <- sGARCH_RACDforecast <- sGARCH_RACDstdret <- vector(mode = "list", length = length(distributions))
+sGARCH_ACDfit <-  
 
-for(i in 1:length(distributions)){
-# Specify a GARCH model with constant mean
-garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "sGARCH", variance.targeting = F), 
-                     distribution.model = distributions[i])
+
+
 # Estimate the model
 garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
 

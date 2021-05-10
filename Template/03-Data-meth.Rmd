@@ -140,12 +140,11 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
   kable_classic(full_width = F)%>%
   footnote(sprintf('This table shows the descriptive statistics of the returns of %s over the period %s to %s. Including minimum, median, arithmetic average, maximum, standard deviation, skewness and excess kurtosis.',gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R)))),
            footnote_as_chunk = T, general_title = "Note: ")
-
 ```
 
 #### Descriptive figures
 
-```{r plot1, echo=F, fig.cap='Eurostoxx 50 rolling volatility'}
+```{r plot1, echo=F, fig.cap='Eurostoxx 50 prices and returns'}
 #par(mfrow = c(1,1))
 plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Index")
@@ -153,7 +152,15 @@ plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
 
-```{r plot2, echo=F}
+```{r plot2, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)'}
+#Plotting volatility
+
+chart.RollingPerformance(R = R, width = 22,
+     FUN = "sd.annualized", scale = 252, main = "One month rolling volatility")
+```
+
+
+```{r plot3, echo=F}
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,
@@ -164,12 +171,6 @@ plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
 # lines(xfit, yfit, col = "black", lwd = 1)
 
 chart.Histogram(R = R, methods = "add.normal", breaks = 100, main = "Returns Histogram Vs. Normal")
-
-#Plotting volatility
-
-chart.RollingPerformance(R = R, width = 22,
-     FUN = "sd.annualized", scale = 252, main = "One month rolling volatility")
-
 ```
 
 As can be seen
@@ -337,6 +338,6 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is $
 
 ##### Dynamic quantile test
 
-@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a 
+@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
 
 \clearpage
