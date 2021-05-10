@@ -304,4 +304,8 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 ```
 It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
+##### Dynamic quantile test
+
+@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a 
+
 \clearpage
