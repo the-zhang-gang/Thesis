@@ -231,16 +231,16 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 \end{align}
 ```
 ```{r MLE exampe}
-n_samples <- 25; true_rate <- 1; set.seed(1)
-exp_samples <- rexp(n = n_samples,
-                    rate = true_rate)
-
-sample_data <- exp_samples
-rate_fit_R <- fitdistrplus::fitdist(data = sample_data, 
-                      distr = 'exp', 
-                      method = 'mle')
-
-rate_fit_R$estimate
+# n_samples <- 25; true_rate <- 1; set.seed(1)
+# exp_samples <- rexp(n = n_samples,
+#                     rate = true_rate)
+# 
+# sample_data <- exp_samples
+# rate_fit_R <- fitdistrplus::fitdist(data = sample_data, 
+#                       distr = 'exp', 
+#                       method = 'mle')
+# 
+# rate_fit_R$estimate
 ```
 
 ```{r MLE normdist}
@@ -302,9 +302,9 @@ start = list(mu=0,sigma=2, lambda = 0, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5
 result = sgt.mle(X.f = X.f, start = start)
 summary(result)
 
-SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
-SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
-summary(SGTfit_R)
+# SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
+# SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
+# summary(SGTfit_R)
 ## ? # LR statistic
 
 ```

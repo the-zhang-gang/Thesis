@@ -5,9 +5,9 @@
 title: |
   Thesis title 
 author: 
-- name: Faes E.
-- name: \ \ \ Mertens de Wilmars S.
-- name: \ \ \ Pratesi F.
+- name: Faes E.^[Enjo.Faes@student.ams.ac.be]
+- name: \ \ \ Mertens de Wilmars S.^[Stephane.MertensdeWilmars@student.ams.ac.be]
+- name: \ \ \ Pratesi F.^[Filippo.Pratesi@student.ams.ac.be]
 university: Antwerp Management School
 university-logo: templates/amslogo.pdf
 submitted-text: A thesis submitted for the degree of
