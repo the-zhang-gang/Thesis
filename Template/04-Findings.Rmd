@@ -33,7 +33,7 @@ require(sgt)
 distributions <- c("norm", "std", "sstd", "sged", "ged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
-Models.garch <- c("sGARCH", "eGARCH","fGARCH", "gjrGARCH", "apARCH", "iGARCH", "csGARCH")
+Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "apARCH", "iGARCH", "csGARCH")
 
 for(i in 1:length(Models.garch)){
 assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
@@ -65,19 +65,30 @@ garchfit.eGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.eGARCH[[i]])
 stdret.eGARCH[[i]] <- residuals(garchfit.eGARCH[[i]], standardize = TRUE)
 }
 
-#ERROR BECAUSE NO SUBMODEL SPECIFIED!!!
+#.fGARCH.NAGARCH------------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.fGARCH.NAGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "NAGARCH", variance.targeting = F),
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.fGARCH.NAGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.NAGARCH[[i]])
+# Compute stdret using residuals()
+stdret.fGARCH.NAGARCH[[i]] <- residuals(garchfit.fGARCH.NAGARCH[[i]], standardize = TRUE)
+}
 
-# #.fGARCH------------------------
-# for(i in 1:length(distributions)){
-# # Specify a GARCH model with constant mean
-# garchspec.fGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-#                      variance.model = list(model = "fGARCH", variance.targeting = F), 
-#                      distribution.model = distributions[i])
-# # Estimate the model
-# garchfit.fGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH[[i]])
-# # Compute stdret using residuals()
-# stdret.fGARCH[[i]] <- residuals(garchfit.fGARCH[[i]], standardize = TRUE)
-# }
+#.fGARCH.AVGARCH------------------------
+
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "AVGARCH", variance.targeting = F),
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.fGARCH.AVGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.AVGARCH[[i]])
+# Compute stdret using residuals()
+stdret.fGARCH.AVGARCH[[i]] <- residuals(garchfit.fGARCH.AVGARCH[[i]], standardize = TRUE)
+}
 
 #.gjrGARCH------------------
 for(i in 1:length(distributions)){
