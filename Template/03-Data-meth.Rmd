@@ -84,14 +84,14 @@ names(jb_R) <- "Jarque-Bera"
 Statistics <-  c(Statistics[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 ## STANDARDIZED RESIDUALS
-garchspec.R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+garchspec_R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
                      variance.model = list(model = "sGARCH", variance.targeting = F), 
                      distribution.model = "norm")
 # Estimate the model
-garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
+garchfit_R <- ugarchfit(data = R, spec = garchspec.R)
 
 # Compute stdret using residuals()
-stdret.R <- residuals(garchfit.R, standardize = TRUE)
+stdret_R <- residuals(garchfit.R, standardize = TRUE)
 
 Statistics.S <-  table.Stats(stdret.R)
 Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
