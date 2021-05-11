@@ -23,6 +23,17 @@ require(fitdistrplus)
 require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
+require(devtools)
+install_bitbucket("alexiosg/racd")
+require(racd)
+require(readxl)
+require(xts)
+require(parallel)
+data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
+colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
+Price_indices <- as.xts(data[,-1], order.by = data$Date)
+Estoxx <- Price_indices[,1] #see if price index
+R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
 
 ## Results of GARCH with constant higher moments
@@ -127,15 +138,6 @@ garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
 stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 }
 
-
-
-
-
-
-
-
-
-
 #  make the histogram
 # 
 # chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),
@@ -146,27 +148,19 @@ stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 
 ```{r}
 # ACD specification
-distribution = "sstd"
-meanmodel = list(armaOrder = c(1, 0))
-sGARCH_ACDspec = acdspec(mean.model = , variance.model = list(variance.targeting = TRUE),
+sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),
+distribution.model = list(model = 'jsu', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
 
 # sGARCH
-sGARCH_ACDfit <-  
-
-
-
-# Estimate the model
-garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
-
-# Compute stdret using residuals()
-stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
-
-# Compute stdret using fitted() and sigma()
-stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+cl = makePSOCKcluster(10)
+fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+plot2xts = function(x, ...) {
+  plot(x, y = NULL, type = 'l',auto.grid = FALSE, major.ticks = 'auto',minor.ticks = FALSE,major.format=FALSE,bar.col = 'grey', candle.col = 'white', ann = TRUE,axes = TRUE, cex.main = 0.9, cex.axis = 0.9,...)
 }
-
-#  make the histogram
-
-chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
-                colorset = c("gray","red","blue"))
+par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
+plot2xts(fitted(fit), col = 'steelblue', main = 'Conditional Mean')
+plot2xts(abs(R), col = 'grey', main = 'Conditional Sigma')
+lines(sigma(fit), col = 'steelblue')
+plot2xts(skewness(fit), col = 'steelblue', main = 'Skewness')
+plot2xts(kurtosis(fit), col = 'steelblue', main = 'Kurtosis (ex)')
 ```
