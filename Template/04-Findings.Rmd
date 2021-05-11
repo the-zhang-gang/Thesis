@@ -52,6 +52,9 @@ assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length
 assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 } 
 
+# ls(pattern = "garchspec.")
+# sapply(ls(pattern = "garchspec."), FUN = setNames, distributions)
+
 #.sGARCH--------------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
