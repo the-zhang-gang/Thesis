@@ -31,8 +31,8 @@ require(fitdistrplus)
 require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
-require(tseries)
-require(openxlsx)
+# require(tseries) # do we need this
+require(openxlsx) # do we need this
 
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
@@ -88,12 +88,12 @@ garchspec_R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
                      variance.model = list(model = "sGARCH", variance.targeting = F), 
                      distribution.model = "norm")
 # Estimate the model
-garchfit_R <- ugarchfit(data = R, spec = garchspec.R)
+garchfit_R <- ugarchfit(data = R, spec = garchspec_R)
 
 # Compute stdret using residuals()
-stdret_R <- residuals(garchfit.R, standardize = TRUE)
+stdret_R <- residuals(garchfit_R, standardize = TRUE)
 
-Statistics.S <-  table.Stats(stdret.R)
+Statistics.S <-  table.Stats(stdret_R)
 Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
 Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 # Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
@@ -102,18 +102,18 @@ Statistics.S <- Statistics.S[,1]
 names(Statistics.S) <- Stats.names.S
 
 # Skewness test
-skewtest <- normtest::skewness.norm.test(coredata(stdret.R)) #as you can see the skewness is the same as the table.Stats method
+skewtest <- normtest::skewness.norm.test(coredata(stdret_R)) #as you can see the skewness is the same as the table.Stats method
 Skewness <- round(skewtest$statistic,4)
 names(Skewness) <- "Skewness"
 skewness.pvalue <- skewtest$p.value
-kurttest <- normtest::kurtosis.norm.test(coredata(stdret.R)) #this is normal kurtosis (not excess)
+kurttest <- normtest::kurtosis.norm.test(coredata(stdret_R)) #this is normal kurtosis (not excess)
 Excess_kurtosis <- round(kurttest$statistic,4) - 3
 names(Excess_kurtosis) <- "Excess Kurtosis"
 kurtosis.pvalue <- kurttest$p.value
 
 # Jb test
-robustjb_R <- DescTools::JarqueBeraTest(coredata(stdret.R)) #robust?
-jb_R <- normtest::jb.norm.test(stdret.R)
+robustjb_R <- DescTools::JarqueBeraTest(coredata(stdret_R)) #robust?
+jb_R <- normtest::jb.norm.test(stdret_R)
 
 jb_R <- paste0(round(jb_R$statistic,4),"***")
 names(jb_R) <- "Jarque-Bera"
@@ -144,23 +144,21 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
 
 #### Descriptive figures
 
-```{r plot1, echo=F, fig.cap='Eurostoxx 50 prices and returns'}
-#par(mfrow = c(1,1))
-plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
+```{r plot1, echo=F, fig.cap='Eurostoxx 50 prices and returns', out.width= "50%"}
+par(mfrow = c(2,1))
+plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "steelblue",
      main = "EuroStoxx 50 Price Index")
-plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
+plot(R, major.ticks = "years", grid.ticks.on = "years", col = "steelblue",
      main = "EuroStoxx 50 Price Log Returns")
 ```
 
-```{r plot2, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)'}
+```{r plot2, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "50%"}
 #Plotting volatility
-
-chart.RollingPerformance(R = R, width = 22,
-     FUN = "sd.annualized", scale = 252, main = "One month rolling volatility")
+par(mfrow = c(1,1))
+chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 
-
-```{r plot3, echo=F}
+```{r plot3, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "50%"}
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,
@@ -170,12 +168,12 @@ chart.RollingPerformance(R = R, width = 22,
 # yfit <- yfit * diff(h$mids[1:2]) * length(R) 
 # lines(xfit, yfit, col = "black", lwd = 1)
 
-chart.Histogram(R = R, methods = "add.normal", breaks = 100, main = "Returns Histogram Vs. Normal")
+chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.9) 
 ```
 
 As can be seen
 
-```{r acfplots, echo=F}
+```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "50%"}
 
 # Compute the mean daily return
 m <- mean(R)
@@ -185,7 +183,7 @@ e <- R - m
 
 # Plot the absolute value of the prediction errors
 par(mfrow = c(2,1),mar = c(1, 2, 2, 1))
-plot(abs(e), main = "Absolute Prediction Error")
+plot(abs(e), main = "Absolute Prediction Error", col = "steelblue")
 
 # Plot the acf of the absolute prediction errors
 acf(abs(e), main = "", xaxt = "n")
@@ -196,40 +194,38 @@ acf(abs(e), main = "", xaxt = "n")
 
 \newpage
 
-### Methodology
+## Methodology
 
-As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
+As already mentioned in ..., GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package "rugarch" version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
+They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in the R l anguage (version 3.6.1) with the package "rugarch" version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation. Additionally
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters $\theta$ that generates the data (\@ref(eq:eq1)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:eq2)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:eq3)).
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters $\theta$ that generates the data (\@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)).
 
 ```{=tex}
-\begin{align} 
-     y_1,y_2,...,y_N \sim i.i.d
+\begin{equation} 
+  y_1,y_2,...,y_N \sim i.i.d
     \\
-    y_i \sim f(y|\theta)
- (\#eq:eq1)
-\end{align}
+  y_i \sim f(y|\theta)
+ (\#eq:pdf)
+\end{equation}
 ```
 ```{=tex}
-\begin{align} 
-
- L(\theta) = \prod^{N}_{i=1}f(y_i|\theta)\\
-\log(L(\theta)) = \sum^{N}_{i=1} \log f(y_i |\theta)
-
- (\#eq:eq2)
-\end{align}
+\begin{equation} 
+ L(\theta) = \prod^N_{i=1}f(y_i|\theta)
+  \\
+ \log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)
+ (\#eq:logl)
+\end{equation}
 ```
 ```{=tex}
-\begin{align} 
-
-\theta^{*} = arg \max_{\theta} \bigg[ {(L)} \bigg]
-\\theta^{*} = arg \max_{\theta} \bigg[ \log{(L)} \bigg]
-
- (\#eq:eq3)
-\end{align}
+\begin{equation} 
+\theta^{*} = arg \max_{\theta} [ L] \\
+\theta^{*} = arg \max_{\theta} [\log(L)]
+ (\#eq:optim)
+\end{equation}
 ```
+
 ```{r MLE exampe}
 # n_samples <- 25; true_rate <- 1; set.seed(1)
 # exp_samples <- rexp(n = n_samples,
@@ -306,38 +302,37 @@ summary(result)
 # SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
 # summary(SGTfit_R)
 ## ? # LR statistic
-
 ```
 
-#### Control Tests
+### Control Tests
 
-##### Unconditional coverage test of @kupiec1995
+#### Unconditional coverage test of @kupiec1995  
 
 A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
 
 ```{=tex}
-\begin{aligned}
+\begin{equation}
 L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}\left(\frac{X}{N}\right)^{X}}\right)
 (\#eq:uccov)
-\end{aligned}
+\end{equation}
 ```
-##### Conditional coverage test of @christoffersen2001
+#### Conditional coverage test of @christoffersen2001  
 
 @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
 
 ```{=tex}
-\begin{aligned}
+\begin{equation}
 I_{t}(\alpha)=\left\{\begin{array}{ll}
 1 & \text { if exceedence occurs } \\
 0 & \text { if no exceedence occurs }
 \end{array} .\right.
 (\#eq:ccov)
-\end{aligned}
+\end{equation}
 ```
 It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
-##### Dynamic quantile test
+#### Dynamic quantile test  
 
-@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
+.\@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
 
 \clearpage
