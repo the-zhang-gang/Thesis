@@ -237,7 +237,7 @@ An improvement on the ARCH model is the Generalised Autoregressive Conditional H
 
 All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the eGARCH model, as this model does not mathematically allow for a negative output.
 
-#### sGARCH model
+#### GARCH model
 
 The standard GARCH model [@bollerslev1986] is written consistent with Alexios @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
 
@@ -267,13 +267,13 @@ The unconditional variance of the standard GARCH model of Bollerslev is very sim
  (\#eq:eq15)
 \end{equation}
 ```
-#### iGARCH model
+#### IGARCH model
 
 Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
-#### eGARCH model
+#### EGARCH model
 
-The eGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16). The advantage of the eGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
+The EGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16). The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
 ```{=tex}
 \begin{align}
@@ -283,9 +283,9 @@ The eGARCH model or exponential GARCH model [@nelson1991] is defined as in equat
 ```
 where $\alpha_j$ captures the sign effect and $\gamma_j$ the size effect.
 
-#### gjrGARCH model
+#### GJRGARCH model
 
-The gjrGARCH model [@glosten1993] models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable $I$, it is specified as in equation \@ref(eq:eq17).
+The GJRGARCH model [@glosten1993] models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable $I$, it is specified as in equation \@ref(eq:eq17).
 
 ```{=tex}
 \begin{align}
@@ -295,9 +295,9 @@ The gjrGARCH model [@glosten1993] models both positive as negative shocks on the
 ```
 where $\gamma_j$ represents the *leverage* term. The indicator function $I$ takes on value 1 for $\varepsilon \le 0$, 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to @ghalanos2020.
 
-#### naGARCH model
+#### NAGARCH model
 
-The naGarch or nonlinear assymetric model [Engle1993]. It is specified as in equation \@ref(eq:eq18). The model is *asymmetric* as it allows for positive and negative shocks to differently affect conditional variance and *nonlinear* because a large shock is not a linear transformation of a small shock.
+The NAGARCH or nonlinear asymmetric model [@engle1993]. It is specified as in equation \@ref(eq:eq18). The model is *asymmetric* as it allows for positive and negative shocks to differently affect conditional variance and *nonlinear* because a large shock is not a linear transformation of a small shock.
 
 ```{=tex}
 \begin{align}
@@ -307,9 +307,9 @@ The naGarch or nonlinear assymetric model [Engle1993]. It is specified as in equ
 ```
 As before, $\gamma_j$ represents the *leverage* term.
 
-#### tGARCH model
+#### TGARCH model
 
-The tGarch or threshold model [Zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the gjrGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
+The TGarch or threshold model [@zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
 
 ```{=tex}
 \begin{align}
@@ -317,11 +317,11 @@ The tGarch or threshold model [Zakoian1994] also models assymetries in volatilit
  (\#eq:eq19)
 \end{align}
 ```
-where $\varepsilon_{t-j}^+$ is equal to $\varepsilon_{t-j}$ if the term is negative and equal to 0 if the term is positive. The reverse applies to $\varepsilon_{t-j}^-$. They cite [Davidian1987] who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
+where $\varepsilon_{t-j}^+$ is equal to $\varepsilon_{t-j}$ if the term is negative and equal to 0 if the term is positive. The reverse applies to $\varepsilon_{t-j}^-$. They cite @davidian1987 who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
 
-#### TS-Garch model
+#### TSGARCH model
 
-The absolute value Garch model or TS-Garch model as named after [Taylor1986] & [Schwert1990] models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \@ref(eq:eq20).
+The absolute value Garch model or TS-Garch model, as named after @taylor1986 and @schwert1989, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \@ref(eq:eq20).
 
 ```{=tex}
 \begin{align}
@@ -332,7 +332,7 @@ The absolute value Garch model or TS-Garch model as named after [Taylor1986] & [
 ```
 #### EWMA
 
-A alternative to the series of GARCH models is the Exponentially weighted moving average model or EWMA. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods.It is specified as in \@ref(eq:eq21).
+A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods. The $\lambda$ must be less than 1. It is specified as in \@ref(eq:eq21).
 
 ```{=tex}
 \begin{align}
@@ -340,11 +340,11 @@ A alternative to the series of GARCH models is the Exponentially weighted moving
  (\#eq:eq21)
 \end{align}
 ```
-In practice a $\lambda$ of 0.94 is often used, such as by the RiskMetrics model of J.P. Morgan.
+In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan.
 
 ## Value at Risk
 
-Value-at-Risk (VaR) is a risk metric developed to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn. According to @Holton2002 VaR was adopted in 1998 when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22).
+Value-at-Risk (VaR) is a risk metric developed to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn. According to VaR was adopted in 1998 when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22).
 
 ```{=tex}
 \begin{align}
@@ -354,7 +354,7 @@ Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \phi
 ```
 With $R_t$ expected returns in period t, $\Omega_{t-1}$ the information set available in the previous period and $\phi$ the chosen confidence level.
 
-## Conditional Value at risk
+## Conditional Value at Risk
 
 One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a $cVaR_{99}$ is the average of all the $VaR$ with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by [@bertsimas2004]. It is specified as in \@ref(eq:eq23).
 
@@ -370,4 +370,4 @@ With the same notations as before, and $f$ the (conditional) probability density
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
 
-\#Past literature on the consequences of higher moments for VaR determination
+# Past literature on the consequences of higher moments for VaR determination

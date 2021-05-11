@@ -13,7 +13,7 @@ bibliography: references.bib
 
 \minitoc <!-- this will include a mini table of contents-->
 
-```{r}
+```{r include=F}
 require(readxl)
 require(xts)
 require(PerformanceAnalytics)
@@ -23,62 +23,169 @@ require(fitdistrplus)
 require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
+require(devtools)
+install_bitbucket("alexiosg/racd")
+data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
+colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
+Price_indices <- as.xts(data[,-1], order.by = data$Date)
+Estoxx <- Price_indices[,1] #see if price index
+R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
 
 ## Results of GARCH with constant higher moments
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r}
+```{r garchcode, echo=F}
 distributions <- c("norm", "std", "sstd", "sged", "ged")
-garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
+#garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
+#names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
+Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "apARCH", "iGARCH", "csGARCH")
 
+for(i in 1:length(Models.garch)){
+assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+} 
+
+# ls(pattern = "garchspec.")
+# sapply(ls(pattern = "garchspec."), FUN = setNames, distributions)
+
+#.sGARCH--------------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
                      variance.model = list(model = "sGARCH", variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
-garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
-
+garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
 # Compute stdret using residuals()
-stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
+stdret.sGARCH[[i]] <- residuals(garchfit.sGARCH[[i]], standardize = TRUE)
+}
 
-# Compute stdret using fitted() and sigma()
-stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+#.eGARCH-------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.eGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "eGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.eGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.eGARCH[[i]])
+# Compute stdret using residuals()
+stdret.eGARCH[[i]] <- residuals(garchfit.eGARCH[[i]], standardize = TRUE)
+}
+
+#.fGARCH.NAGARCH------------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.fGARCH.NAGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "NAGARCH", variance.targeting = F),
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.fGARCH.NAGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.NAGARCH[[i]])
+# Compute stdret using residuals()
+stdret.fGARCH.NAGARCH[[i]] <- residuals(garchfit.fGARCH.NAGARCH[[i]], standardize = TRUE)
+}
+
+#.fGARCH.AVGARCH------------------------
+
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "AVGARCH", variance.targeting = F),
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.fGARCH.AVGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.AVGARCH[[i]])
+# Compute stdret using residuals()
+stdret.fGARCH.AVGARCH[[i]] <- residuals(garchfit.fGARCH.AVGARCH[[i]], standardize = TRUE)
+}
+
+#.gjrGARCH------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.gjrGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "gjrGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
+# Compute stdret using residuals()
+stdret.gjrGARCH[[i]] <- residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
+}
+
+#.apARCH-------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.apARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "apARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.apARCH[[i]] <- ugarchfit(data = R, spec = garchspec.apARCH[[i]])
+# Compute stdret using residuals()
+stdret.apARCH[[i]] <- residuals(garchfit.apARCH[[i]], standardize = TRUE)
+}
+
+#.iGARCH--------------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.iGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "iGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.iGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.iGARCH[[i]])
+# Compute stdret using residuals()
+stdret.iGARCH[[i]] <- residuals(garchfit.iGARCH[[i]], standardize = TRUE)
+}
+
+#.csGARCH-----------------
+for(i in 1:length(distributions)){
+# Specify a GARCH model with constant mean
+garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "csGARCH", variance.targeting = F), 
+                     distribution.model = distributions[i])
+# Estimate the model
+garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
+# Compute stdret using residuals()
+stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 }
 
 #  make the histogram
-
-chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
-                colorset = c("gray","red","blue"))
+# 
+# chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),
+#                 colorset = c("gray","red","blue"))
 ```
 
 ## Results of GARCH with time-varying higher moments
 
-```{r}
-# distributions
+```{r acdcode, include=F}
+require(racd)
+require(rugarch)
+require(parallel)
+require(xts)
+# ACD specification
+sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),
+distribution.model = list(model = 'jsu', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
 
 # sGARCH
-sGARCH_RACDspecs <- sGARCH_RACDfit <- sGARCH_RACDforecast <- sGARCH_RACDstdret <- vector(mode = "list", length = length(distributions))
+cl = makePSOCKcluster(10)
+fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+```
 
-for(i in 1:length(distributions)){
-# Specify a GARCH model with constant mean
-garchspec[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "sGARCH", variance.targeting = F), 
-                     distribution.model = distributions[i])
-# Estimate the model
-garchfit[[i]] <- ugarchfit(data = R, spec = garchspec[[i]])
-
-# Compute stdret using residuals()
-stdret[[i]] <- residuals(garchfit[[i]], standardize = TRUE)
-
-# Compute stdret using fitted() and sigma()
-stdret[[i]] <- (R - fitted(garchfit[[i]])) / sigma(garchfit[[i]]) 
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", echo=F}
+plot2xts = function(x, ...) {
+plot(x, y = NULL, type = 'l', auto.grid = FALSE, major.ticks = 'auto', minor.ticks = FALSE,
+major.format = FALSE, bar.col = 'grey', candle.col = 'white', ann = TRUE,
+axes = TRUE, cex.main = 0.9, cex.axis = 0.9, ...)
+grid()
 }
-
-#  make the histogram
-
-chart.Histogram(stdret[[1]], methods = c("add.normal","add.density" ), 
-                colorset = c("gray","red","blue"))
+par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
+cm <- plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,
+minor.ticks = FALSE, main = 'Conditional Mean', col = 'steelblue')
+cm <- lines(fitted(fit), col = 2)
+cm
+cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
+minor.ticks = FALSE, main = 'Conditional Sigma', col = 'grey')
+cs <- lines(sigma(fit), col = 'steelblue')
+cs
+plot(skewness(fit), col = 'steelblue', main = 'Conditional Skewness')
+plot(kurtosis(fit), col = 'steelblue', main = 'Conditional Excess Kurtosis')
 ```
