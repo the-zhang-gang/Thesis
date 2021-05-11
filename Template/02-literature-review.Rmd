@@ -319,7 +319,7 @@ The TGarch or threshold model [@zakoian1994] also models assymetries in volatili
 ```
 where $\varepsilon_{t-j}^+$ is equal to $\varepsilon_{t-j}$ if the term is negative and equal to 0 if the term is positive. The reverse applies to $\varepsilon_{t-j}^-$. They cite @davidian1987 who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
 
-#### TSGarch model
+#### TSGARCH model
 
 The absolute value Garch model or TS-Garch model, as named after @taylor1986 and @schwert1989, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \@ref(eq:eq20).
 
@@ -354,7 +354,7 @@ Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \phi
 ```
 With $R_t$ expected returns in period t, $\Omega_{t-1}$ the information set available in the previous period and $\phi$ the chosen confidence level.
 
-## Conditional Value at risk
+## Conditional Value at Risk
 
 One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, the conditional VaR (cVaR) quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a $cVaR_{99}$ is the average of all the $VaR$ with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was first introduced by [@bertsimas2004]. It is specified as in \@ref(eq:eq23).
 
