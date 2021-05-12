@@ -127,7 +127,7 @@ Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1
 
 ```{=tex}
 \begin{align} 
-R_{t} &= \mu + \varepsilon_t
+y_{t} &= \mu + \varepsilon_t
  (\#eq:eq1)
 \end{align}
 ```
@@ -153,7 +153,7 @@ From these components we could look at the conditional moments (or expected retu
 ```
 ```{=tex}
 \begin{align} 
-\mathbb{E}_{t-1}(R_{t}) = \mu + \mathbb{E}_{t-1}(\varepsilon_{t}) = \mu
+\mathbb{E}_{t-1}(y_{t}) = \mu + \mathbb{E}_{t-1}(\varepsilon_{t}) = \mu
  (\#eq:eq5)
 \end{align}
 ```
@@ -167,7 +167,7 @@ var_{t-1}(\varepsilon_t) = \mathbb{E}_{t-1}(\varepsilon_{t}^2) = \mathbb{E}_{t-1
 ```
 ```{=tex}
 \begin{align} 
-var_{t-1}(R_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
+var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq7)
 \end{align}
 ```
@@ -348,11 +348,11 @@ Value-at-Risk (VaR) is a risk metric developed to calculate how much money an in
 
 ```{=tex}
 \begin{align}
-Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \phi
+Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \phi
  (\#eq:eq22)
 \end{align}
 ```
-With $R_t$ expected returns in period t, $\Omega_{t-1}$ the information set available in the previous period and $\phi$ the chosen confidence level.
+With $y_t$ expected returns in period t, $\Omega_{t-1}$ the information set available in the previous period and $\phi$ the chosen confidence level.
 
 ## Conditional Value at Risk
 
@@ -362,11 +362,11 @@ To calculate $\theta_t$, VaR and cVaR require information on the expected distri
 
 ```{=tex}
 \begin{align}
-Pr(R_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(R_t | \Omega_{t-1}) \, \mathrm{d}R_t = \phi
+Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \phi
  (\#eq:eq23)
 \end{align}
 ```
-With the same notations as before, and $f$ the (conditional) probability density function of $R_t$.
+With the same notations as before, and $f$ the (conditional) probability density function of $y_t$.
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
 

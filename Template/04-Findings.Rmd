@@ -171,21 +171,25 @@ fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.contro
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", echo=F}
-plot2xts = function(x, ...) {
-plot(x, y = NULL, type = 'l', auto.grid = FALSE, major.ticks = 'auto', minor.ticks = FALSE,
-major.format = FALSE, bar.col = 'grey', candle.col = 'white', ann = TRUE,
-axes = TRUE, cex.main = 0.9, cex.axis = 0.9, ...)
-grid()
-}
+# plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
 par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
-cm <- plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,
-minor.ticks = FALSE, main = 'Conditional Mean', col = 'steelblue')
+cm <- plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue')
 cm <- lines(fitted(fit), col = 2)
 cm
-cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
-minor.ticks = FALSE, main = 'Conditional Sigma', col = 'grey')
+cs <- plotxts(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
+minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
 cs <- lines(sigma(fit), col = 'steelblue')
 cs
-plot(skewness(fit), col = 'steelblue', main = 'Conditional Skewness')
-plot(kurtosis(fit), col = 'steelblue', main = 'Conditional Excess Kurtosis')
+plotxts(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
+plotxts(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
+
+pnl <- function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) {
+  panel.number <- parent.frame()$panel.number
+	if (panel.number == 1) lines(fitted(fit), xts(fit@model$modeldata$data, fit@model$modeldata$index),col = "red")
+	lines(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), col = "red")
+}
+zoo::plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="", panel = pnl) 
+lines(fitted(fit), col = 2) + grid()
+
+xts::plot.xts(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="", )
 ```

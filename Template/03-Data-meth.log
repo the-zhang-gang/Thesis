@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  11 MAY 2021 16:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  12 MAY 2021 11:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1559,100 +1559,84 @@ Package microtype Info: Loading generic protrusion settings for font family
 Package minitoc Info: I0006
 (minitoc)             03-Data-meth.mtc1 is empty on input line 179.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-97.
+98.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-97.
+98.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-197.
+198.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-197.
+198.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 197.
+(Font)              <12> on input line 198.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 197.
+(Font)              <8> on input line 198.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 197.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 197
+(Font)              <6> on input line 198.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 198
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 197
+LaTeX Font Info:    Trying to load font information for U+msb on input line 198
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Overfull \hbox (719.95099pt too wide) in paragraph at lines 197--215
- [][] 
- []
 
-<03-Data-meth_files/figure-latex/plot1-1.pdf, id=28, 457.71pt x 311.1625pt>
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<03-Data-meth_files/figure-latex/plot1-1.pdf, id=32, 423.5825pt x 311.1625pt>
 File: 03-Data-meth_files/figure-latex/plot1-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot1-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-1.pdf  used on i
-nput line 222.
-(pdftex.def)             Requested size: 457.7089pt x 311.16174pt.
-
-Overfull \hbox (36.60843pt too wide) in paragraph at lines 222--223
- [][] 
- []
-
-[1
-
-
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<03-Data-meth_files/figure-latex/plot2-1.pdf, id=47, 412.54124pt x 294.09875pt>
+nput line 227.
+(pdftex.def)             Requested size: 315.82535pt x 232.01338pt.
+<03-Data-meth_files/figure-latex/plot2-1.pdf, id=33, 412.54124pt x 294.09875pt>
 
 File: 03-Data-meth_files/figure-latex/plot2-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot2-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot2-1.pdf  used on i
-nput line 228.
-(pdftex.def)             Requested size: 412.54024pt x 294.09802pt.
-<03-Data-meth_files/figure-latex/plot3-1.pdf, id=48, 436.63126pt x 282.05376pt>
+nput line 236.
+(pdftex.def)             Requested size: 315.82535pt x 225.15083pt.
+<03-Data-meth_files/figure-latex/plot3-1.pdf, id=34, 436.63126pt x 282.05376pt>
 
 File: 03-Data-meth_files/figure-latex/plot3-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot3-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot3-1.pdf  used on i
-nput line 232.
-(pdftex.def)             Requested size: 436.63019pt x 282.05305pt.
-
-Overfull \hbox (33.15454pt too wide) in paragraph at lines 232--233
-[][] 
- []
-
-<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=49, 453.695pt x 306.14375pt
+nput line 245.
+(pdftex.def)             Requested size: 315.82535pt x 204.01677pt.
+<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=35, 453.695pt x 306.14375pt
 >
 File: 03-Data-meth_files/figure-latex/acfplots-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/acfplots-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/acfplots-1.pdf  used o
-n input line 238.
-(pdftex.def)             Requested size: 453.6939pt x 306.14299pt.
+n input line 256.
+(pdftex.def)             Requested size: 315.82535pt x 213.11263pt.
+[1
 
-Overfull \hbox (32.59343pt too wide) in paragraph at lines 238--239
- [][] 
- []
 
-[2 <./03-Data-meth_files/figure-latex/plot1-1.pdf> <./03-Data-meth_files/figure
--latex/plot3-1.pdf>] [3 <./03-Data-meth_files/figure-latex/plot2-1.pdf>] [4 <./
-03-Data-meth_files/figure-latex/acfplots-1.pdf>]
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./0
+3-Data-meth_files/figure-latex/plot1-1.pdf> <./03-Data-meth_files/figure-latex/
+plot2-1.pdf>] [3 <./03-Data-meth_files/figure-latex/plot3-1.pdf>] [4 <./03-Data
+-meth_files/figure-latex/acfplots-1.pdf>]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-77.
+98.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1661,7 +1645,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-284.
+305.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1674,14 +1658,14 @@ Package microtype Info: Character `texttrademark ' is missing
 (microtype)             Ignoring protrusion settings for this character.
 [5] [6]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 413.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 434.
 
 LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 413.
+(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 434.
 
 
 LaTeX Font Warning: Font shape `TS1/lmtt/bx/it' in size <12> not available
-(Font)              Font shape `TS1/lmtt/b/sl' tried instead on input line 413.
+(Font)              Font shape `TS1/lmtt/b/sl' tried instead on input line 434.
 
 
 Package microtype Info: Character `texttrademark ' is missing
@@ -1692,7 +1676,7 @@ Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 541.
+(Font)              <10.95> on input line 562.
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 03-Data-meth.maf file.
@@ -1703,19 +1687,19 @@ Package minitoc Info: I0009
 
 ] (./03-Data-meth.aux)
 Package rerunfilecheck Info: File `03-Data-meth.out' has not changed.
-(rerunfilecheck)             Checksum: 747DE41FA6C529970AE7C56252FCE242;676.
+(rerunfilecheck)             Checksum: 012A46E4F82716F7B2F84702F955D5DC;800.
 Package logreq Info: Writing requests to '03-Data-meth.run.xml'.
 \openout1 = `03-Data-meth.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29732 strings out of 478994
- 493002 string characters out of 5858184
- 1324711 words of memory out of 5000000
- 46374 multiletter control sequences out of 15000+600000
- 482358 words of font info for 126 fonts, out of 8000000 for 9000
+ 29754 strings out of 478994
+ 493385 string characters out of 5858184
+ 1324836 words of memory out of 5000000
+ 46387 multiletter control sequences out of 15000+600000
+ 482487 words of font info for 127 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,10n,89p,1138b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,11n,89p,1138b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
 texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021/
 texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2021/texmf-dist
@@ -1739,10 +1723,10 @@ usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/
 texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/20
 21/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2021/texmf-
 dist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 03-Data-meth.pdf (11 pages, 580765 bytes).
+Output written on 03-Data-meth.pdf (11 pages, 581476 bytes).
 PDF statistics:
- 257 PDF objects out of 1000 (max. 8388607)
- 210 compressed objects within 3 object streams
- 42 named destinations out of 1000 (max. 500000)
- 41541 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 269 PDF objects out of 1000 (max. 8388607)
+ 222 compressed objects within 3 object streams
+ 49 named destinations out of 1000 (max. 500000)
+ 41549 words of extra memory for PDF output out of 42996 (max. 10000000)
 
