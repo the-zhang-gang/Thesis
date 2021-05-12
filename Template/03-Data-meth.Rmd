@@ -5,6 +5,7 @@ output:
   bookdown::pdf_document2: 
     template: templates/brief_template.tex
     citation_package: biblatex
+    extra_dependencies: ["booktabs","threeparttable"]
 documentclass: book
 bibliography: references.bib
 ---
@@ -31,9 +32,9 @@ require(fitdistrplus)
 require(fGarch) 
 require(tree)  # do we need this?
 require(sgt)
-require(tseries)
-require(openxlsx)
-
+# require(tseries) # do we need this
+require(openxlsx) # do we need this
+require(TTR)
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -81,25 +82,26 @@ jb_R <- normtest::jb.norm.test(R)
 jb_R <- paste0(round(jb_R$statistic,4),"***")
 names(jb_R) <- "Jarque-Bera"
 
+# PART 1
 Statistics <-  c(Statistics[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 ## STANDARDIZED RESIDUALS
-garchspec_R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+garchspec.R <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
                      variance.model = list(model = "sGARCH", variance.targeting = F), 
                      distribution.model = "norm")
 # Estimate the model
-garchfit_R <- ugarchfit(data = R, spec = garchspec.R)
+garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
 
 # Compute stdret using residuals()
-stdret_R <- residuals(garchfit.R, standardize = TRUE)
+stdret.R <- residuals(garchfit.R, standardize = TRUE)
 
 Statistics.S <-  table.Stats(stdret.R)
-Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
-Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
-# Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
 
+Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
+Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
 Statistics.S <- Statistics.S[,1]
 names(Statistics.S) <- Stats.names.S
+
 
 # Skewness test
 skewtest <- normtest::skewness.norm.test(coredata(stdret.R)) #as you can see the skewness is the same as the table.Stats method
@@ -121,16 +123,15 @@ names(jb_R) <- "Jarque-Bera"
 Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 # for table 1
-
 table1 <- data.frame(Statistics = names(Statistics.S), `Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
 
-colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
-
+# colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
 # JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
 #                   c(jarque.bera.test(R)$p.value, jarque.bera.test(stdret.R)$p.value))
 # rownames(JB.Test) <- c("Jarque - Bera", "JB p-values")
 # colnames(JB.Test) <- colnames(table1)
 # table1 <- rbind(table1, JB.Test)
+
 
 table1 %>% kbl(caption = "Summary statistics of the returns",
       label = 'dsTable',
@@ -138,29 +139,56 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(sprintf('This table shows the descriptive statistics of the returns of %s over the period %s to %s. Including minimum, median, arithmetic average, maximum, standard deviation, skewness and excess kurtosis.',gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R)))),
+  footnote(sprintf('This table shows the descriptive statistics of the returns of %s over the period %s to %s. Including minimum, median, arithmetic average, maximum, standard deviation, skewness and excess kurtosis.',gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R)))),threeparttable = T,
            footnote_as_chunk = T, general_title = "Note: ")
 ```
 
+\newpage
 #### Descriptive figures
-
-```{r plot1, echo=F, fig.cap='Eurostoxx 50 prices and returns'}
-#par(mfrow = c(1,1))
-plot(Estoxx, major.ticks = "years", grid.ticks.on = "years", col = "blue",
-     main = "EuroStoxx 50 Price Index")
-plot(R, major.ticks = "years", grid.ticks.on = "years", col = "blue",
-     main = "EuroStoxx 50 Price Log Returns")
+```{r plot1, echo=F, fig.cap='Eurostoxx 50 prices and returns', fig.align='center', out.width="75%"}
+par(mfrow = c(2,1),mar = c(2, 7, 1, 1))
+# plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab = "Price", main = "Eurostoxx 50 Price Index", lwd=2);
+# # axis(1, at = time(as.zoo(Estoxx)), labels = FALSE)
+# tt <- time(as.zoo(Estoxx)[endpoints(as.zoo(Estoxx), "years")]);
+# axis(side = 1, at = tt, labels = FALSE);
+# ix <- seq(1, length(tt), 3);
+# fmt <- "%b-%y" # format for axis labels
+# labs <- format(tt, fmt);
+# # axis(1, at = time(zz)[ix], labels = labs[ix], tcl = -0.7, cex.axis = 0.7)
+# axis(side = 1, at = tt[ix], labels = labs[ix], tcl = -0.7, cex.axis = 0.7);
+# grid()
+# 
+# plot(as.zoo(R), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab ="Log Returns",main = "Eurostoxx 50 Price Index Log Returns", lwd=2);
+# # axis(1, at = time(as.zoo(Estoxx)), labels = FALSE)
+# tt <- time(as.zoo(R)[endpoints(as.zoo(R), "years")]);
+# axis(side = 1, at = tt, labels = FALSE);
+# ix <- seq(1, length(tt), 3);
+# fmt <- "%b-%y" # format for axis labels
+# labs <- format(tt, fmt);
+# # axis(1, at = time(zz)[ix], labels = labs[ix], tcl = -0.7, cex.axis = 0.7)
+# axis(side = 1, at = tt[ix], labels = labs[ix], tcl = -0.7, cex.axis = 0.7);
+# grid()
+merged <- merge(Estoxx, R)
+colnames <- c("Price", "Return")
+my.panel <- function(...) {
+  lines(...)
+  abline(h=0)
+}
+par(mfrow=c(1,1))
+plot(as.zoo(merged), screen = 1, col = "steelblue", xlab = "", ylab = "Price", panel = my.panel,lwd=2, main = "Eurostoxx 50 Price Index", plot.type= "multiple"); grid()
+plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "", ylab = "Price", main = "Eurostoxx 50 Price Index"); grid()
+plot(as.zoo(R), screen = 1, col = "steelblue", xlab = "Date", ylab = "Log Returns",main = "Eurostoxx 50 Price Index Log Returns");grid()
 ```
 
-```{r plot2, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)'}
+```{r plot2, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "75%", fig.align='center'}
 #Plotting volatility
-
-chart.RollingPerformance(R = R, width = 22,
-     FUN = "sd.annualized", scale = 252, main = "One month rolling volatility")
+par(mfrow = c(1,1))
+realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
+plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Eurostoxx 50 rolling 22-day volatility (annualized)");grid()
+chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 
-
-```{r plot3, echo=F}
+```{r plot3, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "75%", fig.align='center'}
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,
@@ -170,12 +198,12 @@ chart.RollingPerformance(R = R, width = 22,
 # yfit <- yfit * diff(h$mids[1:2]) * length(R) 
 # lines(xfit, yfit, col = "black", lwd = 1)
 
-chart.Histogram(R = R, methods = "add.normal", breaks = 100, main = "Returns Histogram Vs. Normal")
+chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.9) 
 ```
 
 As can be seen
 
-```{r acfplots, echo=F}
+```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "75%"}
 
 # Compute the mean daily return
 m <- mean(R)
@@ -185,10 +213,10 @@ e <- R - m
 
 # Plot the absolute value of the prediction errors
 par(mfrow = c(2,1),mar = c(1, 2, 2, 1))
-plot(abs(e), main = "Absolute Prediction Error")
+plot(zoo(abs(e), index(e)), main = "Absolute Prediction Error",col = "steelblue")
 
 # Plot the acf of the absolute prediction errors
-acf(abs(e), main = "", xaxt = "n")
+acf(abs(e), main = "ACF", xaxt = "n")
 
 # acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
@@ -197,40 +225,41 @@ acf(abs(e), main = "", xaxt = "n")
 \newpage
 
 ### Methodology
+#### Garch models
 
-As already mentioned in ..., GARCH models sGARCH, eGARCH, iGARCH, gjrGARCH, nGARCH, tGARCH and tsGARCH will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalised error distribution, skewed generalised error distribution and the skewed generalised Theodossiou distribution.
+As already mentioned in ..., GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in R (version 3.6.1) with the package "rugarch" version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation.
+They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in the R language (version 3.6.1) with the package "rugarch" version 1.4-4 (R univariate garch), which gives us a bit more time to focus on the results and the interpretation. Additionally
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters $\theta$ that generates the data (\@ref(eq:eq1)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:eq2)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:eq3)).
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (\@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)).
 
 ```{=tex}
 \begin{align} 
-     y_1,y_2,...,y_N \sim i.i.d
+  y_1,y_2,...,y_N \sim i.i.d
     \\
-    y_i \sim f(y|\theta)
- (\#eq:eq1)
+  y_i \sim f(y|\theta)
+ (\#eq:pdf)
 \end{align}
 ```
+
 ```{=tex}
 \begin{align} 
-
- L(\theta) = \prod^{N}_{i=1}f(y_i|\theta)\\
-\log(L(\theta)) = \sum^{N}_{i=1} \log f(y_i |\theta)
-
- (\#eq:eq2)
+ L(\theta) = \prod^N_{i=1}f(y_i|\theta)
+  \\
+ \log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)
+ (\#eq:logl)
 \end{align}
 ```
+
 ```{=tex}
 \begin{align} 
-
-\theta^{*} = arg \max_{\theta} \bigg[ {(L)} \bigg]
-\\theta^{*} = arg \max_{\theta} \bigg[ \log{(L)} \bigg]
-
- (\#eq:eq3)
+\theta^{*} = arg \max_{\theta} [ L] \\
+\theta^{*} = arg \max_{\theta} [\log(L)]
+ (\#eq:optim)
 \end{align}
 ```
-```{r MLE exampe}
+
+```{r MLE exampe, echo=F}
 # n_samples <- 25; true_rate <- 1; set.seed(1)
 # exp_samples <- rexp(n = n_samples,
 #                     rate = true_rate)
@@ -243,7 +272,9 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 # rate_fit_R$estimate
 ```
 
-```{r MLE normdist}
+
+
+```{r MLE fitdist, echo=F}
 # Normal
 normfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
                       distr = "norm",
@@ -274,7 +305,15 @@ gedfit_R$sd
 gedfit_R$loglik
 #? # LR statistic
 
-
+# SGED distribution 
+sgedstart <- list(mean=1, sd=1, nu=1, xi =1.5)
+sgedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "sged",
+                      method = "mle", start = sgedstart)
+sgedfit_R$estimate
+sgedfit_R$sd
+sgedfit_R$loglik
+#? # LR statistic
 
 # ST distribution
 ## Stephane's skewed student t is different from the rugarch package, so I would skip it? maybe it is just because of the different estimates
@@ -302,43 +341,232 @@ start = list(mu=0,sigma=2, lambda = 0, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5
 result = sgt.mle(X.f = X.f, start = start)
 summary(result)
 
-# SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
-# SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
-# summary(SGTfit_R)
+SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
+SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
+summary(SGTfit_R)
 ## ? # LR statistic
+
+
 
 ```
 
-#### Control Tests
+```{r SGT.MLE, echo=F}
+sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ 
+            lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
+          start, subset, method = "BFGS", itnmax = NULL, 
+          hessian.method = "Richardson", gradient.method = "Richardson", 
+          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
+{
+  formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
+                  p = p.f, q = q.f)
+  varNames = NULL
+  envir = new.env()
+  for (i in 1:6) {
+    formList[[i]] = stats::as.formula(formList[[i]])
+    if (length(formList[[i]]) == 2L) {
+      formList[[i]][[3L]] = formList[[i]][[2L]]
+      formList[[i]][[2L]] = as.name(names(formList)[i])
+    }
+    else if (as.character(formList[[i]][[2L]]) != names(formList)[i]) {
+      warning(paste("The left hand side of ", names(formList)[i], 
+                    ".f was changed from ", as.character(formList[[i]][[2L]]), 
+                    " to ", names(formList)[i], sep = ""))
+    }
+    varNames = c(varNames, all.vars(formList[[i]][[3L]]))
+  }
+  if (class(data)[1L] == "matrix") 
+    data = as.data.frame(data)
+  if (!is.list(data) && !is.environment(data)) 
+    stop("'data' must be a list or an environment")
+  start = as.list(start)
+  if (is.null(names(start))) 
+    stop("'start' must be a named list or named numeric vector")
+  if ("" %in% names(start)) 
+    stop("at least one of the elements in 'start' is missing a name")
+  parNames = names(start)
+  varNames = varNames[is.na(match(varNames, parNames))]
+  if (length(varNames) == 0L) 
+    stop("there is no reference to data in the given formulas")
+  for (i in varNames) {
+    if (!exists(i, data)) 
+      stop(paste(i, "is not contained in 'start' and it is not found in 'data'"))
+    assign(i, eval(parse(text = paste("as.numeric(data$", 
+                                      i, ")", sep = ""))), envir)
+  }
+  if (length(varNames) > 1) {
+    for (i in 2:length(varNames)) {
+      if (length(eval(parse(text = paste("envir$", varNames[1L], 
+                                         sep = "")))) != length(eval(parse(text = paste("envir$", 
+                                                                                        varNames[i], sep = ""))))) 
+        stop(paste("the length of the variable", varNames[i], 
+                   "does not match the length of the variable", 
+                   varNames[1L]))
+    }
+  }
+  control = list(...)
+  if (!is.null(control$maximize)) 
+    stop("'maximize' option not allowed")
+  if (!missing(subset)) 
+    for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
+                                                          i, "[subset]", sep = ""))), envir)
+  keep = rep(TRUE, length(eval(parse(text = paste("envir$", 
+                                                  varNames[1L], sep = "")))))
+  for (i in varNames) keep = keep & is.finite(eval(parse(text = paste("envir$", 
+                                                                      i, sep = ""))))
+  for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
+                                                        i, "[keep]", sep = ""))), envir)
+  loglik = function(params) {
+    for (i in 1:length(parNames)) assign(parNames[i], unlist(params[i]))
+    X = eval(formList[[1L]][[3L]])
+    mu = eval(formList[[2L]][[3L]])
+    sigma = eval(formList[[3L]][[3L]])
+    lambda = eval(formList[[4L]][[3L]])
+    p = eval(formList[[5L]][[3L]])
+    q = eval(formList[[6L]][[3L]])
+    sum(dsgt(X, mu, sigma, lambda, p, q, mean.cent, var.adj, 
+             log = TRUE))
+  }
+  environment(loglik) = envir
+  negloglik = function(params) {
+    -loglik(params)
+  }
+  if (!is.finite(loglik(start))) 
+    stop("'start' yields infinite or non-computable SGT function values")
+  optimum = suppressWarnings(optimx::optimx(par = unlist(start), 
+                                            fn = negloglik, method = method, itnmax = itnmax, control = control, lower=lower, upper=upper))
+  minimum = min(optimum$value, na.rm = TRUE)
+  if (!is.finite(minimum)) 
+    stop("All Maximization Methods Failed")
+  whichbest = max(which(minimum == optimum$value))
+  optimal = optimum[whichbest, ]
+  estimate = as.numeric(optimum[whichbest, 1:length(parNames)])
+  names(estimate) = parNames
+  H = tryCatch(numDeriv::hessian(loglik, estimate, method = hessian.method), 
+               error = function(e) {
+                 warning("hessian matrix calculation failed")
+                 return(as.matrix(NaN))
+               })
+  varcov = tryCatch(-qr.solve(H), error = function(e) {
+    warning("covariance matrix calculation failed due to a problem with the hessian")
+    return(as.matrix(NaN))
+  })
+  std.error = sqrt(diag(varcov))
+  if (is.finite(varcov[1, 1])) 
+    names(std.error) = parNames
+  gradient = tryCatch(numDeriv::grad(loglik, estimate, method = gradient.method), 
+                      error = function(e) {
+                        warning("gradient calculation failed")
+                        return(NaN)
+                      })
+  result = list(maximum = -minimum, estimate = estimate, convcode = as.numeric(optimal$convcode), 
+                niter = as.numeric(optimal$niter), best.method.used = row.names(optimal), 
+                optimx = optimum, hessian = H, gradient = gradient, 
+                varcov = varcov, std.error = std.error)
+  class(result) = c("sgtest", class(result))
+  return(result)
+}
 
-##### Unconditional coverage test of @kupiec1995
+```
+
+```{r mlesgt, echo=F}
+library(sgt)
+require(graphics)
+require(stats)
+### SGT
+X.data <- X ~ coredata(R)
+
+SGT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
+SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
+SGT_sumResult <- summary(SGT_result)
+
+### SGT plot fit
+xvals = seq(-3,3,by=0.01)
+SGT_mu <- SGT_result$estimate[1]
+SGT_sigma <- SGT_result$estimate[2]
+SGT_lambda <- SGT_result$estimate[3]
+SGT_p <- SGT_result$estimate[4]
+SGT_q <- SGT_result$estimate[5]
+plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l")
+lines(density(coredata(R)))
+
+
+### SGED (sgt.mle2)
+
+X.data <- X ~ coredata(R)
+
+SGED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
+SGED_result <- sgt.mle2(X.f = X.data, start = SGED_start, lower = c(-Inf, -Inf, -Inf, -Inf,749.9), upper = c(Inf,Inf,Inf,Inf,750.1))
+SGED_sumResult <- summary(SGED_result)
+
+
+
+
+# SGED (fitdist)
+sgedstart <- list(mean=1, sd=1, nu=1, xi =1.5)
+sgedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
+                      distr = "sged",
+                      method = "mle", start = sgedstart)
+sgedfit_R$estimate
+
+par(mfrow=c(1,2))
+### SGED Plot fit (sgt.mle2)
+xvals = seq(-3,3,by=0.01)
+SGED_mu <- SGED_result$estimate[1]
+SGED_sigma <- SGED_result$estimate[2]
+SGED_lambda <- SGED_result$estimate[3]
+SGED_p <- SGED_result$estimate[4]
+SGED_q <- SGED_result$estimate[5]
+plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
+lines(density(coredata(R)))
+
+
+SGED_mean <- sgedfit_R$estimate[1]
+SGED_sd <- sgedfit_R$estimate[2]
+SGED_nu <- sgedfit_R$estimate[3]
+SGED_xi <- sgedfit_R$estimate[4]
+plot(xvals, dsged(xvals, mean = SGED_mean, sd = SGED_sd, nu = SGED_nu, xi = SGED_xi), col="red", type ="l", main = "SGED (fitdist)")
+lines(density(coredata(R)))
+
+SGED_result$maximum
+sgedfit_R$loglik
+```
+
+
+$A \theta + B = 0$
+
+####Control Tests
+
+##### Unconditional coverage test of @kupiec1995 \\
 
 A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
 
 ```{=tex}
-\begin{aligned}
+\begin{align}
 L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}\left(\frac{X}{N}\right)^{X}}\right)
 (\#eq:uccov)
-\end{aligned}
+\end{align}
 ```
-##### Conditional coverage test of @christoffersen2001
+
+#####Conditional coverage test of @christoffersen2001 \\
 
 @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
 
 ```{=tex}
-\begin{aligned}
+\begin{align}
 I_{t}(\alpha)=\left\{\begin{array}{ll}
 1 & \text { if exceedence occurs } \\
 0 & \text { if no exceedence occurs }
 \end{array} .\right.
 (\#eq:ccov)
-\end{aligned}
+\end{align}
 ```
 It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
+
 
 ##### Dynamic quantile test
 
 @engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a linear model that motivates the violations to a set of explenatory variables. The test is based on a linear regression that links the current hit (violation) to the lagged violation. 
+
 
 
 
