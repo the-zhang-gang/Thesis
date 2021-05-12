@@ -125,12 +125,12 @@ Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"
 # for table 1
 table1 <- data.frame(Statistics = names(Statistics.S), `Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
 
-colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
-JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
-                  c(jarque.bera.test(R)$p.value, jarque.bera.test(stdret.R)$p.value))
-rownames(JB.Test) <- c("Jarque - Bera", "JB p-values")
-colnames(JB.Test) <- colnames(table1)
-table1 <- rbind(table1, JB.Test)
+# colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
+# JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
+#                   c(jarque.bera.test(R)$p.value, jarque.bera.test(stdret.R)$p.value))
+# rownames(JB.Test) <- c("Jarque - Bera", "JB p-values")
+# colnames(JB.Test) <- colnames(table1)
+# table1 <- rbind(table1, JB.Test)
 
 
 table1 %>% kbl(caption = "Summary statistics of the returns",
