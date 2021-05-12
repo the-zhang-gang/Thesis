@@ -82,6 +82,7 @@ jb_R <- normtest::jb.norm.test(R)
 jb_R <- paste0(round(jb_R$statistic,4),"***")
 names(jb_R) <- "Jarque-Bera"
 
+# PART 1
 Statistics <-  c(Statistics[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 ## STANDARDIZED RESIDUALS
@@ -97,12 +98,7 @@ stdret.R <- residuals(garchfit.R, standardize = TRUE)
 Statistics.S <-  table.Stats(stdret.R)
 
 Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
-# Stats.S.names <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
-table1 <- data.frame(`Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
-
-
 Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
-Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),]
 Statistics.S <- Statistics.S[,1]
 names(Statistics.S) <- Stats.names.S
 
