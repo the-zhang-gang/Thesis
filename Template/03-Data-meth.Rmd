@@ -35,6 +35,8 @@ require(sgt)
 # require(tseries) # do we need this
 require(openxlsx) # do we need this
 require(TTR)
+require(lmtest)
+
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -318,11 +320,11 @@ sgedfit_R$loglik
 ## skewtfit_R$sd
 ## skewtfit_R$loglik
 
-STstart <- list(mean=0,sd=2, nu = 8, xi=2)
-STfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", STstart)
-STfit_R$estimate
+
 STfit_R$sd
 STfit_R$loglik
+
+
 ## ? # LR statistic
 
 # ST <- rugarch::fitdist("sstd", x = R)
@@ -465,12 +467,15 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 library(sgt)
 require(graphics)
 require(stats)
+
+
 ### SGT
 X.data <- X ~ coredata(R)
 
 SGT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
 SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
 SGT_sumResult <- summary(SGT_result)
+SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
 
 ### SGT plot fit
 xvals = seq(-3,3,by=0.01)
@@ -479,31 +484,18 @@ SGT_sigma <- SGT_result$estimate[2]
 SGT_lambda <- SGT_result$estimate[3]
 SGT_p <- SGT_result$estimate[4]
 SGT_q <- SGT_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l")
+plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT (sgt.mle2)")
 lines(density(coredata(R)))
 
 
 ### SGED (sgt.mle2)
 
-X.data <- X ~ coredata(R)
-
 SGED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
 SGED_result <- sgt.mle2(X.f = X.data, start = SGED_start, lower = c(-Inf, -Inf, -Inf, -Inf,749.9), upper = c(Inf,Inf,Inf,Inf,750.1))
 SGED_sumResult <- summary(SGED_result)
+SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$maximum
 
-
-
-
-# SGED (fitdist)
-sgedstart <- list(mean=1, sd=1, nu=1, xi =1.5)
-sgedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "sged",
-                      method = "mle", start = sgedstart)
-sgedfit_R$estimate
-
-par(mfrow=c(1,2))
 ### SGED Plot fit (sgt.mle2)
-xvals = seq(-3,3,by=0.01)
 SGED_mu <- SGED_result$estimate[1]
 SGED_sigma <- SGED_result$estimate[2]
 SGED_lambda <- SGED_result$estimate[3]
@@ -512,16 +504,144 @@ SGED_q <- SGED_result$estimate[5]
 plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
 lines(density(coredata(R)))
 
+### GT(sgt.mle2)
+GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
+GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
+GT_sumResult <- summary(GT_result)
+GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
 
-SGED_mean <- sgedfit_R$estimate[1]
-SGED_sd <- sgedfit_R$estimate[2]
-SGED_nu <- sgedfit_R$estimate[3]
-SGED_xi <- sgedfit_R$estimate[4]
-plot(xvals, dsged(xvals, mean = SGED_mean, sd = SGED_sd, nu = SGED_nu, xi = SGED_xi), col="red", type ="l", main = "SGED (fitdist)")
+### GT Plot fit (sgt.mle2)
+GT_mu <- GT_result$estimate[1]
+GT_sigma <- GT_result$estimate[2]
+GT_lambda <- GT_result$estimate[3]
+GT_p <- GT_result$estimate[4]
+GT_q <- GT_result$estimate[5]
+plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
 lines(density(coredata(R)))
 
-SGED_result$maximum
-sgedfit_R$loglik
+
+
+
+### GED(sgt.mle2)
+GED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
+GED_result <- sgt.mle2(X.f = X.data, start = GED_start, lower = c(-Inf, -Inf, -0.000001, -Inf,749.9), upper = c(Inf,Inf,0.000001,Inf,750.1))
+GED_sumResult <- summary(GED_result)
+GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$maximum
+
+### GED Plot fit (sgt.mle2)
+
+GED_mu <- GED_result$estimate[1]
+GED_sigma <- GED_result$estimate[2]
+GED_lambda <- GED_result$estimate[3]
+GED_p <- GED_result$estimate[4]
+GED_q <- GED_result$estimate[5]
+plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED (sgt.mle2)")
+lines(density(coredata(R)))
+
+### ST (fitdist) 
+ST_start <- list(mean=0,sd=2, nu = 8, xi=2)
+ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
+ST_sumResult <- summary(ST_result)
+ST_sumResult$aic
+
+### ST Plot fit (fitdist)
+ST_mean <- ST_result$estimate[1]
+ST_sd <- ST_result$estimate[2]
+ST_nu <- ST_result$estimate[3]
+ST_xi <- ST_result$estimate[4] #lamda
+
+plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST (fitdist)")
+lines(density(coredata(R)))
+
+### T (fitdist) 
+T_start <- list(mean = 0, sd = 1, nu = 5)
+T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
+T_sumResult <- summary(T_result)
+
+### T Plot fit (fitdist)
+T_mean <- T_result$estimate[1]
+T_sd <- T_result$estimate[2]
+T_nu <- T_result$estimate[3]
+
+
+plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T (fitdist)")
+lines(density(coredata(R)))
+
+
+### Normal (sgt.mle2)
+Normal_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 950)
+Normal_result <- sgt.mle2(X.f = X.data, start = Normal_start, lower = c(-Inf, -Inf, -0.00000001, 1.999999999,949.9), upper = c(Inf,Inf,0.00000001,2.000000001,950.1))
+Normal_sumResult <- summary(Normal_result)
+Normal_AIC <- 2*length(Normal_result$estimate-3) - 2*Normal_sumResult$maximum
+
+### Normal  Plot fit (sgt.mle2)
+
+Normal_mu <- Normal_result$estimate[1]
+Normal_sigma <- Normal_result$estimate[2]
+Normal_lambda <- Normal_result$estimate[3]
+Normal_p <- Normal_result$estimate[4]
+Normal_q <- Normal_result$estimate[5]
+plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal (sgt.mle2)")
+lines(density(coredata(R)))
+
+#maximum likelihood estimates of unconditional distribution functions
+Table2 <- matrix(nrow = 7, ncol = 8)
+colnames(Table2) <- c("mu","sigma","lambda","p","q","nu","L","AIC")
+rownames(Table2) <- c("SGT","SGED","GT","GED","ST","T","Normal")
+
+Table2[1,1] <- SGT_mu
+Table2[1,2] <- SGT_sigma
+Table2[1,3] <- SGT_lambda
+Table2[1,4] <- SGT_p
+Table2[1,5] <- SGT_q
+Table2[1,7] <- SGT_result$maximum
+Table2[1,8] <- SGT_AIC
+
+Table2[2,1] <- SGED_mu
+Table2[2,2] <- SGED_sigma
+Table2[2,3] <- SGED_lambda
+Table2[2,4] <- SGED_p
+Table2[2,5] <- SGED_q
+Table2[2,7] <- SGED_result$maximum
+Table2[2,8] <- SGT_AIC
+
+Table2[3,1] <- GT_mu
+Table2[3,2] <- GT_sigma
+Table2[3,3] <- GT_lambda
+Table2[3,4] <- GT_p
+Table2[3,5] <- GT_q
+Table2[3,7] <- GT_result$maximum
+Table2[3,8] <- GT_AIC
+
+
+Table2[4,1] <- GED_mu
+Table2[4,2] <- GED_sigma
+Table2[4,3] <- GED_lambda
+Table2[4,4] <- GED_p
+Table2[4,5] <- GED_q
+Table2[4,7] <- GED_result$maximum
+Table2[4,8] <- GED_AIC
+
+Table2[5,1] <- ST_mean
+Table2[5,2] <- ST_sd
+Table2[5,3] <- ST_xi
+Table2[5,6] <- ST_nu
+Table2[5,7] <- ST_result$loglik
+Table2[5,8] <- ST_result$aic
+
+Table2[6,1] <- T_mean
+Table2[6,2] <- T_sd
+Table2[6,6] <- T_nu
+Table2[6,7] <- T_result$loglik
+Table2[6,8] <- T_result$aic
+
+Table2[7,1] <- GED_mu
+Table2[7,2] <- GED_sigma
+Table2[7,3] <- GED_lambda
+Table2[7,4] <- GED_p
+Table2[7,5] <- GED_q
+Table2[7,7] <- GED_result$maximum
+Table2[7,8] <- GED_AIC
 ```
 
 
