@@ -338,6 +338,8 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is $
 
 ##### Dynamic quantile test
 
-@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
+@engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a linear model that motivates the violations to a set of explenatory variables. The test is based on a linear regression that links the current hit (violation) to the lagged violation. 
+
+
 
 \clearpage
