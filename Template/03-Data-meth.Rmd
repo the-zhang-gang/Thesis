@@ -20,7 +20,7 @@ bibliography: references.bib
 
 <!-- uncomment this codes -->
 
-Here comes text...
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 stocks  
 
 ```{r dataloading, include=F}
 require(readxl)
