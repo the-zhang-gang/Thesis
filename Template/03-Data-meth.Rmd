@@ -17,7 +17,42 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 
 ## Data
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 stocks.  
+
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index (...................................)
+
+The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
+
+```{=tex}
+\begin{align}
+\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
+(\#eq:Laspeyres.formula)
+\end{align}
+```
+where:
+
+t = Time the index is computed
+$n$ = Number of companies in the index
+$p_{i t}$ = Price of company ($i$) at time (t)
+$s_{i t}$ = Number of shares of company ($i$) at time (t)
+$f f_{i t}$ = Free float factor of company ($i$) at time (t)
+$c f_{i t}$ = Weighting cap factor of company ($i$) at time (t)
+$x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t)
+$M_{t}$ = Free-float market capitalization of the index at time (t)
+$D_{t}$ = Divisor of the index at time (t)
+
+```{=tex}
+\begin{align}
+D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
+(\#eq:Price.weighted)
+\end{align}
+```
+where:
+
+$\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
+
+
+
+
 ```{r dataloading, include=F}
 require(readxl)
 require(xts)
@@ -142,7 +177,9 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
 ```
 
 \newpage
+
 #### Descriptive figures
+
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="75%"}
 par(mfrow = c(1,1))
 # plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab = "Price", main = "Eurostoxx 50 Price Index");
@@ -170,7 +207,6 @@ par(mfrow = c(1,1))
 
 plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid()
 ```
-
 
 ```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%"}
 plot(as.zoo(R), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price Log Returns",main = "Log Returns");grid()
@@ -221,6 +257,7 @@ acf(abs(e), main = "ACF", xaxt = "n")
 \clearpage
 
 ## Methodology
+
 ### Garch models
 
 As already mentioned in ..., GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.
@@ -237,7 +274,6 @@ Maximum likelihood estimation is a method to find the distribution parameters th
  (\#eq:pdf)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align} 
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
@@ -246,7 +282,6 @@ Maximum likelihood estimation is a method to find the distribution parameters th
  (\#eq:logl)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align} 
 \theta^{*} = arg \max_{\theta} [ L] \\
@@ -254,25 +289,23 @@ Maximum likelihood estimation is a method to find the distribution parameters th
  (\#eq:optim)
 \end{align}
 ```
+### ACD models {#acd-models-meth}
 
-### ACD models {#acd-models-meth} 
 Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
+
 ```{=tex}
 \begin{align} 
 \mu_{t}=\mu\left(\theta, x_{t}\right)=E\left(y_{t} \mid x_{t}\right)
  (\#eq:cmean)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align}
 \sigma_{t}^{2}=\sigma^{2}\left(\theta, x_{t}\right)=E\left(\left(y_{t}-\mu_{t}^{2}\right) \mid x_{t}\right)
  (\#eq:cvariance)
 \end{align}
 ```
-
-To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \@ref(eq:scaledinn). The conditional density is given by equation \@ref(eq:conddens) and related to the density function $f(y|\alpha)$ as in equation \@ref(eq:densityconddens). 
-
+To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \@ref(eq:scaledinn). The conditional density is given by equation \@ref(eq:conddens) and related to the density function $f(y|\alpha)$ as in equation \@ref(eq:densityconddens).
 
 ```{=tex}
 \begin{align}
@@ -280,22 +313,18 @@ z_{t}(\theta)=\frac{y_{t}-\mu\left(\theta, x_{t}\right)}{\sigma\left(\theta, x_{
 (\#eq:scaledinn)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align}
 g\left(z \mid \eta_{t}\right)=\frac{d}{d z} P\left(z_{t}<z \mid \eta_{t}\right)
 (\#eq:conddens)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align}
 f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} g\left(z_{t} \mid \eta_{t}\right)
 \end{align}
 (\#eq:densityconddens)
 ```
-
-
 ```{r MLE exampe, echo=F}
 # n_samples <- 25; true_rate <- 1; set.seed(1)
 # exp_samples <- rexp(n = n_samples,
@@ -308,8 +337,6 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 # 
 # rate_fit_R$estimate
 ```
-
-
 
 ```{r MLE fitdist, echo=F}
 # Normal
@@ -680,7 +707,6 @@ Table2[7,7] <- GED_result$maximum
 Table2[7,8] <- GED_AIC
 ```
 
-
 <!-- $A \theta + B = 0$ -->
 
 ### Control Tests
@@ -710,10 +736,8 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 ```
 It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
+#### Dynamic quantile test
 
-#### Dynamic quantile test 
-
-
-@engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a 
+@engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
 
 \clearpage
