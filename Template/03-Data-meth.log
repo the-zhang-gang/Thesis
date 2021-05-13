@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  12 MAY 2021 12:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  13 MAY 2021 15:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1609,65 +1609,89 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<03-Data-meth_files/figure-latex/plot1-1.pdf, id=28, 440.64626pt x 283.0575pt>
+<03-Data-meth_files/figure-latex/plot1-1.pdf, id=32, 436.63126pt x 283.0575pt>
 File: 03-Data-meth_files/figure-latex/plot1-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot1-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-1.pdf  used on i
 nput line 227.
-(pdftex.def)             Requested size: 440.64517pt x 283.0568pt.
+(pdftex.def)             Requested size: 436.63019pt x 283.0568pt.
 
-Overfull \hbox (19.54471pt too wide) in paragraph at lines 227--228
+Overfull \hbox (15.52972pt too wide) in paragraph at lines 227--228
  [][] 
  []
 
-<03-Data-meth_files/figure-latex/plot1-2.pdf, id=29, 440.64626pt x 297.11pt>
+<03-Data-meth_files/figure-latex/plot1-2.pdf, id=33, 440.64626pt x 283.0575pt>
 File: 03-Data-meth_files/figure-latex/plot1-2.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot1-2.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-2.pdf  used on i
 nput line 235.
-(pdftex.def)             Requested size: 440.64517pt x 297.10927pt.
+(pdftex.def)             Requested size: 440.64517pt x 283.0568pt.
 
 Overfull \hbox (19.54471pt too wide) in paragraph at lines 235--236
  [][] 
  []
 
-<03-Data-meth_files/figure-latex/plot2-1.pdf, id=30, 440.64626pt x 283.0575pt>
+<03-Data-meth_files/figure-latex/plot1-3.pdf, id=34, 440.64626pt x 283.0575pt>
+File: 03-Data-meth_files/figure-latex/plot1-3.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/plot1-3.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-3.pdf  used on i
+nput line 243.
+(pdftex.def)             Requested size: 440.64517pt x 283.0568pt.
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 243--244
+ [][] 
+ []
+
+<03-Data-meth_files/figure-latex/plot1-4.pdf, id=35, 440.64626pt x 283.0575pt>
+File: 03-Data-meth_files/figure-latex/plot1-4.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/plot1-4.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-4.pdf  used on i
+nput line 251.
+(pdftex.def)             Requested size: 440.64517pt x 283.0568pt.
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 251--252
+ [][] 
+ []
+
+<03-Data-meth_files/figure-latex/plot2-1.pdf, id=36, 440.64626pt x 283.0575pt>
 File: 03-Data-meth_files/figure-latex/plot2-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot2-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot2-1.pdf  used on i
-nput line 244.
+nput line 260.
 (pdftex.def)             Requested size: 315.82535pt x 202.88557pt.
-<03-Data-meth_files/figure-latex/plot2-2.pdf, id=31, 412.54124pt x 294.09875pt>
+<03-Data-meth_files/figure-latex/plot2-2.pdf, id=37, 412.54124pt x 294.09875pt>
 
 File: 03-Data-meth_files/figure-latex/plot2-2.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot2-2.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot2-2.pdf  used on i
-nput line 252.
+nput line 268.
 (pdftex.def)             Requested size: 315.82535pt x 225.15083pt.
-<03-Data-meth_files/figure-latex/plot3-1.pdf, id=32, 436.63126pt x 282.05376pt>
+<03-Data-meth_files/figure-latex/plot3-1.pdf, id=38, 436.63126pt x 282.05376pt>
 
 File: 03-Data-meth_files/figure-latex/plot3-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot3-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot3-1.pdf  used on i
-nput line 261.
+nput line 277.
 (pdftex.def)             Requested size: 315.82535pt x 204.01677pt.
-<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=33, 453.695pt x 306.14375pt
+<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=39, 453.695pt x 306.14375pt
 >
 File: 03-Data-meth_files/figure-latex/acfplots-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/acfplots-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/acfplots-1.pdf  used o
-n input line 272.
+n input line 288.
 (pdftex.def)             Requested size: 315.82535pt x 213.11263pt.
 [1
 
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./0
 3-Data-meth_files/figure-latex/plot1-1.pdf> <./03-Data-meth_files/figure-latex/
-plot1-2.pdf>] [3 <./03-Data-meth_files/figure-latex/plot2-1.pdf>] [4 <./03-Data
--meth_files/figure-latex/plot2-2.pdf> <./03-Data-meth_files/figure-latex/plot3-
-1.pdf>]
+plot1-2.pdf>] [3 <./03-Data-meth_files/figure-latex/plot1-3.pdf> <./03-Data-met
+h_files/figure-latex/plot1-4.pdf>] [4 <./03-Data-meth_files/figure-latex/plot2-
+1.pdf>] [5 <./03-Data-meth_files/figure-latex/plot2-2.pdf> <./03-Data-meth_file
+s/figure-latex/plot3-1.pdf>] [6 <./03-Data-meth_files/figure-latex/acfplots-1.p
+df>]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
-13.
+61.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1675,60 +1699,123 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-[5 <./03-Data-meth_files/figure-latex/acfplots-1.pdf>] [6]
-<03-Data-meth_files/figure-latex/mlesgt-1.pdf, id=148, 440.64626pt x 325.215pt>
+[7] [8]
+<03-Data-meth_files/figure-latex/mlesgt-1.pdf, id=197, 440.64626pt x 325.215pt>
 
 File: 03-Data-meth_files/figure-latex/mlesgt-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/mlesgt-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-1.pdf  used on 
-input line 418.
+input line 452.
 (pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
-
-Overfull \hbox (37.16953pt too wide) in paragraph at lines 418--419
-[][] 
- []
-
-[7]
-<03-Data-meth_files/figure-latex/mlesgt-2.pdf, id=155, 440.64626pt x 325.215pt>
+<03-Data-meth_files/figure-latex/mlesgt-2.pdf, id=198, 440.64626pt x 325.215pt>
 
 File: 03-Data-meth_files/figure-latex/mlesgt-2.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/mlesgt-2.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-2.pdf  used on 
-input line 425.
+input line 452.
+(pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
+<03-Data-meth_files/figure-latex/mlesgt-3.pdf, id=199, 440.64626pt x 325.215pt>
+
+File: 03-Data-meth_files/figure-latex/mlesgt-3.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/mlesgt-3.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-3.pdf  used on 
+input line 452.
+(pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
+<03-Data-meth_files/figure-latex/mlesgt-4.pdf, id=200, 440.64626pt x 325.215pt>
+
+File: 03-Data-meth_files/figure-latex/mlesgt-4.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/mlesgt-4.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-4.pdf  used on 
+input line 452.
 (pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
 
-Overfull \hbox (37.16953pt too wide) in paragraph at lines 425--426
-[][] 
+Overfull \hbox (37.16953pt too wide) in paragraph at lines 452--453
+[][]
  []
 
-[8 <./03-Data-meth_files/figure-latex/mlesgt-1.pdf>] [9 <./03-Data-meth_files/f
-igure-latex/mlesgt-2.pdf>] [10]
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 452--453
+[]
+ []
+
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 452--453
+[]
+ []
+
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 452--453
+[] 
+ []
+
+[9] [10 <./03-Data-meth_files/figure-latex/mlesgt-1.pdf> <./03-Data-meth_files/
+figure-latex/mlesgt-2.pdf>] [11 <./03-Data-meth_files/figure-latex/mlesgt-3.pdf
+> <./03-Data-meth_files/figure-latex/mlesgt-4.pdf>]
+<03-Data-meth_files/figure-latex/mlesgt-5.pdf, id=245, 440.64626pt x 325.215pt>
+
+File: 03-Data-meth_files/figure-latex/mlesgt-5.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/mlesgt-5.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-5.pdf  used on 
+input line 458.
+(pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
+<03-Data-meth_files/figure-latex/mlesgt-6.pdf, id=246, 440.64626pt x 288.07625p
+t>
+File: 03-Data-meth_files/figure-latex/mlesgt-6.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/mlesgt-6.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-6.pdf  used on 
+input line 458.
+(pdftex.def)             Requested size: 440.64517pt x 288.07553pt.
+<03-Data-meth_files/figure-latex/mlesgt-7.pdf, id=247, 440.64626pt x 325.215pt>
+
+File: 03-Data-meth_files/figure-latex/mlesgt-7.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/mlesgt-7.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/mlesgt-7.pdf  used on 
+input line 458.
+(pdftex.def)             Requested size: 440.64517pt x 325.2142pt.
+
+Overfull \hbox (37.16953pt too wide) in paragraph at lines 458--459
+[][]
+ []
+
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 458--459
+[]
+ []
+
+
+Overfull \hbox (19.54471pt too wide) in paragraph at lines 458--459
+[] 
+ []
+
+[12 <./03-Data-meth_files/figure-latex/mlesgt-5.pdf> <./03-Data-meth_files/figu
+re-latex/mlesgt-6.pdf>] [13 <./03-Data-meth_files/figure-latex/mlesgt-7.pdf>] [
+14]
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 482.
+(Font)              <10.95> on input line 507.
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 03-Data-meth.maf file.
 \openout3 = `03-Data-meth.maf'.
 
-[11
+[15
 
 
 ] (./03-Data-meth.aux)
 Package rerunfilecheck Info: File `03-Data-meth.out' has not changed.
-(rerunfilecheck)             Checksum: 2F9329792C637BC5001135C91331D53E;678.
+(rerunfilecheck)             Checksum: A64B1DE579B487D5091743E2E0C718FD;793.
 Package logreq Info: Writing requests to '03-Data-meth.run.xml'.
 \openout1 = `03-Data-meth.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29725 strings out of 478994
- 493621 string characters out of 5858184
- 1325978 words of memory out of 5000000
- 46364 multiletter control sequences out of 15000+600000
- 480825 words of font info for 121 fonts, out of 8000000 for 9000
+ 29801 strings out of 478994
+ 496156 string characters out of 5858184
+ 1326472 words of memory out of 5000000
+ 46414 multiletter control sequences out of 15000+600000
+ 481013 words of font info for 123 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  86i,17n,89p,1138b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
@@ -1751,10 +1838,10 @@ nts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/
 public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/l
 mtt10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
 </usr/local/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 03-Data-meth.pdf (11 pages, 675401 bytes).
+Output written on 03-Data-meth.pdf (15 pages, 742805 bytes).
 PDF statistics:
- 288 PDF objects out of 1000 (max. 8388607)
- 231 compressed objects within 3 object streams
- 49 named destinations out of 1000 (max. 500000)
- 39001 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 393 PDF objects out of 1000 (max. 8388607)
+ 310 compressed objects within 4 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 39044 words of extra memory for PDF output out of 42996 (max. 10000000)
 
