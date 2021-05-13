@@ -20,7 +20,8 @@ bibliography: references.bib
 
 ## Stylized facts of returns
 
-When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^1] following @annaert2021 for returns are given.
+\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^1] following @annaert2021 for returns are given.
+
 
 [^1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
 
@@ -34,13 +35,13 @@ When analyzing returns as a time-series, we look at log returns. The log returns
 
 -   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution.
 
-Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. Below we summarize some alternative distributions that could be a better approximation of returns than the normal one.
+\noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. Below we summarize some alternative distributions that could be a better approximation of returns than the normal one.
 
 ### Alternative distributions than the normal {#conditional-distributions}
 
 #### Student's t-distribution
 
-A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero). The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
+\noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero). The probability density function (pdf), again following @annaert2021, is given by equation \@ref(eq:std). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
 
 ```{=tex}
 \begin{align}
@@ -48,7 +49,7 @@ f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfra
  (\#eq:std)
 \end{align}
 ```
-As can be seen the pdf depends on the degrees of freedom $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos).
+\noindent As can be seen the pdf depends on the degrees of freedom $n$. To be consistent with @ghalanos2020, the following general equation is used for the pdf \@ref(eq:stdghalanos).
 
 ```{=tex}
 \begin{align}
@@ -56,9 +57,9 @@ f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \n
  (\#eq:stdghalanos)
 \end{align}
 ```
-where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
+\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
 
-Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
+\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
 ```{=tex}
 \begin{align}
@@ -68,7 +69,7 @@ kurt = 3 + \dfrac{6}{n-4}
 ```
 #### Generalized Error Distribution
 
-The GED distribution is nested in the generalized t distribution by @mcdonald1988 is used in the GED-GARCH model by @nelson1991 to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution [@bollerslev2008]. The conditional density (pdf) is given by equation \@ref(eq:ged) following @ghalanos2020.
+\noindent The GED distribution is nested in the generalized t distribution by @mcdonald1988 is used in the GED-GARCH model by @nelson1991 to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution [@bollerslev2008]. The conditional density (pdf) is given by equation \@ref(eq:ged) following @ghalanos2020.
 
 ```{=tex}
 \begin{align}
@@ -80,7 +81,7 @@ where $\alpha, \beta$ and $\kappa$ are respectively the location, scale and shap
 
 #### Skewed t-distribution
 
-The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. The first equation from @trottier2015, here equation \@ref(eq:skeweddist) presents the skewed t-distribution.
+\noindent The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. The first equation from @trottier2015, here equation \@ref(eq:skeweddist) presents the skewed t-distribution.
 
 ```{=tex}
 \begin{align}
@@ -91,17 +92,17 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
  (\#eq:skeweddist)
 \end{align}
 ```
-where $\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u$ and $\xi$ between $0$ and $\infty$. $f_1(\cdot)$ is in this case equation \@ref(eq:std), the pdf of the student t distribution.
+\noindent where $\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u$ and $\xi$ between $0$ and $\infty$. $f_1(\cdot)$ is in this case equation \@ref(eq:std), the pdf of the student t distribution.
 
-According to @giot2003; @giot2004, the skewed t-distribution outperforms the symmetric density distributions.
+\noindent According to @giot2003; @giot2004, the skewed t-distribution outperforms the symmetric density distributions.
 
 #### Skewed Generalized Error Distribution
 
-What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, as in the work of @lee2008. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
+\noindent What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, as in the work of @lee2008. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
 
 #### Skewed Generalized t-distribution
 
-The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt) [@bollerslev1994].
+\noindent The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt) [@bollerslev1994].
 
 ```{=tex}
 \begin{align}
@@ -113,17 +114,16 @@ f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \si
 
 \noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
+\newpage
 ## Volatility modeling {#vol-mod}
 
 ### Rolling volatility
 
-When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. @engle2001 explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations. For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined. Engle regards this formulation as the first ARCH model.
-
-\newpage
+\noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. @engle2001 explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations. For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined. Engle regards this formulation as the first ARCH model.
 
 ### ARCH model
 
-Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
 
 ```{=tex}
 \begin{align} 
@@ -145,7 +145,8 @@ y_{t} &= \mu + \varepsilon_t
 ```
 \newpage
 
-From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
+\noindent From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
+
 
 ```{=tex}
 \begin{align} 
@@ -159,7 +160,7 @@ From these components we could look at the conditional moments (or expected retu
  (\#eq:eq5)
 \end{align}
 ```
-For the conditional variance, knowing everything that happened until and including period $t-1$ the conditional innovation variance is given by equation \@ref(eq:eq6). This is equal to $\sigma_t^2$, while the variance of $z_t$ is equal to 1. Then it is easy to derive the conditional variance of returns in equation \@ref(eq:eq7), that is why equation \@ref(eq:eq3) is called the variance equation.
+\noindent For the conditional variance, knowing everything that happened until and including period $t-1$ the conditional innovation variance is given by equation \@ref(eq:eq6). This is equal to $\sigma_t^2$, while the variance of $z_t$ is equal to 1. Then it is easy to derive the conditional variance of returns in equation \@ref(eq:eq7), that is why equation \@ref(eq:eq3) is called the variance equation.
 
 ```{=tex}
 \begin{align} 
@@ -173,7 +174,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq7)
 \end{align}
 ```
-The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
+\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
 
 ```{=tex}
 \begin{align} 
@@ -182,20 +183,18 @@ The unconditional variance is also interesting to derive, while this is the long
 \end{align}
 ```
 \newpage
-
-This leads to the properties of ARCH models.
-
+\noindent This leads to the properties of ARCH models.
 -   Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
 
 -   Zero-mean innovations
 
 -   Uncorrelated innovations
 
-\noindent Thus a weak white noise process $\varepsilon_t$
+\noindent Thus a weak white noise process $\varepsilon_t$.
 
 \noindent Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
 
-\noindent The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylised fact of returns).
+\noindent The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
 
 ```{=tex}
 \begin{align} 
@@ -237,7 +236,8 @@ This leads to the properties of ARCH models.
 
 ### Univariate GARCH models
 
-An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.  \
+
+\noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \
 
 All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
 
@@ -254,9 +254,11 @@ All the GARCH models below are estimated using the package rugarch by Alexios @a
 
 : GARCH models, the founders
 
+\newpage
+
 #### GARCH model
 
-The standard GARCH model [@bollerslev1986] is written consistent with Alexios @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
+\noindent The standard GARCH model [@bollerslev1986] is written consistent with Alexios @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
 
 ```{=tex}
 \begin{align}
@@ -264,7 +266,7 @@ The standard GARCH model [@bollerslev1986] is written consistent with Alexios @g
  (\#eq:eq13)
 \end{align}
 ```
-where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$" specified as in equation \@ref(eq:eq14).
+\noindent where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$" specified as in equation \@ref(eq:eq14).
 
 ```{=tex}
 \begin{align}
@@ -272,7 +274,7 @@ where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and 
  (\#eq:eq14)
 \end{align}
 ```
-The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameters ($\beta$'s) included as in equation \@ref(eq:eq15).
+\noindent The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameters ($\beta$'s) included as in equation \@ref(eq:eq15).
 
 ```{=tex}
 \begin{equation}
@@ -286,11 +288,12 @@ The unconditional variance of the standard GARCH model of Bollerslev is very sim
 ```
 #### IGARCH model
 
-Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
+\noindent Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
+\newpage
 #### EGARCH model
 
-The EGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16). The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
+\noindent The EGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16). The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
 ```{=tex}
 \begin{align}
@@ -298,11 +301,11 @@ The EGARCH model or exponential GARCH model [@nelson1991] is defined as in equat
  (\#eq:eq16)
 \end{align}
 ```
-where $\alpha_j$ captures the sign effect and $\gamma_j$ the size effect.
+\noindent where $\alpha_j$ captures the sign effect and $\gamma_j$ the size effect.
 
 #### GJRGARCH model
 
-The GJRGARCH model [@glosten1993] models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable $I$, it is specified as in equation \@ref(eq:eq17).
+\noindent The GJRGARCH model [@glosten1993] models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable $I$, it is specified as in equation \@ref(eq:eq17).
 
 ```{=tex}
 \begin{align}
@@ -310,11 +313,11 @@ The GJRGARCH model [@glosten1993] models both positive as negative shocks on the
  (\#eq:eq17)
 \end{align}
 ```
-where $\gamma_j$ represents the *leverage* term. The indicator function $I$ takes on value 1 for $\varepsilon \le 0$, 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to @ghalanos2020.
+\noindent where $\gamma_j$ represents the *leverage* term. The indicator function $I$ takes on value 1 for $\varepsilon \le 0$, 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to @ghalanos2020.
 
 #### NAGARCH model
 
-The NAGARCH or nonlinear asymmetric model [@engle1993]. It is specified as in equation \@ref(eq:eq18). The model is *asymmetric* as it allows for positive and negative shocks to differently affect conditional variance and *nonlinear* because a large shock is not a linear transformation of a small shock.
+\noindent The NAGARCH or nonlinear asymmetric model [@engle1993]. It is specified as in equation \@ref(eq:eq18). The model is *asymmetric* as it allows for positive and negative shocks to differently affect conditional variance and *nonlinear* because a large shock is not a linear transformation of a small shock.
 
 ```{=tex}
 \begin{align}
@@ -326,7 +329,7 @@ As before, $\gamma_j$ represents the *leverage* term.
 
 #### TGARCH model
 
-The TGarch or threshold model [@zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
+\noindent The TGarch or threshold model [@zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
 
 ```{=tex}
 \begin{align}
@@ -334,11 +337,11 @@ The TGarch or threshold model [@zakoian1994] also models assymetries in volatili
  (\#eq:eq19)
 \end{align}
 ```
-where $\varepsilon_{t-j}^+$ is equal to $\varepsilon_{t-j}$ if the term is negative and equal to 0 if the term is positive. The reverse applies to $\varepsilon_{t-j}^-$. They cite @davidian1987 who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
+\noindent where $\varepsilon_{t-j}^+$ is equal to $\varepsilon_{t-j}$ if the term is negative and equal to 0 if the term is positive. The reverse applies to $\varepsilon_{t-j}^-$. They cite @davidian1987 who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
 
 #### TSGARCH model
 
-The absolute value Garch model or TS-Garch model, as named after @taylor1986 and @schwert1989, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \@ref(eq:eq20).
+\noindent The absolute value Garch model or TS-Garch model, as named after @taylor1986 and @schwert1989, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \@ref(eq:eq20).
 
 ```{=tex}
 \begin{align}
@@ -347,9 +350,11 @@ The absolute value Garch model or TS-Garch model, as named after @taylor1986 and
  (\#eq:eq20)
 \end{align}
 ```
+
+\newpage
 #### EWMA
 
-A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods. The $\lambda$ must be less than 1. It is specified as in \@ref(eq:eq21).
+\noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods. The $\lambda$ must be less than 1. It is specified as in \@ref(eq:eq21).
 
 ```{=tex}
 \begin{align}
@@ -359,10 +364,11 @@ A alternative to the series of GARCH models is the exponentially weighted moving
 ```
 In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan [@morganguarantytrustcompany1996].
 
-## ACD models
+## ACD models {#acd-models}
 
-An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \@ref(acd-models) the specification is given.
+An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \@ref(acd-models-meth) the specification is given.
 
+\newpage
 ## Value at Risk
 
 Value-at-Risk (VaR) is a risk metric developed to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn. According to VaR was adopted in 1998 when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22).
@@ -391,4 +397,5 @@ With the same notations as before, and $f$ the (conditional) probability density
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
 
+\newpage
 ## Past literature on the consequences of higher moments for VaR determination {#past-lit}
