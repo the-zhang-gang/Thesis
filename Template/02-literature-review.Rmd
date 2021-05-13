@@ -109,9 +109,9 @@ f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \si
  (\#eq:gt)
 \end{align}
 ```
-where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $\kappa$.
+\noindent where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $\kappa$.
 
-Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
+\noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
 ## Volatility modeling {#vol-mod}
 
@@ -143,6 +143,7 @@ y_{t} &= \mu + \varepsilon_t
  (\#eq:eq3)
 \end{align}
 ```
+\newpage
 From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
 
 ```{=tex}
@@ -179,6 +180,7 @@ The unconditional variance is also interesting to derive, while this is the long
  (\#eq:eq8)
 \end{align}
 ```
+\newpage
 This leads to the properties of ARCH models.
 
 -   Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
@@ -187,11 +189,11 @@ This leads to the properties of ARCH models.
 
 -   Uncorrelated innovations
 
-Thus a weak white noise process $\varepsilon_t$
+\noindent Thus a weak white noise process $\varepsilon_t$
 
-Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
+\noindent Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
 
-The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylised fact of returns).
+\noindent The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylised fact of returns).
 
 ```{=tex}
 \begin{align} 
@@ -199,7 +201,7 @@ The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of
  (\#eq:eq9)
 \end{align}
 ```
-Another property of ARCH models is that it takes into account volatility clustering. Because we know that $var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)$, we can plug in $\omega$ for the conditional variance $var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1*\varepsilon_t^2$. Thus it follows that equation \@ref(eq:eq10) displays volatility clustering. If we examine the RHS, as $\alpha_1>0$ (condition for stationarity), when shock $\varepsilon_t^2$ is larger than what you expect it to be on average $\sigma^2$ the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
+\noindent Another property of ARCH models is that it takes into account volatility clustering. Because we know that $var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)$, we can plug in $\omega$ for the conditional variance $var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1*\varepsilon_t^2$. Thus it follows that equation \@ref(eq:eq10) displays volatility clustering. If we examine the RHS, as $\alpha_1>0$ (condition for stationarity), when shock $\varepsilon_t^2$ is larger than what you expect it to be on average $\sigma^2$ the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
 
 ```{=tex}
 \begin{align} 
@@ -207,9 +209,9 @@ Another property of ARCH models is that it takes into account volatility cluster
  (\#eq:eq10)
 \end{align}
 ```
-Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
+\noindent Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
 
-The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2$ from equation \@ref(eq:eq3).
+\noindent The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 * \varepsilon_T^2$ from equation \@ref(eq:eq3).
 
 ```{=tex}
 \begin{align} 
@@ -221,7 +223,7 @@ The estimation of ARCH model and in a next step GARCH models will be explained i
  (\#eq:eq11)
 \end{align}
 ```
-It can be shown that then the conditional variance in period $T+k$ is equal to equation \@ref(eq:eq12). The LHS is the predicted conditional variance $k$-periods ahead above its unconditional variance, $\sigma^2$. The RHS is the difference current last-observed return residual $\varepsilon_T^2$ above the unconditional average multiplied by $\alpha_1^k$, a decreasing function of $k$ (given that $0 \le\alpha_1 <1$). The further ahead predicting the variance, the closer $\alpha_1^k$ comes to zero, the closer to the unconditional variance, i.e. the long-run variance.
+\noindent It can be shown that then the conditional variance in period $T+k$ is equal to equation \@ref(eq:eq12). The LHS is the predicted conditional variance $k$-periods ahead above its unconditional variance, $\sigma^2$. The RHS is the difference current last-observed return residual $\varepsilon_T^2$ above the unconditional average multiplied by $\alpha_1^k$, a decreasing function of $k$ (given that $0 \le\alpha_1 <1$). The further ahead predicting the variance, the closer $\alpha_1^k$ comes to zero, the closer to the unconditional variance, i.e. the long-run variance.
 
 ```{=tex}
 \begin{align} 
@@ -233,7 +235,7 @@ It can be shown that then the conditional variance in period $T+k$ is equal to e
 
 ### Univariate GARCH models
 
-An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.
+An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \ \
 
 All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
 
@@ -357,7 +359,7 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 
 ## ACD models
 
-An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In \@ref(pa).
+An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \@ref(acd-models) the specification is given.
 
 ## Value at Risk
 

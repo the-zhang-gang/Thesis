@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  11 MAY 2021 15:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  13 MAY 2021 17:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1555,15 +1555,44 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `put' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+
+Underfull \hbox (badness 10000) in paragraph at lines 180--181
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 182--183
+
+ []
+
 [1
 
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+
+ []
+
+
+LaTeX Warning: Reference `lit-rev' on page 2 undefined on input line 188.
+
+
+LaTeX Warning: Reference `dat-and-meth' on page 2 undefined on input line 188.
+
+
+LaTeX Warning: Reference `analysis' on page 2 undefined on input line 188.
+
+[2] [3]
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-98.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
+02.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1571,40 +1600,40 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-98.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
+02.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-98.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
+02.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-198.
+202.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-198.
+202.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 198.
+(Font)              <10.95> on input line 202.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 198.
+(Font)              <8> on input line 202.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 198.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 198
+(Font)              <6> on input line 202.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 202
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 198
+LaTeX Font Info:    Trying to load font information for U+msb on input line 202
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1616,9 +1645,12 @@ Package minitoc Info: I0009
 (minitoc)             Creating the 01-introduction.maf file.
 \openout3 = `01-introduction.maf'.
 
-[3
+[4
 
 ] (./01-introduction.aux)
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `01-introduction.out' has not changed.
 (rerunfilecheck)             Checksum: EA962F8C41F00FDE1D105C169DC5FD57;198.
 Package logreq Info: Writing requests to '01-introduction.run.xml'.
@@ -1626,24 +1658,25 @@ Package logreq Info: Writing requests to '01-introduction.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29495 strings out of 478994
- 488613 string characters out of 5858184
- 1318394 words of memory out of 5000000
- 46235 multiletter control sequences out of 15000+600000
- 447955 words of font info for 83 fonts, out of 8000000 for 9000
+ 29549 strings out of 478994
+ 489416 string characters out of 5858184
+ 1320546 words of memory out of 5000000
+ 46246 multiletter control sequences out of 15000+600000
+ 452717 words of font info for 103 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,5n,89p,1135b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,6n,89p,1477b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/
-texlive/2021/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2
-021/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-d
-ist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public
-/lm/lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri12
-.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on 01-introduction.pdf (3 pages, 160943 bytes).
+texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/20
+21/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2021/texmf-
+dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/
+type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/publi
+c/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10
+.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr
+/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on 01-introduction.pdf (4 pages, 188002 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
- 19985 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 89 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
+ 15 named destinations out of 1000 (max. 500000)
+ 22033 words of extra memory for PDF output out of 24883 (max. 10000000)
 
