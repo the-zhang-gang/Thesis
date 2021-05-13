@@ -254,6 +254,47 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 \end{align}
 ```
 
+### ACD models {#acd-models} 
+Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
+```{=tex}
+\begin{align} 
+\mu_{t}=\mu\left(\theta, x_{t}\right)=E\left(y_{t} \mid x_{t}\right)
+ (\#eq:cmean)
+\end{align}
+```
+
+```{=tex}
+\begin{align}
+\sigma_{t}^{2}=\sigma^{2}\left(\theta, x_{t}\right)=E\left(\left(y_{t}-\mu_{t}^{2}\right) \mid x_{t}\right)
+ (\#eq:cvariance)
+\end{align}
+```
+
+To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \@ref(eq:scaledinn). The conditional density is given by equation \@ref(eq:conddens) and related to the density function $f(y|\alpha)$ as in equation \@ref(eq:densityconddens). 
+
+
+```{=tex}
+\begin{align}
+z_{t}(\theta)=\frac{y_{t}-\mu\left(\theta, x_{t}\right)}{\sigma\left(\theta, x_{t}\right)}
+(\#eq:scaledinn)
+\end{align}
+```
+
+```{=tex}
+\begin{align}
+g\left(z \mid \eta_{t}\right)=\frac{d}{d z} P\left(z_{t}<z \mid \eta_{t}\right)
+(\#eq:conddens)
+\end{align}
+```
+
+```{=tex}
+\begin{align}
+f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} g\left(z_{t} \mid \eta_{t}\right)
+\end{align}
+(\#eq:densityconddens)
+```
+
+
 ```{r MLE exampe, echo=F}
 # n_samples <- 25; true_rate <- 1; set.seed(1)
 # exp_samples <- rexp(n = n_samples,
@@ -321,8 +362,7 @@ sgedfit_R$loglik
 ## skewtfit_R$loglik
 
 
-STfit_R$sd
-STfit_R$loglik
+
 
 
 ## ? # LR statistic
@@ -640,10 +680,11 @@ Table2[7,8] <- GED_AIC
 ```
 
 
-$A \theta + B = 0$
-#### Control Tests
+<!-- $A \theta + B = 0$ -->
 
-##### Unconditional coverage test of @kupiec1995
+### Control Tests
+
+#### Unconditional coverage test of @kupiec1995
 
 A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
 
@@ -653,7 +694,7 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 (\#eq:uccov)
 \end{align}
 ```
-##### Conditional coverage test of @christoffersen2001
+#### Conditional coverage test of @christoffersen2001
 
 @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
 
@@ -669,7 +710,7 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
 
-##### Dynamic quantile test \\
+#### Dynamic quantile test \\
 
 
 @engle2004 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a 

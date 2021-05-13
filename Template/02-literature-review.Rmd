@@ -235,7 +235,20 @@ It can be shown that then the conditional variance in period $T+k$ is equal to e
 
 An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.
 
-All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the eGARCH model, as this model does not mathematically allow for a negative output.
+All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
+
+| Author                          | Model                      |
+|---------------------------------|----------------------------|
+| @engle1982                      | ARCH model                 |
+| @bollerslev1986                 | GARCH model                |
+| @bollerslev1986                 | IGARCH model               |
+| @nelson1991                     | EGARCH model               |
+| @glosten1993                    | GJRGARCH model             |
+| @zakoian1994                    | TGARCH model               |
+| @taylor1986 and @schwert1989    | TSGARCH (or AVGARCH) model |
+| @morganguarantytrustcompany1996 | EWMA or RiskMetrics model  |
+
+: GARCH models, the founders
 
 #### GARCH model
 
@@ -340,7 +353,11 @@ A alternative to the series of GARCH models is the exponentially weighted moving
  (\#eq:eq21)
 \end{align}
 ```
-In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan.
+In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan [@morganguarantytrustcompany1996].
+
+## ACD models
+
+An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In \@ref(pa).
 
 ## Value at Risk
 
@@ -370,4 +387,4 @@ With the same notations as before, and $f$ the (conditional) probability density
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
 
-# Past literature on the consequences of higher moments for VaR determination
+## Past literature on the consequences of higher moments for VaR determination {#past-lit}
