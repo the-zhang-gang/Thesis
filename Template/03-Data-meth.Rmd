@@ -17,7 +17,7 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 ## Data
 
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index (...................................)
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index ( write here ...................................)
 
 The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
 
@@ -39,6 +39,8 @@ $x_{i t}$ = Exchange rate from local currency into index currency for company ($
 $M_{t}$ = Free-float market capitalization of the index at time (t)
 $D_{t}$ = Divisor of the index at time (t)
 
+(write here....................................)
+
 ```{=tex}
 \begin{align}
 D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
@@ -48,9 +50,6 @@ D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i
 where:
 
 $\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
-
-
-
 
 ```{r dataloading, include=F}
 require(readxl)
@@ -63,14 +62,14 @@ require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 # require(tseries) # do we need this
-require(openxlsx) # do we need this
+require(openxlsx) 
 require(TTR)
 require(lmtest)
 
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
+data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
@@ -103,7 +102,7 @@ Skewness <- round(skewtest$statistic,4)
 names(Skewness) <- "Skewness"
 skewness.pvalue <- skewtest$p.value
 kurttest <- normtest::kurtosis.norm.test(coredata(R)) #this is normal kurtosis (not excess)
-Excess_kurtosis <- round(kurttest$statistic,4) - 3
+Excess_kurtosis <- round(kurttest$statistic,4) - 3 
 names(Excess_kurtosis) <- "Excess Kurtosis"
 kurtosis.pvalue <- kurttest$p.value
 
