@@ -29,7 +29,7 @@ require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
 require(fitdistrplus)
-require(fGarch) 
+require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 # require(tseries) # do we need this
@@ -340,9 +340,6 @@ SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
 SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
 summary(SGTfit_R)
 ## ? # LR statistic
-
-
-
 ```
 
 ```{r SGT.MLE, echo=F}
@@ -350,8 +347,7 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
             lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
           start, subset, method = "BFGS", itnmax = NULL, 
           hessian.method = "Richardson", gradient.method = "Richardson", 
-          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
-{
+          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) {
   formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
                   p = p.f, q = q.f)
   varNames = NULL
@@ -460,7 +456,6 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
   class(result) = c("sgtest", class(result))
   return(result)
 }
-
 ```
 
 ```{r mlesgt, echo=F}
