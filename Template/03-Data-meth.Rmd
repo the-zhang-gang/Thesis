@@ -17,11 +17,7 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 
 ## Data
-
-<!-- uncomment this codes -->
-
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 stocks  
-
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 stocks.  
 ```{r dataloading, include=F}
 require(readxl)
 require(xts)
@@ -259,7 +255,7 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 \end{align}
 ```
 
-### ACD models {#acd-models} 
+### ACD models {#acd-models-meth} 
 Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
 ```{=tex}
 \begin{align} 

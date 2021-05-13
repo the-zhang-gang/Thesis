@@ -22,17 +22,20 @@ In order to check if the models are specified correctly, some specification chec
 $$ 
 \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
 $$
-### Residual heteroscedasticity
-Ljung-Box test on the squared or absolute standardized residuals.  
 
-### Eye-balling econometrics
+### Figures control tests
 Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
 
 Then the density can be examined standardized residuals and compared with the normal distribution. 
 
-Also the QQ-plot can be examined. 
+Also the QQ-plot can be examined.
 
-### GMM test
+### Residual heteroscedasticity
+Ljung-Box test on the squared or absolute standardized residuals.  
+
+ 
+
+<!-- ### GMM test -->
 zero-mean
 unit-variance
 not skewed
