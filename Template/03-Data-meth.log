@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  14 MAY 2021 18:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  14 MAY 2021 18:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1703,10 +1703,10 @@ Package logreq Info: Writing requests to '03-Data-meth.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  29807 strings out of 478994
- 494857 string characters out of 5858184
- 1326443 words of memory out of 5000000
+ 494859 string characters out of 5858184
+ 1327443 words of memory out of 5000000
  46400 multiletter control sequences out of 15000+600000
- 482468 words of font info for 135 fonts, out of 8000000 for 9000
+ 482506 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  86i,17n,89p,1138b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
@@ -1729,7 +1729,7 @@ dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts
 lic/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lms
 y8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></u
 sr/local/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 03-Data-meth.pdf (13 pages, 574815 bytes).
+Output written on 03-Data-meth.pdf (13 pages, 575619 bytes).
 PDF statistics:
  325 PDF objects out of 1000 (max. 8388607)
  272 compressed objects within 3 object streams
