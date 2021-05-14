@@ -188,7 +188,6 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
-<<<<<<< HEAD
   kable_classic(full_width = F)%>% 
   footnote(general = fn1,threeparttable = T, general_title = "")  %>%
   footnote(c(fn2,fn3,fn4,fn4b), notation="none")  %>%
@@ -196,15 +195,6 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
   
 
 # c(fn1,fn2,fn3,fn4, fn5)
-=======
-  kable_classic(full_width = F)%>%
-  footnote(c(fn1),threeparttable = T,
-           footnote_as_chunk = T, general_title = "Notes: ")
-  # footnote(c(fn1,fn2,fn3,fn4, fn5),threeparttable = T,
-  #          footnote_as_chunk = T, general_title = "")
-
->>>>>>> parent of 6b66bc4... table1 trying
-
 ```
 
 \newpage
