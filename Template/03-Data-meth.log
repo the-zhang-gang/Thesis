@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  14 MAY 2021 18:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  14 MAY 2021 19:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1601,16 +1601,12 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 251--253
-  
- []
-
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [3]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
-65.
+75.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1618,49 +1614,49 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 File: 03-Data-meth_files/figure-latex/plot1-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot1-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-1.pdf  used on i
-nput line 269.
+nput line 279.
 (pdftex.def)             Requested size: 421.10046pt x 270.51411pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [4]
-<figures/vol-clustering-final-withcircles.pdf, id=86, 597.50786pt x 845.04686pt
+<figures/vol-clustering-final-withcircles.pdf, id=85, 597.50786pt x 845.04686pt
 >
 File: figures/vol-clustering-final-withcircles.pdf Graphic file (type pdf)
 <use figures/vol-clustering-final-withcircles.pdf>
 Package pdftex.def Info: figures/vol-clustering-final-withcircles.pdf  used on 
-input line 282.
+input line 292.
 (pdftex.def)             Requested size: 315.82535pt x 446.66063pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<03-Data-meth_files/figure-latex/plot3-1.pdf, id=87, 440.64626pt x 283.0575pt>
+<03-Data-meth_files/figure-latex/plot3-1.pdf, id=86, 440.64626pt x 283.0575pt>
 File: 03-Data-meth_files/figure-latex/plot3-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot3-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot3-1.pdf  used on i
-nput line 291.
+nput line 301.
 (pdftex.def)             Requested size: 315.82535pt x 202.88557pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5 <./03-Data-meth_files/figure-latex/plot1-1.pdf>]
 
-LaTeX Warning: Reference `styl-facts' on page 6 undefined on input line 300.
+LaTeX Warning: Reference `styl-facts' on page 6 undefined on input line 310.
 
-<03-Data-meth_files/figure-latex/plot4-1.pdf, id=102, 436.63126pt x 282.05376pt
+<03-Data-meth_files/figure-latex/plot4-1.pdf, id=101, 436.63126pt x 282.05376pt
 >
 File: 03-Data-meth_files/figure-latex/plot4-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/plot4-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot4-1.pdf  used on i
-nput line 304.
+nput line 314.
 (pdftex.def)             Requested size: 315.82535pt x 204.01677pt.
 [6 <./figures/vol-clustering-final-withcircles.pdf>]
-<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=130, 456.70625pt x 320.1962
+<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=129, 456.70625pt x 320.1962
 4pt>
 File: 03-Data-meth_files/figure-latex/acfplots-1.pdf Graphic file (type pdf)
 <use 03-Data-meth_files/figure-latex/acfplots-1.pdf>
 Package pdftex.def Info: 03-Data-meth_files/figure-latex/acfplots-1.pdf  used o
-n input line 319.
+n input line 329.
 (pdftex.def)             Requested size: 315.82535pt x 221.4291pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -1673,7 +1669,7 @@ Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
-41.
+51.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1682,7 +1678,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 441.
+(Font)              <10.95> on input line 451.
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 03-Data-meth.maf file.
@@ -1702,11 +1698,11 @@ Package logreq Info: Writing requests to '03-Data-meth.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29807 strings out of 478994
- 494859 string characters out of 5858184
+ 29802 strings out of 478994
+ 494808 string characters out of 5858184
  1327443 words of memory out of 5000000
- 46400 multiletter control sequences out of 15000+600000
- 482506 words of font info for 135 fonts, out of 8000000 for 9000
+ 46399 multiletter control sequences out of 15000+600000
+ 482286 words of font info for 133 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  86i,17n,89p,1138b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
@@ -1729,7 +1725,7 @@ dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts
 lic/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lms
 y8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></u
 sr/local/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 03-Data-meth.pdf (13 pages, 575619 bytes).
+Output written on 03-Data-meth.pdf (13 pages, 575797 bytes).
 PDF statistics:
  325 PDF objects out of 1000 (max. 8388607)
  272 compressed objects within 3 object streams
