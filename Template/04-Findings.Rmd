@@ -192,8 +192,9 @@ DistMLE <- function(series) {
   SGED_lambda <- SGED_result$estimate[3]
   SGED_p <- SGED_result$estimate[4]
   SGED_q <- SGED_result$estimate[5]
+  if(!is.na(SGED_mu)){
   plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
-  lines(density(coredata(series)))
+  lines(density(coredata(series)))}
   
   ### GT(sgt.mle2)
   GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
@@ -294,6 +295,7 @@ Table2[1,5] <- SGT_q
 Table2[1,7] <- SGT_result$maximum
 Table2[1,8] <- SGT_AIC
 
+if(!is.na(SGED_mu)){
 Table2[2,1] <- SGED_mu
 Table2[2,2] <- SGED_sigma
 Table2[2,3] <- SGED_lambda
@@ -301,6 +303,7 @@ Table2[2,4] <- SGED_p
 Table2[2,5] <- SGED_q
 Table2[2,7] <- SGED_result$maximum
 Table2[2,8] <- SGT_AIC
+}
 
 Table2[3,1] <- GT_mu
 Table2[3,2] <- GT_sigma
@@ -351,9 +354,15 @@ return(Table2)
 
 ```{r MLE tables for different series}
 
-MLE_Eurostoxx <- DistMLE(R)
-MLE_Bali <- DistMLE(Rbali)
+R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
+R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
+R_covid <- window(R, start = "2009-03-31")
+length(R_dotcom); length(R_GFC); length(R_covid)
 
+MLE_Full <- DistMLE(R)
+MLE_dotcom <- DistMLE(R_dotcom)
+MLE_GFC <- DistMLE(R_GFC)
+MLE_covid <- DistMLE(R_covid)
 
 ```
 
