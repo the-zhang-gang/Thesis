@@ -34,7 +34,7 @@ require(lmtest)
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
+data <- readxl::read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
@@ -171,7 +171,6 @@ table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurosto
 fn1 <- sprintf(paste0('This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.'),gsub(pattern = '\\.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
 fn2 <- paste("The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows: ", "$ R_t=\\\\alpha_0+\\\\alpha_1 R_{t-1}+z_t \\\\sigma_t \\\\\\\\ \\\\sigma_t^2=\\\\beta_0+\\\\beta_1 \\\\sigma_{t-1}^2 z_{t-1}^2+\\\\beta_2 \\\\sigma_{t-1}^2, \\\\\\\\$",  "Where $z$ is the standard residual (assumed to have a normal distribution).")
 fn3 <- '*, **, *** represent significance levels at the 5%, 1% and <1%.'
-
 ```
 
 \noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translate to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is highly significant and negative at `r round(as.numeric(table1[6,2]),3)` and the excess Kurtosis is also highly significant and positive at `r round(as.numeric(table1[8,2]),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.  \
@@ -186,7 +185,6 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
       digits = 3 )%>%
   kable_classic(full_width = F)%>% 
   footnote(general = "Notes",number=c(fn1,fn2,fn3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
-# c(fn1,fn2,fn3,fn4, fn5)
 ```
 
 \newpage
