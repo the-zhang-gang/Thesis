@@ -97,13 +97,14 @@ The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the I
 
 #### Table of summary statistics
 
-Here comes a table and description of the stats
+\@ref:stats provides the main statistics describing the return series analyzed. The Arithmetic Mean of the series is `r table1[1,2]` with a standard deviation of `r table1[5,2]`
+
 
 <!--# [FILIPPO] -> to do: describe it! Also do we have to add a significance level for skewness and kurtosis like in the paper? think they do a t-test or?  -->
 
 ```{r stats, echo=F, results='asis'}
 ## RETURNS
-
+#table1[5,2]
 #selecting relevant statistics only from table.Stats
 Statistics <-  table.Stats(R)
 Stats.names <- rownames(Statistics)[-c(1,2,4,7,8,10:13)]
