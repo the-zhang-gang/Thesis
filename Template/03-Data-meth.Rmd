@@ -45,6 +45,8 @@ Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
+Rbali <- window(R, end = "2004-12-31") #up till end of balis dataset
+
 write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50", 
   col.names = TRUE, row.names = TRUE, append = FALSE)
 ```
@@ -52,6 +54,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 ## Data
 
 \noindent We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen among those ranked between 41 and 60 [@EUROSTOXXFactSheet].
+
 
 \noindent The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
 
@@ -84,7 +87,9 @@ D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i
 \noindent $\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
 
 (Optional)
-The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not qualitatively different conclusions. The findings of these researches are available upon requests.
+
+The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not qualitatively different conclusions(....hopefully....). The findings of these researches are available upon requests.
+
 
 \newpage
 
@@ -136,9 +141,8 @@ garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
 stdret.R <- residuals(garchfit.R, standardize = TRUE)
 
 Statistics.S <-  table.Stats(stdret.R)
-
-Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
+Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 Statistics.S <- Statistics.S[,1]
 names(Statistics.S) <- Stats.names.S
 
@@ -163,7 +167,8 @@ names(jb_R) <- "Jarque-Bera"
 Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 # for table 1
-table1 <- data.frame(Statistics = names(Statistics.S), `Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
+
+table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurostoxx 50` = Statistics[c(3,2,4,1,5:10)], `Standardized Residuals`= Statistics.S[c(3,2,4,1,5:10)])
 
 # colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
 # JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
@@ -275,6 +280,8 @@ plot(e^2,main = "Squared Prediction Error")
 acf(e^2, main = "ACF (squared prediction errors)", xaxt = "n")
 # acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
 # acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
+
+
 ```
 
 \clearpage
@@ -349,390 +356,6 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 (\#eq:densityconddens)
 ```
 Again @ghalanos2015 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
-
-```{r MLE exampe, echo=F}
-# n_samples <- 25; true_rate <- 1; set.seed(1)
-# exp_samples <- rexp(n = n_samples,
-#                     rate = true_rate)
-# 
-# sample_data <- exp_samples
-# rate_fit_R <- fitdistrplus::fitdist(data = sample_data, 
-#                       distr = 'exp', 
-#                       method = 'mle')
-# 
-# rate_fit_R$estimate
-```
-
-```{r MLE fitdist, echo=F}
-# Normal
-normfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "norm",
-                      method = "mle")
-normfit_R$estimate #estimated parameters
-normfit_R$sd #estimated standard errors
-normfit_R$loglik #max log-likelihood 
-#? # LR statistic
-
-# T-dist
-tstart <- list(df=1, ncp = 1)
-
-tfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "t",
-                      method = "mle", start = tstart)
-tfit_R$estimate #estimated parameters
-tfit_R$sd #estimated standard errors
-tfit_R$loglik #max log-likelihood 
-#? # LR statistic
-
-# GED distribution 
-gedstart <- list(mean=1, sd=1, nu=1)
-gedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "ged",
-                      method = "mle", start = gedstart)
-gedfit_R$estimate
-gedfit_R$sd
-gedfit_R$loglik
-#? # LR statistic
-
-# SGED distribution 
-sgedstart <- list(mean=1, sd=1, nu=1, xi =1.5)
-sgedfit_R <- fitdistrplus::fitdist(data = as.vector(R), 
-                      distr = "sged",
-                      method = "mle", start = sgedstart)
-sgedfit_R$estimate
-sgedfit_R$sd
-sgedfit_R$loglik
-#? # LR statistic
-
-# ST distribution
-## Stephane's skewed student t is different from the rugarch package, so I would skip it? maybe it is just because of the different estimates
-## skewtstart <- list(xi=0, omega=2, alpha=2, nu=8)
-## skewtfit_R <- fitdistrplus::fitdist(data = as.vector(R),
-##                       distr = "st",
-##                       method = "mle", skewtstart)
-## skewtfit_R$estimate
-## skewtfit_R$sd
-## skewtfit_R$loglik
-
-
-
-
-
-## ? # LR statistic
-
-# ST <- rugarch::fitdist("sstd", x = R)
-# ST$pars # parameters are very similar to the ones we got with fitdistrplus, which is good
-
-#SGT distribution
-X.f = X ~ coredata(R)
-start = list(mu=0,sigma=2, lambda = 0, p=2, q=8)#list(mu=0,sigma=2, lambda = 0.5, p=2, q=12)
-result = sgt.mle(X.f = X.f, start = start)
-summary(result)
-
-SGTstart <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
-SGTfit_R <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sgt", method = "mle", SGTstart)
-summary(SGTfit_R)
-## ? # LR statistic
-```
-
-```{r SGT.MLE, echo=F}
-sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ 
-            lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
-          start, subset, method = "BFGS", itnmax = NULL, 
-          hessian.method = "Richardson", gradient.method = "Richardson", 
-          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) {
-  formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
-                  p = p.f, q = q.f)
-  varNames = NULL
-  envir = new.env()
-  for (i in 1:6) {
-    formList[[i]] = stats::as.formula(formList[[i]])
-    if (length(formList[[i]]) == 2L) {
-      formList[[i]][[3L]] = formList[[i]][[2L]]
-      formList[[i]][[2L]] = as.name(names(formList)[i])
-    }
-    else if (as.character(formList[[i]][[2L]]) != names(formList)[i]) {
-      warning(paste("The left hand side of ", names(formList)[i], 
-                    ".f was changed from ", as.character(formList[[i]][[2L]]), 
-                    " to ", names(formList)[i], sep = ""))
-    }
-    varNames = c(varNames, all.vars(formList[[i]][[3L]]))
-  }
-  if (class(data)[1L] == "matrix") 
-    data = as.data.frame(data)
-  if (!is.list(data) && !is.environment(data)) 
-    stop("'data' must be a list or an environment")
-  start = as.list(start)
-  if (is.null(names(start))) 
-    stop("'start' must be a named list or named numeric vector")
-  if ("" %in% names(start)) 
-    stop("at least one of the elements in 'start' is missing a name")
-  parNames = names(start)
-  varNames = varNames[is.na(match(varNames, parNames))]
-  if (length(varNames) == 0L) 
-    stop("there is no reference to data in the given formulas")
-  for (i in varNames) {
-    if (!exists(i, data)) 
-      stop(paste(i, "is not contained in 'start' and it is not found in 'data'"))
-    assign(i, eval(parse(text = paste("as.numeric(data$", 
-                                      i, ")", sep = ""))), envir)
-  }
-  if (length(varNames) > 1) {
-    for (i in 2:length(varNames)) {
-      if (length(eval(parse(text = paste("envir$", varNames[1L], 
-                                         sep = "")))) != length(eval(parse(text = paste("envir$", 
-                                                                                        varNames[i], sep = ""))))) 
-        stop(paste("the length of the variable", varNames[i], 
-                   "does not match the length of the variable", 
-                   varNames[1L]))
-    }
-  }
-  control = list(...)
-  if (!is.null(control$maximize)) 
-    stop("'maximize' option not allowed")
-  if (!missing(subset)) 
-    for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
-                                                          i, "[subset]", sep = ""))), envir)
-  keep = rep(TRUE, length(eval(parse(text = paste("envir$", 
-                                                  varNames[1L], sep = "")))))
-  for (i in varNames) keep = keep & is.finite(eval(parse(text = paste("envir$", 
-                                                                      i, sep = ""))))
-  for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
-                                                        i, "[keep]", sep = ""))), envir)
-  loglik = function(params) {
-    for (i in 1:length(parNames)) assign(parNames[i], unlist(params[i]))
-    X = eval(formList[[1L]][[3L]])
-    mu = eval(formList[[2L]][[3L]])
-    sigma = eval(formList[[3L]][[3L]])
-    lambda = eval(formList[[4L]][[3L]])
-    p = eval(formList[[5L]][[3L]])
-    q = eval(formList[[6L]][[3L]])
-    sum(dsgt(X, mu, sigma, lambda, p, q, mean.cent, var.adj, 
-             log = TRUE))
-  }
-  environment(loglik) = envir
-  negloglik = function(params) {
-    -loglik(params)
-  }
-  if (!is.finite(loglik(start))) 
-    stop("'start' yields infinite or non-computable SGT function values")
-  optimum = suppressWarnings(optimx::optimx(par = unlist(start), 
-                                            fn = negloglik, method = method, itnmax = itnmax, control = control, lower=lower, upper=upper))
-  minimum = min(optimum$value, na.rm = TRUE)
-  if (!is.finite(minimum)) 
-    stop("All Maximization Methods Failed")
-  whichbest = max(which(minimum == optimum$value))
-  optimal = optimum[whichbest, ]
-  estimate = as.numeric(optimum[whichbest, 1:length(parNames)])
-  names(estimate) = parNames
-  H = tryCatch(numDeriv::hessian(loglik, estimate, method = hessian.method), 
-               error = function(e) {
-                 warning("hessian matrix calculation failed")
-                 return(as.matrix(NaN))
-               })
-  varcov = tryCatch(-qr.solve(H), error = function(e) {
-    warning("covariance matrix calculation failed due to a problem with the hessian")
-    return(as.matrix(NaN))
-  })
-  std.error = sqrt(diag(varcov))
-  if (is.finite(varcov[1, 1])) 
-    names(std.error) = parNames
-  gradient = tryCatch(numDeriv::grad(loglik, estimate, method = gradient.method), 
-                      error = function(e) {
-                        warning("gradient calculation failed")
-                        return(NaN)
-                      })
-  result = list(maximum = -minimum, estimate = estimate, convcode = as.numeric(optimal$convcode), 
-                niter = as.numeric(optimal$niter), best.method.used = row.names(optimal), 
-                optimx = optimum, hessian = H, gradient = gradient, 
-                varcov = varcov, std.error = std.error)
-  class(result) = c("sgtest", class(result))
-  return(result)
-}
-```
-
-```{r mlesgt, echo=F}
-library(sgt)
-require(graphics)
-require(stats)
-
-
-### SGT
-X.data <- X ~ coredata(R)
-
-SGT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
-SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
-SGT_sumResult <- summary(SGT_result)
-SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
-
-### SGT plot fit
-xvals = seq(-3,3,by=0.01)
-SGT_mu <- SGT_result$estimate[1]
-SGT_sigma <- SGT_result$estimate[2]
-SGT_lambda <- SGT_result$estimate[3]
-SGT_p <- SGT_result$estimate[4]
-SGT_q <- SGT_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT (sgt.mle2)")
-lines(density(coredata(R)))
-
-
-### SGED (sgt.mle2)
-
-SGED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
-SGED_result <- sgt.mle2(X.f = X.data, start = SGED_start, lower = c(-Inf, -Inf, -Inf, -Inf,749.9), upper = c(Inf,Inf,Inf,Inf,750.1))
-SGED_sumResult <- summary(SGED_result)
-SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$maximum
-
-### SGED Plot fit (sgt.mle2)
-SGED_mu <- SGED_result$estimate[1]
-SGED_sigma <- SGED_result$estimate[2]
-SGED_lambda <- SGED_result$estimate[3]
-SGED_p <- SGED_result$estimate[4]
-SGED_q <- SGED_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
-lines(density(coredata(R)))
-
-### GT(sgt.mle2)
-GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
-GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
-GT_sumResult <- summary(GT_result)
-GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
-
-### GT Plot fit (sgt.mle2)
-GT_mu <- GT_result$estimate[1]
-GT_sigma <- GT_result$estimate[2]
-GT_lambda <- GT_result$estimate[3]
-GT_p <- GT_result$estimate[4]
-GT_q <- GT_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
-lines(density(coredata(R)))
-
-
-
-
-### GED(sgt.mle2)
-GED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
-GED_result <- sgt.mle2(X.f = X.data, start = GED_start, lower = c(-Inf, -Inf, -0.000001, -Inf,749.9), upper = c(Inf,Inf,0.000001,Inf,750.1))
-GED_sumResult <- summary(GED_result)
-GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$maximum
-
-### GED Plot fit (sgt.mle2)
-
-GED_mu <- GED_result$estimate[1]
-GED_sigma <- GED_result$estimate[2]
-GED_lambda <- GED_result$estimate[3]
-GED_p <- GED_result$estimate[4]
-GED_q <- GED_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED (sgt.mle2)")
-lines(density(coredata(R)))
-
-### ST (fitdist) 
-ST_start <- list(mean=0,sd=2, nu = 8, xi=2)
-ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
-ST_sumResult <- summary(ST_result)
-ST_sumResult$aic
-
-### ST Plot fit (fitdist)
-ST_mean <- ST_result$estimate[1]
-ST_sd <- ST_result$estimate[2]
-ST_nu <- ST_result$estimate[3]
-ST_xi <- ST_result$estimate[4] #lamda
-
-plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST (fitdist)")
-lines(density(coredata(R)))
-
-### T (fitdist) 
-T_start <- list(mean = 0, sd = 1, nu = 5)
-T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
-T_sumResult <- summary(T_result)
-
-### T Plot fit (fitdist)
-T_mean <- T_result$estimate[1]
-T_sd <- T_result$estimate[2]
-T_nu <- T_result$estimate[3]
-
-
-plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T (fitdist)")
-lines(density(coredata(R)))
-
-
-### Normal (sgt.mle2)
-Normal_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 950)
-Normal_result <- sgt.mle2(X.f = X.data, start = Normal_start, lower = c(-Inf, -Inf, -0.00000001, 1.999999999,949.9), upper = c(Inf,Inf,0.00000001,2.000000001,950.1))
-Normal_sumResult <- summary(Normal_result)
-Normal_AIC <- 2*length(Normal_result$estimate-3) - 2*Normal_sumResult$maximum
-
-### Normal  Plot fit (sgt.mle2)
-
-Normal_mu <- Normal_result$estimate[1]
-Normal_sigma <- Normal_result$estimate[2]
-Normal_lambda <- Normal_result$estimate[3]
-Normal_p <- Normal_result$estimate[4]
-Normal_q <- Normal_result$estimate[5]
-plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal (sgt.mle2)")
-lines(density(coredata(R)))
-
-#maximum likelihood estimates of unconditional distribution functions
-Table2 <- matrix(nrow = 7, ncol = 8)
-colnames(Table2) <- c("mu","sigma","lambda","p","q","nu","L","AIC")
-rownames(Table2) <- c("SGT","SGED","GT","GED","ST","T","Normal")
-
-Table2[1,1] <- SGT_mu
-Table2[1,2] <- SGT_sigma
-Table2[1,3] <- SGT_lambda
-Table2[1,4] <- SGT_p
-Table2[1,5] <- SGT_q
-Table2[1,7] <- SGT_result$maximum
-Table2[1,8] <- SGT_AIC
-
-Table2[2,1] <- SGED_mu
-Table2[2,2] <- SGED_sigma
-Table2[2,3] <- SGED_lambda
-Table2[2,4] <- SGED_p
-Table2[2,5] <- SGED_q
-Table2[2,7] <- SGED_result$maximum
-Table2[2,8] <- SGT_AIC
-
-Table2[3,1] <- GT_mu
-Table2[3,2] <- GT_sigma
-Table2[3,3] <- GT_lambda
-Table2[3,4] <- GT_p
-Table2[3,5] <- GT_q
-Table2[3,7] <- GT_result$maximum
-Table2[3,8] <- GT_AIC
-
-
-Table2[4,1] <- GED_mu
-Table2[4,2] <- GED_sigma
-Table2[4,3] <- GED_lambda
-Table2[4,4] <- GED_p
-Table2[4,5] <- GED_q
-Table2[4,7] <- GED_result$maximum
-Table2[4,8] <- GED_AIC
-
-Table2[5,1] <- ST_mean
-Table2[5,2] <- ST_sd
-Table2[5,3] <- ST_xi
-Table2[5,6] <- ST_nu
-Table2[5,7] <- ST_result$loglik
-Table2[5,8] <- ST_result$aic
-
-Table2[6,1] <- T_mean
-Table2[6,2] <- T_sd
-Table2[6,6] <- T_nu
-Table2[6,7] <- T_result$loglik
-Table2[6,8] <- T_result$aic
-
-Table2[7,1] <- GED_mu
-Table2[7,2] <- GED_sigma
-Table2[7,3] <- GED_lambda
-Table2[7,4] <- GED_p
-Table2[7,5] <- GED_q
-Table2[7,7] <- GED_result$maximum
-Table2[7,8] <- GED_AIC
-```
-
-<!-- $A \theta + B = 0$ -->
 
 ### Control Tests
 
