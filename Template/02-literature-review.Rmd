@@ -20,10 +20,9 @@ bibliography: references.bib
 
 ## Stylized facts of returns {#styl-facts}
 
-\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^1] following @annaert2021 for returns are given.
+\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^literature-review-1] following @annaert2021 for returns are given.
 
-
-[^1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
+[^literature-review-1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
 
 -   Returns are *small and volatile* (with the standard deviation being larger than the mean on average)
 
@@ -115,6 +114,7 @@ f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \si
 \noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
 \newpage
+
 ## Volatility modeling {#vol-mod}
 
 ### Rolling volatility
@@ -146,7 +146,6 @@ y_{t} &= \mu + \varepsilon_t
 \newpage
 
 \noindent From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
-
 
 ```{=tex}
 \begin{align} 
@@ -183,8 +182,8 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \end{align}
 ```
 \newpage
-\noindent This leads to the properties of ARCH models.
--   Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
+
+\noindent This leads to the properties of ARCH models. - Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
 
 -   Zero-mean innovations
 
@@ -235,7 +234,6 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \newpage
 
 ### Univariate GARCH models
-
 
 \noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \
 
@@ -291,6 +289,7 @@ All the GARCH models below are estimated using the package rugarch by Alexios @a
 \noindent Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
 \newpage
+
 #### EGARCH model
 
 \noindent The EGARCH model or exponential GARCH model [@nelson1991] is defined as in equation \@ref(eq:eq16). The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
@@ -350,8 +349,8 @@ As before, $\gamma_j$ represents the *leverage* term.
  (\#eq:eq20)
 \end{align}
 ```
-
 \newpage
+
 #### EWMA
 
 \noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods. The $\lambda$ must be less than 1. It is specified as in \@ref(eq:eq21).
@@ -369,6 +368,7 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \@ref(acd-models-meth) the specification is given.
 
 \newpage
+
 ## Value at Risk
 
 Value-at-Risk (VaR) is a risk metric developed simultaniously by [Markowitz1952] and [Roy1952] to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. According to [Holton2002] VaR gained traction in the last decade of the 20th century when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22). [Christofferson2001] puts forth a general framework for specifying VaR models and comparing between two alternatives models.
@@ -398,4 +398,22 @@ With the same notations as before, and $f$ the (conditional) probability density
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
 
 \newpage
+
 ## Past literature on the consequences of higher moments for VaR determination {#past-lit}
+
+Here comes the discussion about studies that have looked at higher moments and VaR determination. Also a summary of studies that discusses time-varying higher moments, but not a big part, while it is also only a small part of the empirical findings (couple of GARCH-ACD models).
+
+| Author      | Higher moments |
+|-------------|----------------|
+| @hansen1994 |                |
+| @harvey1999 |                |
+|             |                |
+|             |                |
+|             |                |
+|             |                |
+|             |                |
+| @brooks2005 |                |
+|             |                |
+|             |                |
+
+: Higher moments and VaR
