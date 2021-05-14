@@ -17,7 +17,7 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 ## Data
 
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index ( write here ...................................)
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen amongst those ranked between 41 and 60 [@EUROSTOXXFactSheet]
 
 The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
 
@@ -39,7 +39,7 @@ $x_{i t}$ = Exchange rate from local currency into index currency for company ($
 $M_{t}$ = Free-float market capitalization of the index at time (t)
 $D_{t}$ = Divisor of the index at time (t)
 
-(write here....................................)
+Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted)
 
 ```{=tex}
 \begin{align}
