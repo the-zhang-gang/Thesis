@@ -15,41 +15,6 @@ bibliography: references.bib
 \chaptermark{Data and methodology}
 
 \minitoc <!-- this will include a mini table of contents-->
-## Data
-
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR. It is the leading blue-chip index of the Eurozone and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen amongst those ranked between 41 and 60 [@EUROSTOXXFactSheet]
-
-The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
-
-```{=tex}
-\begin{align}
-\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
-(\#eq:Laspeyres.formula)
-\end{align}
-```
-where:
-
-t = Time the index is computed
-$n$ = Number of companies in the index
-$p_{i t}$ = Price of company ($i$) at time (t)
-$s_{i t}$ = Number of shares of company ($i$) at time (t)
-$f f_{i t}$ = Free float factor of company ($i$) at time (t)
-$c f_{i t}$ = Weighting cap factor of company ($i$) at time (t)
-$x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t)
-$M_{t}$ = Free-float market capitalization of the index at time (t)
-$D_{t}$ = Divisor of the index at time (t)
-
-Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted)
-
-```{=tex}
-\begin{align}
-D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
-(\#eq:Price.weighted)
-\end{align}
-```
-where:
-
-$\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
 
 ```{r dataloading, include=F}
 require(readxl)
@@ -78,7 +43,41 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50", 
   col.names = TRUE, row.names = TRUE, append = FALSE)
 ```
+
+## Data
+
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen amongst those ranked between 41 and 60 [@EUROSTOXXFactSheet].
+
+The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
+
+```{=tex}
+\begin{align}
+\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
+(\#eq:Laspeyres.formula)
+\end{align}
+```
+where:
+
+t = Time the index is computed $n$ = Number of companies in the index $p_{i t}$ = Price of company ($i$) at time (t) $s_{i t}$ = Number of shares of company ($i$) at time (t) $f f_{i t}$ = Free float factor of company ($i$) at time (t) $c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) $x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) $M_{t}$ = Free-float market capitalization of the index at time (t) $D_{t}$ = Divisor of the index at time (t)
+
+Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted)
+
+```{=tex}
+\begin{align}
+D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
+(\#eq:Price.weighted)
+\end{align}
+```
+where:
+
+$\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
+
+(Optional)
+
+The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not qualitatively different conclusions. The findings of these researches are available upon requests.
+
 \newpage
+
 ### Descriptives
 
 #### Table of summary statistics
@@ -178,10 +177,9 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
 
 #### Descriptive figures
 
-
 ##### Stylized facts
-Prices
-*heteroscedasticity*
+
+Prices *heteroscedasticity*
 
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="75%"}
 par(mfrow = c(1,1))
@@ -211,7 +209,6 @@ par(mfrow = c(1,1))
 plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid()
 ```
 
-
 \newpage
 
 ```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%"}
@@ -227,7 +224,9 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 ```
 
 \newpage
+
 *normally distributed*
+
 ```{r plot4, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "75%", fig.align='center'}
 #Histogram to eyeball normality
 
@@ -241,9 +240,8 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.9) 
 ```
 
-As can be seen
-\newpage
-*heteroscedasticity*
+As can be seen \newpage *heteroscedasticity*
+
 ```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "75%"}
 
 # Compute the mean daily return
@@ -335,10 +333,7 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 \end{align}
 (\#eq:densityconddens)
 ```
-
-
 Again @ghalanos2015 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
-
 
 ```{r MLE exampe, echo=F}
 # n_samples <- 25; true_rate <- 1; set.seed(1)
