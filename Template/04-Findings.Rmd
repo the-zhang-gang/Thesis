@@ -158,10 +158,6 @@ require(graphics)
 require(stats)
 
 
-
-
-  
-
 DistMLE <- function(series) {
   
   ### SGT

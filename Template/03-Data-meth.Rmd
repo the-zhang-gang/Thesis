@@ -65,7 +65,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 ```
 \noindent where: t = Time the index is computed $n$ = Number of companies in the index $p_{i t}$ = Price of company ($i$) at time (t) $s_{i t}$ = Number of shares of company ($i$) at time (t) $f f_{i t}$ = Free float factor of company ($i$) at time (t) $c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) $x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) $M_{t}$ = Free-float market capitalization of the index at time (t) $D_{t}$ = Divisor of the index at time (t)
 
-\noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted)
+\noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted) formula.
 
 ```{=tex}
 \begin{align}
@@ -85,13 +85,27 @@ The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the I
 
 #### Table of summary statistics
 
-Here comes a table and description of the stats
+\@ref:stats provides the main statistics describing the return series analyzed. Returns are computed with the \@ref(eq:log.returns) formula
+
+```
+\begin{align}
+R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
+(\#eq:log.returns)
+\end{align}
+```
+\noindent Where $I_{t}$ is the index price at time $t$ and $I_{t-1}$ is the index price at $t-1$.
+
+\noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translates to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is `r round(as.numeric(table1[6,2]),3)` with a significance level of `r round(as.numeric(table1[7,2]),3)*100`% and the excess Kurtosis is `r round(as.numeric(table1[8,2]),3)` significant at the `r round(as.numeric(table1[9,2]),3)*100`% level giving an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` significant at the `r round(normtest::jb.norm.test(R)$p.value *100,3)`% level confirms the non normality feeling given by the Skewness and Kurtosis.
+
+\noindent The right column of \@ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in \@ref:stats in Note 2$*$. Again Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a significance level of `r round(as.numeric(table1[7,3]),3)*100`% and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` significant at the `r round(as.numeric(table1[9,3]),3)*100`% level
+
 
 <!--# [FILIPPO] -> to do: describe it! Also do we have to add a significance level for skewness and kurtosis like in the paper? think they do a t-test or?  -->
 
 ```{r stats, echo=F, results='asis'}
 ## RETURNS
-
+round(as.numeric(table1[1,2]),3)
+round(normtest::jb.norm.test(R)$statistic,3)
 #selecting relevant statistics only from table.Stats
 Statistics <-  table.Stats(R)
 Stats.names <- rownames(Statistics)[-c(1,2,4,7,8,10:13)]
@@ -165,6 +179,14 @@ table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurosto
 # colnames(JB.Test) <- colnames(table1)
 # table1 <- rbind(table1, JB.Test)
 
+fn1 <- sprintf(paste0('Note 1: This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including minimum, median, arithmetic average, maximum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test. \n'),gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
+fn2 <- 'Note 2*: The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows: \n' 
+fn3 <- '$R_t=\\alpha_0+\\alpha_1 R_{t-1}+z_t \\sigma_t$ \n'
+fn4 <-  '$\\sigma_t^2=\\beta_0+\\beta_1 \\sigma_{t-1}^2 z_{t-1}^2+\\beta_2 \\sigma_{t-1}^2,$ \n Where $z$ is the standard residual (assumed to have a normal distribution) \n'
+fn5 <- 'Note 3: *, **, *** represent significance levels at the 5%, 1% and <1%'
+
+
+
 
 table1 %>% kbl(caption = "Summary statistics of the returns",
       label = 'dsTable',
@@ -172,8 +194,11 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(sprintf('This table shows the descriptive statistics of the returns of %s over the period %s to %s. Including minimum, median, arithmetic average, maximum, standard deviation, skewness and excess kurtosis.',gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R)))),threeparttable = T,
-           footnote_as_chunk = T, general_title = "Note: ")
+  footnote(c(fn1,fn2,fn3,fn4, fn5),threeparttable = T,
+           footnote_as_chunk = T, general_title = "")
+
+
+
 ```
 
 \newpage
