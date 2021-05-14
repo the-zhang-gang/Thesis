@@ -94,7 +94,17 @@ R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
 ```
 \noindent Where $I_{t}$ is the index price at time $t$ and $I_{t-1}$ is the index price at $t-1$.
 
+
+\noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translate to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is highly significant and negative at `r round(as.numeric(table1[6,2]),3)` and the excess Kurtosis is also highly significant and positive at `r round(as.numeric(table1[8,2]),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.
+
+\noindent The right column of \@ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in \@ref:stats in Note 2$*$. Again, Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(as.numeric(table1[10,3]),3)`, given its high significance, confirms the rejection of the normality assumption.
+
+
+<!--# [FILIPPO] -> to do: describe it! Also do we have to add a significance level for skewness and kurtosis like in the paper? think they do a t-test or?  -->
+
+
 ```{r prepstats, echo=F}
+
 ## RETURNS
 
 #selecting relevant statistics only from table.Stats
@@ -192,7 +202,10 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
   kable_classic(full_width = F)%>%
   footnote(c(fn1),threeparttable = T,
            footnote_as_chunk = T, general_title = "Notes")
-# ,fn2,fn3,fn4, fn5
+  # footnote(c(fn1,fn2,fn3,fn4, fn5),threeparttable = T,
+  #          footnote_as_chunk = T, general_title = "")
+
+
 ```
 
 \newpage
