@@ -226,6 +226,7 @@ par(mfrow = c(1,1))
 
 plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`[1000]))
 
+
 ```
 
 \newpage
