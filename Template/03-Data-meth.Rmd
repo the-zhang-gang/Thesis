@@ -46,7 +46,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ## Data
 
-We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen amongst those ranked between 41 and 60 [@EUROSTOXXFactSheet].
+We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1998 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen amongst those ranked between 41 and 60 [@EUROSTOXXFactSheet].
 
 The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
 
@@ -134,9 +134,8 @@ garchfit.R <- ugarchfit(data = R, spec = garchspec.R)
 stdret.R <- residuals(garchfit.R, standardize = TRUE)
 
 Statistics.S <-  table.Stats(stdret.R)
-
-Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 Stats.names.S <- rownames(Statistics.S)[-c(1,2,4,7,8,10:13)]
+Statistics.S <- Statistics.S[-c(1,2,4,7,8,10:13),] #selecting relevant columns only
 Statistics.S <- Statistics.S[,1]
 names(Statistics.S) <- Stats.names.S
 
@@ -161,7 +160,8 @@ names(jb_R) <- "Jarque-Bera"
 Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"), Excess_kurtosis, paste0("(",kurtosis.pvalue,"***)"),jb_R)
 
 # for table 1
-table1 <- data.frame(Statistics = names(Statistics.S), `Eurostoxx 50` = Statistics, `Standardized Residuals`= Statistics.S)
+
+table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurostoxx 50` = Statistics[c(3,2,4,1,5:10)], `Standardized Residuals`= Statistics.S[c(3,2,4,1,5:10)])
 
 # colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
 # JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
