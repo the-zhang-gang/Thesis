@@ -94,11 +94,7 @@ R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
 ```
 \noindent Where $I_{t}$ is the index price at time $t$ and $I_{t-1}$ is the index price at $t-1$.
 
-\noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translates to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is `r round(as.numeric(table1[6,2]),3)` with a significance level of `r round(as.numeric(table1[7,2]),3)*100`% and the excess Kurtosis is `r round(as.numeric(table1[8,2]),3)` significant at the `r round(as.numeric(table1[9,2]),3)*100`% level giving an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` significant at the `r round(normtest::jb.norm.test(R)$p.value *100,3)`% level confirms the non normality feeling given by the Skewness and Kurtosis.
-
-\noindent The right column of \@ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in \@ref:stats in Note 2$*$. Again Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a significance level of `r round(as.numeric(table1[7,3]),3)*100`% and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` significant at the `r round(as.numeric(table1[9,3]),3)*100`% level.
-
-```{r stats, echo=F, results='asis'}
+```{r prepstats, echo=F}
 ## RETURNS
 round(as.numeric(table1[1,2]),3)
 round(normtest::jb.norm.test(R)$statistic,3)
@@ -181,7 +177,14 @@ fn3 <- '$R_t=\\alpha_0+\\alpha_1 R_{t-1}+z_t \\sigma_t$ \n'
 fn4 <-  '$\\sigma_t^2=\\beta_0+\\beta_1 \\sigma_{t-1}^2 z_{t-1}^2+\\beta_2 \\sigma_{t-1}^2,$ \n Where $z$ is the standard residual (assumed to have a normal distribution) \n\n'
 fn5 <- 'Note 3: *, **, *** represent significance levels at the 5%, 1% and <1%'
 
+```
 
+
+\noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translates to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is `r round(as.numeric(table1[6,2]),3)` with a significance level of `r round(as.numeric(table1[7,2]),3)*100`% and the excess Kurtosis is `r round(as.numeric(table1[8,2]),3)` significant at the `r round(as.numeric(table1[9,2]),3)*100`% level giving an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` significant at the `r round(normtest::jb.norm.test(R)$p.value *100,3)`% level confirms the non normality feeling given by the Skewness and Kurtosis.
+
+\noindent The right column of \@ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in \@ref:stats in Note 2$*$. Again Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a significance level of `r round(as.numeric(table1[7,3]),3)*100`% and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` significant at the `r round(as.numeric(table1[9,3]),3)*100`% level.
+
+```{r stats, echo=F, results='asis'}
 table1 %>% kbl(caption = "Summary statistics of the returns",
       label = 'dsTable',
       booktabs = T,
@@ -407,6 +410,6 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is $
 
 #### Dynamic quantile test
 
-@engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a
+@engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a ...(work-in-progress).
 
 \clearpage
