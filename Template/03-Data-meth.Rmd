@@ -58,7 +58,15 @@ The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that 
 ```
 where:
 
-t = Time the index is computed $n$ = Number of companies in the index $p_{i t}$ = Price of company ($i$) at time (t) $s_{i t}$ = Number of shares of company ($i$) at time (t) $f f_{i t}$ = Free float factor of company ($i$) at time (t) $c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) $x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) $M_{t}$ = Free-float market capitalization of the index at time (t) $D_{t}$ = Divisor of the index at time (t)
+t = Time the index is computed 
+$n$ = Number of companies in the index 
+$p_{i t}$ = Price of company ($i$) at time (t) 
+$s_{i t}$ = Number of shares of company ($i$) at time (t) 
+$f f_{i t}$ = Free float factor of company ($i$) at time (t) 
+$c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) 
+$x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) 
+$M_{t}$ = Free-float market capitalization of the index at time (t) 
+$D_{t}$ = Divisor of the index at time (t)
 
 Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted)
 
