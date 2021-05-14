@@ -34,7 +34,7 @@ require(lmtest)
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
+data <- readxl::read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
@@ -170,11 +170,12 @@ table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurosto
 # colnames(JB.Test) <- colnames(table1)
 # table1 <- rbind(table1, JB.Test)
 
-fn1 <- sprintf(paste0('\n 1): This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test. \n\n'),gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
-# fn2 <- '2): The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows: \n'
-# fn3 <- '$R_t=\\alpha_0+\\alpha_1 R_{t-1}+z_t \\sigma_t$ \n'
-# fn4 <-  '$\\sigma_t^2=\\beta_0+\\beta_1 \\sigma_{t-1}^2 z_{t-1}^2+\\beta_2 \\sigma_{t-1}^2,$ \n Where $z$ is the standard residual (assumed to have a normal distribution) \n\n'
-# fn5 <- ' 3): *, **, *** represent significance levels at the 5%, 1% and <1%'
+fn1 <- sprintf(paste0('\n 1): This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.'),gsub(pattern = '.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
+fn2 <- '2): The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows: \n'
+fn3 <- '$R_t=\\alpha_0+\\alpha_1 R_{t-1}+z_t \\sigma_t$'
+fn4 <-  '$\\sigma_t^2=\\beta_0+\\beta_1 \\sigma_{t-1}^2 z_{t-1}^2+\\beta_2 \\sigma_{t-1}^2,$'
+fn4b <- 'Where $z$ is the standard residual (assumed to have a normal distribution)'
+fn5 <- ' 3): $*$, $**$, $***$ represent significance levels at the 5%, 1% and <1%'
 
 ```
 
@@ -189,10 +190,9 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = fn1,threeparttable = T, general_title = "")  %>%
-  footnote(c(fn2,fn3,fn4,fn4b), notation="none")  %>%
-  footnote(fn5, notation = "none")
-  
+  footnote(general = c(fn1,fn2,fn3,fn4,fn4b,fn5), general_title = "" , threeparttable = T)  
+  #add_footnote("", notation = "none")
+    #footnote(fn1,threeparttable = F)  %>%
 
 # c(fn1,fn2,fn3,fn4, fn5)
 ```
