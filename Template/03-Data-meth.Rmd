@@ -195,6 +195,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
   footnote(c(fn2,fn3,fn4,fn4b), notation="none")  %>%
   footnote(fn5, notation = "none")
   
+
 # c(fn1,fn2,fn3,fn4, fn5)
 
 ```
