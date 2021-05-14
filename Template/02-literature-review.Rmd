@@ -18,7 +18,7 @@ bibliography: references.bib
 
 <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
 
-## Stylized facts of returns
+## Stylized facts of returns {#styl-facts}
 
 \noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^1] following @annaert2021 for returns are given.
 

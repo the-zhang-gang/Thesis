@@ -55,7 +55,6 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 \noindent We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen among those ranked between 41 and 60 [@EUROSTOXXFactSheet].
 
-
 \noindent The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
 
 ```{=tex}
@@ -64,16 +63,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 (\#eq:Laspeyres.formula)
 \end{align}
 ```
-\noindent where:
-t = Time the index is computed 
-$n$ = Number of companies in the index 
-$p_{i t}$ = Price of company ($i$) at time (t) 
-$s_{i t}$ = Number of shares of company ($i$) at time (t) 
-$f f_{i t}$ = Free float factor of company ($i$) at time (t) 
-$c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) 
-$x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) 
-$M_{t}$ = Free-float market capitalization of the index at time (t) 
-$D_{t}$ = Divisor of the index at time (t)
+\noindent where: t = Time the index is computed $n$ = Number of companies in the index $p_{i t}$ = Price of company ($i$) at time (t) $s_{i t}$ = Number of shares of company ($i$) at time (t) $f f_{i t}$ = Free float factor of company ($i$) at time (t) $c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) $x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) $M_{t}$ = Free-float market capitalization of the index at time (t) $D_{t}$ = Divisor of the index at time (t)
 
 \noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted) formula.
 
@@ -83,13 +73,11 @@ D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i
 (\#eq:Price.weighted)
 \end{align}
 ```
-\noindent where:
-\noindent $\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
+\noindent where: \noindent $\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
 
 (Optional)
 
 The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not qualitatively different conclusions(....hopefully....). The findings of these researches are available upon requests.
-
 
 \newpage
 
@@ -218,9 +206,10 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
 #### Descriptive figures
 
 ##### Stylized facts
-As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis of 2011 occurred. With then some improvement again, with the decline beginning of 2020. To then recover very quickly to already values higher then the pre-COVID crisis level.
 
-```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="75%"}
+As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+
+```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="100%", fig.pos='h'}
 par(mfrow = c(1,1))
 # plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab = "Price", main = "Eurostoxx 50 Price Index");
 # # axis(1, at = time(as.zoo(Estoxx)), labels = FALSE)
@@ -247,32 +236,44 @@ par(mfrow = c(1,1))
 # Estoxxdf <- as.data.frame(data[,1:2])
 # Estoxxdf["Date"] <- as.Date(Estoxxdf$Date)
 # events <- as.Date(c("1999-01-01", "2000-04-14", "2008-09-15", "2011-12-31", "2020-02-20"))
-# ggplot(Estoxxdf) + geom_line(aes(x=Date, y = `EURO STOXX 50`), color = "steelblue") + ft_theme() + geom_vline(xintercept = events, linetype="dotted", size = 0.3) + geom_text(aes(x = as.Date("1997-01-01"), label = "Launch of Euro", y =1300), colour = "black", angle = 90) + geom_text(aes(x = as.Date("1999-01-01"), label = "Dot com bubble", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2007-01-01"), label = "Financial crisis", y =1400), colour = "black", angle = 90)+ geom_text(aes(x = as.Date("2014-01-01"), label = "Eurobond crisis", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2020-01-01"), label = "COVID-19 crisis", y =1400), colour = "black", angle = 90) + ylab("Price")
+#  + geom_text(aes(x = as.Date("1999-01-01"), label = "Dot com bubble", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2007-01-01"), label = "Financial crisis", y =1400), colour = "black", angle = 90)+ geom_text(aes(x = as.Date("2014-01-01"), label = "Eurobond crisis", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2020-01-01"), label = "COVID-19 crisis", y =1400), colour = "black", angle = 90) + ylab("Price")
 
-plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`[1000]))
+plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"])); text(index(Estoxx$`EURO STOXX 50`["1998-09-01"]), y = 4900,"Launch of Euro", cex=0.5, srt=90);  
 
+abline(v= index(Estoxx$`EURO STOXX 50`["2000-04-14"])); text(index(Estoxx$`EURO STOXX 50`["1999-12-20"]), y = 4900,"Dot com bubble", cex=0.5, srt=90); 
 
+abline(v= index(Estoxx$`EURO STOXX 50`["2007-12-31"])); text(index(Estoxx$`EURO STOXX 50`["2007-10-02"]), y = 4900,"US housing bubble", cex=0.5, srt=90);
+
+abline(v= index(Estoxx$`EURO STOXX 50`["2008-09-15"])); text(index(Estoxx$`EURO STOXX 50`["2008-05-19"]), y = 4700,"Lehman brothers collapse", cex=0.5, srt=90); 
+
+abline(v= index(Estoxx$`EURO STOXX 50`["2009-01-01"])); text(index(Estoxx$`EURO STOXX 50`["2009-06-01"]), y = 4900,"European bond crisis", cex=0.5, srt=90); 
+
+abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"])); text(index(Estoxx$`EURO STOXX 50`["2019-10-01"]), y = 5000,"COVID-19 crisis", cex=0.5, srt=90); 
 ```
 
 \newpage
-In figure \@ref(fig:plot2) the daily log-returns are visualized. There is already 
-```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%"}
-Rdf <- data.frame(Date = as.Date(index(R)), `Log Returns` = R)
-ggplot(Rdf) + geom_line(aes(x=Date, y = EURO.STOXX.50), color = "steelblue") + ft_theme() +ylab("Log returns")
+
+In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
+
+```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%", fig.pos='h'}
+# pdf("figures/vol-clustering.pdf") # happened only once
 # plot(as.zoo(R), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price Log Returns",main = "Log Returns");grid()
+# dev.off()
+knitr::include_graphics('figures/vol-clustering-final-withcircles.pdf')
 ```
 
-```{r plot3, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "75%", fig.align='center'}
+```{r plot3, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "75%", fig.align='center', fig.pos='h'}
 #Plotting volatility
 par(mfrow = c(1,1))
 realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
-r.voldf <- data.frame(Date = as.Date(index(realized.vol)), `Volatility` = R)
-ggplot(Rdf) + geom_line(aes(x=Date, y = EURO.STOXX.50), color = "steelblue") + ft_theme() +ylab("Log returns")
 plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Eurostoxx 50 rolling 22-day volatility (annualized)");grid()
 # chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 
 \newpage
+
+In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. So
+
 ```{r plot4, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "75%", fig.align='center'}
 #Histogram to eyeball normality
 
@@ -286,9 +287,11 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.9) 
 ```
 
-As can be seen \newpage *heteroscedasticity*
+\newpage \*
 
-```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "75%"}
+heteroscedasticity\* As can be seen
+
+```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "75%", fig.pos='h'}
 
 # Compute the mean daily return
 m <- mean(R)
@@ -298,16 +301,12 @@ e <- R - m
 
 # Plot the absolute value of the prediction errors
 par(mfrow = c(2,2),mar = c(1, 2, 2, 1))
-plot(abs(e), main = "Absolute Prediction Error")
+plot.zoo(abs(e), main = "Absolute Prediction Error", col = "steelblue")
 
 # Plot the acf of the absolute prediction errors
-acf(abs(e), main = "ACF (absolute prediction errors)", xaxt = "n")
-plot(e^2,main = "Squared Prediction Error")
-acf(e^2, main = "ACF (squared prediction errors)", xaxt = "n")
-# acf(coredata(R), lag = 22, main = "EuroStoxx 50 Price Log Returns")
-# acf(coredata(abs(R)), lag = 22, main = "EuroStoxx 50 Absolute Price Log Returns")
-
-
+acf(abs(e), main = "ACF (absolute prediction errors)")
+plot.zoo(e^2,main = "Squared Prediction Error", col = "steelblue")
+acf(e^2, main = "ACF (squared prediction errors)")
 ```
 
 \clearpage
@@ -381,7 +380,7 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 \end{align}
 (\#eq:densityconddens)
 ```
-Again @ghalanos2015 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
+Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
 ### Control Tests
 
