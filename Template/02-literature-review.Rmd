@@ -403,17 +403,17 @@ According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR
 
 Here comes the discussion about studies that have looked at higher moments and VaR determination. Also a summary of studies that discusses time-varying higher moments, but not a big part, while it is also only a small part of the empirical findings (couple of GARCH-ACD models).
 
-| Author      | Higher moments |
-|-------------|----------------|
-| @hansen1994 |                |
-| @harvey1999 |                |
-|             |                |
-|             |                |
-|             |                |
-|             |                |
-|             |                |
-| @brooks2005 |                |
-|             |                |
-|             |                |
+| Author         | Higher moments |
+|----------------|----------------|
+| @hansen1994    |                |
+| \\\@harvey1999 |                |
+|                |                |
+|                |                |
+|                |                |
+|                |                |
+|                |                |
+| @brooks2005    |                |
+|                |                |
+|                |                |
 
 : Higher moments and VaR

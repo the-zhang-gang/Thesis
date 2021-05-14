@@ -50,29 +50,29 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 \noindent We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen among those ranked between 41 and 60 [@EUROSTOXXFactSheet].
 
-\noindent The calculation of the index is made with the \@ref(eq:Laspeyres.formula), that measures the changes in price of the index for fixed weights.
+\noindent The calculation of the index is made with the \@ref(eq:Laspeyresformula), that measures the changes in price of the index for fixed weights.
 
 ```{=tex}
 \begin{align}
 \text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
-(\#eq:Laspeyres.formula)
+(\#eq:Laspeyresformula)
 \end{align}
 ```
 \noindent where: t = Time the index is computed $n$ = Number of companies in the index $p_{i t}$ = Price of company ($i$) at time (t) $s_{i t}$ = Number of shares of company ($i$) at time (t) $f f_{i t}$ = Free float factor of company ($i$) at time (t) $c f_{i t}$ = Weighting cap factor of company ($i$) at time (t) $x_{i t}$ = Exchange rate from local currency into index currency for company ($i$) at time (t) $M_{t}$ = Free-float market capitalization of the index at time (t) $D_{t}$ = Divisor of the index at time (t)
 
-\noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Price.weighted) formula.
+\noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \@ref(eq:Priceweighted) formula.
 
 ```{=tex}
 \begin{align}
 D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
-(\#eq:Price.weighted)
+(\#eq:Priceweighted)
 \end{align}
 ```
 \noindent where: \noindent $\Delta M C_{t+1}$ = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
 
 (Optional)
 
-The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not qualitatively different conclusions(....hopefully....). The findings of these researches are available upon requests.
+The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not different conclusions. The findings of these researches are available upon requests.
 
 \newpage
 

@@ -36,7 +36,7 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
 \#\#MLE distribution parameters
 
-```{r SGT.MLE, echo=F}
+```{r SGT.MLE, eval=F}
 sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ 
             lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
           start, subset, method = "BFGS", itnmax = NULL, 
@@ -152,7 +152,7 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 }
 ```
 
-```{r mlesgt, echo=F}
+```{r mlesgt, eval=F}
 library(sgt)
 require(graphics)
 require(stats)
@@ -347,7 +347,7 @@ return(Table2)
 }
 ```
 
-```{r MLE tables for different series}
+```{r MLE tables for different series, eval=F}
 
 MLE_Eurostoxx <- DistMLE(R)
 MLE_Bali <- DistMLE(Rbali)
@@ -359,7 +359,7 @@ MLE_Bali <- DistMLE(Rbali)
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, echo=F}
+```{r garchcode, eval=F}
 distributions <- c("norm", "std", "sstd", "sged", "ged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
@@ -479,7 +479,7 @@ stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 
 ## Results of GARCH with time-varying higher moments
 
-```{r acdcode, include=F}
+```{r acdcode, eval=F}
 require(racd)
 require(rugarch)
 require(parallel)
@@ -493,18 +493,18 @@ cl = makePSOCKcluster(10)
 fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", echo=F}
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", eval=F}
 # plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
-par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
-cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
-cm <- lines(fitted(fit), col = 2)
-cm
-cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
-minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
-cs <- lines(sigma(fit), col = 'steelblue')
-cs
-plot(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
-plot(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
+# par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
+# cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
+# cm <- lines(fitted(fit), col = 2)
+# cm
+# cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
+# minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
+# cs <- lines(sigma(fit), col = 'steelblue')
+# cs
+# plot(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
+# plot(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
 
 # pnl <- function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) {
 #   panel.number <- parent.frame()$panel.number
