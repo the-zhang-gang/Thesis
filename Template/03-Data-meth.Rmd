@@ -183,11 +183,13 @@ table1 %>% kbl(caption = "Summary statistics of the returns",
 
 \newpage
 
-#### Descriptive figures
+  #### Descriptive figures
 
 ##### Stylized facts
 
+
 Prices *heteroscedasticity*
+As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again for the 2008 financial crisis. After which it decreased significantly. 
 
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="75%"}
 par(mfrow = c(1,1))
