@@ -34,15 +34,12 @@ Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
 
-\#\#MLE distribution parameters
+### MLE distribution parameters
 
-```{r SGT.MLE, eval=F}
-sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ 
-            lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
-          start, subset, method = "BFGS", itnmax = NULL, 
-          hessian.method = "Richardson", gradient.method = "Richardson", 
-          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) {
-  formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
+```{r SGTMLE, echo=F, fig.}
+par(mfrow = c(3,2))
+sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), start, subset, method = "BFGS", itnmax = NULL, hessian.method = "Richardson", gradient.method = "Richardson", mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
+  { formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
                   p = p.f, q = q.f)
   varNames = NULL
   envir = new.env()
@@ -152,7 +149,7 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 }
 ```
 
-```{r mlesgt, eval=F}
+```{r mlesgt, echo=F}
 library(sgt)
 require(graphics)
 require(stats)
@@ -175,7 +172,7 @@ DistMLE <- function(series) {
   SGT_lambda <- SGT_result$estimate[3]
   SGT_p <- SGT_result$estimate[4]
   SGT_q <- SGT_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT", ylab="Density")
   lines(density(coredata(series)))
   
   
@@ -193,26 +190,23 @@ DistMLE <- function(series) {
   SGED_lambda <- SGED_result$estimate[3]
   SGED_p <- SGED_result$estimate[4]
   SGED_q <- SGED_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED", ylab="Density")
   lines(density(coredata(series)))
   
   ### GT(sgt.mle2)
-  GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
-  GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
-  GT_sumResult <- summary(GT_result)
-  GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
+  # GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
+  # GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
+  # GT_sumResult <- summary(GT_result)
+  # GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
   
   ### GT Plot fit (sgt.mle2)
-  GT_mu <- GT_result$estimate[1]
-  GT_sigma <- GT_result$estimate[2]
-  GT_lambda <- GT_result$estimate[3]
-  GT_p <- GT_result$estimate[4]
-  GT_q <- GT_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
-  lines(density(coredata(series)))
-  
-  
-  
+  # GT_mu <- GT_result$estimate[1]
+  # GT_sigma <- GT_result$estimate[2]
+  # GT_lambda <- GT_result$estimate[3]
+  # GT_p <- GT_result$estimate[4]
+  # GT_q <- GT_result$estimate[5]
+  # plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
+  # lines(density(coredata(series)))
   
   ### GED(sgt.mle2)
   GED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
@@ -227,7 +221,7 @@ DistMLE <- function(series) {
   GED_lambda <- GED_result$estimate[3]
   GED_p <- GED_result$estimate[4]
   GED_q <- GED_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED", ylab="Density")
   lines(density(coredata(series)))
   
   ### ST (fitdist) 
@@ -242,7 +236,7 @@ DistMLE <- function(series) {
   ST_nu <- ST_result$estimate[3]
   ST_xi <- ST_result$estimate[4] #lamda
   
-  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST (fitdist)")
+  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST")
   lines(density(coredata(series)))
   
   ### T (fitdist) 
@@ -256,7 +250,7 @@ DistMLE <- function(series) {
   T_nu <- T_result$estimate[3]
   
   
-  plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T (fitdist)")
+  plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T", ylab="Density")
   lines(density(coredata(series)))
   
   
@@ -275,17 +269,14 @@ DistMLE <- function(series) {
   Normal_q <- Normal_result$estimate[5]
   
   if(!is.na(Normal_mu)){
-  plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal", ylab="Density")
  lines(density(coredata(series)))}
-
-
-
 
 #maximum likelihood estimates of unconditional distribution functions
 
-Table2 <- matrix(nrow = 7, ncol = 8)
+Table2 <- matrix(nrow = 6, ncol = 8)
 colnames(Table2) <- c("mu","sigma","lambda","p","q","nu","L","AIC")
-rownames(Table2) <- c("SGT","SGED","GT","GED","ST","T","Normal")
+rownames(Table2) <- c("SGT","SGED","GED","ST","T","Normal")
 
 Table2[1,1] <- SGT_mu
 Table2[1,2] <- SGT_sigma
@@ -303,63 +294,73 @@ Table2[2,5] <- SGED_q
 Table2[2,7] <- SGED_result$maximum
 Table2[2,8] <- SGT_AIC
 
-Table2[3,1] <- GT_mu
-Table2[3,2] <- GT_sigma
-Table2[3,3] <- GT_lambda
-Table2[3,4] <- GT_p
-Table2[3,5] <- GT_q
-Table2[3,7] <- GT_result$maximum
-Table2[3,8] <- GT_AIC
+# Table2[3,1] <- GT_mu
+# Table2[3,2] <- GT_sigma
+# Table2[3,3] <- GT_lambda
+# Table2[3,4] <- GT_p
+# Table2[3,5] <- GT_q
+# Table2[3,7] <- GT_result$maximum
+# Table2[3,8] <- GT_AIC
 
 
-Table2[4,1] <- GED_mu
-Table2[4,2] <- GED_sigma
-Table2[4,3] <- GED_lambda
-Table2[4,4] <- GED_p
-Table2[4,5] <- GED_q
-Table2[4,7] <- GED_result$maximum
-Table2[4,8] <- GED_AIC
+Table2[3,1] <- GED_mu
+Table2[3,2] <- GED_sigma
+Table2[3,3] <- GED_lambda
+Table2[3,4] <- GED_p
+Table2[3,5] <- GED_q
+Table2[3,7] <- GED_result$maximum
+Table2[3,8] <- GED_AIC
 
-Table2[5,1] <- ST_mean
-Table2[5,2] <- ST_sd
-Table2[5,3] <- ST_xi
-Table2[5,6] <- ST_nu
-Table2[5,7] <- ST_result$loglik
-Table2[5,8] <- ST_result$aic
+Table2[4,1] <- ST_mean
+Table2[4,2] <- ST_sd
+Table2[4,3] <- ST_xi
+Table2[4,6] <- ST_nu
+Table2[4,7] <- ST_result$loglik
+Table2[4,8] <- ST_result$aic
 
-Table2[6,1] <- T_mean
-Table2[6,2] <- T_sd
-Table2[6,6] <- T_nu
-Table2[6,7] <- T_result$loglik
-Table2[6,8] <- T_result$aic
+Table2[5,1] <- T_mean
+Table2[5,2] <- T_sd
+Table2[5,6] <- T_nu
+Table2[5,7] <- T_result$loglik
+Table2[5,8] <- T_result$aic
 
 if(!is.na(Normal_mu)){
-Table2[7,1] <- Normal_mu
-Table2[7,2] <- Normal_sigma
-Table2[7,3] <- Normal_lambda
-Table2[7,4] <- Normal_p
-Table2[7,5] <- Normal_q
-Table2[7,7] <- Normal_result$maximum
-Table2[7,8] <- Normal_AIC
+Table2[6,1] <- Normal_mu
+Table2[6,2] <- Normal_sigma
+Table2[6,3] <- Normal_lambda
+Table2[6,4] <- Normal_p
+Table2[6,5] <- Normal_q
+Table2[6,7] <- Normal_result$maximum
+Table2[6,8] <- Normal_AIC
 }
 
-return(Table2)
+Table2
 }
+MLE_Eurostoxx <- DistMLE(R)
 ```
 
-```{r MLE tables for different series, eval=F}
-
-MLE_Eurostoxx <- DistMLE(R)
-MLE_Bali <- DistMLE(Rbali)
-
-
+In table \@ref(tab:disttable) we can see...
+<!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
+```{r MLE tables for different series,results='asis', echo=F}
+# MLE_Bali <- DistMLE(Rbali)
+str(MLE_Eurostoxx)
+table2 <- as.data.frame(MLE_Eurostoxx)
+table2 <- round(table2,3)
+table2[is.na(table2)] <- "" 
+table2 %>% kbl(caption = "Unconditional density distributions","latex",
+      label = 'disttable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>% 
+  footnote(general = "Notes",number="Here comes text",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 ```
 
 ## Results of GARCH with constant higher moments
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, eval=F}
+```{r garchcode, echo=F}
 distributions <- c("norm", "std", "sstd", "sged", "ged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
@@ -479,7 +480,7 @@ stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 
 ## Results of GARCH with time-varying higher moments
 
-```{r acdcode, eval=F}
+```{r acdcode, echo=F}
 require(racd)
 require(rugarch)
 require(parallel)
@@ -493,7 +494,7 @@ cl = makePSOCKcluster(10)
 fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", eval=F}
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", echo=F}
 # plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
 # par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
 # cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
