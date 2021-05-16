@@ -351,7 +351,7 @@ table2 %>% kbl(caption = "Unconditional density distributions","latex",
       label = 'disttable',
       booktabs = T,
       position = "h!",
-      digits = 3 )%>%
+      digits = 3)%>%
   kable_classic(full_width = F)%>% 
   footnote(general = "Notes",number="Here comes text",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 ```
@@ -361,10 +361,10 @@ table2 %>% kbl(caption = "Unconditional density distributions","latex",
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
 ```{r garchcode, echo=F}
-distributions <- c("norm", "std", "sstd", "sged", "ged")
+distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
-Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "apARCH", "iGARCH", "csGARCH")
+Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
 
 for(i in 1:length(Models.garch)){
 assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
@@ -379,7 +379,7 @@ assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(d
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "sGARCH", variance.targeting = F), 
+                     variance.model = list(model = "sGARCH", garchOrder = c(1,1), variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
@@ -412,7 +412,6 @@ stdret.fGARCH.NAGARCH[[i]] <- residuals(garchfit.fGARCH.NAGARCH[[i]], standardiz
 }
 
 #.fGARCH.AVGARCH------------------------
-
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
@@ -436,16 +435,16 @@ garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
 stdret.gjrGARCH[[i]] <- residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
 }
 
-#.apARCH-------------------
+#fGARCH.TGARCH-------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec.apARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "apARCH", variance.targeting = F), 
+garchspec.fGARCH.TGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "TGARCH", variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
-garchfit.apARCH[[i]] <- ugarchfit(data = R, spec = garchspec.apARCH[[i]])
+garchfit.fGARCH.TGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.TGARCH[[i]])
 # Compute stdret using residuals()
-stdret.apARCH[[i]] <- residuals(garchfit.apARCH[[i]], standardize = TRUE)
+stdret.fGARCH.TGARCH[[i]] <- residuals(garchfit.fGARCH.TGARCH[[i]], standardize = TRUE)
 }
 
 #.iGARCH--------------------
@@ -461,22 +460,108 @@ stdret.iGARCH[[i]] <- residuals(garchfit.iGARCH[[i]], standardize = TRUE)
 }
 
 #.csGARCH-----------------
+# for(i in 1:length(distributions)){
+# # Specify a GARCH model with constant mean
+# garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+#                      variance.model = list(model = "csGARCH", variance.targeting = F),
+#                      distribution.model = distributions[i])
+# # Estimate the model
+# garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
+# # Compute stdret using residuals()
+# stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
+# }
+
+
+# we need EWMA
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "csGARCH", variance.targeting = F), 
-                     distribution.model = distributions[i])
+garchspec.EWMA[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "iGARCH", variance.targeting = F),
+                     distribution.model = distributions[i], fixed.pars = list(omega=0))
 # Estimate the model
-garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
+garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 # Compute stdret using residuals()
-stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
+stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 }
+
 
 #  make the histogram
 # 
 # chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),
 #                 colorset = c("gray","red","blue"))
 ```
+
+
+<!-- What do we do, do we do 6 tables for all the distributions?  -->
+```{r table3prep}
+table3 <- matrix(nrow = 12, ncol = 5)
+colnames(table3) <- distributions
+
+#trying a loop, maybe you can solve that @filippo?
+## column loop i = normal distribution, std, sstd, ged, sged
+table3[1,1] <- garchfit.sGARCH[[1]]@fit$coef[1] #first parameter estimate
+table3[2,1] <- garchfit.sGARCH[[1]]@fit$se.coef[1] #first standard error
+table3[3,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2] #second parameter estimate
+table3[4,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2]
+#...
+table3 <- round(table3, 3)
+
+# for (i in length(distributions)) {
+#   for (j in nrow(table3)) {
+#     table3[j,i] <- garchfit.sGARCH[[i]]@fit$coef
+#     table3[j+1,i] <-garchfit.sGARCH[[i]]@fit$se.coef
+#     }
+# }
+
+garchfit.sGARCH[[5]]@fit$se.coef
+
+```
+
+```{r table4prep}
+garchfit.iGARCH[[1]]@fit$coef
+garchfit.iGARCH[[1]]@fit$se.coef
+```
+
+```{r table5prep}
+garchfit.EWMA[[1]]@fit$coef
+c(garchfit.EWMA[[1]]@fit$se.coef[1:2],NA,garchfit.EWMA[[1]]@fit$se.coef[3], NA)
+```
+
+
+```{r table6prep}
+garchfit.gjrGARCH[[1]]@fit$coef
+garchfit.gjrGARCH[[1]]@fit$se.coef
+```
+
+```{r table7prep}
+garchfit.eGARCH[[1]]@fit$coef
+garchfit.eGARCH[[1]]@fit$se.coef
+```
+
+```{r table8prep}
+garchfit.fGARCH.NAGARCH[[1]]@fit$coef
+garchfit.fGARCH.NAGARCH[[1]]@fit$se.coef
+```
+
+```{r table9prep}
+garchfit.fGARCH.TGARCH[[1]]@fit$coef
+garchfit.fGARCH.TGARCH[[1]]@fit$se.coef
+```
+
+```{r table10prep}
+garchfit.fGARCH.AVGARCH[[1]]@fit$coef
+garchfit.fGARCH.AVGARCH[[1]]@fit$se.coef
+```
+
+
+
+
+
+
+
+
+<!-- Here comes the description -->
+
 
 ## Results of GARCH with time-varying higher moments
 
