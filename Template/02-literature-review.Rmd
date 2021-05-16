@@ -52,17 +52,17 @@ f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfra
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\sigma \pi \nu}} \left(1+\dfrac{(x-\mu)^2}{\sigma \nu}\right)^{-(\nu+1)/2}
  (\#eq:stdghalanos)
 \end{align}
 ```
-\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
+\noindent where $\mu, \sigma$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
 
 \noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
 ```{=tex}
 \begin{align}
-kurt = 3 + \dfrac{6}{n-4}
+kurt = 3 + \dfrac{6}{\nu-4}
  (\#eq:kurt)
 \end{align}
 ```
@@ -72,11 +72,11 @@ kurt = 3 + \dfrac{6}{n-4}
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{\kappa e^{\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+\kappa^(-1)}\beta\Gamma(\kappa^{-1})}
+f(x) = \dfrac{p e^{\left|\dfrac{x-\mu}{\sigma}\right|^p}}{2^{1+p^(-1)}\sigma\Gamma(p^{-1})}
  (\#eq:ged)
 \end{align}
 ```
-where $\alpha, \beta$ and $\kappa$ are respectively the location, scale and shapeparameters .
+where $\mu, \sigma$ and $p$ are respectively the location, scale and shape parameters .
 
 #### Skewed t-distribution
 
@@ -101,15 +101,17 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 
 #### Skewed Generalized t-distribution
 
+<!-- I really don't know about this thing, because it's not that there is only lambda that comes with it it is also a q parameter... -->
+
 \noindent The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt) [@bollerslev1994].
 
 ```{=tex}
 \begin{align}
-f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \ \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}
+f\left[\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right]=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
  (\#eq:gt)
 \end{align}
 ```
-\noindent where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $\kappa$.
+\noindent where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $p$.
 
 \noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
@@ -181,7 +183,6 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq8)
 \end{align}
 ```
-\newpage
 
 \noindent This leads to the properties of ARCH models. - Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
 
@@ -233,19 +234,20 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 ```
 \newpage
 
-### Univariate GARCH models
+### Univariate GARCH models {#univ-garch}
 
 \noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \
 
-All the GARCH models below are estimated using the package rugarch by Alexios @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
+All the GARCH models below are estimated using the package rugarch by  @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
 
-| Author                          | Model                      |
+| Author(s)/user(s)               | Model                      |
 |---------------------------------|----------------------------|
 | @engle1982                      | ARCH model                 |
 | @bollerslev1986                 | GARCH model                |
 | @bollerslev1986                 | IGARCH model               |
 | @nelson1991                     | EGARCH model               |
 | @glosten1993                    | GJRGARCH model             |
+| @engle1993                      | NAGARCH model              |
 | @zakoian1994                    | TGARCH model               |
 | @taylor1986 and @schwert1989    | TSGARCH (or AVGARCH) model |
 | @morganguarantytrustcompany1996 | EWMA or RiskMetrics model  |
@@ -256,7 +258,7 @@ All the GARCH models below are estimated using the package rugarch by Alexios @a
 
 #### GARCH model
 
-\noindent The standard GARCH model [@bollerslev1986] is written consistent with Alexios @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
+\noindent The standard GARCH model [@bollerslev1986] is written consistent with @ghalanos2020 as in equation \@ref(eq:eq13) without external regressors.
 
 ```{=tex}
 \begin{align}
@@ -286,7 +288,7 @@ All the GARCH models below are estimated using the package rugarch by Alexios @a
 ```
 #### IGARCH model
 
-\noindent Following Alexios @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
+\noindent Following @ghalanos2020, the integrated GARCH model [@bollerslev1986] can also be estimated. This model assumes the persistence $\hat{P} = 1$. This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
 \newpage
 

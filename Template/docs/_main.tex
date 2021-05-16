@@ -195,7 +195,7 @@
 
 %%%%% THESIS / TITLE PAGE INFORMATION
 % Everybody needs to complete the following:
-\title{Thesis title}
+\title{The importance of higher moments in VaR and cVaR estimation.}
 \author{Faes E.\footnote{\href{mailto:Enjo.Faes@student.ams.ac.be}{\nolinkurl{Enjo.Faes@student.ams.ac.be}}}\textsuperscript{}~~~Mertens de Wilmars S.\footnote{\href{mailto:Stephane.MertensdeWilmars@student.ams.ac.be}{\nolinkurl{Stephane.MertensdeWilmars@student.ams.ac.be}}}\textsuperscript{}~~~Pratesi F.\footnote{\href{mailto:Filippo.Pratesi@student.ams.ac.be}{\nolinkurl{Filippo.Pratesi@student.ams.ac.be}}}\textsuperscript{}}
 \college{}
 
@@ -277,7 +277,7 @@
 
 %%%%% DEDICATION -- If you'd like one, un-comment the following.
 \begin{dedication}
-  For Yihui Xie
+  For our families and loved ones
 \end{dedication}
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
@@ -393,16 +393,16 @@ f(x) = \dfrac{\Gamma(\dfrac{n+1}{2})}{\Gamma(\dfrac{n}{2})\sqrt{\pi n}} (1+\dfra
 \noindent As can be seen the pdf depends on the degrees of freedom \(n\). To be consistent with \textcite{ghalanos2020}, the following general equation is used for the pdf \eqref{eq:stdghalanos}.
 
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\sigma \pi \nu}} \left(1+\dfrac{(x-\mu)^2}{\sigma \nu}\right)^{-(\nu+1)/2}
  \label{eq:stdghalanos}
 \end{align}
 
-\noindent where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. The symbol \(\Gamma\) is the Gamma function.
+\noindent where \(\mu, \sigma\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. The symbol \(\Gamma\) is the Gamma function.
 
 \noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \eqref{eq:kurt}. This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
 
 \begin{align}
-kurt = 3 + \dfrac{6}{n-4}
+kurt = 3 + \dfrac{6}{\nu-4}
  \label{eq:kurt}
 \end{align}
 
@@ -412,11 +412,11 @@ kurt = 3 + \dfrac{6}{n-4}
 \noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
 
 \begin{align}
-f(x) = \dfrac{\kappa e^{\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+\kappa^(-1)}\beta\Gamma(\kappa^{-1})}
+f(x) = \dfrac{p e^{\left|\dfrac{x-\mu}{\sigma}\right|^p}}{2^{1+p^(-1)}\sigma\Gamma(p^{-1})}
  \label{eq:ged}
 \end{align}
 
-where \(\alpha, \beta\) and \(\kappa\) are respectively the location, scale and shapeparameters .
+where \(\mu, \sigma\) and \(p\) are respectively the location, scale and shape parameters .
 
 \hypertarget{skewed-t-distribution}{%
 \subsubsection{Skewed t-distribution}\label{skewed-t-distribution}}
@@ -446,11 +446,11 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 \noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt} \autocite{bollerslev1994}.
 
 \begin{align}
-f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \ \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}
+f\left[\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right]=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
  \label{eq:gt}
 \end{align}
 
-\noindent where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(\kappa\).
+\noindent where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(p\).
 
 \noindent Again the skewed variant is given by equation \eqref{eq:skeweddist} but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
 
@@ -517,8 +517,6 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  \label{eq:eq8}
 \end{align}
 
-\newpage
-
 \noindent This leads to the properties of ARCH models. - Stationarity condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\).
 
 \begin{itemize}
@@ -568,21 +566,21 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 
 \newpage
 
-\hypertarget{univariate-garch-models}{%
-\subsection{Univariate GARCH models}\label{univariate-garch-models}}
+\hypertarget{univ-garch}{%
+\subsection{Univariate GARCH models}\label{univ-garch}}
 
 \noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.~\\
 
-All the GARCH models below are estimated using the package rugarch by Alexios \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
+All the GARCH models below are estimated using the package rugarch by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output. An overview (of a selection) of GARCH models is given in the following table.
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{GARCH models, the founders}\tabularnewline
 \toprule
-Author & Model\tabularnewline
+Author(s)/user(s) & Model\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Author & Model\tabularnewline
+Author(s)/user(s) & Model\tabularnewline
 \midrule
 \endhead
 \textcite{engle1982} & ARCH model\tabularnewline
@@ -590,6 +588,7 @@ Author & Model\tabularnewline
 \textcite{bollerslev1986} & IGARCH model\tabularnewline
 \textcite{nelson1991} & EGARCH model\tabularnewline
 \textcite{glosten1993} & GJRGARCH model\tabularnewline
+\textcite{engle1993} & NAGARCH model\tabularnewline
 \textcite{zakoian1994} & TGARCH model\tabularnewline
 \textcite{taylor1986} and \textcite{schwert1989} & TSGARCH (or AVGARCH) model\tabularnewline
 \textcite{morganguarantytrustcompany1996} & EWMA or RiskMetrics model\tabularnewline
@@ -601,7 +600,7 @@ Author & Model\tabularnewline
 \hypertarget{garch-model}{%
 \subsubsection{GARCH model}\label{garch-model}}
 
-\noindent The standard GARCH model \autocite{bollerslev1986} is written consistent with Alexios \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
+\noindent The standard GARCH model \autocite{bollerslev1986} is written consistent with \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
 
 \begin{align}
 \sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
@@ -629,7 +628,7 @@ Author & Model\tabularnewline
 \hypertarget{igarch-model}{%
 \subsubsection{IGARCH model}\label{igarch-model}}
 
-\noindent Following Alexios \textcite{ghalanos2020}, the integrated GARCH model \autocite{bollerslev1986} can also be estimated. This model assumes the persistence \(\hat{P} = 1\). This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
+\noindent Following \textcite{ghalanos2020}, the integrated GARCH model \autocite{bollerslev1986} can also be estimated. This model assumes the persistence \(\hat{P} = 1\). This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
 \newpage
 
@@ -822,9 +821,9 @@ R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
 
 \noindent where \(I_{t}\) is the index price at time \(t\) and \(I_{t-1}\) is the index price at \(t-1\).
 
-\noindent The Arithmetic Mean of the series is 4\% with a standard deviation of 6\% and a median of 5 which translate to an annualized mean of 1008\% and an annualized standard deviation of 95.247\%. The Skewness statistic is highly significant and negative at 1 and the excess Kurtosis is also highly significant and positive at 9. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19528.62 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
+\noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.208. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19528.62 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
 
-\noindent The right column of @ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in @ref:stats in Note 2\(*\). Again, Skewness statistic at 3 with a high statistical significance level and the excess Kurtosis at 8 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at 7, given its high significance, confirms the rejection of the normality assumption.~\\
+\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2\(*\). Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at NA, given its high significance, confirms the rejection of the normality assumption.~\\
 
 \begin{table}[h!]
 
@@ -864,9 +863,9 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \subsubsection{Descriptive figures}\label{descriptive-figures}}
 
 \hypertarget{stylized-facts}{%
-\paragraph{\texorpdfstring{Stylized facts ~\\
-}{Stylized facts ~ }}\label{stylized-facts}}
+\paragraph{Stylized facts}\label{stylized-facts}}
 
+~\\
 As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 \begin{figure}[h]
@@ -919,7 +918,7 @@ ACF plots: to do\ldots{}
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.75\linewidth]{_main_files/figure-latex/acfplots-1} 
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/acfplots-1} 
 
 }
 
@@ -934,11 +933,11 @@ ACF plots: to do\ldots{}
 \hypertarget{garch-models}{%
 \subsection{Garch models}\label{garch-models}}
 
-As already mentioned in \ldots, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. ~\\
+As already mentioned in part @(ref:univ-garch), GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. ~\\
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
+They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (\eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).~\\
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).~\\
 
 \begin{align} 
   y_1,y_2,...,y_N \sim i.i.d
@@ -1037,16 +1036,14 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \hypertarget{density-of-the-returns}{%
 \section{Density of the returns}\label{density-of-the-returns}}
 
-\#\#MLE distribution parameters
+\hypertarget{mle-distribution-parameters}{%
+\subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{sgt.mle2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (X.f, }\AttributeTok{mu.f =}\NormalTok{ mu }\SpecialCharTok{\textasciitilde{}}\NormalTok{ mu, }\AttributeTok{sigma.f =}\NormalTok{ sigma }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sigma, }\AttributeTok{lambda.f =}\NormalTok{ lambda }\SpecialCharTok{\textasciitilde{}} 
-\NormalTok{            lambda, }\AttributeTok{p.f =}\NormalTok{ p }\SpecialCharTok{\textasciitilde{}}\NormalTok{ p, }\AttributeTok{q.f =}\NormalTok{ q }\SpecialCharTok{\textasciitilde{}}\NormalTok{ q, }\AttributeTok{data =} \FunctionTok{parent.frame}\NormalTok{(), }
-\NormalTok{          start, subset, }\AttributeTok{method =} \StringTok{"BFGS"}\NormalTok{, }\AttributeTok{itnmax =} \ConstantTok{NULL}\NormalTok{, }
-          \AttributeTok{hessian.method =} \StringTok{"Richardson"}\NormalTok{, }\AttributeTok{gradient.method =} \StringTok{"Richardson"}\NormalTok{, }
-          \AttributeTok{mean.cent =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{var.adj =} \ConstantTok{TRUE}\NormalTok{, ..., }\AttributeTok{lower =}\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{, }\AttributeTok{upper=}\ConstantTok{Inf}\NormalTok{) \{}
-\NormalTok{  formList }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{X =}\NormalTok{ X.f, }\AttributeTok{mu =}\NormalTok{ mu.f, }\AttributeTok{sigma =}\NormalTok{ sigma.f, }\AttributeTok{lambda =}\NormalTok{ lambda.f, }
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\NormalTok{sgt.mle2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (X.f, }\AttributeTok{mu.f =}\NormalTok{ mu }\SpecialCharTok{\textasciitilde{}}\NormalTok{ mu, }\AttributeTok{sigma.f =}\NormalTok{ sigma }\SpecialCharTok{\textasciitilde{}}\NormalTok{ sigma, }\AttributeTok{lambda.f =}\NormalTok{ lambda }\SpecialCharTok{\textasciitilde{}}\NormalTok{ lambda, }\AttributeTok{p.f =}\NormalTok{ p }\SpecialCharTok{\textasciitilde{}}\NormalTok{ p, }\AttributeTok{q.f =}\NormalTok{ q }\SpecialCharTok{\textasciitilde{}}\NormalTok{ q, }\AttributeTok{data =} \FunctionTok{parent.frame}\NormalTok{(), start, subset, }\AttributeTok{method =} \StringTok{"BFGS"}\NormalTok{, }\AttributeTok{itnmax =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{hessian.method =} \StringTok{"Richardson"}\NormalTok{, }\AttributeTok{gradient.method =} \StringTok{"Richardson"}\NormalTok{, }\AttributeTok{mean.cent =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{var.adj =} \ConstantTok{TRUE}\NormalTok{, ..., }\AttributeTok{lower =}\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{, }\AttributeTok{upper=}\ConstantTok{Inf}\NormalTok{) }
+\NormalTok{  \{ formList }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{X =}\NormalTok{ X.f, }\AttributeTok{mu =}\NormalTok{ mu.f, }\AttributeTok{sigma =}\NormalTok{ sigma.f, }\AttributeTok{lambda =}\NormalTok{ lambda.f, }
                   \AttributeTok{p =}\NormalTok{ p.f, }\AttributeTok{q =}\NormalTok{ q.f)}
 \NormalTok{  varNames }\OtherTok{=} \ConstantTok{NULL}
 \NormalTok{  envir }\OtherTok{=} \FunctionTok{new.env}\NormalTok{()}
@@ -1181,7 +1178,7 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  SGT\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
 \NormalTok{  SGT\_p }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{4}\NormalTok{]}
 \NormalTok{  SGT\_q }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{5}\NormalTok{]}
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ SGT\_mu, }\AttributeTok{sigma =}\NormalTok{ SGT\_sigma, }\AttributeTok{lambda =}\NormalTok{ SGT\_lambda, }\AttributeTok{p =}\NormalTok{ SGT\_p, }\AttributeTok{q =}\NormalTok{ SGT\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{,}\AttributeTok{main =} \StringTok{"SGT (sgt.mle2)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ SGT\_mu, }\AttributeTok{sigma =}\NormalTok{ SGT\_sigma, }\AttributeTok{lambda =}\NormalTok{ SGT\_lambda, }\AttributeTok{p =}\NormalTok{ SGT\_p, }\AttributeTok{q =}\NormalTok{ SGT\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{,}\AttributeTok{main =} \StringTok{"SGT"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Density"}\NormalTok{)}
   \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
   
   
@@ -1199,26 +1196,23 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  SGED\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ SGED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
 \NormalTok{  SGED\_p }\OtherTok{\textless{}{-}}\NormalTok{ SGED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{4}\NormalTok{]}
 \NormalTok{  SGED\_q }\OtherTok{\textless{}{-}}\NormalTok{ SGED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{5}\NormalTok{]}
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ SGED\_mu, }\AttributeTok{sigma =}\NormalTok{ SGED\_sigma, }\AttributeTok{lambda =}\NormalTok{ SGED\_lambda, }\AttributeTok{p =}\NormalTok{ SGED\_p, }\AttributeTok{q =}\NormalTok{ SGED\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"SGED (sgt.mle2)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ SGED\_mu, }\AttributeTok{sigma =}\NormalTok{ SGED\_sigma, }\AttributeTok{lambda =}\NormalTok{ SGED\_lambda, }\AttributeTok{p =}\NormalTok{ SGED\_p, }\AttributeTok{q =}\NormalTok{ SGED\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"SGED"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Density"}\NormalTok{)}
   \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
   
   \DocumentationTok{\#\#\# GT(sgt.mle2)}
-\NormalTok{  GT\_start }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{mu =} \DecValTok{0}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{2}\NormalTok{, }\AttributeTok{lambda =} \DecValTok{0}\NormalTok{, }\AttributeTok{p =} \DecValTok{2}\NormalTok{, }\AttributeTok{q =} \DecValTok{12}\NormalTok{)}
-\NormalTok{  GT\_result }\OtherTok{\textless{}{-}} \FunctionTok{sgt.mle2}\NormalTok{(}\AttributeTok{X.f =}\NormalTok{ X.data, }\AttributeTok{start =}\NormalTok{ GT\_start, }\AttributeTok{lower =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{, }\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{0.001}\NormalTok{, }\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{,}\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{), }\AttributeTok{upper =} \FunctionTok{c}\NormalTok{(}\ConstantTok{Inf}\NormalTok{,}\ConstantTok{Inf}\NormalTok{,}\FloatTok{0.001}\NormalTok{,}\ConstantTok{Inf}\NormalTok{,}\ConstantTok{Inf}\NormalTok{))}
-\NormalTok{  GT\_sumResult }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(GT\_result)}
-\NormalTok{  GT\_AIC }\OtherTok{\textless{}{-}} \DecValTok{2}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(GT\_result}\SpecialCharTok{$}\NormalTok{estimate}\DecValTok{{-}1}\NormalTok{) }\SpecialCharTok{{-}} \DecValTok{2}\SpecialCharTok{*}\NormalTok{GT\_sumResult}\SpecialCharTok{$}\NormalTok{maximum}
+  \CommentTok{\# GT\_start \textless{}{-} list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)}
+  \CommentTok{\# GT\_result \textless{}{-} sgt.mle2(X.f = X.data, start = GT\_start, lower = c({-}Inf, {-}Inf, {-}0.001, {-}Inf,{-}Inf), upper = c(Inf,Inf,0.001,Inf,Inf))}
+  \CommentTok{\# GT\_sumResult \textless{}{-} summary(GT\_result)}
+  \CommentTok{\# GT\_AIC \textless{}{-} 2*length(GT\_result$estimate{-}1) {-} 2*GT\_sumResult$maximum}
   
   \DocumentationTok{\#\#\# GT Plot fit (sgt.mle2)}
-\NormalTok{  GT\_mu }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{1}\NormalTok{]}
-\NormalTok{  GT\_sigma }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{2}\NormalTok{]}
-\NormalTok{  GT\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
-\NormalTok{  GT\_p }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{4}\NormalTok{]}
-\NormalTok{  GT\_q }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{5}\NormalTok{]}
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ GT\_mu, }\AttributeTok{sigma =}\NormalTok{ GT\_sigma, }\AttributeTok{lambda =}\NormalTok{ GT\_lambda, }\AttributeTok{p =}\NormalTok{ GT\_p, }\AttributeTok{q =}\NormalTok{ GT\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"GT (sgt.mle2)"}\NormalTok{)}
-  \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
-  
-  
-  
+  \CommentTok{\# GT\_mu \textless{}{-} GT\_result$estimate[1]}
+  \CommentTok{\# GT\_sigma \textless{}{-} GT\_result$estimate[2]}
+  \CommentTok{\# GT\_lambda \textless{}{-} GT\_result$estimate[3]}
+  \CommentTok{\# GT\_p \textless{}{-} GT\_result$estimate[4]}
+  \CommentTok{\# GT\_q \textless{}{-} GT\_result$estimate[5]}
+  \CommentTok{\# plot(xvals, dsgt(xvals, mu = GT\_mu, sigma = GT\_sigma, lambda = GT\_lambda, p = GT\_p, q = GT\_q), col="red", type ="l", main = "GT (sgt.mle2)")}
+  \CommentTok{\# lines(density(coredata(series)))}
   
   \DocumentationTok{\#\#\# GED(sgt.mle2)}
 \NormalTok{  GED\_start }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{mu =} \DecValTok{0}\NormalTok{, }\AttributeTok{sigma =} \DecValTok{2}\NormalTok{, }\AttributeTok{lambda =} \DecValTok{0}\NormalTok{, }\AttributeTok{p =} \DecValTok{2}\NormalTok{, }\AttributeTok{q =} \DecValTok{750}\NormalTok{)}
@@ -1233,7 +1227,7 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  GED\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ GED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
 \NormalTok{  GED\_p }\OtherTok{\textless{}{-}}\NormalTok{ GED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{4}\NormalTok{]}
 \NormalTok{  GED\_q }\OtherTok{\textless{}{-}}\NormalTok{ GED\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{5}\NormalTok{]}
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ GED\_mu, }\AttributeTok{sigma =}\NormalTok{ GED\_sigma, }\AttributeTok{lambda =}\NormalTok{ GED\_lambda, }\AttributeTok{p =}\NormalTok{ GED\_p, }\AttributeTok{q =}\NormalTok{ GED\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"GED (sgt.mle2)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ GED\_mu, }\AttributeTok{sigma =}\NormalTok{ GED\_sigma, }\AttributeTok{lambda =}\NormalTok{ GED\_lambda, }\AttributeTok{p =}\NormalTok{ GED\_p, }\AttributeTok{q =}\NormalTok{ GED\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"GED"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Density"}\NormalTok{)}
   \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
   
   \DocumentationTok{\#\#\# ST (fitdist) }
@@ -1248,7 +1242,7 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  ST\_nu }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
 \NormalTok{  ST\_xi }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{4}\NormalTok{] }\CommentTok{\#lamda}
   
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsstd}\NormalTok{(xvals, }\AttributeTok{mean =}\NormalTok{ ST\_mean, }\AttributeTok{sd =}\NormalTok{ ST\_sd, }\AttributeTok{nu =}\NormalTok{ ST\_nu, }\AttributeTok{xi=}\NormalTok{ST\_xi), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"ST (fitdist)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsstd}\NormalTok{(xvals, }\AttributeTok{mean =}\NormalTok{ ST\_mean, }\AttributeTok{sd =}\NormalTok{ ST\_sd, }\AttributeTok{nu =}\NormalTok{ ST\_nu, }\AttributeTok{xi=}\NormalTok{ST\_xi), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"ST"}\NormalTok{)}
   \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
   
   \DocumentationTok{\#\#\# T (fitdist) }
@@ -1262,7 +1256,7 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  T\_nu }\OtherTok{\textless{}{-}}\NormalTok{ T\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{3}\NormalTok{]}
   
   
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dstd}\NormalTok{(xvals, }\AttributeTok{mean =}\NormalTok{ T\_mean, }\AttributeTok{sd =}\NormalTok{ T\_sd, }\AttributeTok{nu =}\NormalTok{ T\_nu), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"T (fitdist)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dstd}\NormalTok{(xvals, }\AttributeTok{mean =}\NormalTok{ T\_mean, }\AttributeTok{sd =}\NormalTok{ T\_sd, }\AttributeTok{nu =}\NormalTok{ T\_nu), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"T"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Density"}\NormalTok{)}
   \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))}
   
   
@@ -1281,17 +1275,14 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{  Normal\_q }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_result}\SpecialCharTok{$}\NormalTok{estimate[}\DecValTok{5}\NormalTok{]}
   
   \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(Normal\_mu))\{}
-  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ Normal\_mu, }\AttributeTok{sigma =}\NormalTok{ Normal\_sigma, }\AttributeTok{lambda =}\NormalTok{ Normal\_lambda, }\AttributeTok{p =}\NormalTok{ Normal\_p, }\AttributeTok{q =}\NormalTok{ Normal\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"Normal (sgt.mle2)"}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(xvals, }\FunctionTok{dsgt}\NormalTok{(xvals, }\AttributeTok{mu =}\NormalTok{ Normal\_mu, }\AttributeTok{sigma =}\NormalTok{ Normal\_sigma, }\AttributeTok{lambda =}\NormalTok{ Normal\_lambda, }\AttributeTok{p =}\NormalTok{ Normal\_p, }\AttributeTok{q =}\NormalTok{ Normal\_q), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{type =}\StringTok{"l"}\NormalTok{, }\AttributeTok{main =} \StringTok{"Normal"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Density"}\NormalTok{)}
  \FunctionTok{lines}\NormalTok{(}\FunctionTok{density}\NormalTok{(}\FunctionTok{coredata}\NormalTok{(series)))\}}
-
-
-
 
 \CommentTok{\#maximum likelihood estimates of unconditional distribution functions}
 
-\NormalTok{Table2 }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{7}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{8}\NormalTok{)}
+\NormalTok{Table2 }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{6}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{8}\NormalTok{)}
 \FunctionTok{colnames}\NormalTok{(Table2) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"mu"}\NormalTok{,}\StringTok{"sigma"}\NormalTok{,}\StringTok{"lambda"}\NormalTok{,}\StringTok{"p"}\NormalTok{,}\StringTok{"q"}\NormalTok{,}\StringTok{"nu"}\NormalTok{,}\StringTok{"L"}\NormalTok{,}\StringTok{"AIC"}\NormalTok{)}
-\FunctionTok{rownames}\NormalTok{(Table2) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"SGT"}\NormalTok{,}\StringTok{"SGED"}\NormalTok{,}\StringTok{"GT"}\NormalTok{,}\StringTok{"GED"}\NormalTok{,}\StringTok{"ST"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"Normal"}\NormalTok{)}
+\FunctionTok{rownames}\NormalTok{(Table2) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"SGT"}\NormalTok{,}\StringTok{"SGED"}\NormalTok{,}\StringTok{"GED"}\NormalTok{,}\StringTok{"ST"}\NormalTok{,}\StringTok{"T"}\NormalTok{,}\StringTok{"Normal"}\NormalTok{)}
 
 \NormalTok{Table2[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_mu}
 \NormalTok{Table2[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_sigma}
@@ -1309,47 +1300,47 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{Table2[}\DecValTok{2}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ SGED\_result}\SpecialCharTok{$}\NormalTok{maximum}
 \NormalTok{Table2[}\DecValTok{2}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ SGT\_AIC}
 
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_mu}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_sigma}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_lambda}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_p}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_q}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_result}\SpecialCharTok{$}\NormalTok{maximum}
-\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GT\_AIC}
+\CommentTok{\# Table2[3,1] \textless{}{-} GT\_mu}
+\CommentTok{\# Table2[3,2] \textless{}{-} GT\_sigma}
+\CommentTok{\# Table2[3,3] \textless{}{-} GT\_lambda}
+\CommentTok{\# Table2[3,4] \textless{}{-} GT\_p}
+\CommentTok{\# Table2[3,5] \textless{}{-} GT\_q}
+\CommentTok{\# Table2[3,7] \textless{}{-} GT\_result$maximum}
+\CommentTok{\# Table2[3,8] \textless{}{-} GT\_AIC}
 
 
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_mu}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_sigma}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_lambda}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_p}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_q}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_result}\SpecialCharTok{$}\NormalTok{maximum}
-\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_AIC}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_mu}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_sigma}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_lambda}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_p}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_q}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_result}\SpecialCharTok{$}\NormalTok{maximum}
+\NormalTok{Table2[}\DecValTok{3}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ GED\_AIC}
 
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_mean}
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_sd}
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_xi}
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_nu}
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{loglik}
-\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{aic}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_mean}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_sd}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_xi}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_nu}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{loglik}
+\NormalTok{Table2[}\DecValTok{4}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ ST\_result}\SpecialCharTok{$}\NormalTok{aic}
 
-\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_mean}
-\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_sd}
-\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_nu}
-\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_result}\SpecialCharTok{$}\NormalTok{loglik}
-\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_result}\SpecialCharTok{$}\NormalTok{aic}
+\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_mean}
+\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_sd}
+\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_nu}
+\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_result}\SpecialCharTok{$}\NormalTok{loglik}
+\NormalTok{Table2[}\DecValTok{5}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ T\_result}\SpecialCharTok{$}\NormalTok{aic}
 
 \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(Normal\_mu))\{}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_mu}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_sigma}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_lambda}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_p}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_q}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_result}\SpecialCharTok{$}\NormalTok{maximum}
-\NormalTok{Table2[}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_AIC}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_mu}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_sigma}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{3}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_lambda}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_p}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_q}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_result}\SpecialCharTok{$}\NormalTok{maximum}
+\NormalTok{Table2[}\DecValTok{6}\NormalTok{,}\DecValTok{8}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ Normal\_AIC}
 \NormalTok{\}}
 
-\FunctionTok{return}\NormalTok{(Table2)}
+\NormalTok{Table2}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1357,7 +1348,25 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{MLE\_Eurostoxx }\OtherTok{\textless{}{-}} \FunctionTok{DistMLE}\NormalTok{(R)}
-\NormalTok{MLE\_Bali }\OtherTok{\textless{}{-}} \FunctionTok{DistMLE}\NormalTok{(Rbali)}
+\end{Highlighting}
+\end{Shaded}
+
+In table \ref{tab:disttable} we can see\ldots{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# MLE\_Bali \textless{}{-} DistMLE(Rbali)}
+\FunctionTok{str}\NormalTok{(MLE\_Eurostoxx)}
+\NormalTok{table2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(MLE\_Eurostoxx)}
+\NormalTok{table2 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(table2,}\DecValTok{3}\NormalTok{)}
+\NormalTok{table2[}\FunctionTok{is.na}\NormalTok{(table2)] }\OtherTok{\textless{}{-}} \StringTok{""} 
+\NormalTok{table2 }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{caption =} \StringTok{"Unconditional density distributions"}\NormalTok{,}\StringTok{"latex"}\NormalTok{,}
+      \AttributeTok{label =} \StringTok{\textquotesingle{}disttable\textquotesingle{}}\NormalTok{,}
+      \AttributeTok{booktabs =}\NormalTok{ T,}
+      \AttributeTok{position =} \StringTok{"h!"}\NormalTok{,}
+      \AttributeTok{digits =} \DecValTok{3}\NormalTok{ )}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F)}\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{footnote}\NormalTok{(}\AttributeTok{general =} \StringTok{"Notes"}\NormalTok{,}\AttributeTok{number=}\StringTok{"Here comes text"}\NormalTok{,}\AttributeTok{threeparttable =}\NormalTok{ T,}\AttributeTok{footnote\_as\_chunk =}\NormalTok{ F, }\AttributeTok{escape=}\NormalTok{F, }\AttributeTok{general\_title =} \StringTok{""}\NormalTok{) }
 \end{Highlighting}
 \end{Shaded}
 
@@ -1366,10 +1375,10 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"sged"}\NormalTok{, }\StringTok{"ged"}\NormalTok{)}
+\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"ged"}\NormalTok{, }\StringTok{"sged"}\NormalTok{)}
 \CommentTok{\#garchspec \textless{}{-} garchfit \textless{}{-} garchforecast \textless{}{-} stdret \textless{}{-} vector(mode = "list", length = length(distributions))}
 \CommentTok{\#names(garchspec) \textless{}{-} names(garchfit) \textless{}{-} names(garchforecast) \textless{}{-} names(stdret) \textless{}{-} distributions}
-\NormalTok{Models.garch }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{, }\StringTok{"eGARCH"}\NormalTok{,}\StringTok{"fGARCH.AVGARCH"}\NormalTok{,}\StringTok{"fGARCH.NAGARCH"}\NormalTok{, }\StringTok{"gjrGARCH"}\NormalTok{, }\StringTok{"apARCH"}\NormalTok{, }\StringTok{"iGARCH"}\NormalTok{, }\StringTok{"csGARCH"}\NormalTok{)}
+\NormalTok{Models.garch }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{, }\StringTok{"eGARCH"}\NormalTok{,}\StringTok{"fGARCH.AVGARCH"}\NormalTok{,}\StringTok{"fGARCH.NAGARCH"}\NormalTok{, }\StringTok{"gjrGARCH"}\NormalTok{, }\StringTok{"fGARCH.TGARCH"}\NormalTok{, }\StringTok{"iGARCH"}\NormalTok{, }\StringTok{"EWMA"}\NormalTok{)}
 
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(Models.garch))\{}
 \FunctionTok{assign}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"garchspec."}\NormalTok{,Models.garch[i]),}\FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions)))}
@@ -1384,7 +1393,7 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
 \CommentTok{\# Specify a GARCH model with constant mean}
 \NormalTok{garchspec.sGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
+                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{garchOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{variance.targeting =}\NormalTok{ F), }
                      \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
 \CommentTok{\# Estimate the model}
 \NormalTok{garchfit.sGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.sGARCH[[i]])}
@@ -1417,7 +1426,6 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{\}}
 
 \CommentTok{\#.fGARCH.AVGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
 \CommentTok{\# Specify a GARCH model with constant mean}
 \NormalTok{garchspec.fGARCH.AVGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
@@ -1441,16 +1449,16 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{stdret.gjrGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.gjrGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{\}}
 
-\CommentTok{\#.apARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\#fGARCH.TGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
 \CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.apARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"apARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
+\NormalTok{garchspec.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
+                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"fGARCH"}\NormalTok{, }\AttributeTok{submodel =} \StringTok{"TGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
                      \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
 \CommentTok{\# Estimate the model}
-\NormalTok{garchfit.apARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.apARCH[[i]])}
+\NormalTok{garchfit.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.fGARCH.TGARCH[[i]])}
 \CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.apARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.apARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{stdret.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.fGARCH.TGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{\}}
 
 \CommentTok{\#.iGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
@@ -1466,21 +1474,118 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \NormalTok{\}}
 
 \CommentTok{\#.csGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# for(i in 1:length(distributions))\{}
+\CommentTok{\# \# Specify a GARCH model with constant mean}
+\CommentTok{\# garchspec.csGARCH[[i]] \textless{}{-} ugarchspec(mean.model = list(armaOrder = c(1,0)),}
+\CommentTok{\#                      variance.model = list(model = "csGARCH", variance.targeting = F),}
+\CommentTok{\#                      distribution.model = distributions[i])}
+\CommentTok{\# \# Estimate the model}
+\CommentTok{\# garchfit.csGARCH[[i]] \textless{}{-} ugarchfit(data = R, spec = garchspec.csGARCH[[i]])}
+\CommentTok{\# \# Compute stdret using residuals()}
+\CommentTok{\# stdret.csGARCH[[i]] \textless{}{-} residuals(garchfit.csGARCH[[i]], standardize = TRUE)}
+\CommentTok{\# \}}
+
+
+\CommentTok{\# we need EWMA}
 \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
 \CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.csGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"csGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
+\NormalTok{garchspec.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
+                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"iGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F),}
+                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i], }\AttributeTok{fixed.pars =} \FunctionTok{list}\NormalTok{(}\AttributeTok{omega=}\DecValTok{0}\NormalTok{))}
 \CommentTok{\# Estimate the model}
-\NormalTok{garchfit.csGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.csGARCH[[i]])}
+\NormalTok{garchfit.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.EWMA[[i]])}
 \CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.csGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.csGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{stdret.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.EWMA[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{\}}
+
 
 \CommentTok{\#  make the histogram}
 \CommentTok{\# }
 \CommentTok{\# chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),}
 \CommentTok{\#                 colorset = c("gray","red","blue"))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table3 }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{12}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{5}\NormalTok{)}
+\FunctionTok{colnames}\NormalTok{(table3) }\OtherTok{\textless{}{-}}\NormalTok{ distributions}
+
+\CommentTok{\#trying a loop, maybe you can solve that @filippo?}
+\DocumentationTok{\#\# column loop i = normal distribution, std, sstd, ged, sged}
+\NormalTok{table3[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\CommentTok{\#first parameter estimate}
+\NormalTok{table3[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{1}\NormalTok{] }\CommentTok{\#first standard error}
+\NormalTok{table3[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{2}\NormalTok{] }\CommentTok{\#second parameter estimate}
+\NormalTok{table3[}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{2}\NormalTok{]}
+\CommentTok{\#...}
+\NormalTok{table3 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(table3, }\DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# for (i in length(distributions)) \{}
+\CommentTok{\#   for (j in nrow(table3)) \{}
+\CommentTok{\#     table3[j,i] \textless{}{-} garchfit.sGARCH[[i]]@fit$coef}
+\CommentTok{\#     table3[j+1,i] \textless{}{-}garchfit.sGARCH[[i]]@fit$se.coef}
+\CommentTok{\#     \}}
+\CommentTok{\# \}}
+
+\FunctionTok{print}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{)}
+\NormalTok{garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"iGARCH"}\NormalTok{)}
+\NormalTok{garchfit.iGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.iGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"EWMA"}\NormalTok{)}
+\NormalTok{garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\FunctionTok{c}\NormalTok{(garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{],}\ConstantTok{NA}\NormalTok{,garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{3}\NormalTok{], }\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"eGARCH"}\NormalTok{)}
+\NormalTok{garchfit.eGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.eGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"gjrGARCH"}\NormalTok{)}
+\NormalTok{garchfit.gjrGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.gjrGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"NAGARCH"}\NormalTok{)}
+\NormalTok{garchfit.fGARCH.NAGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.NAGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"TGARCH"}\NormalTok{)}
+\NormalTok{garchfit.fGARCH.TGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.TGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"TSGARCH/AVGARCH"}\NormalTok{)}
+\NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
 \end{Highlighting}
 \end{Shaded}
 

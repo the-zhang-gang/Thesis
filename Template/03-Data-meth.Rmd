@@ -30,6 +30,7 @@ require(sgt)
 require(openxlsx) 
 require(TTR)
 require(lmtest)
+require(latex2exp)
 
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
@@ -173,9 +174,9 @@ fn2 <- paste("The standardized residual is derived from a maximum likelyhood est
 fn3 <- '*, **, *** represent significance levels at the 5%, 1% and <1%.'
 ```
 
-\noindent The Arithmetic Mean of the series is `r round(as.numeric(table1[1,2]),3)`% with a standard deviation of `r round(as.numeric(table1[5,2]),3)`% and a median of `r round(as.numeric(table1[2,2]),3)` which translate to an annualized mean of `r round(as.numeric(table1[1,2])*252,3)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),3)`%. The Skewness statistic is highly significant and negative at `r round(as.numeric(table1[6,2]),3)` and the excess Kurtosis is also highly significant and positive at `r round(as.numeric(table1[8,2]),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.  \
+\noindent The arithmetic mean of the series is `r round(as.numeric(levels(table1[1,2][,drop=T])),3)`% with a standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T])),3)`% and a median of `r round(as.numeric(levels(table1[2,2][,drop=T])),3)` which translate to an annualized mean of `r round(as.numeric(levels(table1[1,2][,drop=T]))*252,3)`% and an annualized standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T]))*sqrt(252),3)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(levels(table1[6,2][,drop=T])),3)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(levels(table1[8,2][,drop=T])),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.  \
 
-\noindent The right column of \@ref:stats displays the same descriptives but for the standardizes residuals obtained from a simple GARCH model as mentioned in \@ref:stats in Note 2$*$. Again, Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(as.numeric(table1[10,3]),3)`, given its high significance, confirms the rejection of the normality assumption. \
+\noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2$*$. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(as.numeric(levels(table1[10,3][,drop=T])),3)`, given its high significance, confirms the rejection of the normality assumption. \
 
 ```{r stats, echo=F, results='asis'}
 table1 %>% kbl(caption = "Summary statistics of the returns","latex",
@@ -191,7 +192,8 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 \clearpage
 #### Descriptive figures
 
-##### Stylized facts  \
+##### Stylized facts 
+ \
 As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="100%", fig.pos='h'}
@@ -223,17 +225,17 @@ par(mfrow = c(1,1))
 # events <- as.Date(c("1999-01-01", "2000-04-14", "2008-09-15", "2011-12-31", "2020-02-20"))
 #  + geom_text(aes(x = as.Date("1999-01-01"), label = "Dot com bubble", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2007-01-01"), label = "Financial crisis", y =1400), colour = "black", angle = 90)+ geom_text(aes(x = as.Date("2014-01-01"), label = "Eurobond crisis", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2020-01-01"), label = "COVID-19 crisis", y =1400), colour = "black", angle = 90) + ylab("Price")
 par(mfrow=c(1,1))
-plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"])); text(index(Estoxx$`EURO STOXX 50`["1998-09-01"]), y = 1500,"Launch of Euro", cex=0.9, srt=90);  
+plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Eurostoxx 50 Price", main = "Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1998-07-01"]), y = 1550,"Launch of Euro", cex=0.7, srt=90,font=4);  
 
-abline(v= index(Estoxx$`EURO STOXX 50`["2000-04-14"])); text(index(Estoxx$`EURO STOXX 50`["1999-12-20"]), y = 1500,"Dot com bubble", cex=0.9, srt=90); 
+abline(v= index(Estoxx$`EURO STOXX 50`["2000-04-14"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1999-10-14"]), y = 1550,"Dot com bubble", cex=0.7, srt=90,font=4); 
 
-abline(v= index(Estoxx$`EURO STOXX 50`["2007-12-31"])); text(index(Estoxx$`EURO STOXX 50`["2007-10-02"]), y = 1650,"US housing bubble", cex=0.9, srt=90);
+abline(v= index(Estoxx$`EURO STOXX 50`["2007-12-31"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["2007-06-27"]), y = 1780,"US housing bubble", cex=0.7, srt=90,font=4);
 
-abline(v= index(Estoxx$`EURO STOXX 50`["2008-09-15"])); text(index(Estoxx$`EURO STOXX 50`["2008-05-19"]), y = 2050,"Lehman brothers collapse", cex=0.9, srt=90); 
+# abline(v= index(Estoxx$`EURO STOXX 50`["2008-09-15"])); text(index(Estoxx$`EURO STOXX 50`["2008-05-27"]), y = 2170,"Lehman brothers collapse", cex=0.8, srt=90); 
 
-abline(v= index(Estoxx$`EURO STOXX 50`["2011-01-03"])); text(index(Estoxx$`EURO STOXX 50`["2010-11-01"]), y = 2100,"European bond crisis peak", cex=0.9, srt=90); 
+abline(v= index(Estoxx$`EURO STOXX 50`["2011-01-03"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["2010-08-06"]), y = 2200,"European bond crisis peak", cex=0.7, srt=90,font=4); 
 
-abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"])); text(index(Estoxx$`EURO STOXX 50`["2019-10-01"]), y = 1500,"COVID-19 crisis", cex=0.9, srt =90); 
+abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["2019-08-27"]), y = 1570,"COVID-19 crisis", cex=0.7, srt =90,font=4); 
 ```
 
 \newpage
@@ -269,14 +271,14 @@ In figure \@ref(fig:plot4) the density distribution of the log returns are exami
 # yfit <- yfit * diff(h$mids[1:2]) * length(R) 
 # lines(xfit, yfit, col = "black", lwd = 1)
 
-chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.9) 
+chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7) 
 ```
 
 \newpage
 
 ACF plots: to do...
 
-```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "75%", fig.pos='h'}
+```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "100%", fig.pos='h'}
 
 # Compute the mean daily return
 m <- mean(R)
@@ -285,16 +287,14 @@ m <- mean(R)
 e <- R - m
 
 # Plot the absolute value of the prediction errors
-par(mfrow = c(2,2),mar=c(5,4,4,2)+0.1)
-plot.zoo(abs(e), main = "Absolute Prediction Error",col = "steelblue")
-
+par(mfrow = c(2,2),mar=c(1,4,4,2)+0.1)
+plot.zoo(abs(e), main = "Absolute Prediction Error",col = "steelblue", ylab = expression(paste("|",epsilon,"|")))
+plot.zoo(e^2,main = "Squared Prediction Error", col = "steelblue", ylab =(expression(paste(epsilon^2))))
 # Plot the acf of the absolute prediction errors
 acfPlot(abs(e), lag.max = 22, labels=F)
 title("ACF (absolute prediction errors)")
-plot.zoo(e^2,main = "Squared Prediction Error", col = "steelblue")
 acfPlot(e^2, lag.max = 22, labels=F)
 title("ACF (Squared prediction errors)")
-?acfPlot
 ```
 
 \clearpage
@@ -303,11 +303,11 @@ title("ACF (Squared prediction errors)")
 
 ### Garch models
 
-As already mentioned in ..., GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.  \
+As already mentioned in part \@(ref:univ-garch), GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.  \
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, Alexios @alexios2020 has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation. \
+They will be estimated using maximum likelihood. As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation. \
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (\@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)). \
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (equation \@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)). \
 
 ```{=tex}
 \begin{align} 
