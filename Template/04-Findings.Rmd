@@ -385,7 +385,7 @@ table2 %>% kbl(caption = "Unconditional density distributions","latex",
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, eval=FALSE}
+```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
@@ -526,7 +526,7 @@ colnames(table3) <- distributions
 ## column loop i = normal distribution, std, sstd, ged, sged
 table3[1,1] <- garchfit.sGARCH[[1]]@fit$coef[1] #first parameter estimate
 table3[2,1] <- garchfit.sGARCH[[1]]@fit$se.coef[1] #first standard error
-table3[3,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2] #second parameter estimate
+table3[3,1] <- garchfit.sGARCH[[1]]@fit$coef[2] #second parameter estimate
 table3[4,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2]
 #...
 table3 <- round(table3, 3)
