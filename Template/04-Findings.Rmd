@@ -347,7 +347,7 @@ Table2
 
 
 
-```{r MLE tables for different series}
+```{r MLE tables for different series, include=FALSE, eval=FALSE}
 
 R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
 R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
