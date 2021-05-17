@@ -13,6 +13,8 @@ bibliography: references.bib
 
 \minitoc <!-- this will include a mini table of contents-->
 
+## Density of the returns
+
 ```{r include=F}
 require(readxl)
 require(xts)
@@ -24,24 +26,20 @@ require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 require(devtools)
-remotes::install_github("R-Finance/xtsExtra")
-install_bitbucket("alexiosg/racd")
+# install_bitbucket("alexiosg/racd")
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
-##MLE distribution parameters 
 
+### MLE distribution parameters
 
-```{r SGT.MLE, echo=F}
-sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ 
-            lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), 
-          start, subset, method = "BFGS", itnmax = NULL, 
-          hessian.method = "Richardson", gradient.method = "Richardson", 
-          mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) {
-  formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
+```{r SGTMLE, eval=FALSE}
+par(mfrow = c(3,2))
+sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), start, subset, method = "BFGS", itnmax = NULL, hessian.method = "Richardson", gradient.method = "Richardson", mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
+  { formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
                   p = p.f, q = q.f)
   varNames = NULL
   envir = new.env()
@@ -151,7 +149,7 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 }
 ```
 
-```{r mlesgt, echo=F}
+```{r mlesgt, eval=FALSE}
 library(sgt)
 require(graphics)
 require(stats)
@@ -174,7 +172,7 @@ DistMLE <- function(series) {
   SGT_lambda <- SGT_result$estimate[3]
   SGT_p <- SGT_result$estimate[4]
   SGT_q <- SGT_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = SGT_mu, sigma = SGT_sigma, lambda = SGT_lambda, p = SGT_p, q = SGT_q), col="red", type ="l",main = "SGT", ylab="Density")
   lines(density(coredata(series)))
   
   
@@ -192,27 +190,26 @@ DistMLE <- function(series) {
   SGED_lambda <- SGED_result$estimate[3]
   SGED_p <- SGED_result$estimate[4]
   SGED_q <- SGED_result$estimate[5]
-  if(!is.na(SGED_mu)){
-  plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED (sgt.mle2)")
-  lines(density(coredata(series)))}
+
+  
+  plot(xvals, dsgt(xvals, mu = SGED_mu, sigma = SGED_sigma, lambda = SGED_lambda, p = SGED_p, q = SGED_q), col="red", type ="l", main = "SGED", ylab="Density")
+  lines(density(coredata(series)))
+
   
   ### GT(sgt.mle2)
-  GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
-  GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
-  GT_sumResult <- summary(GT_result)
-  GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
+  # GT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
+  # GT_result <- sgt.mle2(X.f = X.data, start = GT_start, lower = c(-Inf, -Inf, -0.001, -Inf,-Inf), upper = c(Inf,Inf,0.001,Inf,Inf))
+  # GT_sumResult <- summary(GT_result)
+  # GT_AIC <- 2*length(GT_result$estimate-1) - 2*GT_sumResult$maximum
   
   ### GT Plot fit (sgt.mle2)
-  GT_mu <- GT_result$estimate[1]
-  GT_sigma <- GT_result$estimate[2]
-  GT_lambda <- GT_result$estimate[3]
-  GT_p <- GT_result$estimate[4]
-  GT_q <- GT_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
-  lines(density(coredata(series)))
-  
-  
-  
+  # GT_mu <- GT_result$estimate[1]
+  # GT_sigma <- GT_result$estimate[2]
+  # GT_lambda <- GT_result$estimate[3]
+  # GT_p <- GT_result$estimate[4]
+  # GT_q <- GT_result$estimate[5]
+  # plot(xvals, dsgt(xvals, mu = GT_mu, sigma = GT_sigma, lambda = GT_lambda, p = GT_p, q = GT_q), col="red", type ="l", main = "GT (sgt.mle2)")
+  # lines(density(coredata(series)))
   
   ### GED(sgt.mle2)
   GED_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 750)
@@ -227,7 +224,7 @@ DistMLE <- function(series) {
   GED_lambda <- GED_result$estimate[3]
   GED_p <- GED_result$estimate[4]
   GED_q <- GED_result$estimate[5]
-  plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = GED_mu, sigma = GED_sigma, lambda = GED_lambda, p = GED_p, q = GED_q), col="red", type ="l", main = "GED", ylab="Density")
   lines(density(coredata(series)))
   
   ### ST (fitdist) 
@@ -242,7 +239,7 @@ DistMLE <- function(series) {
   ST_nu <- ST_result$estimate[3]
   ST_xi <- ST_result$estimate[4] #lamda
   
-  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST (fitdist)")
+  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST")
   lines(density(coredata(series)))
   
   ### T (fitdist) 
@@ -256,7 +253,7 @@ DistMLE <- function(series) {
   T_nu <- T_result$estimate[3]
   
   
-  plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T (fitdist)")
+  plot(xvals, dstd(xvals, mean = T_mean, sd = T_sd, nu = T_nu), col="red", type ="l", main = "T", ylab="Density")
   lines(density(coredata(series)))
   
   
@@ -275,17 +272,14 @@ DistMLE <- function(series) {
   Normal_q <- Normal_result$estimate[5]
   
   if(!is.na(Normal_mu)){
-  plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal (sgt.mle2)")
+  plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal", ylab="Density")
  lines(density(coredata(series)))}
-
-
-
 
 #maximum likelihood estimates of unconditional distribution functions
 
-Table2 <- matrix(nrow = 7, ncol = 8)
+Table2 <- matrix(nrow = 6, ncol = 8)
 colnames(Table2) <- c("mu","sigma","lambda","p","q","nu","L","AIC")
-rownames(Table2) <- c("SGT","SGED","GT","GED","ST","T","Normal")
+rownames(Table2) <- c("SGT","SGED","GED","ST","T","Normal")
 
 Table2[1,1] <- SGT_mu
 Table2[1,2] <- SGT_sigma
@@ -305,49 +299,50 @@ Table2[2,7] <- SGED_result$maximum
 Table2[2,8] <- SGT_AIC
 }
 
-Table2[3,1] <- GT_mu
-Table2[3,2] <- GT_sigma
-Table2[3,3] <- GT_lambda
-Table2[3,4] <- GT_p
-Table2[3,5] <- GT_q
-Table2[3,7] <- GT_result$maximum
-Table2[3,8] <- GT_AIC
+# Table2[3,1] <- GT_mu
+# Table2[3,2] <- GT_sigma
+# Table2[3,3] <- GT_lambda
+# Table2[3,4] <- GT_p
+# Table2[3,5] <- GT_q
+# Table2[3,7] <- GT_result$maximum
+# Table2[3,8] <- GT_AIC
 
 
-Table2[4,1] <- GED_mu
-Table2[4,2] <- GED_sigma
-Table2[4,3] <- GED_lambda
-Table2[4,4] <- GED_p
-Table2[4,5] <- GED_q
-Table2[4,7] <- GED_result$maximum
-Table2[4,8] <- GED_AIC
+Table2[3,1] <- GED_mu
+Table2[3,2] <- GED_sigma
+Table2[3,3] <- GED_lambda
+Table2[3,4] <- GED_p
+Table2[3,5] <- GED_q
+Table2[3,7] <- GED_result$maximum
+Table2[3,8] <- GED_AIC
 
-Table2[5,1] <- ST_mean
-Table2[5,2] <- ST_sd
-Table2[5,3] <- ST_xi
-Table2[5,6] <- ST_nu
-Table2[5,7] <- ST_result$loglik
-Table2[5,8] <- ST_result$aic
+Table2[4,1] <- ST_mean
+Table2[4,2] <- ST_sd
+Table2[4,3] <- ST_xi
+Table2[4,6] <- ST_nu
+Table2[4,7] <- ST_result$loglik
+Table2[4,8] <- ST_result$aic
 
-Table2[6,1] <- T_mean
-Table2[6,2] <- T_sd
-Table2[6,6] <- T_nu
-Table2[6,7] <- T_result$loglik
-Table2[6,8] <- T_result$aic
+Table2[5,1] <- T_mean
+Table2[5,2] <- T_sd
+Table2[5,6] <- T_nu
+Table2[5,7] <- T_result$loglik
+Table2[5,8] <- T_result$aic
 
 if(!is.na(Normal_mu)){
-Table2[7,1] <- Normal_mu
-Table2[7,2] <- Normal_sigma
-Table2[7,3] <- Normal_lambda
-Table2[7,4] <- Normal_p
-Table2[7,5] <- Normal_q
-Table2[7,7] <- Normal_result$maximum
-Table2[7,8] <- Normal_AIC
+Table2[6,1] <- Normal_mu
+Table2[6,2] <- Normal_sigma
+Table2[6,3] <- Normal_lambda
+Table2[6,4] <- Normal_p
+Table2[6,5] <- Normal_q
+Table2[6,7] <- Normal_result$maximum
+Table2[6,8] <- Normal_AIC
 }
 
-return(Table2)
+Table2
 }
 ```
+
 
 
 
@@ -363,6 +358,26 @@ MLE_Full <- DistMLE(R)
 MLE_dotcom <- DistMLE(R_dotcom)
 MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
+```
+
+```{r plotswithing, out.width="100%", fig.cap='Distributions of the data', fig.align='center', eval=FALSE}
+MLE_Eurostoxx <- DistMLE(R)
+```
+In table \@ref(tab:disttable) we can see...
+<!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
+```{r MLE tables for different series,results='asis', eval=FALSE}
+# MLE_Bali <- DistMLE(Rbali)
+str(MLE_Eurostoxx)
+table2 <- as.data.frame(MLE_Eurostoxx)
+table2 <- round(table2,3)
+table2[is.na(table2)] <- "" 
+table2 %>% kbl(caption = "Unconditional density distributions","latex",
+      label = 'disttable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>% 
+  footnote(general = "Notes",number="Here comes text",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 
 ```
 
@@ -370,11 +385,11 @@ MLE_covid <- DistMLE(R_covid)
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, echo=F}
-distributions <- c("norm", "std", "sstd", "sged", "ged")
+```{r garchcode, eval=FALSE}
+distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
-Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "apARCH", "iGARCH", "csGARCH")
+Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
 
 for(i in 1:length(Models.garch)){
 assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
@@ -389,7 +404,7 @@ assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(d
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "sGARCH", variance.targeting = F), 
+                     variance.model = list(model = "sGARCH", garchOrder = c(1,1), variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
@@ -422,7 +437,6 @@ stdret.fGARCH.NAGARCH[[i]] <- residuals(garchfit.fGARCH.NAGARCH[[i]], standardiz
 }
 
 #.fGARCH.AVGARCH------------------------
-
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
@@ -446,16 +460,16 @@ garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
 stdret.gjrGARCH[[i]] <- residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
 }
 
-#.apARCH-------------------
+#fGARCH.TGARCH-------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec.apARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "apARCH", variance.targeting = F), 
+garchspec.fGARCH.TGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "fGARCH", submodel = "TGARCH", variance.targeting = F), 
                      distribution.model = distributions[i])
 # Estimate the model
-garchfit.apARCH[[i]] <- ugarchfit(data = R, spec = garchspec.apARCH[[i]])
+garchfit.fGARCH.TGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.TGARCH[[i]])
 # Compute stdret using residuals()
-stdret.apARCH[[i]] <- residuals(garchfit.apARCH[[i]], standardize = TRUE)
+stdret.fGARCH.TGARCH[[i]] <- residuals(garchfit.fGARCH.TGARCH[[i]], standardize = TRUE)
 }
 
 #.iGARCH--------------------
@@ -471,16 +485,30 @@ stdret.iGARCH[[i]] <- residuals(garchfit.iGARCH[[i]], standardize = TRUE)
 }
 
 #.csGARCH-----------------
+# for(i in 1:length(distributions)){
+# # Specify a GARCH model with constant mean
+# garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+#                      variance.model = list(model = "csGARCH", variance.targeting = F),
+#                      distribution.model = distributions[i])
+# # Estimate the model
+# garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
+# # Compute stdret using residuals()
+# stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
+# }
+
+
+# we need EWMA
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
-garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "csGARCH", variance.targeting = F), 
-                     distribution.model = distributions[i])
+garchspec.EWMA[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                     variance.model = list(model = "iGARCH", variance.targeting = F),
+                     distribution.model = distributions[i], fixed.pars = list(omega=0))
 # Estimate the model
-garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
+garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 # Compute stdret using residuals()
-stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
+stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 }
+
 
 #  make the histogram
 # 
@@ -488,9 +516,80 @@ stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
 #                 colorset = c("gray","red","blue"))
 ```
 
+
+<!-- What do we do, do we do 6 tables for all the distributions?  -->
+```{r table3prep, eval=FALSE}
+table3 <- matrix(nrow = 12, ncol = 5)
+colnames(table3) <- distributions
+
+#trying a loop, maybe you can solve that @filippo?
+## column loop i = normal distribution, std, sstd, ged, sged
+table3[1,1] <- garchfit.sGARCH[[1]]@fit$coef[1] #first parameter estimate
+table3[2,1] <- garchfit.sGARCH[[1]]@fit$se.coef[1] #first standard error
+table3[3,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2] #second parameter estimate
+table3[4,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2]
+#...
+table3 <- round(table3, 3)
+
+# for (i in length(distributions)) {
+#   for (j in nrow(table3)) {
+#     table3[j,i] <- garchfit.sGARCH[[i]]@fit$coef
+#     table3[j+1,i] <-garchfit.sGARCH[[i]]@fit$se.coef
+#     }
+# }
+
+print("sGARCH")
+garchfit.sGARCH[[1]]@fit$coef
+garchfit.sGARCH[[1]]@fit$se.coef
+
+```
+
+```{r table4prep, eval=FALSE}
+print("iGARCH")
+garchfit.iGARCH[[1]]@fit$coef
+garchfit.iGARCH[[1]]@fit$se.coef
+```
+
+```{r table5prep, eval=FALSE}
+print("EWMA")
+garchfit.EWMA[[1]]@fit$coef
+c(garchfit.EWMA[[1]]@fit$se.coef[1:2],NA,garchfit.EWMA[[1]]@fit$se.coef[3], NA)
+```
+
+```{r table7prep, eval=FALSE}
+print("eGARCH")
+garchfit.eGARCH[[1]]@fit$coef
+garchfit.eGARCH[[1]]@fit$se.coef
+```
+
+```{r table6prep, eval=FALSE}
+print("gjrGARCH")
+garchfit.gjrGARCH[[1]]@fit$coef
+garchfit.gjrGARCH[[1]]@fit$se.coef
+```
+
+```{r table8prep, eval=FALSE}
+print("NAGARCH")
+garchfit.fGARCH.NAGARCH[[1]]@fit$coef
+garchfit.fGARCH.NAGARCH[[1]]@fit$se.coef
+```
+
+```{r table9prep, eval=FALSE}
+print("TGARCH")
+garchfit.fGARCH.TGARCH[[1]]@fit$coef
+garchfit.fGARCH.TGARCH[[1]]@fit$se.coef
+```
+
+```{r table10prep, eval=FALSE}
+print("TSGARCH/AVGARCH")
+garchfit.fGARCH.AVGARCH[[1]]@fit$coef
+garchfit.fGARCH.AVGARCH[[1]]@fit$se.coef
+```
+<!-- Here comes the description -->
+
 ## Results of GARCH with time-varying higher moments
 
-```{r acdcode, include=F}
+```{r acdcode, eval=FALSE}
 require(racd)
 require(rugarch)
 require(parallel)
@@ -504,18 +603,18 @@ cl = makePSOCKcluster(10)
 fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", echo=F}
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", eval=FALSE}
 # plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
-par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
-cm <- plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
-cm <- lines(fitted(fit), col = 2)
-cm
-cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
-minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
-cs <- lines(sigma(fit), col = 'steelblue')
-cs
-plot(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
-plot(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
+# par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
+# cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
+# cm <- lines(fitted(fit), col = 2)
+# cm
+# cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
+# minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
+# cs <- lines(sigma(fit), col = 'steelblue')
+# cs
+# plot(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
+# plot(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
 
 # pnl <- function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) {
 #   panel.number <- parent.frame()$panel.number
