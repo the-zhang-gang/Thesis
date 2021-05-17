@@ -385,7 +385,7 @@ table2 %>% kbl(caption = "Unconditional density distributions","latex",
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, eval=FALSE}
+```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
