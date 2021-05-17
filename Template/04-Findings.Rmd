@@ -161,6 +161,7 @@ require(graphics)
 require(stats)
 
 
+
 DistMLE <- function(series) {
   
   ### SGT
@@ -170,7 +171,21 @@ DistMLE <- function(series) {
   SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
   SGT_sumResult <- summary(SGT_result)
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
-  SGT_p <- SGT_sumResult$p.value
+  SGT_pv <- SGT_sumResult$p.value
+  # SGT_tv_manual <- SGT_result$estimate/(SGT_result$std.error/sqrt(length(R)))#to compare with tvalues's of fitdist
+  SGT_significance <- matrix(ncol = 6,nrow = 1)
+  for(i in 1:5){
+  if(SGT_pv[i]>=0.05){
+  SGT_significance[i] <-  "" 
+  }
+  if(SGT_pv[i]<0.05){
+  SGT_significance[i] <-  "*"  
+  }
+  if(SGT_pv[i]<0.01){
+  SGT_significance[i] <-  "**"  
+  }
+  }
+  SGT_significance[is.na(SGT_significance)] <- ""
   
   ### SGT plot fit
   xvals = seq(-3,3,by=0.01)
@@ -190,7 +205,20 @@ DistMLE <- function(series) {
   SGED_result <- sgt.mle2(X.f = X.data, start = SGED_start, lower = c(-Inf, -Inf, -Inf, -Inf,749.9), upper = c(Inf,Inf,Inf,Inf,750.1))
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$maximum
-  SGED_p <- SGED_sumResult$p.value
+  SGED_pv <- SGED_sumResult$p.value
+  SGED_significance <- matrix(ncol = 6,nrow = 1)
+  for(i in 1:4){
+  if(SGED_pv[i]>=0.05){
+  SGED_significance[i] <-  "" 
+  }
+  if(SGED_pv[i]<0.05){
+  SGED_significance[i] <-  "*"  
+  }
+  if(SGED_pv[i]<0.01){
+  SGED_significance[i] <-  "**"  
+  }
+  }
+  SGED_significance[is.na(SGED_significance)] <- ""
   
   ### SGED Plot fit (sgt.mle2)
   SGED_mu <- SGED_result$estimate[1]
@@ -224,7 +252,20 @@ DistMLE <- function(series) {
   GED_result <- sgt.mle2(X.f = X.data, start = GED_start, lower = c(-Inf, -Inf, -0.000001, -Inf,749.9), upper = c(Inf,Inf,0.000001,Inf,750.1))
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$maximum
-  GED_p <- GED_sumResult$p.value
+  GED_pv <- GED_sumResult$p.value
+  GED_significance <- matrix(ncol = 6,nrow = 1)
+  for(i in c(1,2,4)){
+  if(GED_pv[i]>=0.05){
+  GED_significance[i] <-  "" 
+  }
+  if(GED_pv[i]<0.05){
+  GED_significance[i] <-  "*"  
+  }
+  if(GED_pv[i]<0.01){
+  GED_significance[i] <-  "**"  
+  }
+  }
+  GED_significance[is.na(GED_significance)] <- ""
   
   ### GED Plot fit (sgt.mle2)
   
@@ -241,7 +282,22 @@ DistMLE <- function(series) {
   ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
   ST_sumResult <- summary(ST_result)
   ST_sumResult$aic
+  ST_tvalues <- ST_result$estimate/(ST_result$sd/sqrt(length(R)))
+  ST_tvalues2 <- c(ST_tvalues[c(1:2,4)],NA,NA,ST_tvalues[3]) #adjust the format
+  ST_significance <- matrix(ncol = 6,nrow = 1)
   
+  for(i in c(1:3,6)){
+  if(ST_tvalues2[i]<=1.96){
+  ST_significance[i] <-  "" 
+  }
+  if(ST_tvalues2[i]>1.96){
+  ST_significance[i] <-  "*"  
+  }
+  if(ST_tvalues2[i] > 2.58){
+  ST_significance[i] <-  "**"  
+  }
+  }
+  ST_significance[is.na(ST_significance)] <- ""
   
   ### ST Plot fit (fitdist)
   ST_mean <- ST_result$estimate[1]
@@ -256,6 +312,22 @@ DistMLE <- function(series) {
   T_start <- list(mean = 0, sd = 1, nu = 5)
   T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
   T_sumResult <- summary(T_result)
+  T_tvalues <- T_result$estimate/(T_result$sd/sqrt(length(R)))
+  T_tvalues2 <- c(ST_tvalues[1:2],NA,NA,NA,ST_tvalues[3]) #adjust the format
+  T_significance <- matrix(ncol = 6,nrow = 1)
+  
+  for(i in c(1:2,6)){
+  if(T_tvalues2[i]<=1.96){
+  T_significance[i] <-  "" 
+  }
+  if(T_tvalues2[i]>1.96){
+  T_significance[i] <-  "*"  
+  }
+  if(T_tvalues2[i] > 2.58){
+  T_significance[i] <-  "**"  
+  }
+  }
+  T_significance[is.na(T_significance)] <- ""
   
   ### T Plot fit (fitdist)
   T_mean <- T_result$estimate[1]
@@ -272,6 +344,20 @@ DistMLE <- function(series) {
   Normal_result <- sgt.mle2(X.f = X.data, start = Normal_start, lower = c(-Inf, -Inf, -0.00000001, 1.999999999,949.9), upper = c(Inf,Inf,0.00000001,2.000000001,950.1))
   Normal_sumResult <- summary(Normal_result)
   Normal_AIC <- 2*length(Normal_result$estimate-3) - 2*Normal_sumResult$maximum
+  Normal_pv <- Normal_sumResult$p.value
+  Normal_significance <- matrix(ncol = 6,nrow = 1)
+  for(i in 1:2){
+  if(Normal_pv[i]>=0.05){
+  Normal_significance[i] <-  "" 
+  }
+  if(Normal_pv[i]<0.05){
+  Normal_significance[i] <-  "*"  
+  }
+  if(Normal_pv[i]<0.01){
+  Normal_significance[i] <-  "**"  
+  }
+  }
+  Normal_significance[is.na(Normal_significance)] <- ""
   
   ### Normal  Plot fit (sgt.mle2)
   
@@ -280,6 +366,7 @@ DistMLE <- function(series) {
   Normal_lambda <- Normal_result$estimate[3]
   Normal_p <- Normal_result$estimate[4]
   Normal_q <- Normal_result$estimate[5]
+ 
   
   if(!is.na(Normal_mu)){
   plot(xvals, dsgt(xvals, mu = Normal_mu, sigma = Normal_sigma, lambda = Normal_lambda, p = Normal_p, q = Normal_q), col="red", type ="l", main = "Normal", ylab="Density")
@@ -384,16 +471,18 @@ Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3)
 
 #SEs (basic)
 
-Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")")
-Table2_SE[4,2:6] <- paste0("(",round(SGED_result$std.error, 3),")")
-Table2_SE[6,2:6] <- paste0("(",round(GED_result$std.error, 3),")")
-Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3],3),")")
-Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3],3),")")
-Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3],3),")")
-Table2_SE[10,7] <- paste0("(",round(T_result$sd[3],3),")")
-Table2_SE[12,2:3] <- paste0("(",round(Normal_result$std.error, 3),")")
 
 
+Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significance)
+Table2_SE[4,2:6] <- paste0("(",round(SGED_result$std.error, 3),")",SGED_significance)
+Table2_SE[6,2:6] <- paste0("(",round(GED_result$std.error, 3),")",GED_significance)
+Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3],3),")",ST_significance[1:3])
+Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3],3),")", ST_significance[6])
+Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3],3),")",T_significance[1:2])
+Table2_SE[10,7] <- paste0("(",round(T_result$sd[3],3),")",T_significance[6])
+Table2_SE[12,2:3] <- paste0("(",round(Normal_result$std.error, 3),")",Normal_significance)
+
+SGT_significance
 
 #Remove SE for limiting cases
 Table2_SE[6,4] <- NA
@@ -427,14 +516,14 @@ MLE_covid <- DistMLE(R_covid)
 
 
 
-In table \@ref(tab:disttable) we can see...
+In table \@ref(tab:disttable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
 <!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
 ```{r MLE tables for diferent series,results='asis', echo=FALSE}
 par(mfrow = c(3,2))
 Eurostoxx <- DistMLE(R)
 
 
-Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions","latex",
+Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'dsTable',
       booktabs = T,
       position = "h!",
