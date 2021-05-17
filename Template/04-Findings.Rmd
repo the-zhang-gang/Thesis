@@ -526,8 +526,11 @@ colnames(table3) <- distributions
 ## column loop i = normal distribution, std, sstd, ged, sged
 table3[1,1] <- garchfit.sGARCH[[1]]@fit$coef[1] #first parameter estimate
 table3[2,1] <- garchfit.sGARCH[[1]]@fit$se.coef[1] #first standard error
-table3[3,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2] #second parameter estimate
+table3[3,1] <- garchfit.sGARCH[[1]]@fit$coef[2] #second parameter estimate
 table3[4,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2]
+
+
+
 #...
 table3 <- round(table3, 3)
 
