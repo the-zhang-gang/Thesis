@@ -27,6 +27,12 @@ require(tree)  # do we need this?
 require(sgt)
 require(devtools)
 # install_bitbucket("alexiosg/racd")
+options(knitr.kable.NA = "")
+
+
+
+
+
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
@@ -36,7 +42,7 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
 ### MLE distribution parameters
 
-```{r SGTMLE, eval=FALSE}
+```{r SGTMLE, include=FALSE}
 par(mfrow = c(3,2))
 sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), start, subset, method = "BFGS", itnmax = NULL, hessian.method = "Richardson", gradient.method = "Richardson", mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
   { formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
@@ -149,7 +155,7 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 }
 ```
 
-```{r mlesgt, eval=FALSE}
+```{r mlesgt, include=FALSE}
 library(sgt)
 require(graphics)
 require(stats)
@@ -164,6 +170,7 @@ DistMLE <- function(series) {
   SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
   SGT_sumResult <- summary(SGT_result)
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
+  SGT_p <- SGT_sumResult$p.value
   
   ### SGT plot fit
   xvals = seq(-3,3,by=0.01)
@@ -183,6 +190,7 @@ DistMLE <- function(series) {
   SGED_result <- sgt.mle2(X.f = X.data, start = SGED_start, lower = c(-Inf, -Inf, -Inf, -Inf,749.9), upper = c(Inf,Inf,Inf,Inf,750.1))
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$maximum
+  SGED_p <- SGED_sumResult$p.value
   
   ### SGED Plot fit (sgt.mle2)
   SGED_mu <- SGED_result$estimate[1]
@@ -216,6 +224,7 @@ DistMLE <- function(series) {
   GED_result <- sgt.mle2(X.f = X.data, start = GED_start, lower = c(-Inf, -Inf, -0.000001, -Inf,749.9), upper = c(Inf,Inf,0.000001,Inf,750.1))
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$maximum
+  GED_p <- GED_sumResult$p.value
   
   ### GED Plot fit (sgt.mle2)
   
@@ -232,6 +241,7 @@ DistMLE <- function(series) {
   ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
   ST_sumResult <- summary(ST_result)
   ST_sumResult$aic
+  
   
   ### ST Plot fit (fitdist)
   ST_mean <- ST_result$estimate[1]
@@ -339,8 +349,63 @@ Table2[6,7] <- Normal_result$maximum
 Table2[6,8] <- Normal_AIC
 }
 
-Table2
+
+
+
+#Manualy changing close to 0 and close to 750 to 0 and inf
+
+Table2[c(3,6),3] <- 0
+Table2[6,4] <- 2
+Table2[c(2,3,6),5] <- Inf
+
+#adding SE
+Table2_SE <- matrix(nrow = 12, ncol = 8)
+
+Table2_SE <- as.data.frame(Table2_SE)
+
+
+
+#coefficients
+Table2_SE[1,] <- Table2[1,]
+Table2_SE[3,] <- Table2[2,]
+Table2_SE[5,] <- Table2[3,]
+Table2_SE[7,] <- Table2[4,]
+Table2_SE[9,] <- Table2[5,]
+Table2_SE[11,] <- Table2[6,]
+
+
+#fixing rownames
+colnames(Table2_SE) <- c("mu","sigma","lambda","p","q","nu","L","AIC")
+rownames(Table2_SE) <- c(1,2,3,4,5,6,7,8,9,10,11,12)
+tablenames <- c("SGT","","SGED","","GED","","ST","","T","","Normal","")
+Table2_SE <- cbind(tablenames,Table2_SE)
+
+Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3)
+
+#SEs (basic)
+
+Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")")
+Table2_SE[4,2:6] <- paste0("(",round(SGED_result$std.error, 3),")")
+Table2_SE[6,2:6] <- paste0("(",round(GED_result$std.error, 3),")")
+Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3],3),")")
+Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3],3),")")
+Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3],3),")")
+Table2_SE[10,7] <- paste0("(",round(T_result$sd[3],3),")")
+Table2_SE[12,2:3] <- paste0("(",round(Normal_result$std.error, 3),")")
+
+
+
+#Remove SE for limiting cases
+Table2_SE[6,4] <- NA
+Table2_SE[c(4,6),6] <- NA
+
+
+return(Table2_SE)
 }
+
+
+
+
 ```
 
 
@@ -360,24 +425,27 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
-```{r plotswithing, out.width="100%", fig.cap='Distributions of the data', fig.align='center', eval=FALSE}
-MLE_Eurostoxx <- DistMLE(R)
-```
+
+
 In table \@ref(tab:disttable) we can see...
 <!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
-```{r MLE tables for different series,results='asis', eval=FALSE}
-# MLE_Bali <- DistMLE(Rbali)
-str(MLE_Eurostoxx)
-table2 <- as.data.frame(MLE_Eurostoxx)
-table2 <- round(table2,3)
-table2[is.na(table2)] <- "" 
-table2 %>% kbl(caption = "Unconditional density distributions","latex",
-      label = 'disttable',
+```{r MLE tables for diferent series,results='asis', echo=FALSE}
+par(mfrow = c(3,2))
+Eurostoxx <- DistMLE(R)
+
+
+Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions","latex",
+      label = 'dsTable',
       booktabs = T,
       position = "h!",
-      digits = 3 )%>%
+      digits = 3,
+      col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Notes",number="Here comes text",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+  footnote(general = "Notes",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+
+
+```
+
 
 ```
 
@@ -385,7 +453,7 @@ table2 %>% kbl(caption = "Unconditional density distributions","latex",
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, echo=FALSE}
+```{r garchcode, eval=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
