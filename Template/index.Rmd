@@ -3,7 +3,7 @@
 ## thesis metadata ##
 #####################
 title: |
- The importance of higher moments in VaR and cVaR estimation. 
+ The importance of higher moments in VaR and CVaR estimation. 
 author: 
 - name: Faes E.^[Enjo.Faes@student.ams.ac.be]
 - name: \ \ \ Mertens de Wilmars S.^[Stephane.MertensdeWilmars@student.ams.ac.be]
