@@ -509,6 +509,8 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
+
+
 In table \@ref(tab:MLEtable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
 <!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
 ```{r MLE tables for diferent series,results='asis', echo=FALSE}
@@ -516,15 +518,14 @@ par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 
 
-Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions", "latex", #add a hash before "latex"
+Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',
       booktabs = T,
       position = "h!",
       digits = 3,
       col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = sprintf("This table shows the parameter estimatesof the different unconditional distribution of the Skewed Generalized t (SGT), Skewed Generalized Error Distribution (SGED), Generalized Error Distribution (GED), Skewed t (ST), Symmetric t (T) and Normal distribution. The results are based on the daily ra reeturns on the EURO STOXX 50 spanning the period from %s to %s (%s observations). Standard errors are given below the parameter estimates, *, **, *** represent significance levels at the 10, 5 and 1 percent.",format(index(head(R,1)), '%d %B, %Y'), format(index(tail(R,1)),'%d %B, %Y'), nrow(R)),threeparttable = T,footnote_as_chunk = T, escape=F, general_title = "Note:")
-
+  footnote(general = "Notes",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 
 
 ```

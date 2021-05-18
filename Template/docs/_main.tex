@@ -282,11 +282,11 @@
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
- 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors Zhang \footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}}, Annaert\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}} and De Ceuster\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}} for the valuable insights during courses you have given us in preparation of this thesis, the dozens of assignments using the R language and the many questions answered this year. We must be grateful for the classes of R programming by prof Zhang. ~\\
+ 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors \href{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}{Zhang}, \href{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}{Annaert} and \href{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}{De Ceuster} for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang. ~\\
 
-  \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to the inventors of ``Markdown'', ``Pandoc'', ``knitr'', ``bookdown'', ``thesisdown''. Then, we must say thanks to Ulrik Lyngs who made it fun to work together in R and also without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
+  \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing ``Markdown'', to MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.Special thanks to \href{http://chester.rbind.io}{Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
 
-  \noindent Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
+  \noindent Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``Rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
 
   \begin{flushright}
   Enjo Faes, \\
@@ -597,7 +597,9 @@ Author & Higher moments\tabularnewline
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the EURO STOXX 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
+\noindent We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
+
+The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not different conclusions. The findings of these researches are available upon requests.
 
 \hypertarget{descriptives}{%
 \subsection{Descriptives}\label{descriptives}}
@@ -644,7 +646,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \item Notes
 \item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-01 to 2021-04-27 (8954 observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.
 \item[2] The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
-\item[3] *, **, *** represent significance levels at the 10%, 5% and <1%.
+\item[3] *, **, *** represent significance levels at the 5%, 1% and <1%.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -852,9 +854,8 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
  & (0.014) & (0.015)** &  &  &  &  &  & \\
 \bottomrule
 \end{tabular}
-\begin{tablenotes}[para]
-\item \textit{Note:} 
-\item This table shows the parameter estimatesof the different unconditional distribution of the Skewed Generalized t (SGT), Skewed Generalized Error Distribution (SGED), Generalized Error Distribution (GED), Skewed t (ST), Symmetric t (T) and Normal distribution. The results are based on the daily ra reeturns on the EURO STOXX 50 spanning the period from 01 January, 1987 to 27 April, 2021 (8954 observations). Standard errors are given below the parameter estimates, *, **, *** represent significance levels at the 10, 5 and 1 percent.
+\begin{tablenotes}
+\item Notes
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
