@@ -511,7 +511,7 @@ MLE_covid <- DistMLE(R_covid)
 
 
 
-In table \@ref(tab:disttable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
+In table \@ref(tab:MLEtable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
 <!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
 ```{r MLE tables for diferent series,results='asis', echo=FALSE}
 par(mfrow = c(3,2))
@@ -519,7 +519,7 @@ Eurostoxx <- DistMLE(R)
 
 
 Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions",
-      label = 'dsTable',
+      label = 'MLEtable',
       booktabs = T,
       position = "h!",
       digits = 3,
@@ -537,7 +537,7 @@ Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distr
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, echo=FALSE}
+```{r garchcode, eval=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
