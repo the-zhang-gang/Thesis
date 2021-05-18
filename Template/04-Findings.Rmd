@@ -14,7 +14,6 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 
 ## Density of the returns
-
 ```{r include=F}
 require(readxl)
 require(xts)
@@ -342,10 +341,6 @@ Table2[6,8] <- Normal_AIC
 Table2
 }
 ```
-
-
-
-
 
 ```{r MLE tables for different series, include=FALSE, eval=FALSE}
 
