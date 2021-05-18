@@ -511,9 +511,11 @@ MLE_covid <- DistMLE(R_covid)
 
 
 
-In table \@ref(tab:MLEtable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
-<!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
-```{r MLE tables for diferent series,results='asis', echo=FALSE}
+In table \@ref(tab:Eurostoxx) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT. 
+
+Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
+
+```{r Eurostoxx,results='asis', echo=FALSE}
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 
@@ -525,7 +527,7 @@ Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distr
       digits = 3,
       col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Notes",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** point out significance at 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 
 
 ```
