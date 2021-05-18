@@ -282,11 +282,9 @@
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
- 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors \href{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}{Zhang}, \href{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}{Annaert} and \href{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}{De Ceuster} for the valuable insights you have given us in preparation of this thesis and the many questions answered. We must be grateful for the classes of R programming by prof Zhang. ~\\
-
-  \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to Gruber for inventing ``Markdown'', to MacFarlane for creating ``Pandoc'' which converts Markdown to a large number of output formats, and to Xie for creating ``knitr'' which introduced R Markdown as a way of embedding code in Markdown documents, and ``bookdown'' which added tools for technical and longer-form writing.Special thanks to \href{http://chester.rbind.io}{Ismay}, who created the ``thesisdown'' package that helped many PhD students write their theses in R Markdown. And a very special thanks to McManigle, whose adaption of Evans' adaptation of Gillow's original maths template for writing an Oxford University DPhil thesis in ``LaTeX'' provided the template that Ulrik Lyngs in turn adapted for R Markdown, which we also owe a big thank you. Without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
-
-  \noindent Finally, we thank \textcite{alexios2020} for making the implementation of GARCH models integrated in R via his package ``Rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
+ 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors Zhang \footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}}, Annaert\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}} and De Ceuster\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}} for the valuable insights during courses you have given us in preparation of this thesis, the dozens of assignments using the R language and the many questions answered this year. We must be grateful for the classes of R programming by prof Zhang. ~\\
+  \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to the inventors of ``Markdown'', ``Pandoc'', ``knitr'', ``bookdown'', ``thesisdown''. Then, we must say thanks to \href{https://www.cs.ox.ac.uk/people/ulrik.lyngs/}{Ulrik Lyngs} who made it a bit easier to work together in R with a pre-build template for the university of Oxford, also without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
+  \noindent Finally, we thank \href{https://www.linkedin.com/in/alexios-galanos-64309165/}{Alexios Ghalanos} for making the implementation of GARCH models integrated in R via his package ``rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
 
   \begin{flushright}
   Enjo Faes, \\
@@ -342,7 +340,7 @@
 \adjustmtc
 \markboth{Introduction}{}
 
-A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocite{Officer1972}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns.~\\
+A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[Among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns.~\\
 
 Additionally, a point of interest is the predictability of stock prices. \textcite{fama1965} explains that the question in academic and business circles is: ``To what extent can the past history of a common stock's price be used to make meaningful predictions concerning the future price of the stock?''. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by their past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process \autocite{Fama1970}. On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism''. Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices. ~\\
 
@@ -402,7 +400,7 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 \hypertarget{arch-model}{%
 \subsection{ARCH model}\label{arch-model}}
 
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
 
 \begin{align} 
 y_{t} &= \mu + \varepsilon_t
@@ -418,8 +416,6 @@ y_{t} &= \mu + \varepsilon_t
 \sigma_{t}^{2} &= \omega + \alpha_1 \times  \varepsilon_{t-1}^2 
  \label{eq:eq3}
 \end{align}
-
-\newpage
 
 \noindent From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component \(\sigma_t\) into the conditional mean innovation \(\varepsilon_{t}\) and use the conditional mean innovation to examine the conditional mean return. In equation \eqref{eq:eq4} and \eqref{eq:eq5} they are derived. Because the random variable \(z_t\) is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \eqref{eq:eq5} is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
 
@@ -528,14 +524,10 @@ Author(s)/user(s) & Model\tabularnewline
 \bottomrule
 \end{longtable}
 
-\newpage
-
 \hypertarget{acd-models}{%
 \section{ACD models}\label{acd-models}}
 
 An extension to GARCH models was proposed by \textcite{hansen1994}, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, \textcite{ghalanos2016} mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: ``the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR.'' Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \ref{acd-models-meth} the specification is given.
-
-\newpage
 
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
@@ -552,9 +544,9 @@ With \(y_t\) expected returns in period t, \(\Omega_{t-1}\) the information set 
 \hypertarget{conditional-value-at-risk}{%
 \section{Conditional Value at Risk}\label{conditional-value-at-risk}}
 
-One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. As VaR lacks subadditivity of different percentile outcomes, {[}Artzner1998{]} reject it as a coherent measure of risk. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, they provide a conceptual idea of a conditional VaR (cVaR) which quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was written out in the form it is used by today by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.
+One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. As VaR lacks subadditivity of different percentile outcomes, {[}Artzner1998{]} reject it as a coherent measure of risk. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, they provide a conceptual idea of a Conditional VaR (CVaR) which quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was written out in the form it is used by today by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.
 
-To calculate \(\theta_t\), VaR and cVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
+To calculate \(\theta_t\), VaR and CVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
 
 \begin{align}
 Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \phi
@@ -563,9 +555,7 @@ Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(y_t | 
 
 With the same notations as before, and \(f\) the (conditional) probability density function of \(y_t\).
 
-According to the BIS framework, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations \autocite{baselcommitteeonbankingsupervision2016}. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(cVaR_{97.5}\).
-
-\newpage
+According to the BIS framework, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations \autocite{baselcommitteeonbankingsupervision2016}. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(CVaR_{97.5}\).
 
 \hypertarget{past-lit}{%
 \section{Past literature on the consequences of higher moments for VaR determination}\label{past-lit}}
@@ -605,32 +595,8 @@ Author & Higher moments\tabularnewline
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the EURO STOXX 50 Index denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. Its composition is reviewed annually in September, from each of the 19 EURO STOXX Supersector indices the biggest stocks are selected until the coverage is at 60\% of the free-float market cap of each of the EURO STOXX Supersector index then all the current EURO STOXX 50 stocks are used in the selection list from which the largest 40 in terms of free-float market cap are selected and the remaining 10 stocks are chosen among those ranked between 41 and 60 \autocite{EUROSTOXXFactSheet}.
-
-\noindent The calculation of the index is made with the \eqref{eq:Laspeyresformula}, that measures the changes in price of the index for fixed weights.
-
-\begin{align}
-\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
-\label{eq:Laspeyresformula}
-\end{align}
-
-\noindent where: t = Time the index is computed \(n\) = Number of companies in the index \(p_{i t}\) = Price of company (\(i\)) at time (t) \(s_{i t}\) = Number of shares of company (\(i\)) at time (t) \(f f_{i t}\) = Free float factor of company (\(i\)) at time (t) \(c f_{i t}\) = Weighting cap factor of company (\(i\)) at time (t) \(x_{i t}\) = Exchange rate from local currency into index currency for company (\(i\)) at time (t) \(M_{t}\) = Free-float market capitalization of the index at time (t) \(D_{t}\) = Divisor of the index at time (t)
-
-\noindent Changes in weights caused by corporate actions are proportionally distributed across the components of the index and the index Divisor is computed with the \eqref{eq:Priceweighted} formula.
-
-\begin{align}
-D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
-\label{eq:Priceweighted}
-\end{align}
-
-\noindent where: \noindent \(\Delta M C_{t+1}\) = Difference between the closing market capitalization of the index and the adjusted closing market capitalization of the index
-
-(Optional)
-
-The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not different conclusions. The findings of these researches are available upon requests.
-
-\hypertarget{descriptives}{%
-\subsection{Descriptives}\label{descriptives}}
+\noindent We worked with daily returns on the EURO STOXX 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
+\#\#\# Descriptives
 
 \hypertarget{table-of-summary-statistics}{%
 \subsubsection{Table of summary statistics}\label{table-of-summary-statistics}}
@@ -646,7 +612,7 @@ R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
 
 \noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.208. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19528.62 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
 
-\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2\(*\). Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at NA, given its high significance, confirms the rejection of the normality assumption.~\\
+\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2\(*\). Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at NA, given its high significance, confirms the rejection of the normality assumption.
 
 \begin{table}[h!]
 
@@ -682,11 +648,8 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \hypertarget{descriptive-figures}{%
 \subsubsection{Descriptive figures}\label{descriptive-figures}}
 
-\hypertarget{stylized-facts}{%
-\paragraph{Stylized facts}\label{stylized-facts}}
-
-~\\
-As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+\textbf{Stylized facts}~\\
+\noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 \begin{figure}[h]
 
@@ -699,11 +662,11 @@ As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1
 
 \newpage
 
-In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
+\noindent In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.75\linewidth]{figures/vol-clustering-final-withcircles} 
+{\centering \includegraphics[width=0.75\linewidth]{figures/vol-clustering-final} 
 
 }
 
@@ -721,7 +684,7 @@ In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact 
 
 \newpage
 
-In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed. So
+\noindent In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed. So
 
 \begin{figure}
 
@@ -734,7 +697,7 @@ In figure \ref{fig:plot4} the density distribution of the log returns are examin
 
 \newpage
 
-ACF plots: to do\ldots{}
+\noindent ACF plots: to do\ldots{}
 
 \begin{figure}[h]
 
@@ -753,11 +716,11 @@ ACF plots: to do\ldots{}
 \hypertarget{garch-models}{%
 \subsection{Garch models}\label{garch-models}}
 
-As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. ~\\
+\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. ~\\
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
+\noindent They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
+\noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
 
 \begin{align} 
   y_1,y_2,...,y_N \sim i.i.d
@@ -782,7 +745,7 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 \hypertarget{acd-models-meth}{%
 \subsection{ACD models}\label{acd-models-meth}}
 
-Following \textcite{ghalanos2016}, arguments of ACD models are specified as in \textcite{hansen1994}. The density function \(f(y|\alpha)\) has parameters \(\alpha_t = (\mu_t, \sigma_t, \nu_t)\), with equation \eqref{eq:cmean}, the conditional mean equation. Equation \eqref{eq:cvariance} as the conditional variance. And \(\nu_t=\nu(\theta,x_t)\) the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
+\noindent Following \textcite{ghalanos2016}, arguments of ACD models are specified as in \textcite{hansen1994}. The density function \(f(y|\alpha)\) has parameters \(\alpha_t = (\mu_t, \sigma_t, \nu_t)\), with equation \eqref{eq:cmean}, the conditional mean equation. Equation \eqref{eq:cvariance} as the conditional variance. And \(\nu_t=\nu(\theta,x_t)\) the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
 
 \begin{align} 
 \mu_{t}=\mu\left(\theta, x_{t}\right)=E\left(y_{t} \mid x_{t}\right)
@@ -794,7 +757,7 @@ Following \textcite{ghalanos2016}, arguments of ACD models are specified as in \
  \label{eq:cvariance}
 \end{align}
 
-To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \eqref{eq:scaledinn}. The conditional density is given by equation \eqref{eq:conddens} and related to the density function \(f(y|\alpha)\) as in equation \eqref{eq:densityconddens}.
+\noindent To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \eqref{eq:scaledinn}. The conditional density is given by equation \eqref{eq:conddens} and related to the density function \(f(y|\alpha)\) as in equation \eqref{eq:densityconddens}.
 
 \begin{align}
 z_{t}(\theta)=\frac{y_{t}-\mu\left(\theta, x_{t}\right)}{\sigma\left(\theta, x_{t}\right)}
@@ -819,7 +782,7 @@ Again \textcite{ghalanos2016} makes it easier to implement the somewhat complex 
 \hypertarget{unconditional-coverage-test-of-kupiec1995}{%
 \subsubsection{\texorpdfstring{Unconditional coverage test of \textcite{kupiec1995}}{Unconditional coverage test of @kupiec1995}}\label{unconditional-coverage-test-of-kupiec1995}}
 
-A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by \textcite{kupiec1995}. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g.~1\% percentile) of the VaR model. Following \textcite{kupiec1995} and \textcite{ghalanos2020}, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \eqref{eq:uccov}, with \(p\) the probability of an exceedence for a confidence level, \(N\) the sample size and \(X\) the number of exceedence. The null hypothesis states that the test statistic \(L R^{u c}\) is \(\chi^2\)-distributed with one degree of freedom or that the probability of failure \(\hat p\) is equal to the chosen percentile \(\alpha\).
+\noindent A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by \textcite{kupiec1995}. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g.~1\% percentile) of the VaR model. Following \textcite{kupiec1995} and \textcite{ghalanos2020}, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \eqref{eq:uccov}, with \(p\) the probability of an exceedence for a confidence level, \(N\) the sample size and \(X\) the number of exceedence. The null hypothesis states that the test statistic \(L R^{u c}\) is \(\chi^2\)-distributed with one degree of freedom or that the probability of failure \(\hat p\) is equal to the chosen percentile \(\alpha\).
 
 \begin{align}
 L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}\left(\frac{X}{N}\right)^{X}}\right)
@@ -829,7 +792,7 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 \hypertarget{conditional-coverage-test-of-christoffersen2001}{%
 \subsubsection{\texorpdfstring{Conditional coverage test of \textcite{christoffersen2001}}{Conditional coverage test of @christoffersen2001}}\label{conditional-coverage-test-of-christoffersen2001}}
 
-\textcite{christoffersen2001} proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the \(L R^{u c}\) can give a false picture while at any point in time it classifies inaccurate VaR estimates as ``acceptably accurate'' \autocite{bali2007}. For a certain VaR estimate an indicator variable, \(I_t(\alpha)\), is computed as equation \eqref{eq:ccov}.
+\noindent \textcite{christoffersen2001} proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the \(L R^{u c}\) can give a false picture while at any point in time it classifies inaccurate VaR estimates as ``acceptably accurate'' \autocite{bali2007}. For a certain VaR estimate an indicator variable, \(I_t(\alpha)\), is computed as equation \eqref{eq:ccov}.
 
 \begin{align}
 I_{t}(\alpha)=\left\{\begin{array}{ll}
@@ -839,12 +802,12 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \label{eq:ccov}
 \end{align}
 
-It involves a likelihood ratio test's null hypothesis is that the statistic is \(\chi^2\)-distributed with two degrees of freedom or that the probability of violation \(\hat p\) (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile \(\alpha\).
+\noindent It involves a likelihood ratio test's null hypothesis is that the statistic is \(\chi^2\)-distributed with two degrees of freedom or that the probability of violation \(\hat p\) (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile \(\alpha\).
 
 \hypertarget{dynamic-quantile-test}{%
 \subsubsection{Dynamic quantile test}\label{dynamic-quantile-test}}
 
-\textcite{engle1999} with the aim to provide completeness to the conditional coverage test of \textcite{christoffersen2001} developed the Dynamic quantile test. It consists in testing some restriction in a \ldots(work-in-progress).
+\noindent \textcite{engle1999} with the aim to provide completeness to the conditional coverage test of \textcite{christoffersen2001} developed the Dynamic quantile test. It consists in testing some restriction in a \ldots(work-in-progress).
 
 \hypertarget{analysis}{%
 \chapter{Empirical Findings}\label{analysis}}
