@@ -391,8 +391,6 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 
 \noindent Again the skewed variant is given by equation \eqref{eq:skeweddist} of appendix but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
 
-\newpage
-
 \hypertarget{vol-mod}{%
 \section{Volatility modeling}\label{vol-mod}}
 
@@ -500,8 +498,6 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \mathbb{E}_T(\varepsilon_{T+k}^2) - \sigma^2 = \alpha_1^k\times(\varepsilon_T^2 - \sigma^2)
  \label{eq:eq12}
 \end{align}
-
-\newpage
 
 \hypertarget{univ-garch}{%
 \subsection{Univariate GARCH models}\label{univ-garch}}
@@ -633,8 +629,6 @@ D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i
 
 The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not different conclusions. The findings of these researches are available upon requests.
 
-\newpage
-
 \hypertarget{descriptives}{%
 \subsection{Descriptives}\label{descriptives}}
 
@@ -684,9 +678,6 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
-
-\newpage
-\clearpage
 
 \hypertarget{descriptive-figures}{%
 \subsubsection{Descriptive figures}\label{descriptive-figures}}
@@ -766,7 +757,7 @@ As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARC
 
 They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
 
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).~\\
+Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
 
 \begin{align} 
   y_1,y_2,...,y_N \sim i.i.d
@@ -822,8 +813,8 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 
 Again \textcite{ghalanos2016} makes it easier to implement the somewhat complex ACD models using the R language with package ``racd''.
 
-\hypertarget{control-tests}{%
-\subsection{Control Tests}\label{control-tests}}
+\hypertarget{analysis-tests-var-and-cvar}{%
+\subsection{Analysis Tests VaR and cVaR}\label{analysis-tests-var-and-cvar}}
 
 \hypertarget{unconditional-coverage-test-of-kupiec1995}{%
 \subsubsection{\texorpdfstring{Unconditional coverage test of \textcite{kupiec1995}}{Unconditional coverage test of @kupiec1995}}\label{unconditional-coverage-test-of-kupiec1995}}
@@ -854,8 +845,6 @@ It involves a likelihood ratio test's null hypothesis is that the statistic is \
 \subsubsection{Dynamic quantile test}\label{dynamic-quantile-test}}
 
 \textcite{engle1999} with the aim to provide completeness to the conditional coverage test of \textcite{christoffersen2001} developed the Dynamic quantile test. It consists in testing some restriction in a \ldots(work-in-progress).
-
-\clearpage
 
 \hypertarget{analysis}{%
 \chapter{Empirical Findings}\label{analysis}}

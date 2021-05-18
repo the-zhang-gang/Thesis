@@ -52,8 +52,6 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 
 \noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) of appendix but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
-\newpage
-
 ## Volatility modeling {#vol-mod}
 
 ### Rolling volatility
@@ -61,27 +59,24 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 \noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. @engle2001 explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations. For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined. Engle regards this formulation as the first ARCH model.
 
 ### ARCH model
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
 
 ```{=tex}
 \begin{align} 
 y_{t} &= \mu + \varepsilon_t
  (\#eq:eq1)
 \end{align}
-```
-```{=tex}
+
 \begin{align} 
 \varepsilon_{t} &= \sigma_t \times z_t, \ where \ z_t \stackrel{iid}{\sim} (0,1)
  (\#eq:eq2)
 \end{align} 
-```
-```{=tex}
+
 \begin{align} 
 \sigma_{t}^{2} &= \omega + \alpha_1 \times  \varepsilon_{t-1}^2 
  (\#eq:eq3)
 \end{align}
 ```
-\newpage
 
 \noindent From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
 
@@ -168,7 +163,6 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq12)
 \end{align}
 ```
-\newpage
 
 ### Univariate GARCH models {#univ-garch}
 \noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \
@@ -189,13 +183,10 @@ An overview (of a selection) of investigated GARCH models is given in the follow
 
 : GARCH models, the founders
 
-\newpage
 
 ## ACD models {#acd-models}
 
 An extension to GARCH models was proposed by @hansen1994, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, @ghalanos2016 mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: "the research on time varying higher moments has mostly explored different parameterizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR." Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \@ref(acd-models-meth) the specification is given.
-
-\newpage
 
 ## Value at Risk
 
@@ -223,8 +214,6 @@ Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(y_t | 
 With the same notations as before, and $f$ the (conditional) probability density function of $y_t$.
 
 According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR_{97.5}$ daily to determine capital requirements for equity, using a minimum of one year of daily observations [@baselcommitteeonbankingsupervision2016]. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their $VaR_{99}$ or 30 exceptions for their $VaR_{97.5}$ they have to follow a standardized approach.Similarly, banks must calculate $cVaR_{97.5}$.
-
-\newpage
 
 ## Past literature on the consequences of higher moments for VaR determination {#past-lit}
 

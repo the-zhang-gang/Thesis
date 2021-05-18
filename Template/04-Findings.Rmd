@@ -304,7 +304,7 @@ DistMLE <- function(series) {
   ST_nu <- ST_result$estimate[3]
   ST_xi <- ST_result$estimate[4] #lamda
   
-  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST")
+  plot(xvals, dsstd(xvals, mean = ST_mean, sd = ST_sd, nu = ST_nu, xi=ST_xi), col="red", type ="l", main = "ST", ylab = "Density")
   lines(density(coredata(series)))
   
   ### T (fitdist) 
@@ -514,7 +514,7 @@ MLE_covid <- DistMLE(R_covid)
 In table \@ref(tab:MLEtable) we can see... Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. 
 <!-- Stephane, I leave this to you :), maybe you can use in-text notation like in R programming or like filippo did in Data methodology for table1-->
 ```{r MLE tables for diferent series,results='asis', echo=FALSE}
-par(mfrow = c(3,2))
+par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 
 

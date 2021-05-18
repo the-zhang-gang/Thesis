@@ -55,7 +55,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ```{=tex}
 \begin{align}
-\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
+\text { Index }_{t}=\frac{\sum_{i=1}^{n}\left(p_{i t} \times s_{i t} \times f f_{i t} \times c f_{i t} \times x_{i t}\right)}{D_{t}}=\frac{M_{t}}{D_{t}}
 (\#eq:Laspeyresformula)
 \end{align}
 ```
@@ -65,7 +65,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ```{=tex}
 \begin{align}
-D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i t} \cdot c f_{i t} \cdot x_{i t}\right)}
+D_{t+1}=D_{t} \times \frac{\sum_{i=1}^{n}\left(p_{i t} \times s_{i t} \times f f_{i t} \times c f_{i t} \times x_{i t}\right) \pm \Delta M C_{t+1}}{\sum_{i=1}^{n}\left(p_{i t} \times s_{i t} \times f f_{i t} \times c f_{i t} \times x_{i t}\right)}
 (\#eq:Priceweighted)
 \end{align}
 ```
@@ -74,8 +74,6 @@ D_{t+1}=D_{t} \cdot \frac{\sum_{i=1}^{n}\left(p_{i t} \cdot s_{i t} \cdot f f_{i
 (Optional)
 
 The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with not different conclusions. The findings of these researches are available upon requests.
-
-\newpage
 
 ### Descriptives
 
@@ -176,7 +174,7 @@ fn3 <- '*, **, *** represent significance levels at the 5%, 1% and <1%.'
 
 \noindent The arithmetic mean of the series is `r round(as.numeric(levels(table1[1,2][,drop=T])),3)`% with a standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T])),3)`% and a median of `r round(as.numeric(levels(table1[2,2][,drop=T])),3)` which translate to an annualized mean of `r round(as.numeric(levels(table1[1,2][,drop=T]))*252,3)`% and an annualized standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T]))*sqrt(252),3)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(levels(table1[6,2][,drop=T])),3)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(levels(table1[8,2][,drop=T])),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.  \
 
-\noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2$*$. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(as.numeric(levels(table1[10,3][,drop=T])),3)`, given its high significance, confirms the rejection of the normality assumption. \
+\noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2$*$. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(as.numeric(levels(table1[10,3][,drop=T])),3)`, given its high significance, confirms the rejection of the normality assumption.
 
 ```{r stats, echo=F, results='asis'}
 table1 %>% kbl(caption = "Summary statistics of the returns","latex",
@@ -188,16 +186,10 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
   footnote(general = "Notes",number=c(fn1,fn2,fn3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 ```
 
-```{=tex}
-\newpage
-\clearpage
-```
 #### Descriptive figures
 
-##### Stylized facts
-
- \
-As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+**Stylized facts** \
+\noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 ```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="100%", fig.pos='h'}
 par(mfrow = c(1,1))
@@ -243,7 +235,7 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estox
 
 \newpage
 
-In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
+\noindent In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
 ```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%", fig.pos='h'}
 # pdf("figures/vol-clustering.pdf") # happened only once
@@ -262,7 +254,7 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 
 \newpage
 
-In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. So
+\noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. So
 
 ```{r plot4, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "75%", fig.align='center'}
 #Histogram to eyeball normality
@@ -274,12 +266,12 @@ In figure \@ref(fig:plot4) the density distribution of the log returns are exami
 # yfit <- yfit * diff(h$mids[1:2]) * length(R) 
 # lines(xfit, yfit, col = "black", lwd = 1)
 
-chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7) 
+chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7, ylim=c(0,0.8)) 
 ```
 
 \newpage
 
-ACF plots: to do...
+\noindent ACF plots: to do...
 
 ```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "100%", fig.pos='h'}
 
@@ -303,14 +295,12 @@ title("ACF (Squared prediction errors)")
 \clearpage
 
 ## Methodology
-
 ### Garch models
+\noindent As already mentioned in part \@ref(univ-garch), GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.  \
 
-As already mentioned in part \@ref(univ-garch), GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution.  \
+\noindent They will be estimated using maximum likelihood. As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation. \
 
-They will be estimated using maximum likelihood. As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation. \
-
-Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (equation \@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)). \
+\noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (equation \@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)).
 
 ```{=tex}
 \begin{align} 
@@ -319,16 +309,14 @@ Maximum likelihood estimation is a method to find the distribution parameters th
   y_i \sim f(y|\theta)
  (\#eq:pdf)
 \end{align}
-```
-```{=tex}
+
 \begin{align} 
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
   \\
  \log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)
  (\#eq:logl)
 \end{align}
-```
-```{=tex}
+
 \begin{align} 
 \theta^{*} = arg \max_{\theta} [ L] \\
 \theta^{*} = arg \max_{\theta} [\log(L)]
@@ -337,7 +325,7 @@ Maximum likelihood estimation is a method to find the distribution parameters th
 ```
 ### ACD models {#acd-models-meth}
 
-Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
+\noindent Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
 
 ```{=tex}
 \begin{align} 
@@ -351,7 +339,7 @@ Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994
  (\#eq:cvariance)
 \end{align}
 ```
-To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \@ref(eq:scaledinn). The conditional density is given by equation \@ref(eq:conddens) and related to the density function $f(y|\alpha)$ as in equation \@ref(eq:densityconddens).
+\noindent To further explain the difference between GARCH and ACD. The scaled innovations are given by equation \@ref(eq:scaledinn). The conditional density is given by equation \@ref(eq:conddens) and related to the density function $f(y|\alpha)$ as in equation \@ref(eq:densityconddens).
 
 ```{=tex}
 \begin{align}
@@ -373,11 +361,11 @@ f\left(y_{t} \mid \mu_{t}, \sigma_{t}^{2}, \eta_{t}\right)=\frac{1}{\sigma_{t}} 
 ```
 Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
-### Control Tests
+### Analysis Tests VaR and cVaR
 
 #### Unconditional coverage test of @kupiec1995
 
-A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
+\noindent A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by @kupiec1995. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g. 1% percentile) of the VaR model. Following @kupiec1995 and @ghalanos2020, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \@ref(eq:uccov), with $p$ the probability of an exceedence for a confidence level, $N$ the sample size and $X$ the number of exceedence. The null hypothesis states that the test statistic $L R^{u c}$ is $\chi^2$-distributed with one degree of freedom or that the probability of failure $\hat p$ is equal to the chosen percentile $\alpha$.
 
 ```{=tex}
 \begin{align}
@@ -387,7 +375,7 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 ```
 #### Conditional coverage test of @christoffersen2001
 
-@christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
+\noindent @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
 
 ```{=tex}
 \begin{align}
@@ -398,10 +386,9 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 (\#eq:ccov)
 \end{align}
 ```
-It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
+\noindent It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$.
 
 #### Dynamic quantile test
 
-@engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a ...(work-in-progress).
+\noindent @engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a ...(work-in-progress).
 
-\clearpage
