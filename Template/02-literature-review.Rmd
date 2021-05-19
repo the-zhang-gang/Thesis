@@ -202,17 +202,28 @@ According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR
 
 Here comes the discussion about studies that have looked at higher moments and VaR determination. Also a summary of studies that discusses time-varying higher moments, but not a big part, while it is also only a small part of the empirical findings (couple of GARCH-ACD models).
 
-| Author         | Higher moments |
-|----------------|----------------|
-| @hansen1994    |                |
-| \\\@harvey1999 |                |
-|                |                |
-|                |                |
-|                |                |
-| racd vignette  |                |
-|                |                |
-| @brooks2005    |                |
-|                |                |
-|                |                |
++----------------------------------+-------------------------------------------+
+| Author                           | Higher moments                            |
++==================================+===========================================+
+| @hansen1994                      | Skewness and shape, extended ARCH-model   |
++----------------------------------+-------------------------------------------+
+| \\\@harvey1999                   | Effect of higher moments on lower moments |
++----------------------------------+-------------------------------------------+
+| @brooks2005                      | Time varying degrees of freedom           |
++----------------------------------+-------------------------------------------+
+|                                  |                                           |
++----------------------------------+-------------------------------------------+
+|                                  |                                           |
++----------------------------------+-------------------------------------------+
 
 : Higher moments and VaR
+
+While it is relatively straightforward to include unconditional higher-moments in VaR and CVaR calculations, it is less simple to do so when the higher moments (in addition to the variance) are time-varying. @hansen1994 extends the ARCH model to include time-varying moments beyond mean and variance. While mean returns and variance are usually the parameters of most interest, disregarding these higher moments could provide an incomplete description of a conditional distribution. The model proposed by @hansen1994 allows for skewness and shape parameters to vary in a skewed-t density function through specifying them as functions of their errors in previous periods (in an similar way how variance is estimated). Applications on U.S. Treasuries and exchange rates are discussed.
+
+Harvey and Siddique
+
+-   What is the impact on the coefficients of the lower moments?
+
+For the third question, some evidence was presented in Harvey and Siddique (1999) where the inclusion of time varying skewness affected the persistence of the conditional variance and caused some of the asymmetries in the variance to disappear (through a reduced asymmetry coefficient in the variance dynamics). I would also actually expect that for standard GARCH models with very high persistence, the inclusion of time variation in the shape parameter (and hence more directly on the higher even moments) to lead to a reduction in such persistence as some of the extreme variations from shocks could be better accommodated. I also wonder whether the inclusion of time variation in the skew parameter would have an impact on the first moment parameters, particularly when their dynamics might include threshold effects.
+
+Brooks
