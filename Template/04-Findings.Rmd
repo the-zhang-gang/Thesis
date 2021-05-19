@@ -25,6 +25,7 @@ require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 require(devtools)
+require(zoo)
 # install_bitbucket("alexiosg/racd")
 options(knitr.kable.NA = "")
 
@@ -166,25 +167,34 @@ DistMLE <- function(series) {
   ### SGT
   X.data <- X ~ coredata(series)
   
-  SGT_start <- list(mu = 0, sigma = 2, lambda = 0, p = 2, q = 12)
+  SGT_start <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8)
   SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
   SGT_sumResult <- summary(SGT_result)
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
   SGT_pv <- SGT_sumResult$p.value
-  # SGT_tv_manual <- SGT_result$estimate/(SGT_result$std.error/sqrt(length(R)))#to compare with tvalues's of fitdist
+
   SGT_significance <- matrix(ncol = 6,nrow = 1)
   for(i in 1:5){
-  if(SGT_pv[i]>=0.05){
+  if(SGT_pv[i]>=0.10){
   SGT_significance[i] <-  "" 
   }
-  if(SGT_pv[i]<0.05){
+  if(SGT_pv[i]<0.10){
   SGT_significance[i] <-  "*"  
   }
-  if(SGT_pv[i]<0.01){
+  if(SGT_pv[i]<0.05){
   SGT_significance[i] <-  "**"  
+  }
+  if(SGT_pv[i]<0.01){
+  SGT_significance[i] <-  "***"  
   }
   }
   SGT_significance[is.na(SGT_significance)] <- ""
+  
+
+
+  
+
+  
   
   ### SGT plot fit
   xvals = seq(-3,3,by=0.01)
@@ -205,19 +215,31 @@ DistMLE <- function(series) {
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$maximum
   SGED_pv <- SGED_sumResult$p.value
+  SGED_pv_a <- 2* stats::pnorm(-abs(SGED_result$estimate/(SGED_result$std.error)))#to compare with pvalues's of fitdist
   SGED_significance <- matrix(ncol = 6,nrow = 1)
   for(i in 1:4){
-  if(SGED_pv[i]>=0.05){
+  if(SGED_pv[i]>=0.10){
   SGED_significance[i] <-  "" 
   }
-  if(SGED_pv[i]<0.05){
+  if(SGED_pv[i]<0.10){
   SGED_significance[i] <-  "*"  
   }
-  if(SGED_pv[i]<0.01){
+  if(SGED_pv[i]<0.05){
   SGED_significance[i] <-  "**"  
+  }
+  if(SGED_pv[i]<0.01){
+  SGED_significance[i] <-  "***"  
   }
   }
   SGED_significance[is.na(SGED_significance)] <- ""
+  
+### SGED (fitdist) #doesnt give the same p values!
+#SGED_start_f <- list(mean=0,sd=1, nu = 2, xi = 1.5)
+#SGED_result_f <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sged", method = "mle",       #SGED_start_f)
+
+#SGED_pvalue_b <- 2* stats::pnorm(-abs(SGED_tvalues_f/(SGED_result_f$sd/sqrt(length(R)))))
+
+
   
   ### SGED Plot fit (sgt.mle2)
   SGED_mu <- SGED_result$estimate[1]
@@ -254,14 +276,17 @@ DistMLE <- function(series) {
   GED_pv <- GED_sumResult$p.value
   GED_significance <- matrix(ncol = 6,nrow = 1)
   for(i in c(1,2,4)){
-  if(GED_pv[i]>=0.05){
+  if(GED_pv[i]>=0.10){
   GED_significance[i] <-  "" 
   }
-  if(GED_pv[i]<0.05){
+  if(GED_pv[i]<0.10){
   GED_significance[i] <-  "*"  
   }
-  if(GED_pv[i]<0.01){
+  if(GED_pv[i]<0.05){
   GED_significance[i] <-  "**"  
+  }
+    if(GED_pv[i]<0.01){
+  GED_significance[i] <-  "***"  
   }
   }
   GED_significance[is.na(GED_significance)] <- ""
@@ -283,17 +308,21 @@ DistMLE <- function(series) {
   ST_sumResult$aic
   ST_tvalues <- ST_result$estimate/(ST_result$sd/sqrt(length(R)))
   ST_tvalues2 <- c(ST_tvalues[c(1:2,4)],NA,NA,ST_tvalues[3]) #adjust the format
+  ST_pvalue <- 2* stats::pnorm(-abs(ST_tvalues2))
   ST_significance <- matrix(ncol = 6,nrow = 1)
   
   for(i in c(1:3,6)){
-  if(ST_tvalues2[i]<=1.96){
-  ST_significance[i] <-  "" 
+  if(abs(ST_tvalues2[i])<=1.64){
+  T_significance[i] <-  "" 
   }
-  if(ST_tvalues2[i]>1.96){
-  ST_significance[i] <-  "*"  
+  if(abs(ST_tvalues2[i])>1.64){
+  T_significance[i] <-  "*"  
   }
-  if(ST_tvalues2[i] > 2.58){
-  ST_significance[i] <-  "**"  
+  if(abs(ST_tvalues2[i])> 1.96){
+  T_significance[i] <-  "**"  
+  }
+  if(abs(ST_tvalues2[i])> 2.58){
+  T_significance[i] <-  "***"  
   }
   }
   ST_significance[is.na(ST_significance)] <- ""
@@ -316,14 +345,17 @@ DistMLE <- function(series) {
   T_significance <- matrix(ncol = 6,nrow = 1)
   
   for(i in c(1:2,6)){
-  if(T_tvalues2[i]<=1.96){
+  if(abs(T_tvalues2[i])<=1.64){
   T_significance[i] <-  "" 
   }
-  if(T_tvalues2[i]>1.96){
+  if(abs(T_tvalues2[i])>1.64){
   T_significance[i] <-  "*"  
   }
-  if(T_tvalues2[i] > 2.58){
+  if(abs(T_tvalues2[i])> 1.96){
   T_significance[i] <-  "**"  
+  }
+  if(abs(T_tvalues2[i])> 2.58){
+  T_significance[i] <-  "***"  
   }
   }
   T_significance[is.na(T_significance)] <- ""
@@ -346,14 +378,17 @@ DistMLE <- function(series) {
   Normal_pv <- Normal_sumResult$p.value
   Normal_significance <- matrix(ncol = 6,nrow = 1)
   for(i in 1:2){
-  if(Normal_pv[i]>=0.05){
+  if(Normal_pv[i]>=0.10){
   Normal_significance[i] <-  "" 
   }
-  if(Normal_pv[i]<0.05){
+  if(Normal_pv[i]<0.10){
   Normal_significance[i] <-  "*"  
   }
-  if(Normal_pv[i]<0.01){
+  if(Normal_pv[i]<0.05){
   Normal_significance[i] <-  "**"  
+  }
+  if(Normal_pv[i]<0.01){
+  Normal_significance[i] <-  "***"  
   }
   }
   Normal_significance[is.na(Normal_significance)] <- ""
@@ -475,13 +510,12 @@ Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3)
 Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significance)
 Table2_SE[4,2:6] <- paste0("(",round(SGED_result$std.error, 3),")",SGED_significance)
 Table2_SE[6,2:6] <- paste0("(",round(GED_result$std.error, 3),")",GED_significance)
-Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3],3),")",ST_significance[1:3])
-Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3],3),")", ST_significance[6])
-Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3],3),")",T_significance[1:2])
-Table2_SE[10,7] <- paste0("(",round(T_result$sd[3],3),")",T_significance[6])
+Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3]/sqrt(length(R)),3),")",ST_significance[1:3])
+Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3]/sqrt(length(R),3)),")", ST_significance[6])
+Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3]/sqrt(length(R)),3),")",T_significance[1:2])
+Table2_SE[10,7] <- paste0("(",round(T_result$sd[3]/sqrt(length(R),3)),")",T_significance[6])
 Table2_SE[12,2:3] <- paste0("(",round(Normal_result$std.error, 3),")",Normal_significance)
 
-SGT_significance
 
 #Remove SE for limiting cases
 Table2_SE[6,4] <- NA
@@ -511,7 +545,7 @@ MLE_covid <- DistMLE(R_covid)
 
 
 
-In table \@ref(tab:Eurostoxx) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT. 
+In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.^[To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and  up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.] 
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
 
@@ -527,7 +561,7 @@ Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distr
       digits = 3,
       col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** point out significance at 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 
 
 ```
