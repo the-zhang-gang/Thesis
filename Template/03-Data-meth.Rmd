@@ -10,6 +10,13 @@ documentclass: book
 bibliography: references.bib
 ---
 
+```{block type='savequote', quote_author='(ref:alexander-quote)', include=knitr::is_latex_output()}
+Volatility is unobservable. We can only ever estimate and forecast volatility, and this only within the context of an assumed statistical model. So there is no absolute ‘true’ volatility: what is ‘true’ depends only on the assumed model...
+
+Moreover, volatility is only a sufficient statistic for the dispersion of the returns distribution when we make a normality assumption. In other words, volatility does not provide a full description of the risks that are taken by the investment unless we assume the investment returns are normally distributed.
+```
+(ref:alexander-quote) --- Alexander (2008) in *Market Risk Analysis Practical Financial Econometrics*
+
 # Data and methodology {#dat-and-meth}
 
 \chaptermark{Data and methodology}
@@ -49,7 +56,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ## Data
 
-\noindent We worked with daily returns on the EURO STOXX 50 Price Index^[The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.] denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet [@EUROSTOXXFactSheet].
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index^[The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.] denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet [@EUROSTOXXFactSheet].
 
 ### Descriptives
 
@@ -134,9 +141,10 @@ Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"
 
 # for table 1
 
-table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Eurostoxx 50` = Statistics[c(3,2,4,1,5:10)], `Standardized Residuals`= Statistics.S[c(3,2,4,1,5:10)])
+table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Euro Stoxx 50` = Statistics[c(3,2,4,1,5:10)], `Standardized Residuals`= Statistics.S[c(3,2,4,1,5:10)])
 
-# colnames(table1) <- gsub(pattern = '.', replacement=' ',colnames(table1), fixed=T)
+
+colnames(table1) <- gsub(pattern = '\\.', replacement=' ',colnames(table1))
 # JB.Test <- rbind( c(jarque.bera.test(R)$statistic, jarque.bera.test(stdret.R)$statistic) ,
 #                   c(jarque.bera.test(R)$p.value, jarque.bera.test(stdret.R)$p.value))
 # rownames(JB.Test) <- c("Jarque - Bera", "JB p-values")
@@ -165,11 +173,11 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 #### Descriptive figures
 
 **Stylized facts** \
-\noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+\noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
-```{r plot1, echo=F, fig.cap='Eurostoxx 50 Price Index prices', fig.align='center', out.width="100%", fig.pos='h'}
+```{r plot1, echo=F, fig.cap='Euro Stoxx 50 Price Index prices', fig.align='center', out.width="100%", fig.pos='h'}
 par(mfrow = c(1,1))
-# plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab = "Price", main = "Eurostoxx 50 Price Index");
+# plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab = "Price", main = "Euro Stoxx 50 Price Index");
 # # axis(1, at = time(as.zoo(Estoxx)), labels = FALSE)
 # tt <- time(as.zoo(Estoxx)[endpoints(as.zoo(Estoxx), "years")]);
 # axis(side = 1, at = tt, labels = FALSE);
@@ -180,7 +188,7 @@ par(mfrow = c(1,1))
 # axis(side = 1, at = tt[ix], labels = labs[ix], tcl = -0.7, cex.axis = 0.7);
 # grid()
 # 
-# plot(as.zoo(R), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab ="Log Returns",main = "Eurostoxx 50 Price Index Log Returns");
+# plot(as.zoo(R), screen = 1, col = "steelblue", xaxt = "n", xlab = "Date", ylab ="Log Returns",main = "Euro Stoxx 50 Price Index Log Returns");
 # # axis(1, at = time(as.zoo(Estoxx)), labels = FALSE)
 # tt <- time(as.zoo(R)[endpoints(as.zoo(R), "years")]);
 # axis(side = 1, at = tt, labels = FALSE);
@@ -196,7 +204,7 @@ par(mfrow = c(1,1))
 # events <- as.Date(c("1999-01-01", "2000-04-14", "2008-09-15", "2011-12-31", "2020-02-20"))
 #  + geom_text(aes(x = as.Date("1999-01-01"), label = "Dot com bubble", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2007-01-01"), label = "Financial crisis", y =1400), colour = "black", angle = 90)+ geom_text(aes(x = as.Date("2014-01-01"), label = "Eurobond crisis", y =1400), colour = "black", angle = 90) + geom_text(aes(x = as.Date("2020-01-01"), label = "COVID-19 crisis", y =1400), colour = "black", angle = 90) + ylab("Price")
 par(mfrow=c(1,1))
-plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Price", main = "Eurostoxx 50 Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1998-07-01"]), y = 1550,"Launch of Euro", cex=0.7, srt=90,font=4);  
+plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Price", main = "Euro Stoxx 50 Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1998-07-01"]), y = 1550,"Launch of Euro", cex=0.7, srt=90,font=4);  
 
 abline(v= index(Estoxx$`EURO STOXX 50`["2000-04-14"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1999-10-14"]), y = 1550,"Dot com bubble", cex=0.7, srt=90,font=4); 
 
@@ -213,18 +221,18 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estox
 
 \noindent In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
-```{r plot2, echo=F, fig.cap='Eurostoxx 50 Price Index log returns', fig.align='center', out.width="75%", fig.pos='h'}
+```{r plot2, echo=F, fig.cap='Euro Stoxx 50 Price Index log returns', fig.align='center', out.width="75%", fig.pos='h'}
 # pdf("figures/vol-clustering.pdf") # happened only once
-# plot(as.zoo(R), screen = 1, col = "steelblue", xlab = "Date", ylab = "Log Returns",main = "Eurostoxx 50 Price Log Returns");grid()
+# plot(as.zoo(R), screen = 1, col = "steelblue", xlab = "Date", ylab = "Log Returns",main = "Euro Stoxx 50 Price Log Returns");grid()
 # dev.off()
 knitr::include_graphics('figures/vol-clustering-final.pdf')
 ```
 
-```{r plot3, echo=F, fig.cap='Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "75%", fig.align='center', fig.pos='h'}
+```{r plot3, echo=F, fig.cap='Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "75%", fig.align='center', fig.pos='h'}
 #Plotting volatility
 par(mfrow = c(1,1))
 realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
-plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Eurostoxx 50 rolling 22-day volatility (annualized)");grid()
+plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Euro Stoxx 50 rolling 22-day volatility (annualized)");grid()
 # chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 
@@ -232,7 +240,7 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 
 \noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. So
 
-```{r plot4, echo=F,fig.cap='Density vs. Normal Eurostoxx 50 log returns)', out.width= "75%", fig.align='center'}
+```{r plot4, echo=F,fig.cap='Density vs. Normal Euro Stoxx 50 log returns)', out.width= "75%", fig.align='center'}
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,
@@ -249,7 +257,7 @@ chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns 
 
 \noindent ACF plots: to do...
 
-```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Eurostoxx 50.", out.width= "100%", fig.pos='h'}
+```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Euro Stoxx 50.", out.width= "100%", fig.pos='h'}
 
 # Compute the mean daily return
 m <- mean(R)
@@ -271,7 +279,7 @@ title("ACF (Squared prediction errors)")
 \clearpage
 
 ## Methodology
-### Garch models
+### Garch models {#garch-method}
 \noindent As already mentioned in part \@ref(univ-garch), GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood. As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation. \
 
 \noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ (equation \@ref(eq:pdf)). These functions are based on the joint probability distribution of the observed data (equation \@ref(eq:logl)). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \@ref(eq:optim)).
