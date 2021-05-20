@@ -549,7 +549,7 @@ Additionally, for every distribution fitted with MLE, plots are generated to com
 ```{r Euro Stoxx,, echo=FALSE}
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
-names(Eurostoxx) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC") 
+names(Eurostoxx) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC")  
 ```
 
 ```{r results='asis'}

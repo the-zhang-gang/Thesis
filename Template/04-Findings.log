@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  20 MAY 2021 09:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  20 MAY 2021 09:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1635,40 +1635,21 @@ Overfull \hbox (41.70901pt too wide) in paragraph at lines 205--205
 ub-multiple or[] 
  []
 
-<04-Findings_files/figure-latex/Euro Stoxx-1.pdf, id=39, 440.64626pt x 311.1625
-pt>
-File: 04-Findings_files/figure-latex/Euro Stoxx-1.pdf Graphic file (type pdf)
-<use 04-Findings_files/figure-latex/Euro Stoxx-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/Euro Stoxx-1.pdf  used 
-on input line 207.
+<04-Findings_files/figure-latex/Euro Stoxx,-1.pdf, id=39, 440.64626pt x 311.162
+5pt>
+File: 04-Findings_files/figure-latex/Euro Stoxx,-1.pdf Graphic file (type pdf)
+<use 04-Findings_files/figure-latex/Euro Stoxx,-1.pdf>
+Package pdftex.def Info: 04-Findings_files/figure-latex/Euro Stoxx,-1.pdf  used
+ on input line 207.
 (pdftex.def)             Requested size: 440.64517pt x 311.16174pt.
 
 Overfull \hbox (37.16953pt too wide) in paragraph at lines 207--208
 [][] 
  []
 
-
-Overfull \hbox (147.02696pt too wide) in paragraph at lines 214--238
- [] 
- []
-
-[2] [3 <./04-Findings_files/figure-latex/Euro Stoxx-1.pdf>]
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 249.
-
-LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 249.
-
-[4]
-Overfull \hbox (142.89297pt too wide) in paragraph at lines 333--349
- [] 
- []
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
+[2]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-362.
+212.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1679,13 +1660,31 @@ Package microtype Info: Loading generic protrusion settings for font family
 Package microtype Info: Character `texttrademark ' is missing
 (microtype)             in font `TS1/lmtt/m/n/12'.
 (microtype)             Ignoring protrusion settings for this character.
-[5]
+
+Overfull \hbox (141.02696pt too wide) in paragraph at lines 227--251
+ [] 
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 262.
+
+LaTeX Font Warning: Font shape `T1/lmtt/bx/it' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/sl' tried instead on input line 262.
+
+[3 <./04-Findings_files/figure-latex/Euro Stoxx,-1.pdf>] [4] [5]
+Overfull \hbox (142.89297pt too wide) in paragraph at lines 346--362
+ [] 
+ []
+
 Package microtype Info: Character `texttrademark ' is missing
 (microtype)             in font `TS1/lmtt/m/it/12'.
 (microtype)             Ignoring protrusion settings for this character.
 [6]
 
-LaTeX Warning: Empty bibliography on input line 408.
+LaTeX Warning: Empty bibliography on input line 421.
 
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
@@ -1701,8 +1700,8 @@ Package logreq Info: Writing requests to '04-Findings.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  29477 strings out of 478994
- 487310 string characters out of 5858184
- 1326567 words of memory out of 5000000
+ 487316 string characters out of 5858184
+ 1328567 words of memory out of 5000000
  46145 multiletter control sequences out of 15000+600000
  478098 words of font info for 128 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1721,7 +1720,7 @@ t/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type
 lmtko10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt12.pf
 b></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/l
 ocal/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 04-Findings.pdf (7 pages, 301449 bytes).
+Output written on 04-Findings.pdf (7 pages, 304127 bytes).
 PDF statistics:
  142 PDF objects out of 1000 (max. 8388607)
  116 compressed objects within 2 object streams
