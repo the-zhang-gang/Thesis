@@ -562,24 +562,29 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 
 <!-- What do we do, do we do 6 tables for all the distributions?  -->
 ```{r table3prep, eval=FALSE}
-# table3 <- matrix(nrow = 12, ncol = 5)
-# colnames(table3) <- distributions
 
-## column loop i = normal distribution, std, sstd, ged, sged
+table.3.function <- function(GARCHfit.object = garchfit.eGARCH){
+  
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
 list.table.3 <- vector(mode = "list", length = length(distributions))
 names(list.table.3) <- distributions
-
 ref.distr <- seq(from = 1, to = length(distributions)*2, by = 2)
 
 for(i in 1:length(distributions)){
-    list.table.3.tmp[[ref.distr[i]]] <- garchfit.eGARCH[[i]]@fit$coef
-    list.table.3.tmp[[ref.distr[i]+1]] <- garchfit.eGARCH[[i]]@fit$tval
+    list.table.3.tmp[[ref.distr[i]]] <- garchfit.EWMA[[i]]@fit$coef
+    list.table.3.tmp[[ref.distr[i]+1]] <- garchfit.EWMA[[i]]@fit$tval
 }
 
 for(i in 1:length(distributions)){
-  list.table.3[[i]] <- t(rbind(list.table.3.tmp[[ref.distr[i]]], list.table.3.tmp[[ref.distr[i]+1]]))
+  #length(list.table.3.tmp[[ref.distr[i]+1]]) <- length(list.table.3.tmp[[ref.distr[i]]])
+  list.table.3[[i]] <- cbind(list.table.3.tmp[[ref.distr[i]]], list.table.3.tmp[[ref.distr[i]+1]][match(names(list.table.3.tmp[[ref.distr[i]]]), names(list.table.3.tmp[[ref.distr[i]+1]]))])
 }
+#cbind(list.table.3.tmp[[ref.distr[1]]], list.table.3.tmp[[ref.distr[1]+1]][match(names(list.table.3.tmp[[ref.distr[1]]]), names(list.table.3.tmp[[ref.distr[1]+1]]))])
+
+# for(i in 1:length(distributions)){
+#   #length(list.table.3.tmp[[ref.distr[i]+1]]) <- length(list.table.3.tmp[[ref.distr[i]]])
+#   list.table.3[[i]] <- cbind(list.table.3.tmp[[ref.distr[1]]], list.table.3.tmp[[ref.distr[1]+1]])
+# }
 
 list.restructure <- function(object = list.table.3){
   len.table <- length(object)
@@ -592,7 +597,7 @@ list.restructure <- function(object = list.table.3){
   for(i in 1:len.table){adj.list[[i]] <- names.list[[i]] <- rep(NA, len.inside.list[i]*2)}
   for(i in 1:len.table){
       adj.list[[i]][ref.list[[i]]] <- round(object[[i]][,1],3)
-      adj.list[[i]][ref.list[[i]]+1] <- paste0("(", round(object[[i]][,2],3),")")
+      adj.list[[i]][ref.list[[i]]+1] <- paste0("(", round(list.table.3[[i]][,2],3),")")
   }
   for(i in 1:len.table){
     names.list[[i]][ref.list[[i]]] <- rownames(object[[i]])
@@ -609,49 +614,27 @@ table.3.matrix <- matrix(unlist(lapply(adj.list, `length<-`, max(lengths(adj.lis
                                  ncol = length(distributions),nrow = max(lengths(adj.list)), byrow = F)
 colnames(table.3.matrix) <- names(adj.list)
 table.3.matrix[is.na(table.3.matrix)] <- ""
+table.3.matrix[table.3.matrix=="(NA)"] <- ""
 
 table.3.matrix[c(length(table.3.matrix[,2])-1,length(table.3.matrix[,2])),2] <- tail(table.3.matrix[table.3.matrix[,2]!="",2],2)
 table.3.matrix[c(length(table.3.matrix[,2])-3,length(table.3.matrix[,2])-2),2] <- ""
 table.3.matrix[c(length(table.3.matrix[,4])-1,length(table.3.matrix[,4])),4] <- tail(table.3.matrix[table.3.matrix[,4]!="",4],2)
 table.3.matrix[c(length(table.3.matrix[,4])-3,length(table.3.matrix[,4])-2),4] <- ""
 
-
 table.3.matrix <- cbind(names(adj.list[[3]]), table.3.matrix)
 table.3.matrix <- as.data.frame(table.3.matrix, row.names = NULL)
 
+return(table.3.matrix)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#...
-table3 <- round(table3, 3)
-
-# for (i in length(distributions)) {
-#   for (j in nrow(table3)) {
-#     table3[j,i] <- garchfit.sGARCH[[i]]@fit$coef
-#     table3[j+1,i] <-garchfit.sGARCH[[i]]@fit$se.coef
-#     }
-# }
-
-print("sGARCH")
-garchfit.sGARCH[[1]]@fit$coef
-garchfit.sGARCH[[1]]@fit$se.coef
+Table.3.iGARCH <- table.3.function(GARCHfit.object = garchfit.iGARCH)
+Table.3.eGARCH <- table.3.function(GARCHfit.object = garchfit.eGARCH)
+Table.3.gjrGARCH <- table.3.function(GARCHfit.object = garchfit.gjrGARCH)
+Table.3.sGARCH <- table.3.function(GARCHfit.object = garchfit.sGARCH)
+Table.3.EWMA <- table.3.function(GARCHfit.object = garchfit.EWMA)
+Table.3.fGARCH.AVGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.AVGARCH)
+Table.3.fGARCH.NAGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.NAGARCH)
+Table.3.fGARCH.TGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.TGARCH)
 
 ```
 
