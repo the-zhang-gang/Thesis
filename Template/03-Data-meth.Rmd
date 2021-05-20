@@ -62,17 +62,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 #### Table of summary statistics
 
-Equation \@ref(tab:dsTable) provides the main statistics describing the return series analyzed. Returns are computed with equation \@ref(eq:logret).
-
-```{=tex}
-\begin{align}
-R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
-  (\#eq:logret)
-\end{align}
-```
-\noindent where $I_{t}$ is the index price at time $t$ and $I_{t-1}$ is the index price at $t-1$.
-
-<!--# [FILIPPO] -> to do: describe it! Also do we have to add a significance level for skewness and kurtosis like in the paper? think they do a t-test or?  -->
+Equation \@ref(tab:dsTable) provides the main statistics describing the return series analyzed. Let daily returns be computed as $R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)$,where $P_{t}$ is the index price at time $t$ and $P_{t-1}$ is the index price at $t-1$.
 
 ```{r prepstats, echo=F}
 
@@ -171,7 +161,6 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 ```
 
 #### Descriptive figures
-
 **Stylized facts** \
 \noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50 went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
