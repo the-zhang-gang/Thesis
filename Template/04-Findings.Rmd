@@ -511,8 +511,6 @@ kbl(Eurostoxx,caption = "Maximum likelihood estimates of unconditional distribut
 
 ```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
-#garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
-#names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
 Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
 Models.garch.clean <-  toupper(gsub("fGARCH.", "", Models.garch)) # we use this for tables
 
@@ -521,9 +519,6 @@ assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = lengt
 assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 } 
-
-# ls(pattern = "garchspec.")
-# sapply(ls(pattern = "garchspec."), FUN = setNames, distributions)
 
 #.sGARCH--------------------------
 for(i in 1:length(distributions)){
