@@ -619,7 +619,10 @@ table.3.matrix[c(length(table.3.matrix[,2])-3,length(table.3.matrix[,2])-2),2] <
 table.3.matrix[c(length(table.3.matrix[,4])-1,length(table.3.matrix[,4])),4] <- tail(table.3.matrix[table.3.matrix[,4]!="",4],2)
 table.3.matrix[c(length(table.3.matrix[,4])-3,length(table.3.matrix[,4])-2),4] <- ""
 
-table.3.matrix <- cbind(names(adj.list[[3]]), table.3.matrix)
+LLH <- rep(NA, length(distributions))
+for(i in 1:length(distributions)){LLH[i] <- GARCHfit.object[[i]]@fit$LLH}
+table.3.matrix <- rbind(table.3.matrix, round(LLH,3))
+table.3.matrix <- cbind(c(names(adj.list[[3]]),"LLH"), table.3.matrix)
 table.3.matrix <- as.data.frame(table.3.matrix, row.names = NULL)
 
 return(table.3.matrix)
