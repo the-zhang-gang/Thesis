@@ -15,7 +15,6 @@ bibliography: references.bib
 # Literature review {#lit-rev}
 
 \minitoc <!-- this will include a mini table of contents-->
-
 <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
 
 ## Stylized facts of returns {#styl-facts}
@@ -24,17 +23,15 @@ bibliography: references.bib
 
 [^1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
 
--   Returns are *small and volatile* (with the standard deviation being larger than the mean on average)
-
+-   Returns are *small and volatile* (with the standard deviation being larger than the mean on average).
 -   Returns have very little serial correlation as mentioned by for example @bollerslev1987.
-
--   Returns exhibit conditional heteroskedasticity, or *volatility clustering*. There is no constant variance, but it is time-varying (homoskedasticity). @bollerslev1987 describes it as "rates of return data are characterized by volatile and tranquil periods".
-
--   Returns also exhibit *asymmetric volatility*, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the *leverage effect.*
-
--   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution.
+-   Returns exhibit conditional heteroskedasticity, or *volatility clustering*. This effect goes back to @mandelbrot1963. There is no constant variance (homoskedasticity), but it is time-varying. @bollerslev1987 describes it as "rates of return data are characterized by volatile and tranquil periods". @alexander2008 says this will have implications for risk models: following a large shock to the market, the volatility changes and the probability of another large shock is increased significantly.
+-   Returns also exhibit *asymmetric volatility*, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the *leverage effect*. @alexander2008 mentions that this leverage effect is pronounced in equity markets: usually there is a strong negative correlation between equity returns and the change in volatility.
+-   Returns are *not normally distributed* which is also one of the conclusions by @fama1965. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns **can** be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution. A good summary is given by @alexander2008 as: "In general, we need to know more about the distribution of returns than its expected return and its volatility. Volatility tells us the *scale* and the mean tells us the *location*, but the dispersion also depends on the ***shape*** of the distribution. The best dispersion metric would be based on the entire distribution function of returns."
 
 \noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix we summarize some alternative distributions (T, GED, ST, SGED, SGT) that could be a better approximation of returns than the normal one.
+
+\newpage
 
 ## Volatility modeling {#vol-mod}
 
@@ -44,7 +41,7 @@ bibliography: references.bib
 
 ### ARCH model
 
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (**i**id), notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
 
 ```{=tex}
 \begin{align} 
@@ -90,7 +87,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq7)
 \end{align}
 ```
-\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
+\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
 
 ```{=tex}
 \begin{align} 
@@ -98,17 +95,8 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq8)
 \end{align}
 ```
-\noindent This leads to the properties of ARCH models. - Stationarity condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$.
 
--   Zero-mean innovations
-
--   Uncorrelated innovations
-
-\noindent Thus a weak white noise process $\varepsilon_t$.
-
-\noindent Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
-
-\noindent The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
+\noindent This leads to the properties of ARCH models: Stationarity^[Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.] condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates fat-tails.
 
 ```{=tex}
 \begin{align} 
@@ -126,7 +114,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 ```
 \noindent Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
 
-\noindent The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 \times \varepsilon_T^2$ from equation \@ref(eq:eq3).
+\noindent How will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 \times \varepsilon_T^2$ from equation \@ref(eq:eq3).
 
 ```{=tex}
 \begin{align} 
@@ -147,10 +135,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \end{align}
 ```
 ### Univariate GARCH models {#univ-garch}
-
-\noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. \
-
-\noindent An overview (of a selection) of investigated GARCH models is given in the following table.
+\noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)^[*Generalized* as it is a generalization by @bollerslev1986 of the ARCH model of @engle1982. *Autoregressive,* as it is a time series model with an autoregressive form (regression on itself). *Conditional heteroscedasticity,* while time variation in conditional variance is built into the model [@alexander2008].]. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \@ref(conditional-distributions) will be used. As @alexander2008 explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function^[which makes the maximum likelihood estimation explained in part \@ref(garch-method) complex with more parameters that have to be estimated.]. An overview (of a selection) of investigated GARCH models is given in the following table.
 
 | Author(s)/user(s)               | Model                      |
 |---------------------------------|----------------------------|
@@ -172,7 +157,9 @@ An extension to GARCH models was proposed by @hansen1994, the autoregressive con
 
 ## Value at Risk
 
-Value-at-Risk (VaR) is a risk metric developed simultaniously by [Markowitz1952] and [Roy1952] to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. According to [Holton2002] VaR gained traction in the last decade of the 20th century when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22). [Christofferson2001] puts forth a general framework for specifying VaR models and comparing between two alternatives models.
+Value-at-Risk (VaR) is a risk metric developed simultaniously by @markowitz1952 and Roy1952 to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the *1996 RiskMetrics Technical Document*, composed by RiskMetrics[^literature-review-2], @morganguarantytrustcompany1996 (part of JP Morgan), gives a good overview of the computation, but also made use of the name "value-at-risk" over equivalents like "dollars-at-risk" (DaR), "capital-at-risk" (CaR), "income-at-risk" (IaR) and "earnings-at-risk" (EaR). According to @holton2002 VaR gained traction in the last decade of the 20^th^ century when financial institutions started using it to determine their regulatory capital requirements. A $VaR_{99}$ finds the amount that would be the greatest possible loss in 99% of cases. It can be defined as the threshold value $\theta_t$. Put differently, in 1% of cases the loss would be greater than this amount.It is specified as in \@ref(eq:eq22). Christofferson2001 puts forth a general framework for specifying VaR models and comparing between two alternatives models.
+
+[^literature-review-2]: RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries [@alexander2008].
 
 ```{=tex}
 \begin{align}

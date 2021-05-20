@@ -195,7 +195,7 @@
 
 %%%%% THESIS / TITLE PAGE INFORMATION
 % Everybody needs to complete the following:
-\title{The importance of higher moments in VaR and cVaR estimation.}
+\title{The importance of higher moments in VaR and CVaR estimation.}
 \author{Faes E.\footnote{\href{mailto:Enjo.Faes@student.ams.ac.be}{\nolinkurl{Enjo.Faes@student.ams.ac.be}}}\textsuperscript{}~~~Mertens de Wilmars S.\footnote{\href{mailto:Stephane.MertensdeWilmars@student.ams.ac.be}{\nolinkurl{Stephane.MertensdeWilmars@student.ams.ac.be}}}\textsuperscript{}~~~Pratesi F.\footnote{\href{mailto:Filippo.Pratesi@student.ams.ac.be}{\nolinkurl{Filippo.Pratesi@student.ams.ac.be}}}\textsuperscript{}}
 \college{}
 
@@ -283,7 +283,9 @@
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
  	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors Zhang \footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}}, Annaert\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}} and De Ceuster\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}} for the valuable insights during courses you have given us in preparation of this thesis, the dozens of assignments using the R language and the many questions answered this year. We must be grateful for the classes of R programming by prof Zhang. ~\\
+
   \noindent Secondly, we have to thank the developer of the software we used for our thesis. A profuse thanks to Allaire, the founder and CEO of \href{http://rstudio.com}{RStudio}. Thanks for making data science easier, more accessible and fun. We must also be grateful to the inventors of ``Markdown'', ``Pandoc'', ``knitr'', ``bookdown'', ``thesisdown''. Then, we must say thanks to \href{https://www.cs.ox.ac.uk/people/ulrik.lyngs/}{Ulrik Lyngs} who made it a bit easier to work together in R with a pre-build template for the university of Oxford, also without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
+
   \noindent Finally, we thank \href{https://www.linkedin.com/in/alexios-galanos-64309165/}{Alexios Ghalanos} for making the implementation of GARCH models integrated in R via his package ``rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
 
   \begin{flushright}
@@ -340,15 +342,15 @@
 \adjustmtc
 \markboth{Introduction}{}
 
-A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[Among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns.~\\
+\noindent A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[Among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns.~\\
 
-Additionally, a point of interest is the predictability of stock prices. \textcite{fama1965} explains that the question in academic and business circles is: ``To what extent can the past history of a common stock's price be used to make meaningful predictions concerning the future price of the stock?''. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by their past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process \autocite{Fama1970}. On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism''. Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices. ~\\
+\noindent Additionally, a point of interest is the predictability of stock prices. \textcite{fama1965} explains that the question in academic and business circles is: ``To what extent can the past history of a common stock's price be used to make meaningful predictions concerning the future price of the stock?''. There are two viewpoints towards the predictability of stock prices. Firstly, some argue that stock prices are unpredictable or very difficult to predict by their past returns (i.e.~have very little serial correlation) because they simply follow a Random Walk process \autocite{Fama1970}. On the other hand, Lo \& MacKinlay mention that ``financial markets \emph{are} predictable to some extent but far from being a symptom of inefficiency or irrationality, predictability is the oil that lubricates the gears of capitalism''. Furthermore, there is also no real robust evidence for the predictability of returns themselves, let alone be out-of-sample \autocite{welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices. ~\\
 
-Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement. The tool of VaR has now become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 5\% VaR can be informally defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 5\% while the Conditional Value at Risk (CVaR) can be informally defined as the average of the events that are lower than the VaR. \textcite{bali2008} explains that many implementations of the CVaR have the assumption that asset and portfolio's returns are normally distributed but that it is an inconsistency with the evidence empirically available which outlines a more skewed distribution with fatter tails than the normal. This lead to the conclusion that the assumption of normality, which simplifies the computation of VaR, can bring to incorrect numbers, underestimating the probability of extreme events happening.~\\
+\noindent Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement. The tool of VaR has now become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 5\% VaR can be informally defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 5\% while the Conditional Value at Risk (CVaR) can be informally defined as the average of the events that are lower than the VaR. \textcite{bali2008} explains that many implementations of the CVaR have the assumption that asset and portfolio's returns are normally distributed but that it is an inconsistency with the evidence empirically available which outlines a more skewed distribution with fatter tails than the normal. This lead to the conclusion that the assumption of normality, which simplifies the computation of VaR, can bring to incorrect numbers, underestimating the probability of extreme events happening.~\\
 
-This paper has the aim to replicate and update the research made by \textcite{bali2008} on US indexes, analyzing the dynamics proposed with a European outlook. The main contribution of the research is to provide the industry with a new approach to calculating VaR with a flexible tool for modeling the empirical distribution of returns with higher accuracy and characterization of the tails.~\\
+\noindent This paper has the aim to replicate and update the research made by \textcite{bali2008} on US indexes, analyzing the dynamics proposed with a European outlook. The main contribution of the research is to provide the industry with a new approach to calculating VaR with a flexible tool for modeling the empirical distribution of returns with higher accuracy and characterization of the tails.~\\
 
-The paper is organized as follows. Chapter \ref{lit-rev} discusses at first the alternative distribution than the normal that we are going to evaluate during the analysis (Student's t-distribution, Generalized Error Distribution, Skewed t-distribution, Skewed Generalized Error Distribution, Skewed Generalized t-distribution), then the discrete time GARCH models used (GARCH, IGARCH, EGARCH, GJRGARCH, NAGARCH, TGARCH, TSGARCH or AVGARCH and EWMA) are presented as extensions of the \textcite{engle1982} 's ARCH model. Chapter \ref{dat-and-meth} describes the dataset used and the methodology followed in modeling the volatility with the GARCH model by \textcite{bollerslev1986} and with its refinements using Maximum likelihood estimation to find the distribution parameters. Then a description is given of how are performed the control tests (un- and conditional coverage test, dynamic quantile test) used in the paper to evaluate the performances of the different GARCH models and underlying distributions. In chapter \ref{analysis}, findings are presented and discussed, in chapter \ref{Robustness} the findings of the performed tests are shown and interpreted and in chapter \ref{Conclusion} the investigation and the results are summarized.
+\noindent The paper is organized as follows. Chapter \ref{lit-rev} discusses at first the alternative distribution than the normal that we are going to evaluate during the analysis (Student's t-distribution, Generalized Error Distribution, Skewed t-distribution, Skewed Generalized Error Distribution, Skewed Generalized t-distribution), then the discrete time GARCH models used (GARCH, IGARCH, EGARCH, GJRGARCH, NAGARCH, TGARCH, TSGARCH or AVGARCH and EWMA) are presented as extensions of the \textcite{engle1982} 's ARCH model. Chapter \ref{dat-and-meth} describes the dataset used and the methodology followed in modeling the volatility with the GARCH model by \textcite{bollerslev1986} and with its refinements using Maximum likelihood estimation to find the distribution parameters. Then a description is given of how are performed the control tests (un- and conditional coverage test, dynamic quantile test) used in the paper to evaluate the performances of the different GARCH models and underlying distributions. In chapter \ref{analysis}, findings are presented and discussed, in chapter \ref{Robustness} the findings of the performed tests are shown and interpreted and in chapter \ref{Conclusion} the investigation and the results are summarized.
 
 \hypertarget{lit-rev}{%
 \chapter{Literature review}\label{lit-rev}}
@@ -361,33 +363,22 @@ The paper is organized as follows. Chapter \ref{lit-rev} discusses at first the 
 \noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
 
 \begin{itemize}
+\tightlist
 \item
-  Returns are \emph{small and volatile} (with the standard deviation being larger than the mean on average)
+  Returns are \emph{small and volatile} (with the standard deviation being larger than the mean on average).
 \item
   Returns have very little serial correlation as mentioned by for example \textcite{bollerslev1987}.
 \item
-  Returns exhibit conditional heteroskedasticity, or \emph{volatility clustering}. There is no constant variance, but it is time-varying (homoskedasticity). \textcite{bollerslev1987} describes it as ``rates of return data are characterized by volatile and tranquil periods''.
+  Returns exhibit conditional heteroskedasticity, or \emph{volatility clustering}. This effect goes back to \textcite{mandelbrot1963}. There is no constant variance (homoskedasticity), but it is time-varying. \textcite{bollerslev1987} describes it as ``rates of return data are characterized by volatile and tranquil periods''. \textcite{alexander2008} says this will have implications for risk models: following a large shock to the market, the volatility changes and the probability of another large shock is increased significantly.
 \item
-  Returns also exhibit \emph{asymmetric volatility}, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the \emph{leverage effect.}
+  Returns also exhibit \emph{asymmetric volatility}, in that sense volatility increases more after a negative return shock than after a large positive return shock. This is also called the \emph{leverage effect}. \textcite{alexander2008} mentions that this leverage effect is pronounced in equity markets: usually there is a strong negative correlation between equity returns and the change in volatility.
 \item
-  Returns are \emph{not normally distributed} which is also one of the conclusions by \textcite{fama1965}. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns \textbf{can} be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution.
+  Returns are \emph{not normally distributed} which is also one of the conclusions by \textcite{fama1965}. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns \textbf{can} be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution. A good summary is given by \textcite{alexander2008} as: ``In general, we need to know more about the distribution of returns than its expected return and its volatility. Volatility tells us the \emph{scale} and the mean tells us the \emph{location}, but the dispersion also depends on the \textbf{\emph{shape}} of the distribution. The best dispersion metric would be based on the entire distribution function of returns.''
 \end{itemize}
 
-\noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix we summarize some alternative distributions (T, GED, ST, SGED) that could be a better approximation of returns than the normal one. Below
+\noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix we summarize some alternative distributions (T, GED, ST, SGED, SGT) that could be a better approximation of returns than the normal one.
 
-\hypertarget{sgt-skewed-generalized-t-distribution}{%
-\section{SGT (Skewed Generalized t-distribution)}\label{sgt-skewed-generalized-t-distribution}}
-
-\noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt} \autocite{bollerslev1994}.
-
-\begin{align}
-f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
- \label{eq:gt}
-\end{align}
-
-\noindent where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(p\).
-
-\noindent Again the skewed variant is given by equation \eqref{eq:skeweddist} of appendix but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
+\newpage
 
 \hypertarget{vol-mod}{%
 \section{Volatility modeling}\label{vol-mod}}
@@ -400,7 +391,7 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 \hypertarget{arch-model}{%
 \subsection{ARCH model}\label{arch-model}}
 
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent from iid, notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\mu\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (\textbf{i}id), notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
 
 \begin{align} 
 y_{t} &= \mu + \varepsilon_t
@@ -441,27 +432,14 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  \label{eq:eq7}
 \end{align}
 
-\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in \eqref{eq:eq11}. After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get \eqref{eq:eq8} for the unconditional variance, equal to the constant \(c\) and divided by \(1-\alpha_1\), the slope of the variance equation.
+\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \eqref{eq:eq11}. After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \eqref{eq:eq8} for the unconditional variance, equal to the constant \(c\) and divided by \(1-\alpha_1\), the slope of the variance equation.
 
 \begin{align} 
 \sigma^2 = \dfrac{\omega}{1-\alpha_1}
  \label{eq:eq8}
 \end{align}
 
-\noindent This leads to the properties of ARCH models. - Stationarity condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\).
-
-\begin{itemize}
-\item
-  Zero-mean innovations
-\item
-  Uncorrelated innovations
-\end{itemize}
-
-\noindent Thus a weak white noise process \(\varepsilon_t\).
-
-\noindent Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
-
-\noindent The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
+\noindent This leads to the properties of ARCH models: Stationarity\footnote{Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.} condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\). But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process \(\varepsilon_t\). The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
 
 \begin{align} 
 3\dfrac{1-\alpha_1^2}{1-3\alpha_1^2}
@@ -477,7 +455,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 
 \noindent Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \ref{conditional-distributions}. The serial correlation for squared innovations is positive if fourth moment exists (equation \eqref{eq:eq9}, this is volatility clustering once again.
 
-\noindent The estimation of ARCH model and in a next step GARCH models will be explained in the methodology. However how will then the variance be forecasted? Well, the conditional variance for the \(k\)-periods ahead , denoted as period \(T+k\), is given by equation \eqref{eq:eq11}. This can already be simplified, while we know that \(\sigma_{T+1}^2 = \omega + \alpha_1 \times \varepsilon_T^2\) from equation \eqref{eq:eq3}.
+\noindent How will then the variance be forecasted? Well, the conditional variance for the \(k\)-periods ahead , denoted as period \(T+k\), is given by equation \eqref{eq:eq11}. This can already be simplified, while we know that \(\sigma_{T+1}^2 = \omega + \alpha_1 \times \varepsilon_T^2\) from equation \eqref{eq:eq3}.
 
 \begin{align} 
 \begin{split}
@@ -498,9 +476,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \hypertarget{univ-garch}{%
 \subsection{Univariate GARCH models}\label{univ-garch}}
 
-\noindent An improvement on the ARCH model is the Generalised Autoregressive Conditional Heteroscedasticity (GARCH). This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component.~\\
-
-An overview (of a selection) of investigated GARCH models is given in the following table.
+\noindent An improvement of the ARCH model described in part @ is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)\footnote{\emph{Generalized} as it is a generalization by \textcite{bollerslev1986} of the ARCH model of \textcite{engle1982}. \emph{Autoregressive,} as it is a time series model with an autoregressive form (regression on itself). \emph{Conditional heteroscedasticity,} while time variation in conditional variance is built into the model \autocite{alexander2008}.}. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \ref{conditional-distributions} will be used. As \textcite{alexander2008} explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function\footnote{which makes the maximum likelihood estimation explained in part \ref{garch-method} complex with more parameters that have to be estimated.}. An overview (of a selection) of investigated GARCH models is given in the following table.
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{GARCH models, the founders}\tabularnewline
@@ -532,7 +508,7 @@ An extension to GARCH models was proposed by \textcite{hansen1994}, the autoregr
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
 
-Value-at-Risk (VaR) is a risk metric developed simultaniously by {[}Markowitz1952{]} and {[}Roy1952{]} to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. According to {[}Holton2002{]} VaR gained traction in the last decade of the 20th century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\theta_t\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}. {[}Christofferson2001{]} puts forth a general framework for specifying VaR models and comparing between two alternatives models.
+Value-at-Risk (VaR) is a risk metric developed simultaniously by \textcite{markowitz1952} and Roy1952 to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the \emph{1996 RiskMetrics Technical Document}, composed by RiskMetrics\footnote{RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries \autocite{alexander2008}.}, \textcite{morganguarantytrustcompany1996} (part of JP Morgan), gives a good overview of the computation, but also made use of the name ``value-at-risk'' over equivalents like ``dollars-at-risk'' (DaR), ``capital-at-risk'' (CaR), ``income-at-risk'' (IaR) and ``earnings-at-risk'' (EaR). According to \textcite{holton2002} VaR gained traction in the last decade of the 20\textsuperscript{th} century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\theta_t\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}. Christofferson2001 puts forth a general framework for specifying VaR models and comparing between two alternatives models.
 
 \begin{align}
 Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \phi
@@ -585,6 +561,21 @@ Author & Higher moments\tabularnewline
 \bottomrule
 \end{longtable}
 
+\begin{savequote}
+Volatility is unobservable. We can only ever estimate and forecast
+volatility, and this only within the context of an assumed statistical
+model. So there is no absolute `true' volatility: what is `true' depends
+only on the assumed model\ldots{}
+
+Moreover, volatility is only a sufficient statistic for the dispersion
+of the returns distribution when we make a normality assumption. In
+other words, volatility does not provide a full description of the risks
+that are taken by the investment unless we assume the investment returns
+are normally distributed.
+\qauthor{--- Alexander (2008) in \emph{Market Risk Analysis Practical Financial Econometrics}}\end{savequote}
+
+
+
 \hypertarget{dat-and-meth}{%
 \chapter{Data and methodology}\label{dat-and-meth}}
 
@@ -595,8 +586,10 @@ Author & Higher moments\tabularnewline
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the EURO STOXX 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
-\#\#\# Descriptives
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
+
+\hypertarget{descriptives}{%
+\subsection{Descriptives}\label{descriptives}}
 
 \hypertarget{table-of-summary-statistics}{%
 \subsubsection{Table of summary statistics}\label{table-of-summary-statistics}}
@@ -621,7 +614,7 @@ R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
 \begin{threeparttable}
 \begin{tabular}[t]{lll}
 \toprule
-Statistics & Eurostoxx.50 & Standardized.Residuals\\
+Statistics & Euro Stoxx 50 & Standardized Residuals\\
 \midrule
 Arithmetic Mean & 0.0167 & -0.0409\\
 Median & 0.0357 & -0.0193\\
@@ -639,7 +632,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \begin{tablenotes}
 \item Notes
 \item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-01 to 2021-04-27 (8954 observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.
-\item[2] The standardized residual is derived from a maximum likelyhood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
+\item[2] The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
 \item[3] *, **, *** represent significance levels at the 5%, 1% and <1%.
 \end{tablenotes}
 \end{threeparttable}
@@ -649,7 +642,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \subsubsection{Descriptive figures}\label{descriptive-figures}}
 
 \textbf{Stylized facts}~\\
-\noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the EuroStoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+\noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the Euro Stoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 \begin{figure}[h]
 
@@ -657,7 +650,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 
 }
 
-\caption{Eurostoxx 50 Price Index prices}\label{fig:plot1}
+\caption{Euro Stoxx 50 Price Index prices}\label{fig:plot1}
 \end{figure}
 
 \newpage
@@ -670,7 +663,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 
 }
 
-\caption{Eurostoxx 50 Price Index log returns}\label{fig:plot2}
+\caption{Euro Stoxx 50 Price Index log returns}\label{fig:plot2}
 \end{figure}
 
 \begin{figure}[h]
@@ -679,7 +672,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 
 }
 
-\caption{Eurostoxx 50 rolling volatility (22 days, calculated over 252 days)}\label{fig:plot3}
+\caption{Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)}\label{fig:plot3}
 \end{figure}
 
 \newpage
@@ -692,7 +685,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 
 }
 
-\caption{Density vs. Normal Eurostoxx 50 log returns)}\label{fig:plot4}
+\caption{Density vs. Normal Euro Stoxx 50 log returns)}\label{fig:plot4}
 \end{figure}
 
 \newpage
@@ -713,12 +706,10 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \hypertarget{methodology}{%
 \section{Methodology}\label{methodology}}
 
-\hypertarget{garch-models}{%
-\subsection{Garch models}\label{garch-models}}
+\hypertarget{garch-method}{%
+\subsection{Garch models}\label{garch-method}}
 
-\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. ~\\
-
-\noindent They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
+\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
 
 \noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
 
@@ -782,7 +773,7 @@ Again \textcite{ghalanos2016} makes it easier to implement the somewhat complex 
 \hypertarget{unconditional-coverage-test-of-kupiec1995}{%
 \subsubsection{\texorpdfstring{Unconditional coverage test of \textcite{kupiec1995}}{Unconditional coverage test of @kupiec1995}}\label{unconditional-coverage-test-of-kupiec1995}}
 
-\noindent A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by \textcite{kupiec1995}. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g.~1\% percentile) of the VaR model. Following \textcite{kupiec1995} and \textcite{ghalanos2020}, the number of exceedence follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \eqref{eq:uccov}, with \(p\) the probability of an exceedence for a confidence level, \(N\) the sample size and \(X\) the number of exceedence. The null hypothesis states that the test statistic \(L R^{u c}\) is \(\chi^2\)-distributed with one degree of freedom or that the probability of failure \(\hat p\) is equal to the chosen percentile \(\alpha\).
+\noindent A number of tests are computed to see if the value-at-risk estimations capture the actual losses well. A first one is the unconditional coverage test by \textcite{kupiec1995}. The unconditional coverage or proportion of failures method tests if the actual value-at-risk exceedances are consistent with the expected exceedances (a chosen percentile, e.g.~1\% percentile) of the VaR model. Following \textcite{kupiec1995} and \textcite{ghalanos2020}, the number of exceedences follow a binomial distribution (with thus probability equal to the significance level or expected proportion) under the null hypothesis of a correct VaR model. The test is conducted as a likelihood ratio test with statistic like in equation \eqref{eq:uccov}, with \(p\) the probability of an exceedence for a confidence level, \(N\) the sample size and \(X\) the number of exceedences. The null hypothesis states that the test statistic \(L R^{u c}\) is \(\chi^2\)-distributed with one degree of freedom or that the probability of failure \(\hat p\) is equal to the chosen percentile \(\alpha\).
 
 \begin{align}
 L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}\left(\frac{X}{N}\right)^{X}}\right)
@@ -820,8 +811,11 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \hypertarget{mle-distribution-parameters}{%
 \subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
 
-In table \ref{tab:MLEtable} we can see\ldots{} Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns.
-\includegraphics{_main_files/figure-latex/MLE tables for diferent series-1.pdf}
+In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.
+
+Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
+
+\includegraphics{_main_files/figure-latex/Euro Stoxx-1.pdf}
 
 \begin{table}[h!]
 
@@ -849,146 +843,13 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
-\item Notes
+\item Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** point out significance at 5% and 1% level.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
 \hypertarget{results-of-garch-with-constant-higher-moments}{%
 \section{Results of GARCH with constant higher moments}\label{results-of-garch-with-constant-higher-moments}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{distributions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"norm"}\NormalTok{, }\StringTok{"std"}\NormalTok{, }\StringTok{"sstd"}\NormalTok{, }\StringTok{"ged"}\NormalTok{, }\StringTok{"sged"}\NormalTok{)}
-\CommentTok{\#garchspec \textless{}{-} garchfit \textless{}{-} garchforecast \textless{}{-} stdret \textless{}{-} vector(mode = "list", length = length(distributions))}
-\CommentTok{\#names(garchspec) \textless{}{-} names(garchfit) \textless{}{-} names(garchforecast) \textless{}{-} names(stdret) \textless{}{-} distributions}
-\NormalTok{Models.garch }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{, }\StringTok{"eGARCH"}\NormalTok{,}\StringTok{"fGARCH.AVGARCH"}\NormalTok{,}\StringTok{"fGARCH.NAGARCH"}\NormalTok{, }\StringTok{"gjrGARCH"}\NormalTok{, }\StringTok{"fGARCH.TGARCH"}\NormalTok{, }\StringTok{"iGARCH"}\NormalTok{, }\StringTok{"EWMA"}\NormalTok{)}
-
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(Models.garch))\{}
-\FunctionTok{assign}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"garchspec."}\NormalTok{,Models.garch[i]),}\FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions)))}
-\FunctionTok{assign}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"garchfit."}\NormalTok{,Models.garch[i]),}\FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions)))}
-\FunctionTok{assign}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"stdret."}\NormalTok{,Models.garch[i]),}\FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions)))}
-\NormalTok{\} }
-
-\CommentTok{\# ls(pattern = "garchspec.")}
-\CommentTok{\# sapply(ls(pattern = "garchspec."), FUN = setNames, distributions)}
-
-\CommentTok{\#.sGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.sGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"sGARCH"}\NormalTok{, }\AttributeTok{garchOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.sGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.sGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.sGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.sGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.eGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.eGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"eGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.eGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.eGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.eGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.eGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.fGARCH.NAGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.fGARCH.NAGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"fGARCH"}\NormalTok{, }\AttributeTok{submodel =} \StringTok{"NAGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F),}
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.fGARCH.NAGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.fGARCH.NAGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.fGARCH.NAGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.fGARCH.NAGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.fGARCH.AVGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.fGARCH.AVGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"fGARCH"}\NormalTok{, }\AttributeTok{submodel =} \StringTok{"AVGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F),}
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.fGARCH.AVGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.fGARCH.AVGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.fGARCH.AVGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.fGARCH.AVGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.gjrGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.gjrGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"gjrGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.gjrGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.gjrGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.gjrGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.gjrGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#fGARCH.TGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"fGARCH"}\NormalTok{, }\AttributeTok{submodel =} \StringTok{"TGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.fGARCH.TGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.fGARCH.TGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.fGARCH.TGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.iGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.iGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"iGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F), }
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i])}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.iGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.iGARCH[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.iGARCH[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.iGARCH[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-\CommentTok{\#.csGARCH{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-\CommentTok{\# for(i in 1:length(distributions))\{}
-\CommentTok{\# \# Specify a GARCH model with constant mean}
-\CommentTok{\# garchspec.csGARCH[[i]] \textless{}{-} ugarchspec(mean.model = list(armaOrder = c(1,0)),}
-\CommentTok{\#                      variance.model = list(model = "csGARCH", variance.targeting = F),}
-\CommentTok{\#                      distribution.model = distributions[i])}
-\CommentTok{\# \# Estimate the model}
-\CommentTok{\# garchfit.csGARCH[[i]] \textless{}{-} ugarchfit(data = R, spec = garchspec.csGARCH[[i]])}
-\CommentTok{\# \# Compute stdret using residuals()}
-\CommentTok{\# stdret.csGARCH[[i]] \textless{}{-} residuals(garchfit.csGARCH[[i]], standardize = TRUE)}
-\CommentTok{\# \}}
-
-
-\CommentTok{\# we need EWMA}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
-\CommentTok{\# Specify a GARCH model with constant mean}
-\NormalTok{garchspec.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)),}
-                     \AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{"iGARCH"}\NormalTok{, }\AttributeTok{variance.targeting =}\NormalTok{ F),}
-                     \AttributeTok{distribution.model =}\NormalTok{ distributions[i], }\AttributeTok{fixed.pars =} \FunctionTok{list}\NormalTok{(}\AttributeTok{omega=}\DecValTok{0}\NormalTok{))}
-\CommentTok{\# Estimate the model}
-\NormalTok{garchfit.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{ugarchfit}\NormalTok{(}\AttributeTok{data =}\NormalTok{ R, }\AttributeTok{spec =}\NormalTok{ garchspec.EWMA[[i]])}
-\CommentTok{\# Compute stdret using residuals()}
-\NormalTok{stdret.EWMA[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(garchfit.EWMA[[i]], }\AttributeTok{standardize =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-
-
-\CommentTok{\#  make the histogram}
-\CommentTok{\# }
-\CommentTok{\# chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),}
-\CommentTok{\#                 colorset = c("gray","red","blue"))}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1070,7 +931,6 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(}\StringTok{"TSGARCH/AVGARCH"}\NormalTok{)}
 \NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
 \NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
 \end{Highlighting}
@@ -1165,12 +1025,12 @@ no serial correlation in the squares
 \chapter{Appendix}\label{appendix}}
 
 \hypertarget{conditional-distributions}{%
-\section{Alternative distributions than the normal}\label{conditional-distributions}}
+\paragraph{Alternative distributions than the normal}\label{conditional-distributions}}
 
 \hypertarget{students-t-distribution}{%
-\subsection{Student's t-distribution}\label{students-t-distribution}}
+\subparagraph{Student's t-distribution}\label{students-t-distribution}}
 
-\noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero). The probability density function (pdf), consistent with \textcite{ghalanos2020}, is given by equation \eqref{eq:stdghalanos}. As will be seen in \ref{vol-mod}, GARCH models are used for volatility modeling in practice. \textcite{bollerslev1987} examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution \autocite{bollerslev2008}.
+\noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero if \(\nu > 3\)). The probability density function (pdf), consistent with \textcite{ghalanos2020}, is given by equation \eqref{eq:stdghalanos}. As will be seen in \ref{vol-mod}, GARCH models are used for volatility modeling in practice. \textcite{bollerslev1987} examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution \autocite{bollerslev2008}.
 
 \begin{align}
 f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \beta}\right)^{-(\nu+1)/2}
@@ -1179,7 +1039,7 @@ f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \n
 
 \noindent where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. The symbol \(\Gamma\) is the Gamma function.
 
-\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \eqref{eq:kurt}. This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
+\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \eqref{eq:kurt} if \(\nu>4\). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
 
 \begin{align}
 kurt = 3 + \dfrac{6}{\nu-4}
@@ -1187,7 +1047,7 @@ kurt = 3 + \dfrac{6}{\nu-4}
 \end{align}
 
 \hypertarget{generalized-error-distribution}{%
-\subsection{Generalized Error Distribution}\label{generalized-error-distribution}}
+\subparagraph{Generalized Error Distribution}\label{generalized-error-distribution}}
 
 \noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
 
@@ -1199,7 +1059,7 @@ f(x) = \dfrac{p e^{\left|\dfrac{x-\mu}{\sigma}\right|^p}}{2^{1+p^(-1)}\sigma\Gam
 where \(\mu, \sigma\) and \(p\) are respectively the location, scale and shape parameters .
 
 \hypertarget{skewed-t-distribution}{%
-\subsection{Skewed t-distribution}\label{skewed-t-distribution}}
+\subparagraph{Skewed t-distribution}\label{skewed-t-distribution}}
 
 \noindent The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. The first equation from \textcite{trottier2015}, here equation \eqref{eq:skeweddist} presents the skewed t-distribution.
 
@@ -1216,17 +1076,31 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 \noindent According to \textcite{giot2003}; \textcite{giot2004}, the skewed t-distribution outperforms the symmetric density distributions.
 
 \hypertarget{skewed-generalized-error-distribution}{%
-\subsection{Skewed Generalized Error Distribution}\label{skewed-generalized-error-distribution}}
+\subparagraph{Skewed Generalized Error Distribution}\label{skewed-generalized-error-distribution}}
 
 \noindent What also will be interesting to examine is the SGED distribution of \textcite{theodossiou2000} in GARCH models, as in the work of \textcite{lee2008}. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}.
 
-\hypertarget{garch-models-1}{%
-\section{GARCH models}\label{garch-models-1}}
+\hypertarget{sgt-skewed-generalized-t-distribution}{%
+\subparagraph{SGT (Skewed Generalized t-distribution)}\label{sgt-skewed-generalized-t-distribution}}
+
+\noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt} \autocite{bollerslev1994}.
+
+\begin{align}
+f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
+ \label{eq:gt}
+\end{align}
+
+\noindent where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(p\).
+
+\noindent Again the skewed variant is given by equation \eqref{eq:skeweddist} of appendix but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
+
+\hypertarget{garch-models}{%
+\paragraph{GARCH models}\label{garch-models}}
 
 All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output.
 
-\hypertarget{garch-model}{%
-\subsection{GARCH model}\label{garch-model}}
+\hypertarget{symmetric-normal-garch-model}{%
+\subparagraph{Symmetric (normal) GARCH model}\label{symmetric-normal-garch-model}}
 
 \noindent The standard GARCH model \autocite{bollerslev1986} is written consistent with \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
 
@@ -1254,14 +1128,24 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 \end{equation}
 
 \hypertarget{igarch-model}{%
-\subsection{IGARCH model}\label{igarch-model}}
+\subparagraph{IGARCH model}\label{igarch-model}}
 
 \noindent Following \textcite{ghalanos2020}, the integrated GARCH model \autocite{bollerslev1986} can also be estimated. This model assumes the persistence \(\hat{P} = 1\). This is done by Ghalanos, by setting the sum of the ARCH and GARCH parameters to 1. Because of this unit-persistence, the unconditional variance cannot be calculated.
 
-\newpage
+\hypertarget{gjrgarch-model}{%
+\subparagraph{GJRGARCH model}\label{gjrgarch-model}}
+
+\noindent The GJRGARCH model \autocite{glosten1993}, which is an alternative for the asymmetric GARCH (AGARCH) by \textcite{engle1990} and \textcite{engle1993}, models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I_t-j\), it is specified as in equation \eqref{eq:eq17}.
+
+\begin{align}
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ \label{eq:eq17}
+\end{align}
+
+\noindent where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \(I\) takes on value 1 for \(\varepsilon \le 0\), 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to \textcite{ghalanos2020}.
 
 \hypertarget{egarch-model}{%
-\subsection{EGARCH model}\label{egarch-model}}
+\subparagraph{EGARCH model}\label{egarch-model}}
 
 \noindent The EGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16}. The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
@@ -1272,20 +1156,8 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent where \(\alpha_j\) captures the sign effect and \(\gamma_j\) the size effect.
 
-\hypertarget{gjrgarch-model}{%
-\subsection{GJRGARCH model}\label{gjrgarch-model}}
-
-\noindent The GJRGARCH model \autocite{glosten1993} models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I\), it is specified as in equation \eqref{eq:eq17}.
-
-\begin{align}
-\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
- \label{eq:eq17}
-\end{align}
-
-\noindent where \(\gamma_j\) represents the \emph{leverage} term. The indicator function \(I\) takes on value 1 for \(\varepsilon \le 0\), 0 otherwise. Because of the indicator function, persistence of the model now crucially depends on the asymmetry of the conditional distribution used according to \textcite{ghalanos2020}.
-
 \hypertarget{nagarch-model}{%
-\subsection{NAGARCH model}\label{nagarch-model}}
+\subparagraph{NAGARCH model}\label{nagarch-model}}
 
 \noindent The NAGARCH or nonlinear asymmetric model \autocite{engle1993}. It is specified as in equation \eqref{eq:eq18}. The model is \emph{asymmetric} as it allows for positive and negative shocks to differently affect conditional variance and \emph{nonlinear} because a large shock is not a linear transformation of a small shock.
 
@@ -1297,7 +1169,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 As before, \(\gamma_j\) represents the \emph{leverage} term.
 
 \hypertarget{tgarch-model}{%
-\subsection{TGARCH model}\label{tgarch-model}}
+\subparagraph{TGARCH model}\label{tgarch-model}}
 
 \noindent The TGarch or threshold model \autocite{zakoian1994} also models assymetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
 
@@ -1309,7 +1181,7 @@ As before, \(\gamma_j\) represents the \emph{leverage} term.
 \noindent where \(\varepsilon_{t-j}^+\) is equal to \(\varepsilon_{t-j}\) if the term is negative and equal to 0 if the term is positive. The reverse applies to \(\varepsilon_{t-j}^-\). They cite \textcite{davidian1987} who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
 
 \hypertarget{tsgarch-model}{%
-\subsection{TSGARCH model}\label{tsgarch-model}}
+\subparagraph{TSGARCH model}\label{tsgarch-model}}
 
 \noindent The absolute value Garch model or TS-Garch model, as named after \textcite{taylor1986} and \textcite{schwert1989}, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \eqref{eq:eq20}.
 
@@ -1322,7 +1194,7 @@ As before, \(\gamma_j\) represents the \emph{leverage} term.
 \newpage
 
 \hypertarget{ewma}{%
-\subsection{EWMA}\label{ewma}}
+\subparagraph{EWMA}\label{ewma}}
 
 \noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\lambda\) more weight is assigned to recent periods than distant periods. The \(\lambda\) must be less than 1. It is specified as in \eqref{eq:eq21}.
 

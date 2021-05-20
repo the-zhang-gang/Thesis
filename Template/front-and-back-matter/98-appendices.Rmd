@@ -10,7 +10,7 @@
 
 ###### Student's t-distribution
 
-\noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero). The probability density function (pdf), consistent with @ghalanos2020, is given by equation \@ref(eq:stdghalanos). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
+\noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero if $\nu > 3$). The probability density function (pdf), consistent with @ghalanos2020, is given by equation \@ref(eq:stdghalanos). As will be seen in \@ref(vol-mod), GARCH models are used for volatility modeling in practice. @bollerslev1987 examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution [@bollerslev2008].
 
 ```{=tex}
 \begin{align}
@@ -20,7 +20,7 @@ f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \n
 ```
 \noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
 
-\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution has fatter tails (thus it has a kurtosis coefficient), if the degrees of freedom are finite. This kurtosis coefficient is given by equation \@ref(eq:kurt). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
+\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \@ref(eq:kurt) if $\nu>4$. This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
 ```{=tex}
 \begin{align}

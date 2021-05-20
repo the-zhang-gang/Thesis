@@ -25,6 +25,7 @@ require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 require(devtools)
+require(condformat)
 require(zoo)
 # install_bitbucket("alexiosg/racd")
 options(knitr.kable.NA = "")
@@ -549,21 +550,19 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
 
-```{r Eurostoxx,results='asis', echo=FALSE}
+```{r Euro Stoxx,results='asis', echo=FALSE}
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 
 
 Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions",
-      label = 'MLEtable',
+      label = 'MLEtable',"latex",
       booktabs = T,
       position = "h!",
       digits = 3,
       col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
   kable_classic(full_width = F)%>% 
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
-
-
 ```
 
 
@@ -573,11 +572,12 @@ Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distr
 
 <!--# Here comes our main part [FILIPPO] -> to do!  -->
 
-```{r garchcode, eval=FALSE}
+```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 #garchspec <- garchfit <- garchforecast <- stdret <- vector(mode = "list", length = length(distributions))
 #names(garchspec) <- names(garchfit) <- names(garchforecast) <- names(stdret) <- distributions
 Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
+Models.garch.clean <-  toupper(gsub("fGARCH.", "", Models.garch)) # we use this for tables
 
 for(i in 1:length(Models.garch)){
 assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
@@ -771,12 +771,86 @@ garchfit.fGARCH.TGARCH[[1]]@fit$coef
 garchfit.fGARCH.TGARCH[[1]]@fit$se.coef
 ```
 
+
 ```{r table10prep, eval=FALSE}
-print("TSGARCH/AVGARCH")
 garchfit.fGARCH.AVGARCH[[1]]@fit$coef
 garchfit.fGARCH.AVGARCH[[1]]@fit$se.coef
 ```
 <!-- Here comes the description -->
+
+```{r aictable, echo=F, results='asis'}
+
+aic_sGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_sGARCH[i] = infocriteria(garchfit.sGARCH[[i]])[1]
+} 
+
+aic_iGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_iGARCH[i] = infocriteria(garchfit.iGARCH[[i]])[1]
+} 
+
+aic_EWMA <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_EWMA[i] = infocriteria(garchfit.EWMA[[i]])[1]
+} 
+
+aic_eGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_eGARCH[i] = infocriteria(garchfit.eGARCH[[i]])[1]
+} 
+
+aic_gjrGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_gjrGARCH[i] = infocriteria(garchfit.gjrGARCH[[i]])[1]
+} 
+
+aic_naGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_naGARCH[i] = infocriteria(garchfit.fGARCH.NAGARCH[[i]])[1]
+} 
+
+aic_tGARCH <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_tGARCH[i] = infocriteria(garchfit.fGARCH.TGARCH[[i]])[1]
+} 
+
+aic_avgarch <- vector(length=length(distributions)) 
+for (i in 1:length(distributions)) {
+  aic_avgarch[i] = infocriteria(garchfit.fGARCH.AVGARCH[[i]])[1]
+} 
+
+aics <- matrix(ncol=length(Models.garch), nrow = length(distributions))
+rownames(aics) <- distributions
+colnames(aics) <- Models.garch.clean[c(1,7,8,2,5,4,6,3)]
+aics[,1] <- aic_sGARCH
+aics[,2] <- aic_iGARCH
+aics[,3] <- aic_EWMA
+aics[,4] <- aic_eGARCH
+aics[,5] <- aic_gjrGARCH
+aics[,6] <- aic_naGARCH
+aics[,7] <- aic_tGARCH
+aics[,8] <- aic_avgarch
+
+tableAIC <- as.data.frame(round(aics,4))
+
+cf <-  condformat(tableAIC) %>%
+  rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(EWMA,expression =EWMA==min(EWMA), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(EGARCH,expression =EGARCH==min(EGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(GJRGARCH,expression =GJRGARCH==min(GJRGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(NAGARCH,expression =NAGARCH==min(NAGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))  %>%
+  rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+  rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>% kbl(caption = "Model selection according to AIC","latex",
+      label = 'aicTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>% 
+  footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+```
+
 
 ## Results of GARCH with time-varying higher moments
 
@@ -794,7 +868,7 @@ cl = makePSOCKcluster(10)
 fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Eurostoxx 50 series.", eval=FALSE}
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE}
 # plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
 # par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
 # cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
