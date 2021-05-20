@@ -568,22 +568,22 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 ```{r table3prep, eval=FALSE}
 
 table.3.function <- function(GARCHfit.object = garchfit.eGARCH){
-  
+#Making objects to fill  
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
 list.table.3 <- vector(mode = "list", length = length(distributions))
 names(list.table.3) <- distributions
 ref.distr <- seq(from = 1, to = length(distributions)*2, by = 2)
-
+#Retriving all the data from the original lists
 for(i in 1:length(distributions)){
     list.table.3.tmp[[ref.distr[i]]] <- GARCHfit.object[[i]]@fit$coef
     list.table.3.tmp[[ref.distr[i]+1]] <- GARCHfit.object[[i]]@fit$tval
 }
-
+#From list of vectors of different lengths to list of matrixes with empty spaces filled with NAs
 for(i in 1:length(distributions)){
   #length(list.table.3.tmp[[ref.distr[i]+1]]) <- length(list.table.3.tmp[[ref.distr[i]]])
   list.table.3[[i]] <- cbind(list.table.3.tmp[[ref.distr[i]]], list.table.3.tmp[[ref.distr[i]+1]][match(names(list.table.3.tmp[[ref.distr[i]]]), names(list.table.3.tmp[[ref.distr[i]+1]]))])
 }
-
+#Function to rearrange the list from a list of matrices to list of vectors
 list.restructure <- function(object = list.table.3){
   len.table <- length(object)
   len.inside.list <- rep(NA, len.table)
@@ -606,19 +606,19 @@ list.restructure <- function(object = list.table.3){
   for(i in 1:len.table){names(adj.list[[i]]) <- names.list[[i]]}
   return(adj.list)
 }
-
+#Unlisting and removing NAs
 adj.list  <- list.restructure(object = list.table.3)
 table.3.matrix <- matrix(unlist(lapply(adj.list, `length<-`, max(lengths(adj.list)))), 
                                  ncol = length(distributions),nrow = max(lengths(adj.list)), byrow = F)
 colnames(table.3.matrix) <- names(adj.list)
 table.3.matrix[is.na(table.3.matrix)] <- ""
 table.3.matrix[table.3.matrix=="(NA)"] <- ""
-
+#Adjustments for std & ged distributions
 table.3.matrix[c(length(table.3.matrix[,2])-1,length(table.3.matrix[,2])),2] <- tail(table.3.matrix[table.3.matrix[,2]!="",2],2)
 table.3.matrix[c(length(table.3.matrix[,2])-3,length(table.3.matrix[,2])-2),2] <- ""
 table.3.matrix[c(length(table.3.matrix[,4])-1,length(table.3.matrix[,4])),4] <- tail(table.3.matrix[table.3.matrix[,4]!="",4],2)
 table.3.matrix[c(length(table.3.matrix[,4])-3,length(table.3.matrix[,4])-2),4] <- ""
-
+#Log-Likelyhoods
 LLH <- rep(NA, length(distributions))
 for(i in 1:length(distributions)){LLH[i] <- GARCHfit.object[[i]]@fit$LLH}
 table.3.matrix <- rbind(table.3.matrix, round(LLH,3))
