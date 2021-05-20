@@ -6,7 +6,7 @@
 
 # Appendix
 
-##### Alternative distributions than the normal {#conditional-distributions}
+#### Alternative distributions than the normal {#conditional-distributions}
 
 ###### Student's t-distribution
 
@@ -77,7 +77,7 @@ f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ 
 
 \noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) of appendix but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
 
-##### GARCH models
+#### GARCH models
 
 All the GARCH models are estimated using the package "rugarch" by @alexios2020. We use specifications similar to @ghalanos2020. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output.
 
