@@ -30,10 +30,6 @@ require(zoo)
 # install_bitbucket("alexiosg/racd")
 options(knitr.kable.NA = "")
 
-
-
-
-
 data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
@@ -314,16 +310,16 @@ DistMLE <- function(series) {
   
   for(i in c(1:3,6)){
   if(abs(ST_tvalues2[i])<=1.64){
-  T_significance[i] <-  "" 
+  ST_significance[i] <-  "" 
   }
   if(abs(ST_tvalues2[i])>1.64){
-  T_significance[i] <-  "*"  
+  ST_significance[i] <-  "*"  
   }
   if(abs(ST_tvalues2[i])> 1.96){
-  T_significance[i] <-  "**"  
+  ST_significance[i] <-  "**"  
   }
   if(abs(ST_tvalues2[i])> 2.58){
-  T_significance[i] <-  "***"  
+  ST_significance[i] <-  "***"  
   }
   }
   ST_significance[is.na(ST_significance)] <- ""
@@ -512,9 +508,9 @@ Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significan
 Table2_SE[4,2:6] <- paste0("(",round(SGED_result$std.error, 3),")",SGED_significance)
 Table2_SE[6,2:6] <- paste0("(",round(GED_result$std.error, 3),")",GED_significance)
 Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3]/sqrt(length(R)),3),")",ST_significance[1:3])
-Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3]/sqrt(length(R),3)),")", ST_significance[6])
+Table2_SE[8,7] <- paste0("(",round(ST_result$sd[3]/sqrt(length(R)),3),")", ST_significance[6])
 Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3]/sqrt(length(R)),3),")",T_significance[1:2])
-Table2_SE[10,7] <- paste0("(",round(T_result$sd[3]/sqrt(length(R),3)),")",T_significance[6])
+Table2_SE[10,7] <- paste0("(",round(T_result$sd[3]/sqrt(length(R)),3),")",T_significance[6])
 Table2_SE[12,2:3] <- paste0("(",round(Normal_result$std.error, 3),")",Normal_significance)
 
 
@@ -550,21 +546,22 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
 
-```{r Euro Stoxx,results='asis', echo=FALSE}
+```{r Euro Stoxx,, echo=FALSE}
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
+names(Eurostoxx) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC") 
+```
 
-
-Eurostoxx %>% kbl(caption = "Maximum likelihood estimates of unconditional distribution functions",
-      label = 'MLEtable',"latex",
+```{r results='asis'}
+kbl(Eurostoxx,caption = "Maximum likelihood estimates of unconditional distribution functions",
+      label = 'MLEtable',
       booktabs = T,
       position = "h!",
       digits = 3,
-      col.names = c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC"))%>%
+      col.names = )%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "")
 ```
-
 
 
 
@@ -834,15 +831,16 @@ aics[,8] <- aic_avgarch
 
 tableAIC <- as.data.frame(round(aics,4))
 
-cf <-  condformat(tableAIC) %>%
-  rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(EWMA,expression =EWMA==min(EWMA), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(EGARCH,expression =EGARCH==min(EGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(GJRGARCH,expression =GJRGARCH==min(GJRGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(NAGARCH,expression =NAGARCH==min(NAGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))  %>%
-  rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
-  rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>% kbl(caption = "Model selection according to AIC","latex",
+# cf <-  condformat(tableAIC) %>%
+#   rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(EWMA,expression =EWMA==min(EWMA), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(EGARCH,expression =EGARCH==min(EGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(GJRGARCH,expression =GJRGARCH==min(GJRGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(NAGARCH,expression =NAGARCH==min(NAGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))  %>%
+#   rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) 
+aics %>% kbl(caption = "Model selection according to AIC","latex",
       label = 'aicTable',
       booktabs = T,
       position = "h!",
@@ -869,7 +867,6 @@ fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.contro
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE}
-# plotxts comes from implementing https://stackoverflow.com/a/50051183/271616
 # par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
 # cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
 # cm <- lines(fitted(fit), col = 2)
