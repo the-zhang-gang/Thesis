@@ -642,12 +642,45 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 table3 <- matrix(nrow = 12, ncol = 5)
 colnames(table3) <- distributions
 
-#trying a loop, maybe you can solve that @filippo?
 ## column loop i = normal distribution, std, sstd, ged, sged
-table3[1,1] <- garchfit.sGARCH[[1]]@fit$coef[1] #first parameter estimate
-table3[2,1] <- garchfit.sGARCH[[1]]@fit$se.coef[1] #first standard error
-table3[3,1] <- garchfit.sGARCH[[1]]@fit$coef[2] #second parameter estimate
-table3[4,1] <- garchfit.sGARCH[[1]]@fit$se.coef[2]
+list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
+list.table.3 <- vector(mode = "list", length = length(distributions))
+names(list.table.3) <- distributions
+
+ref.distr <- seq(from = 1, to = length(distributions)*2, by = 2)
+
+for(i in 1:length(distributions)){
+    list.table.3.tmp[[ref.distr[i]]] <- garchfit.sGARCH[[i]]@fit$coef
+    list.table.3.tmp[[ref.distr[i]+1]] <- garchfit.sGARCH[[i]]@fit$se.coef
+}
+
+for(i in 1:length(distributions)){
+  list.table.3[[i]] <- t(rbind(list.table.3.tmp[[ref.distr[i]]], list.table.3.tmp[[ref.distr[i]+1]]))
+}
+
+
+
+
+
+
+
+
+
+
+
+# merge(list.table.3, by = "col.names", all = T)
+# 
+# Reduce(function(...) merge(..., by = "col.names", all = TRUE), list.table.3)
+# 
+
+
+
+
+
+
+
+
+
 
 
 
