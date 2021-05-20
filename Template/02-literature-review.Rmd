@@ -15,14 +15,13 @@ bibliography: references.bib
 # Literature review {#lit-rev}
 
 \minitoc <!-- this will include a mini table of contents-->
-
 <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
 
 ## Stylized facts of returns {#styl-facts}
 
-\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^literature-review-1] following @annaert2021 for returns are given.
+\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts[^1] following @annaert2021 for returns are given.
 
-[^literature-review-1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
+[^1]: Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)
 
 -   Returns are *small and volatile* (with the standard deviation being larger than the mean on average).
 -   Returns have very little serial correlation as mentioned by for example @bollerslev1987.
@@ -96,7 +95,8 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq8)
 \end{align}
 ```
-\noindent This leads to the properties of ARCH models: Stationarity^[Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.] condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
+
+\noindent This leads to the properties of ARCH models: Stationarity^[Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.] condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates fat-tails.
 
 ```{=tex}
 \begin{align} 
@@ -135,8 +135,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \end{align}
 ```
 ### Univariate GARCH models {#univ-garch}
-
-\noindent An improvement of the ARCH model described in part \@ is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)^[*Generalized* as it is a generalization by @bollerslev1986 of the ARCH model of @engle1982. *Autoregressive,* as it is a time series model with an autoregressive form (regression on itself). *Conditional heteroscedasticity,* while time variation in conditional variance is built into the model [@alexander2008].]. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \@ref(conditional-distributions) will be used. As @alexander2008 explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function^[which makes the maximum likelihood estimation explained in part \@ref(garch-method) complex with more parameters that have to be estimated.]. An overview (of a selection) of investigated GARCH models is given in the following table.
+\noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)^[*Generalized* as it is a generalization by @bollerslev1986 of the ARCH model of @engle1982. *Autoregressive,* as it is a time series model with an autoregressive form (regression on itself). *Conditional heteroscedasticity,* while time variation in conditional variance is built into the model [@alexander2008].]. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \@ref(conditional-distributions) will be used. As @alexander2008 explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function^[which makes the maximum likelihood estimation explained in part \@ref(garch-method) complex with more parameters that have to be estimated.]. An overview (of a selection) of investigated GARCH models is given in the following table.
 
 | Author(s)/user(s)               | Model                      |
 |---------------------------------|----------------------------|
@@ -190,17 +189,28 @@ According to the BIS framework, banks need to calculate both $VaR_{99}$ and $VaR
 
 Here comes the discussion about studies that have looked at higher moments and VaR determination. Also a summary of studies that discusses time-varying higher moments, but not a big part, while it is also only a small part of the empirical findings (couple of GARCH-ACD models).
 
-| Author         | Higher moments |
-|----------------|----------------|
-| @hansen1994    |                |
-| \\\@harvey1999 |                |
-|                |                |
-|                |                |
-|                |                |
-|                |                |
-|                |                |
-| @brooks2005    |                |
-|                |                |
-|                |                |
++----------------------------------+-------------------------------------------+
+| Author                           | Higher moments                            |
++==================================+===========================================+
+| @hansen1994                      | Skewness and shape, extended ARCH-model   |
++----------------------------------+-------------------------------------------+
+| \\\@harvey1999                   | Effect of higher moments on lower moments |
++----------------------------------+-------------------------------------------+
+| @brooks2005                      | Time varying degrees of freedom           |
++----------------------------------+-------------------------------------------+
+|                                  |                                           |
++----------------------------------+-------------------------------------------+
+|                                  |                                           |
++----------------------------------+-------------------------------------------+
 
 : Higher moments and VaR
+
+While it is relatively straightforward to include unconditional higher-moments in VaR and CVaR calculations, it is less simple to do so when the higher moments (in addition to the variance) are time-varying. @hansen1994 extends the ARCH model to include time-varying moments beyond mean and variance. While mean returns and variance are usually the parameters of most interest, disregarding these higher moments could provide an incomplete description of a conditional distribution. The model proposed by @hansen1994 allows for skewness and shape parameters to vary in a skewed-t density function through specifying them as functions of their errors in previous periods (in an similar way how variance is estimated). Applications on U.S. Treasuries and exchange rates are discussed.
+
+Harvey and Siddique
+
+-   What is the impact on the coefficients of the lower moments?
+
+For the third question, some evidence was presented in Harvey and Siddique (1999) where the inclusion of time varying skewness affected the persistence of the conditional variance and caused some of the asymmetries in the variance to disappear (through a reduced asymmetry coefficient in the variance dynamics). I would also actually expect that for standard GARCH models with very high persistence, the inclusion of time variation in the shape parameter (and hence more directly on the higher even moments) to lead to a reduction in such persistence as some of the extreme variations from shocks could be better accommodated. I also wonder whether the inclusion of time variation in the skew parameter would have an impact on the first moment parameters, particularly when their dynamics might include threshold effects.
+
+Brooks
