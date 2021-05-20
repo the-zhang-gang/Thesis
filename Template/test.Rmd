@@ -1,0 +1,22 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r}
+SGT_result$estimate
+(names(SGT_result$estimate) <- c("mu", "sigma", "xi", "p", "eta"))
+```
+```{r}
+SGED_result$estimate #according to sgt package, there to get SGED, q = infinity so it should be p here nu? 
+
+# q = eta = nu
+(names(SGED_result$estimate) <- c("mu", "sigma", "eta", "xi"))
+SGED_result$estimate
+
+```
+
+

@@ -164,7 +164,6 @@ DistMLE <- function(R) {
   SGT_sumResult <- summary(SGT_result)
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
   SGT_pv <- SGT_sumResult$p.value
-
   SGT_significance <- matrix(ncol = 5,nrow = 1)
   for(i in 1:5){
   if(SGT_pv[i]>=0.10){
@@ -188,8 +187,9 @@ DistMLE <- function(R) {
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$loglik
   SGED_pv <- 2* stats::pnorm(-abs(SGED_result$estimate/(SGED_result$sd)))
-  SGED_significance <- matrix(ncol = 6,nrow = 1)
-  for(i in 1:4){
+  SGED_pv <- c(SGED_pv[1:2], SGED_pv[4],NA, SGED_pv[3])
+  SGED_significance <- matrix(ncol =5,nrow = 1)
+  for(i in c(1:3,5)){
   if(SGED_pv[i]>=0.10){
   SGED_significance[i] <-  "" 
   }
@@ -211,8 +211,9 @@ DistMLE <- function(R) {
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$loglik
   GED_pv <- 2* stats::pnorm(-abs(GED_sumResult$estimate/(GED_sumResult$sd)))
-  GED_significance <- matrix(ncol = 6,nrow = 1)
-  for(i in c(1,2,3)){
+  GED_pv <- c(GED_pv[1:2], NA, NA, GED_pv[3])
+  GED_significance <- matrix(ncol = 5,nrow = 1)
+  for(i in c(1,2,5)){
   if(GED_pv[i]>=0.10){
   GED_significance[i] <-  "" 
   }
@@ -234,8 +235,9 @@ DistMLE <- function(R) {
   ST_sumResult <- summary(ST_result)
   ST_sumResult$aic
   ST_pvalue <- 2*stats::pnorm(-abs(ST_sumResult$estimate/(ST_sumResult$sd)))
-  ST_significance <- matrix(ncol = 4,nrow = 1)
-  for(i in 1:4){
+  ST_pvalue <-  c(ST_pvalue[1:2], ST_pvalue[4], NA, ST_pvalue[3])
+  ST_significance <- matrix(ncol = 5,nrow = 1)
+  for(i in c(1:3,5)){
   if(ST_pvalue[i]>=0.10){
   ST_significance[i] <-  "" 
   }
@@ -256,8 +258,9 @@ DistMLE <- function(R) {
   T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
   T_sumResult <- summary(T_result)
   T_pvalues <-  2*stats::pnorm(-abs(T_result$estimate/(T_result$sd)))
-  T_significance <- matrix(ncol = 3,nrow = 1)
-  for(i in 1:3){
+  T_pvalues <-  c(T_pvalues[1:2], NA, NA, T_pvalues[3])
+  T_significance <- matrix(ncol = 5,nrow = 1)
+  for(i in c(1,2,5)){
   if(T_pvalues[i]>=0.10){
   T_significance[i] <-  "" 
   }
@@ -279,8 +282,8 @@ DistMLE <- function(R) {
   Normal_sumResult <- summary(Normal_result)
   Normal_AIC <- 2*length(Normal_result$estimate-3) - 2*Normal_sumResult$loglik
   Normal_pv <- 2*stats::pnorm(-abs(Normal_result$estimate/(Normal_result$sd)))
-  Normal_significance <- matrix(ncol = 2,nrow = 1)
-  for(i in 1:2){
+  Normal_significance <- matrix(ncol = 5,nrow = 1)
+  for(i in c(1:2)){
   if(Normal_pv[i]>=0.10){
   Normal_significance[i] <-  "" 
   }
@@ -312,40 +315,40 @@ Table2[1,7] <- SGT_AIC
 Table2[2,1] <- SGED_result$estimate[1]
 Table2[2,2] <- SGED_result$estimate[2]
 Table2[2,3] <- SGED_result$estimate[4]
-Table2[2,4] <- Inf
-Table2[2,5] <- SGED_result$estimate[3]
+Table2[2,4] <- SGED_result$estimate[3]
+Table2[2,5] <- Inf
 Table2[2,6] <- SGED_result$loglik
 Table2[2,7] <- SGT_AIC
 
 Table2[3,1] <- GED_result$estimate[1]
 Table2[3,2] <- GED_result$estimate[2]
 Table2[3,3] <- 0
-Table2[3,4] <- Inf
-Table2[3,5] <- GED_result$estimate[3]
+Table2[3,4] <- GED_result$estimate[3]
+Table2[3,5] <- Inf 
 Table2[3,6] <- GED_result$loglik
 Table2[3,7] <- GED_AIC
 
 Table2[4,1] <- ST_result$estimate[1]
 Table2[4,2] <- ST_result$estimate[2]
 Table2[4,3] <- ST_result$estimate[4]
-Table2[4,4] <- 2
-Table2[4,5] <- ST_result$estimate[3]
+Table2[4,4] <- ST_result$estimate[3]
+Table2[4,5] <- 2
 Table2[4,6] <- ST_result$loglik
 Table2[4,7] <- ST_result$aic
 
 Table2[5,1] <- T_result$estimate[1]
 Table2[5,2] <- T_result$estimate[2]
 Table2[5,3] <- 0 
-Table2[5,4] <- 2
-Table2[5,5] <- T_result$estimate[3]
+Table2[5,4] <- T_result$estimate[3] 
+Table2[5,5] <- 2
 Table2[5,6] <- T_result$loglik
 Table2[5,7] <- T_result$aic
 
 Table2[6,1] <- Normal_mu
 Table2[6,2] <- Normal_sigma
 Table2[6,3] <- 0
-Table2[6,4] <- 2
-Table2[6,5] <- Inf
+Table2[6,4] <- Inf 
+Table2[6,5] <- 2
 Table2[6,6] <- Normal_result$loglik
 Table2[6,7] <- Normal_result$aic
 
@@ -411,8 +414,9 @@ Additionally, for every distribution fitted with MLE, plots are generated to com
 ```{r Euro Stoxx,, echo=FALSE}
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
-Eurostoxx$table
-names(Eurostoxx) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$q$","$\\nu$","$L$","AIC")  
+table2 <- Eurostoxx$table
+Eurostoxx$results$SGT
+colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$\\kappa$","$\\nu$","$L$","AIC")  
 ```
 
 ```{r results='asis'}
