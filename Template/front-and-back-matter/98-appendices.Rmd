@@ -193,6 +193,8 @@ $\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +}
  (\#eq:eq18)
 \end{align}
 ```
+$\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2$
+
 As before, $\gamma_j$ represents the *leverage* term.
 
 ###### TGARCH model
@@ -219,6 +221,8 @@ As before, $\gamma_j$ represents the *leverage* term.
 \end{align}
 ```
 \newpage
+
+$\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}$
 
 ###### EWMA
 

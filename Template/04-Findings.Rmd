@@ -161,8 +161,8 @@ DistMLE <- function(R) {
   X.data <- X ~ coredata(R)
   SGT_start <- list(mu=0,sigma=1, lambda = 0.5, p=2, q=8) # p = kappa, q = nu
   SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
+names(SGT_result$estimate) <- names(SGT_result$std.error) <-  c("alpha", "beta", "xi", "kappa", "eta")
   SGT_sumResult <- summary(SGT_result)
-  names(SGT_result$estimate) <- names(SGT_result$std.error) <-  c("alpha", "beta", "xi", "kappa", "eta")
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
   SGT_pv <- 2* stats::pnorm(-abs(SGT_result$estimate/(SGT_result$std.error)))
   SGT_significance <- matrix(ncol = 5,nrow = 1)
@@ -185,9 +185,9 @@ DistMLE <- function(R) {
   ### SGED
   SGED_start <- list(mean=0,sd=1, nu = 2, xi = 1.5)
   SGED_result <- fitdist(data = as.vector(coredata(R)), distr = "sged", method = "mle", SGED_start)
+    names(SGED_result$estimate) <- names(SGED_result$sd) <-  c("alpha", "beta", "kappa", "xi") 
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$loglik
-  names(SGED_result$estimate) <- names(SGED_result$sd) <-  c("alpha", "beta", "kappa", "xi") 
   SGED_pv <- 2* stats::pnorm(-abs(SGED_result$estimate/(SGED_result$sd)))
   
   SGED_pv <- c(SGED_pv[1:2], SGED_pv[4], SGED_pv[3],NA)
@@ -211,6 +211,7 @@ DistMLE <- function(R) {
   ### GED
   GED_start <- list(mean = 0, sd = 1, nu = 2)
   GED_result <- fitdist(data = as.vector(R),distr="ged", start = GED_start)
+  names(GED_result$estimate) <- names(GED_result$sd) <-  c("alpha", "beta", "kappa") 
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$loglik
   GED_pv <- 2* stats::pnorm(-abs(GED_sumResult$estimate/(GED_sumResult$sd)))
@@ -235,6 +236,7 @@ DistMLE <- function(R) {
   ### ST (fitdist) 
   ST_start <- list(mean=0,sd=1, nu = 5, xi=1.5)
   ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
+  names(ST_result$estimate) <- names(ST_result$sd) <-  c("alpha", "beta", "eta","xi")
   ST_sumResult <- summary(ST_result)
   ST_sumResult$aic
   ST_pvalue <- 2*stats::pnorm(-abs(ST_sumResult$estimate/(ST_sumResult$sd)))
@@ -259,6 +261,7 @@ DistMLE <- function(R) {
   ### T (fitdist) 
   T_start <- list(mean = 0, sd = 1, nu = 5)
   T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
+  names(T_result$estimate) <- names(T_result$sd) <-  c("alpha", "beta", "eta")
   T_sumResult <- summary(T_result)
   T_pvalues <-  2*stats::pnorm(-abs(T_result$estimate/(T_result$sd)))
   T_pvalues <-  c(T_pvalues[1:2], NA, NA, T_pvalues[3])
@@ -282,6 +285,7 @@ DistMLE <- function(R) {
   ### Normal (fitdist)
   Normal_start <- list(mean = 0, sd=1)
   Normal_result <- fitdist(as.vector(coredata(R)), "norm","mle", Normal_start)
+  names(Normal_result$estimate) <- names(Normal_result$sd) <-  c("alpha", "beta")
   Normal_sumResult <- summary(Normal_result)
   Normal_AIC <- 2*length(Normal_result$estimate-3) - 2*Normal_sumResult$loglik
   Normal_pv <- 2*stats::pnorm(-abs(Normal_result$estimate/(Normal_result$sd)))
@@ -306,50 +310,40 @@ DistMLE <- function(R) {
 Table2 <- matrix(nrow = 6, ncol = 7)
 colnames(Table2) <- c("alpha","beta","xi","kappa","eta","L","AIC")
 rownames(Table2) <- c("SGT","SGED","GED","ST","T","Normal")
-
 # "alpha","beta","xi","kappa","nu","L","AIC"
-Table2[1,1] <- SGT_result$estimate[1] 
-Table2[1,2] <- SGT_result$estimate[2] 
-Table2[1,3] <- SGT_result$estimate[3]
-Table2[1,4] <- SGT_result$estimate[4]
-Table2[1,5] <- SGT_result$estimate[5]
+Table2[1,1:5] <- SGT_result$estimate
 Table2[1,6] <- SGT_result$maximum
 Table2[1,7] <- SGT_AIC
-
-Table2[2,1] <- SGED_result$estimate[1]
-Table2[2,2] <- SGED_result$estimate[2]
+# "alpha","beta","xi","kappa","nu","L","AIC"
+Table2[2,1:2] <- SGED_result$estimate[1:2]
 Table2[2,3] <- SGED_result$estimate[4]
 Table2[2,4] <- SGED_result$estimate[3]
 Table2[2,5] <- Inf
 Table2[2,6] <- SGED_result$loglik
 Table2[2,7] <- SGT_AIC
-
-Table2[3,1] <- GED_result$estimate[1]
-Table2[3,2] <- GED_result$estimate[2]
+# "alpha","beta","xi","kappa","nu","L","AIC"
+Table2[3,1:2] <- GED_result$estimate[1:2]
 Table2[3,3] <- 0
 Table2[3,4] <- GED_result$estimate[3]
 Table2[3,5] <- Inf 
 Table2[3,6] <- GED_result$loglik
 Table2[3,7] <- GED_AIC
-
-Table2[4,1] <- ST_result$estimate[1]
-Table2[4,2] <- ST_result$estimate[2]
+# "alpha","beta","xi","kappa","nu","L","AIC"
+Table2[4,1:2] <- ST_result$estimate[1:2]
 Table2[4,3] <- ST_result$estimate[4]
 Table2[4,4] <- 2
-Table2[4,5] <- ST_result$estimate[3]/2 # eta parameter
+Table2[4,5] <- ST_result$estimate[3] # eta parameter is not exactly true here... See formula SGT package
 Table2[4,6] <- ST_result$loglik
 Table2[4,7] <- ST_result$aic
-
-Table2[5,1] <- T_result$estimate[1]
-Table2[5,2] <- T_result$estimate[2]
+# "alpha","beta","xi","kappa","nu","L","AIC"
+Table2[5,1:2] <- T_result$estimate[1:2]
 Table2[5,3] <- 0 
 Table2[5,4] <- 2
 Table2[5,5] <- T_result$estimate[3]/2 # eta parameters
 Table2[5,6] <- T_result$loglik
 Table2[5,7] <- T_result$aic
 
-Table2[6,1] <- Normal_result$estimate[1]
-Table2[6,2] <- Normal_result$estimate[2]
+Table2[6,1:2] <- Normal_result$estimate[1:2]
 Table2[6,3] <- 0
 Table2[6,4] <- 2 
 Table2[6,5] <- Inf
@@ -367,11 +361,9 @@ Table2_SE[5,] <- Table2[3,]
 Table2_SE[7,] <- Table2[4,]
 Table2_SE[9,] <- Table2[5,]
 Table2_SE[11,] <- Table2[6,]
-
-
 #fixing rownames
 colnames(Table2_SE) <- c("alpha","beta","xi","kappa","nu","L","AIC")
-rownames(Table2_SE) <- c(1,2,3,4,5,6,7,8,9,10,11,12)
+rownames(Table2_SE) <- 1:12
 tablenames <- c("SGT","","SGED","","GED","","ST","","T","","Normal","")
 Table2_SE <- cbind(tablenames,Table2_SE)
 
