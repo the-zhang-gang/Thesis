@@ -628,6 +628,8 @@ table.3.matrix <- as.data.frame(table.3.matrix, row.names = NULL)
 return(table.3.matrix)
 }
 
+#RESULTS
+
 Table.3.iGARCH <- table.3.function(GARCHfit.object = garchfit.iGARCH)
 Table.3.eGARCH <- table.3.function(GARCHfit.object = garchfit.eGARCH)
 Table.3.gjrGARCH <- table.3.function(GARCHfit.object = garchfit.gjrGARCH)
