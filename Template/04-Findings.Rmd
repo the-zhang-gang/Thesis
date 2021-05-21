@@ -649,6 +649,33 @@ Table.3.fGARCH.TGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.TGAR
 
 #Testing the kabling
 knitr::kable(Table.3.eGARCH)
+
+# Table.3.cbind.function <- function(distribution = "sstd"){}
+# 
+# Table.3.fGARCH.AVGARCH[Table.3.fGARCH.AVGARCH[,1]!="",1] 
+# 
+# 
+# test1 <- Table.3.iGARCH[c(match(Table.3.fGARCH.AVGARCH[Table.3.fGARCH.AVGARCH[,1]!="",1],Table.3.iGARCH[,1]),match(Table.3.fGARCH.AVGARCH[Table.3.fGARCH.AVGARCH[-nrow(Table.3.fGARCH.AVGARCH),1]!="",1],Table.3.iGARCH[,1])+1),-1]
+# 
+# hello1 <- Table.3.iGARCH[,4:5]
+# hello2 <- Table.3.fGARCH.AVGARCH[,4:5]
+# 
+# 
+# fff <- cbind(Table.3.fGARCH.AVGARCH[,1],Table.3.iGARCH[match(Table.3.fGARCH.AVGARCH[,1],Table.3.iGARCH[,1]),-1])
+# 
+# 
+# test <- c(match(Table.3.fGARCH.AVGARCH[Table.3.fGARCH.AVGARCH[,1]!="",1],Table.3.iGARCH[,1]),match(Table.3.fGARCH.AVGARCH[Table.3.fGARCH.AVGARCH[-nrow(Table.3.fGARCH.AVGARCH),1]!="",1],Table.3.iGARCH[,1])+1)
+#                                                                                                    
+# test1[is.na(test1)]
+#                                                                                                  
+# test[!is.na(test)] <- sort(test[!is.na(test)])
+# 
+# 
+# Table.3.iGARCH[,which(names(Table.3.iGARCH)=="sstd")]
+# 
+# hi <- left_join(hello1, hello2, na_matches = "na")
+
+
 ```
 
 ```{r table4prep, eval=FALSE}
