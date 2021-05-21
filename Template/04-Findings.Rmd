@@ -613,6 +613,7 @@ table.3.matrix <- matrix(unlist(lapply(adj.list, `length<-`, max(lengths(adj.lis
 colnames(table.3.matrix) <- names(adj.list)
 table.3.matrix[is.na(table.3.matrix)] <- ""
 table.3.matrix[table.3.matrix=="(NA)"] <- ""
+
 #Adjustments for std & ged distributions
 table.3.matrix[c(length(table.3.matrix[,2])-1,length(table.3.matrix[,2])),2] <- tail(table.3.matrix[table.3.matrix[,2]!="",2],2)
 table.3.matrix[c(length(table.3.matrix[,2])-3,length(table.3.matrix[,2])-2),2] <- ""
