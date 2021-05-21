@@ -567,6 +567,7 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 
 <!-- What do we do, do we do 6 tables for all the distributions?  -->
 ```{r table3prep, eval=FALSE}
+require(plyr)
 
 table.3.function <- function(GARCHfit.object = garchfit.eGARCH){
 #Making objects to fill  
@@ -622,9 +623,14 @@ table.3.matrix[c(length(table.3.matrix[,4])-1,length(table.3.matrix[,4])),4] <- 
 table.3.matrix[c(length(table.3.matrix[,4])-3,length(table.3.matrix[,4])-2),4] <- ""
 #Log-Likelyhoods
 LLH <- rep(NA, length(distributions))
-for(i in 1:length(distributions)){LLH[i] <- GARCHfit.object[[i]]@fit$LLH}
-table.3.matrix <- rbind(table.3.matrix, round(LLH,3))
-table.3.matrix <- cbind(c(names(adj.list[[3]]),"LLH"), table.3.matrix)
+for(i in 1:length(distributions)){LLH[i] <- garchfit.iGARCH[[i]]@fit$LLH}
+names.table.3 <- revalue(names(adj.list[[3]]), c("mu"="$\\alpha_0$", "ar1"="$\\alpha_1$", "omega"= "$\\beta_0$", "alpha1"="$\\beta_1$", "beta1"="$\\beta_2$", "gamma1"="$\\gamma$", "skew"="$\\lambda$", "shape"="$\\kappa$"), warn_missing = F)
+kappa.object <- cbind(matrix(data = "", nrow = 2, ncol = 3) ,table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),4:5])
+eta <- cbind(table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),1:3], matrix(data = "", nrow = 2, ncol = 2) )
+table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),] <- kappa.object
+table.3.matrix <- rbind(table.3.matrix, eta, round(LLH,3))
+#table.3.matrix <- rbind(table.3.matrix, round(LLH,3))
+table.3.matrix <- cbind(c(names.table.3,"$\\eta$","","LLH"), table.3.matrix)
 table.3.matrix <- as.data.frame(table.3.matrix, row.names = NULL)
 
 return(table.3.matrix)
@@ -641,6 +647,8 @@ Table.3.fGARCH.AVGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.AVG
 Table.3.fGARCH.NAGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.NAGARCH)
 Table.3.fGARCH.TGARCH <- table.3.function(GARCHfit.object = garchfit.fGARCH.TGARCH)
 
+#Testing the kabling
+knitr::kable(Table.3.eGARCH)
 ```
 
 ```{r table4prep, eval=FALSE}
