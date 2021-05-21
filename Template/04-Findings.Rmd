@@ -153,17 +153,18 @@ sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = l
 ```
 
 ```{r mlesgt, include=FALSE}
-library(sgt)
+require(sgt)
 require(graphics)
 require(stats)
 DistMLE <- function(R) {
   ### SGT
   X.data <- X ~ coredata(R)
-  SGT_start <- list(mu=0,sigma=2, lambda = 0.5, p=2, q=8) # p = kappa, q = nu
+  SGT_start <- list(mu=0,sigma=1, lambda = 0.5, p=2, q=8) # p = kappa, q = nu
   SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
   SGT_sumResult <- summary(SGT_result)
+  names(SGT_result$estimate) <- names(SGT_result$std.error) <-  c("alpha", "beta", "xi", "kappa", "eta")
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
-  SGT_pv <- SGT_sumResult$p.value
+  SGT_pv <- 2* stats::pnorm(-abs(SGT_result$estimate/(SGT_result$std.error)))
   SGT_significance <- matrix(ncol = 5,nrow = 1)
   for(i in 1:5){
   if(SGT_pv[i]>=0.10){
@@ -180,16 +181,18 @@ DistMLE <- function(R) {
   }
   }
   SGT_significance[is.na(SGT_significance)] <- ""
-  
+
   ### SGED
   SGED_start <- list(mean=0,sd=1, nu = 2, xi = 1.5)
-  SGED_result <- fitdist(data = as.vector(coredata(R)), distr = "sged", method = "mle", SGED_start_f)
+  SGED_result <- fitdist(data = as.vector(coredata(R)), distr = "sged", method = "mle", SGED_start)
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$loglik
+  names(SGED_result$estimate) <- names(SGED_result$sd) <-  c("alpha", "beta", "kappa", "xi") 
   SGED_pv <- 2* stats::pnorm(-abs(SGED_result$estimate/(SGED_result$sd)))
-  SGED_pv <- c(SGED_pv[1:2], SGED_pv[4],NA, SGED_pv[3])
+  
+  SGED_pv <- c(SGED_pv[1:2], SGED_pv[4], SGED_pv[3],NA)
   SGED_significance <- matrix(ncol =5,nrow = 1)
-  for(i in c(1:3,5)){
+  for(i in c(1:4)){
   if(SGED_pv[i]>=0.10){
   SGED_significance[i] <-  "" 
   }
@@ -301,11 +304,12 @@ DistMLE <- function(R) {
 
 #maximum likelihood estimates of unconditional distribution functions
 Table2 <- matrix(nrow = 6, ncol = 7)
-colnames(Table2) <- c("mu","sigma","lambda","p","q","L","AIC")
+colnames(Table2) <- c("alpha","beta","xi","kappa","eta","L","AIC")
 rownames(Table2) <- c("SGT","SGED","GED","ST","T","Normal")
 
-Table2[1,1] <- SGT_result$estimate[1]
-Table2[1,2] <- SGT_result$estimate[2]
+# "alpha","beta","xi","kappa","nu","L","AIC"
+Table2[1,1] <- SGT_result$estimate[1] 
+Table2[1,2] <- SGT_result$estimate[2] 
 Table2[1,3] <- SGT_result$estimate[3]
 Table2[1,4] <- SGT_result$estimate[4]
 Table2[1,5] <- SGT_result$estimate[5]
@@ -331,24 +335,24 @@ Table2[3,7] <- GED_AIC
 Table2[4,1] <- ST_result$estimate[1]
 Table2[4,2] <- ST_result$estimate[2]
 Table2[4,3] <- ST_result$estimate[4]
-Table2[4,4] <- ST_result$estimate[3]
-Table2[4,5] <- 2
+Table2[4,4] <- 2
+Table2[4,5] <- ST_result$estimate[3]/2 # eta parameter
 Table2[4,6] <- ST_result$loglik
 Table2[4,7] <- ST_result$aic
 
 Table2[5,1] <- T_result$estimate[1]
 Table2[5,2] <- T_result$estimate[2]
 Table2[5,3] <- 0 
-Table2[5,4] <- T_result$estimate[3] 
-Table2[5,5] <- 2
+Table2[5,4] <- 2
+Table2[5,5] <- T_result$estimate[3]/2 # eta parameters
 Table2[5,6] <- T_result$loglik
 Table2[5,7] <- T_result$aic
 
-Table2[6,1] <- Normal_mu
-Table2[6,2] <- Normal_sigma
+Table2[6,1] <- Normal_result$estimate[1]
+Table2[6,2] <- Normal_result$estimate[2]
 Table2[6,3] <- 0
-Table2[6,4] <- Inf 
-Table2[6,5] <- 2
+Table2[6,4] <- 2 
+Table2[6,5] <- Inf
 Table2[6,6] <- Normal_result$loglik
 Table2[6,7] <- Normal_result$aic
 
@@ -366,7 +370,7 @@ Table2_SE[11,] <- Table2[6,]
 
 
 #fixing rownames
-colnames(Table2_SE) <- c("mu","sigma","lambda","p","q","L","AIC")
+colnames(Table2_SE) <- c("alpha","beta","xi","kappa","nu","L","AIC")
 rownames(Table2_SE) <- c(1,2,3,4,5,6,7,8,9,10,11,12)
 tablenames <- c("SGT","","SGED","","GED","","ST","","T","","Normal","")
 Table2_SE <- cbind(tablenames,Table2_SE)
@@ -375,13 +379,11 @@ Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3)
 
 #SEs (basic)
 Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significance)
-Table2_SE[4,2:6] <- paste0("(",round(SGED_result$sd, 3),")",SGED_significance)
-Table2_SE[6,2:6] <- paste0("(",round(GED_result$sd, 3),")",GED_significance)
-Table2_SE[8,2:4] <- paste0("(",round(ST_result$sd[-3],3),")",ST_significance[1:3])
-Table2_SE[8,6] <- paste0("(",round(ST_result$sd[3],3),")", ST_significance[6])
-Table2_SE[10,2:3] <- paste0("(",round(T_result$sd[-3],3),")",T_significance[1:2])
-Table2_SE[10,6] <- paste0("(",round(T_result$sd[3],3),")",T_significance[6])
-Table2_SE[12,2:3] <- paste0("(",round(Normal_result$sd, 3),")",Normal_significance)
+Table2_SE[4,2:6] <- paste0("(",round(c(SGED_result$sd[1:2],SGED_result$sd[4],NA,SGED_result$sd[3]), 3),")",SGED_significance)
+Table2_SE[6,2:6] <- paste0("(",round(c(GED_result$sd[1:2],NA,NA, GED_result$sd[3]), 3),")",GED_significance)
+Table2_SE[8,2:6] <- paste0("(",round(c(ST_result$sd[-3],NA,ST_result$sd[3]),3),")",ST_significance)
+Table2_SE[10,2:6] <- paste0("(",round(c(T_result$sd[-3],NA,NA,T_result$sd[3]),3),")",T_significance)
+Table2_SE[12,2:6] <- paste0("(",round(c(Normal_result$sd, NA,NA,NA), 3),")",Normal_significance)
 
 
 #Remove SE for limiting cases
@@ -391,7 +393,6 @@ Table2_SE[12,2:3] <- paste0("(",round(Normal_result$sd, 3),")",Normal_significan
 totalresults <- list(table = Table2_SE, results = list(SGT = SGT_sumResult,SGED = SGED_sumResult, GED = GED_sumResult, ST = ST_sumResult, T = T_sumResult, Norm =Normal_sumResult))
 return(totalresults)
 }
-
 ```
 
 ```{r MLE tables for different series, include=FALSE, eval=FALSE}
@@ -416,7 +417,7 @@ par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
 Eurostoxx$results$SGT
-colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$\\kappa$","$\\nu$","$L$","AIC")  
+colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$\\nu$","$L$","AIC")  
 ```
 
 ```{r results='asis'}
@@ -458,7 +459,7 @@ garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
 # Compute stdret using residuals()
 stdret.sGARCH[[i]] <- residuals(garchfit.sGARCH[[i]], standardize = TRUE)
 }
-
+garchfit.sGARCH[[5]]
 #.eGARCH-------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
@@ -753,6 +754,11 @@ aics %>% kbl(caption = "Model selection according to AIC","latex",
       digits = 3 )%>%
   kable_classic(full_width = F)%>% 
   footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+```
+
+```{r}
+# VaR table, unconditional coverage
+VaRTest(Egarch)
 ```
 
 

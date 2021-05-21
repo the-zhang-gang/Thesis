@@ -1,0 +1,368 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\startappendices
+
+\hypertarget{appendix}{%
+\section{Appendix}\label{appendix}}
+
+\hypertarget{conditional-distributions}{%
+\paragraph{Alternative distributions than the
+normal}\label{conditional-distributions}}
+
+Student's t-distribution
+
+\noindent A common alternative for the normal distribution is the
+Student t distribution. Similarly to the normal distribution, it is also
+symmetric (skewness is equal to zero if \(\nu > 3\)). The probability
+density function (pdf), consistent with @ghalanos2020, is given by
+equation @ref(eq:stdghalanos). As will be seen in @ref(vol-mod), GARCH
+models are used for volatility modeling in practice. @bollerslev1987
+examined the use of the GARCH-Student or GARCH-t model as an alternative
+to the standard Normal distribution, which relaxes the assumption of
+conditional normality by assuming the standardized innovation to follow
+a standardized Student t-distribution {[}@bollerslev2008{]}.
+
+\begin{align}
+f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \beta}\right)^{-(\nu+1)/2}
+ (\#eq:stdghalanos)
+\end{align}
+
+\noindent where \(\alpha, \beta\) and \(\nu\) are respectively the
+location, scale and shape (tail-thickness) parameters. The symbol
+\(\Gamma\) is the Gamma function.
+
+\noindent Unlike the normal distribution, which depends entirely on two
+moments only, the student t distribution allows for fatter tails. This
+kurtosis coefficient is given by equation @ref(eq:kurt) if \(\nu>4\).
+This is useful while as already mentioned, the standardized residuals
+appear to have fatter tails than the normal distribution following
+@bollerslev2008.
+
+\begin{align}
+kurt = 3 + \dfrac{6}{\nu-4}
+ (\#eq:kurt)
+\end{align}
+
+Generalized Error Distribution
+
+\noindent The GED distribution is nested in the generalized t
+distribution by @mcdonald1988 is used in the GED-GARCH model by
+@nelson1991 to model stock market returns. This model replaced the
+assumption of conditional normally distributed error terms by
+standardized innovations that following a generalized error
+distribution. It is a symmetric, unimodal distribution (location
+parameter is the mode, median and mean). This is also sometimes called
+the exponential power distribution {[}@bollerslev2008{]}. The
+conditional density (pdf) is given by equation @ref(eq:ged) following
+@ghalanos2020.
+
+\begin{align}
+f(x) = \dfrac{p e^{\left|\dfrac{x-\alpha}{\beta}\right|^p}}{2^{1+p^(-1)}\beta\Gamma(p^{-1})}
+ (\#eq:ged)
+\end{align}
+
+where \(\alpha, \beta\) and \(p\) are respectively the location, scale
+and shape parameters .
+
+Skewed t-distribution
+
+\noindent The density function can be derived following @fernández1998
+who showed how to introduce skewness into uni-modal standardized
+distributions {[}@trottier2015{]}. The first equation from
+@trottier2015, here equation @ref(eq:skeweddist) presents the skewed
+t-distribution.
+
+\begin{align}
+f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right), \quad z_{\xi} \equiv\left\{\begin{array}{ll}
+\xi^{-1}\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z \geq-\mu_{\xi} / \sigma_{\xi} \\
+\xi\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z<-\mu_{\xi} / \sigma_{\xi}
+\end{array}\right.
+ (\#eq:skeweddist)
+\end{align}
+
+\noindent where
+\(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\)
+and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case
+equation @ref(eq:stdghalanos), the pdf of the student t distribution.
+
+\noindent According to @giot2003; @giot2004, the skewed t-distribution
+outperforms the symmetric density distributions.
+
+Skewed Generalized Error Distribution
+
+\noindent What also will be interesting to examine is the SGED
+distribution of @theodossiou2000 in GARCH models, as in the work of
+@lee2008. The SGED distribution extends the Generalized Error
+Distribution (GED) to allow for skewness and leptokurtosis. The density
+function can be derived following @fernández1998 who showed how to
+introduce skewness into uni-modal standardized distributions
+{[}@trottier2015{]}. It can also be found in @theodossiou2000. The pdf
+is then given by the same equation @ref(eq:skeweddist) as the skewed
+t-distribution but with \(f_1(\cdot)\) equal to equation @ref(eq:ged).
+
+SGT (Skewed Generalized t-distribution)
+
+\noindent The SGT distribution of introduced by @theodossiou1998 and
+applied by @bali2007 and @bali2008. According to @bali2008 the proposed
+solutions (use of historical simulation, student's t-distribution,
+generalized error distribution or a mixture of two normal distributions)
+to the non-normality of standardized financial returns only partially
+solved the issues of skewness and leptokurtosis. The density of the
+generalized t-distribution of @mcdonald1988 is given by equation
+@ref(eq:gt) {[}@bollerslev1994{]}.
+
+\begin{align}
+f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
+ (\#eq:gt)
+\end{align}
+
+\noindent where \(B(1 / \eta, \psi)\) is the beta function
+(=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)),
+\(\psi\eta>2,\ \eta>0 \ and \ \psi >0\),
+\(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)),
+the scale factor and one shape parameter \(p\).
+
+\noindent Again the skewed variant is given by equation
+@ref(eq:skeweddist) of appendix but with \(f_1(\cdot)\) equal to
+equation @ref(eq:gt) following @trottier2015. Following @theodossiou1998
+however, there are two parameters (\(p\), referred to as \(\kappa\) by
+Theodossiou and \(\eta\) by @bali2008 and \(q\), referred to as \(n\))
+for the shape in the SGT distribution. The \(p\) is the tail-thickness
+parameter. It is equal to the degrees of freedom divided by 2 if
+\(\lambda = 0\) and \(q = 2\). The \(q\) is the peakedness parameter. As
+shown in the following picture, from the SGT the other distributions in
+the figure are limiting cases of the SGT.
+
+\begin{figure}
+\centering
+\includegraphics[width=6.11458in,height=\textheight]{images/Screenshot 2021-05-21 at 10.30.48.png}
+\caption{Source: \url{https://cran.r-project.org/web/packages/sgt}}
+\end{figure}
+
+\hypertarget{garch-models}{%
+\paragraph{GARCH models}\label{garch-models}}
+
+All the GARCH models are estimated using the package ``rugarch'' by
+@alexios2020. We use specifications similar to @ghalanos2020. Parameters
+have to be restricted so that the variance output always is positive,
+except for the EGARCH model, as this model does not mathematically allow
+for a negative output.
+
+Symmetric (normal) GARCH model
+
+\noindent The standard GARCH model {[}@bollerslev1986{]} is written
+consistent with @ghalanos2020 as in equation @ref(eq:eq13) without
+external regressors.
+
+\begin{align}
+\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
+ (\#eq:eq13)
+\end{align}
+
+\noindent where \(\sigma_t^2\) denotes the conditional variance,
+\(\omega\) the intercept and \(\varepsilon_t^2\) the residuals from the
+used mean process. The GARCH order is defined by \((q, p)\) (ARCH,
+GARCH). As @ghalanos2020 describes: "one of the key features of the
+observed behavior of financial data which GARCH models capture is
+volatility clustering which may be quantified in the persistence
+parameter \(\hat{P}\) specified as in equation @ref(eq:eq14).
+
+\begin{align}
+\hat{P} = \sum\limits_{j = 1}^q {{\alpha_j}}  + \sum\limits_{j = 1}^p {{\beta_j}}.
+ (\#eq:eq14)
+\end{align}
+
+\noindent The unconditional variance of the standard GARCH model of
+Bollerslev is very similar to the ARCH model, but with the Garch
+parameters (\(\beta\)'s) included as in equation @ref(eq:eq15).
+
+\begin{equation}
+\begin{split}
+\hat{\sigma}^2 
+&= \dfrac{\hat{\omega}}{1 - \hat{P}} \\
+&= \dfrac{\hat{\omega}}{1 - \alpha - \beta}
+\end{split}
+ (\#eq:eq15)
+\end{equation}
+
+IGARCH model
+
+\noindent Following @ghalanos2020, the integrated GARCH model
+{[}@bollerslev1986{]} can also be estimated. This model assumes the
+persistence \(\hat{P} = 1\). This is done by Ghalanos, by setting the
+sum of the ARCH and GARCH parameters to 1. Because of this
+unit-persistence, the unconditional variance cannot be calculated.
+
+GJRGARCH model
+
+\noindent The GJRGARCH model {[}@glosten1993{]}, which is an alternative
+for the asymmetric GARCH (AGARCH) by @engle1990 and @engle1993, models
+both positive as negative shocks on the conditional variance
+asymmetrically by using an indicator variable \(I_t-j\), it is specified
+as in equation @ref(eq:eq17).
+
+\begin{align}
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ (\#eq:eq17)
+\end{align}
+
+\noindent where \(\gamma_j\) represents the \emph{leverage} term. The
+indicator function \(I\) takes on value 1 for \(\varepsilon \le 0\), 0
+otherwise. Because of the indicator function, persistence of the model
+now crucially depends on the asymmetry of the conditional distribution
+used according to @ghalanos2020.
+
+EGARCH model
+
+\noindent The EGARCH model or exponential GARCH model {[}@nelson1991{]}
+is defined as in equation @ref(eq:eq16). The advantage of the EGARCH
+model is that there are no parameter restrictions, since the output is
+log variance (which cannot be negative mathematically), instead of
+variance.
+
+\begin{align}
+\log_e(\sigma_t^2) = \omega + \sum\limits_{j=1}^q (\alpha_j z_{t-j} + \gamma_j (|z_{t-j}| - E|z_{t-j}|))+ \sum\limits_{j = 1}^p \beta_j \log_e(\sigma_{t-j}^2)
+ (\#eq:eq16)
+\end{align}
+
+\noindent where \(\alpha_j\) captures the sign effect and \(\gamma_j\)
+the size effect.
+
+NAGARCH model
+
+\noindent The NAGARCH or nonlinear asymmetric model {[}@engle1993{]}. It
+is specified as in equation @ref(eq:eq18). The model is
+\emph{asymmetric} as it allows for positive and negative shocks to
+differently affect conditional variance and \emph{nonlinear} because a
+large shock is not a linear transformation of a small shock.
+
+\begin{align}
+\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+ (\#eq:eq18)
+\end{align}
+
+As before, \(\gamma_j\) represents the \emph{leverage} term.
+
+TGARCH model
+
+\noindent The TGarch or threshold model {[}@zakoian1994{]} also models
+assymetries in volatility depending on the sign of the shock, but
+contrary to the GJRGARCH model it uses the conditional standard
+deviation instead of conditional variance. It is specified as in
+@ref(eq:eq19).
+
+\begin{align}
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j^+ \varepsilon_{t-j}^+ \alpha_j^{-} + \varepsilon_{t-j}^{-}) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+ (\#eq:eq19)
+\end{align}
+
+\noindent where \(\varepsilon_{t-j}^+\) is equal to
+\(\varepsilon_{t-j}\) if the term is negative and equal to 0 if the term
+is positive. The reverse applies to \(\varepsilon_{t-j}^-\). They cite
+@davidian1987 who find that using volatility instead of variance as
+scaling input variable gives better variance estimates. This is due to
+absolute residuals (contrary to squared residuals with variance) more
+closely predicting variance for non-normal distributions.
+
+TSGARCH model
+
+\noindent The absolute value Garch model or TS-Garch model, as named
+after @taylor1986 and @schwert1989, models the conditional standard
+deviation and is intuitively specified like a normal GARCH model, but
+with the absolute value of the shock term. It is specified as in
+@ref(eq:eq20).
+
+\begin{align}
+\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +
+\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+ (\#eq:eq20)
+\end{align}
+
+\newpage
+
+EWMA
+
+\noindent A alternative to the series of GARCH models is the
+exponentially weighted moving average or EWMA model. This model
+calculates conditional variance based on the shocks from previous
+periods. The idea is that by including a smoothing parameter \(\lambda\)
+more weight is assigned to recent periods than distant periods. The
+\(\lambda\) must be less than 1. It is specified as in @ref(eq:eq21).
+
+\begin{align}
+\sigma_t^2 = (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \varepsilon_{t-j}^2)
+ (\#eq:eq21)
+\end{align}
+
+In practice a \(\lambda\) of 0.94 is often used, such as by the
+financial risk management company RiskMetrics\(^{TM}\) model of J.P.
+Morgan {[}@morganguarantytrustcompany1996{]}.
+
+\end{document}

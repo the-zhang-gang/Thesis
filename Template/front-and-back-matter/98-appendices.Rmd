@@ -1,3 +1,9 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
 `r if(knitr:::is_latex_output()) '\\startappendices'`
 
 `r if(!knitr:::is_latex_output()) '# (APPENDIX) Appendix {-}'`
@@ -14,11 +20,13 @@
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \beta}\right)^{-(\nu+1)/2}
+f(x; \alpha, \beta,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
  (\#eq:stdghalanos)
 \end{align}
 ```
-\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. The symbol $\Gamma$ is the Gamma function.
+\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. $\nu/2$ is equal to the $q$[^appendices-1] parameter (which we call $\eta$) of the SGT distribution. The symbol $\Gamma$ is the Gamma function.
+
+[^appendices-1]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008
 
 \noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \@ref(eq:kurt) if $\nu>4$. This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following @bollerslev2008.
 
@@ -30,15 +38,15 @@ kurt = 3 + \dfrac{6}{\nu-4}
 ```
 ###### Generalized Error Distribution
 
-\noindent The GED distribution is nested in the generalized t distribution by @mcdonald1988 is used in the GED-GARCH model by @nelson1991 to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution [@bollerslev2008]. The conditional density (pdf) is given by equation \@ref(eq:ged) following @ghalanos2020.
+\noindent The GED distribution is nested in the generalized t distribution by @mcdonald1988 is used in the GED-GARCH model by @nelson1991 to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, uni-modal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution [@bollerslev2008]. The conditional density (pdf) is given by equation \@ref(eq:ged) following @ghalanos2020.
 
 ```{=tex}
 \begin{align}
-f(x) = \dfrac{p e^{\left|\dfrac{x-\mu}{\sigma}\right|^p}}{2^{1+p^(-1)}\sigma\Gamma(p^{-1})}
+f(x; \alpha, \beta, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+1/\kappa}\beta\Gamma(1/\kappa)}
  (\#eq:ged)
 \end{align}
 ```
-where $\mu, \sigma$ and $p$ are respectively the location, scale and shape parameters .
+where $\alpha, \beta$ and $\kappa$ are respectively the location, scale and shape parameters.
 
 ###### Skewed t-distribution
 
@@ -53,29 +61,63 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
  (\#eq:skeweddist)
 \end{align}
 ```
-\noindent where $\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u$ and $\xi$ between $0$ and $\infty$. $f_1(\cdot)$ is in this case equation \@ref(eq:stdghalanos), the pdf of the student t distribution.
+\noindent where $\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u$ and $\xi$ between $0$ and $\infty$. $f_1(\cdot)$ is in this case equation \@ref(eq:stdghalanos), the pdf of the student t distribution coming to equation \@ref(eq:stdist), which has the parameterization following the SGT parameters.
 
+```{=tex}
+\begin{equation}
+\begin{array}{c}f_{S T}(x ; \alpha, \beta, \xi, \eta)=\frac{\Gamma\left(\frac{1}{2}+\eta\right)}{\sqrt{\beta\pi \eta} \Gamma(\eta)\left(\frac{|x-\alpha+m|^{2}}{\eta\beta(\xi \operatorname{sign}(x-\alpha+m)+1)^{2}}+1\right)^{\frac{1}{2}+\eta}} \\m=\frac{2 \xi \sqrt{\beta\eta} \Gamma\left(\eta-\frac{1}{2}\right)}{\sqrt{\pi} \Gamma\left(\eta+\frac{1}{2}\right)}\end{array}
+ (\#eq:stdist)
+\end{equation}
+```
 \noindent According to @giot2003; @giot2004, the skewed t-distribution outperforms the symmetric density distributions.
 
 ###### Skewed Generalized Error Distribution
 
-\noindent What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, as in the work of @lee2008. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged).
+\noindent What also will be interesting to examine is the SGED distribution of @theodossiou2000 in GARCH models, as in the work of @lee2008. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following @fernández1998 who showed how to introduce skewness into uni-modal standardized distributions [@trottier2015]. It can also be found in @theodossiou2000. The pdf is then given by the same equation \@ref(eq:skeweddist) as the skewed t-distribution but with $f_1(\cdot)$ equal to equation \@ref(eq:ged). To then get equation \@ref(eq:sged).
+
+```{=tex}
+\begin{equation}
+\begin{array}{c}
+f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\
+m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
+\end{array}
+(\#eq:sged)
+\end{equation}
+```
+$f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}$
 
 ###### SGT (Skewed Generalized t-distribution)
 
-<!-- I really don't know about this thing, because it's not that there is only lambda that comes with it it is also a q parameter... -->
+<!-- I really don't know about this thing, because it's not that there is only lambda that comes with it it is also a q parameter... here it anly has p (or Kappa) -->
 
-\noindent The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 is given by equation \@ref(eq:gt) [@bollerslev1994].
+\noindent The SGT distribution of introduced by @theodossiou1998 and applied by @bali2007 and @bali2008. According to @bali2008 the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of @mcdonald1988 can be rewritten as its skew variant following @trottier2015. The pdf of the SGT distribition is given by eqution \@ref(eq:sgt).
 
 ```{=tex}
-\begin{align}
-f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
- (\#eq:gt)
-\end{align}
+\begin{equation}
+\begin{array}{c}
+f_{S G T}(x ; \alpha, \beta, \xi, \eta, q)=\frac{p}{2 v \beta q^{1 / p} B\left(\frac{1}{p}, q\right)\left(\frac{|x-\alpha +m|^{p}}{q(v \beta)^{p}(\xi \operatorname{sign}(x-\alpha+m)+1)^{p}}+1\right)^{\frac{1}{p}+q}} \\
+m=\frac{2 v \beta \xi q^{\frac{1}{p}} B\left(\frac{2}{p}, q-\frac{1}{p}\right)}{B\left(\frac{1}{p}, q\right)}
+\end{array}
+(\#eq:sgt)
+\end{equation}
 ```
-\noindent where $B(1 / \eta, \psi)$ is the beta function (=$\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)$), $\psi\eta>2,\ \eta>0 \ and \ \psi >0$, $\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}$), the scale factor and one shape parameter $p$.
+\noindent where $B(1 / \eta, \kappa)$ is the beta function, the scale factor and one shape parameter $p$.
 
-\noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) of appendix but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) following @trottier2015.
+\\alpha, \\beta, \\xi, \\eta,\\kappa (alpha = location, beta = scale, xi = skew, eta =
+
+$\begin{array}{c}f_{S G T}(x ; \alpha, \beta, \xi, \eta,\kappa)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\mu+m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}\end{array}$
+
+$\begin{equation}f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}\end{equation}$
+
+\noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) of appendix but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) . Following @theodossiou1998 however, there are two parameters, $p$[^appendices-2]and $q$[^appendices-3]) for the shape in the SGT distribution. The $p$ is the peakedness parameter. The $q$ is the tail-thickness parameter. It is equal to the degrees of freedom $\eta$ divided by 2 if $\xi = 0$ and $p = 2$, there is referred to symbol $\nu$ in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure \@ref(fig:figure) adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
+
+[^appendices-2]: Also referred to as $\kappa$ by @theodossiou1998 and @bali2008
+
+[^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008
+
+    ```{r figure, echo=FALSE, fig.cap="Source: https://cran.r-project.org/web/packages/sgt", out.width = '100%', fig.align='center'}
+    knitr::include_graphics("images/Screenshot%202021-05-21%20at%2010.30.48.png")
+    ```
 
 #### GARCH models
 
@@ -91,7 +133,9 @@ All the GARCH models are estimated using the package "rugarch" by @alexios2020. 
  (\#eq:eq13)
 \end{align}
 ```
-\noindent where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$" specified as in equation \@ref(eq:eq14).
+$\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2}$
+
+\noindent where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$ specified as in equation \@ref(eq:eq14).
 
 ```{=tex}
 \begin{align}
