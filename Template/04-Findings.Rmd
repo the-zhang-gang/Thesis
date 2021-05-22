@@ -571,7 +571,7 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 
 
 <!-- What do we do, do we do 6 tables for all the distributions?  -->
-```{r table3prep, echo=FALSE}
+```{r table3prep, echo=FALSE, results='asis'}
 require(plyr)
 require(dplyr)
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
@@ -690,7 +690,7 @@ for(i in 1:length(distributions)){
 fn1.3 <- sprintf(paste0('This table shows the maximum likelyhood estimates of various ST-GARCH models. The daily returns used on the ',gsub(pattern = '\\.', replacement=' ',colnames(R))," price index cover the period from ",gsub(" UTC", "",min(index(R)))," to ",gsub(" UTC", "",max(index(R))), "(", nrow(R)," observations)."))
 fn2.3 <- paste0("The mean process is modeled as follows: ", "$\\\\\\\\R_t=\\\\alpha_0+\\\\alpha_1 R_{t-1}+\\\\varepsilon_t\\\\\\\\$ ",  "Where, in the ", ncol(Table.3$ST)-1, " GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\lambda$, $\\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.")
 
-kbl(Table.3$ST,caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",
+kbl(Table.3$ST,caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
       label = 'dsTable',
       booktabs = T,
       position = "h!",

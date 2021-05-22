@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  22 MAY 2021 18:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  22 MAY 2021 18:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1234,7 +1234,7 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'english'.
-(./04-Findings.aux)
+No file 04-Findings.aux.
 \openout1 = `04-Findings.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 157.
@@ -1370,7 +1370,6 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 157.
 LaTeX Info: Redefining \pageref on input line 157.
 LaTeX Info: Redefining \nameref on input line 157.
-(./04-Findings.out) (./04-Findings.out)
 \@outlinefile=\write6
 \openout6 = `04-Findings.out'.
 
@@ -1410,8 +1409,8 @@ Package: blx-case-expl3 2020/12/31 v3.16 expl3 case changing code for biblatex
 \openout5 = `04-Findings.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file '04-Findings.bbl' found.
-(./04-Findings.bbl)
+Package biblatex Info: ... file '04-Findings.bbl' not found.
+No file 04-Findings.bbl.
 Package biblatex Info: Reference section=0 on input line 157.
 Package biblatex Info: Reference segment=0 on input line 157.
 Chapter 1.
@@ -1432,6 +1431,9 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 Package minitoc Info: I0006
 (minitoc)             04-Findings.mtc1 is empty on input line 177.
+
+LaTeX Warning: Reference `tab:MLEtable' on page 1 undefined on input line 184.
+
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
 84.
 (c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
@@ -1491,9 +1493,8 @@ Overfull \hbox (73.41507pt too wide) in paragraph at lines 193--217
  [] 
  []
 
-[2]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-23.
+22.
 (c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1501,80 +1502,24 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 226.
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-266.
-(c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: TS1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-Package microtype Info: Character `texttrademark ' is missing
-(microtype)             in font `TS1/lmtt/m/n/12'.
-(microtype)             Ignoring protrusion settings for this character.
-[3] [4] [5] [6] [7]
-Overfull \hbox (142.89297pt too wide) in paragraph at lines 413--430
- [] 
+[2]
+Overfull \hbox (1.88724pt too wide) in paragraph at lines 240--240
+[]\T1/lmtt/m/n/12 ##     arrange, count, desc, failwith, id, mutate, rename, su
+mmarise,[] 
  []
 
-Package microtype Info: Character `texttrademark ' is missing
-(microtype)             in font `TS1/lmtt/m/it/12'.
-(microtype)             Ignoring protrusion settings for this character.
-[8]
-
-LaTeX Warning: Empty bibliography on input line 496.
-
-Package minitoc Info: I0009
-(minitoc)             Listing minitoc auxiliary files. 
-(minitoc)             Creating the 04-Findings.maf file.
-\openout3 = `04-Findings.maf'.
-
-[9] (./04-Findings.aux)
-
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 64.17pt have occurred.
-
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-Package rerunfilecheck Info: File `04-Findings.out' has not changed.
-(rerunfilecheck)             Checksum: 8C4A703D3B2F6D09D5C791FED815215B;1125.
-Package logreq Info: Writing requests to '04-Findings.run.xml'.
-\openout1 = `04-Findings.run.xml'.
-
- ) 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.318 \end{tabular}}
+                     
 Here is how much of TeX's memory you used:
- 29236 strings out of 480703
- 496587 string characters out of 5899788
- 1322286 words of memory out of 5000000
- 45828 multiletter control sequences out of 15000+600000
- 468659 words of font info for 126 fonts, out of 8000000 for 9000
+ 29140 strings out of 480703
+ 494953 string characters out of 5899788
+ 1319697 words of memory out of 5000000
+ 45765 multiletter control sequences out of 15000+600000
+ 470413 words of font info for 123 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 75i,13n,81p,2067b,1685s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1
-.enc}{c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-
-ec.enc}{c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/l
-m-mathit.enc} <c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfou
-r/jknappen/ec/ecrm3583.600pk><c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dis
-t/fonts/type1/public/lm/lmbx10.pfb><c:/Users/huawei/AppData/Roaming/TinyTeX/tex
-mf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/huawei/AppData/Roaming/TinyT
-eX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/huawei/AppData/Roaming
-/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/huawei/AppData/Ro
-aming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/huawei/AppDa
-ta/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/huawei/
-AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/hua
-wei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users
-/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb><c:
-/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.p
-fb><c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
-tti10.pfb>
-Output written on 04-Findings.pdf (9 pages, 264059 bytes).
-PDF statistics:
- 142 PDF objects out of 1000 (max. 8388607)
- 117 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 38441 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 75i,14n,81p,2067b,805s stack positions out of 5000i,500n,10000p,200000b,80000s
 
+!  ==> Fatal error occurred, no output PDF file produced!

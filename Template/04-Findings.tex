@@ -1,0 +1,466 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BRIEF VERSION OF OXFORD THESIS TEMPLATE FOR CHAPTER PREVIEWS
+
+%%%%% CHOOSE PAGE LAYOUT
+% format for PDF output (ie equal margins, no extra blank pages):
+\documentclass[a4paper,nobind]{templates/ociamthesis}
+
+% UL 5 January 2021 - add packages used by kableExtra
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage[colorlinks=false,pdfpagelabels,hidelinks=]{hyperref}
+\usepackage{float}
+
+
+%UL set section header spacing
+\usepackage{titlesec}
+% 
+\titlespacing\subsubsection{0pt}{24pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+% UL 30 Nov 2018 pandoc puts lists in 'tightlist' command when no space between bullet points in Rmd file
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+ 
+% UL 1 Dec 2018, fix to include code in shaded environments
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+%UL 2 Dec 2018 add a bit of white space before and after code blocks
+\renewenvironment{Shaded}
+{
+  \vspace{10pt}%
+  \begin{snugshade}%
+}{%
+  \end{snugshade}%
+  \vspace{8pt}%
+}
+%UL 2 Dec 2018 reduce whitespace around verbatim environments
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=0pt \partopsep=0pt }
+\makeatother
+
+%UL 28 Mar 2019, enable strikethrough
+\usepackage[normalem]{ulem}
+
+%UL use soul package for correction highlighting
+\usepackage{soul}
+\usepackage{xcolor}
+\newcommand{\ctext}[3][RGB]{%
+  \begingroup
+  \definecolor{hlcolor}{#1}{#2}\sethlcolor{hlcolor}%
+  \hl{#3}%
+  \endgroup
+}
+\soulregister\ref7
+\soulregister\cite7
+\soulregister\autocite7
+\soulregister\textcite7
+\soulregister\pageref7
+
+%UL 3 Nov 2019, avoid mysterious error from not having hyperref included
+\usepackage{hyperref}
+
+%%%%% SELECT YOUR DRAFT OPTIONS
+% Three options going on here; use in any combination.  But remember to turn the first two off before
+% generating a PDF to send to the printer!
+
+% This adds a "DRAFT" footer to every normal page.  (The first page of each chapter is not a "normal" page.)
+
+% This highlights (in blue) corrections marked with (for words) \mccorrect{blah} or (for whole
+% paragraphs) \begin{mccorrection} . . . \end{mccorrection}.  This can be useful for sending a PDF of
+% your corrected thesis to your examiners for review.  Turn it off, and the blue disappears.
+
+%%%%% BIBLIOGRAPHY SETUP
+% Note that your bibliography will require some tweaking depending on your department, preferred format, etc.
+% The options included below are just very basic "sciencey" and "humanitiesey" options to get started.
+% If you've not used LaTeX before, I recommend reading a little about biblatex/biber and getting started with it.
+% If you're already a LaTeX pro and are used to natbib or something, modify as necessary.
+% Either way, you'll have to choose and configure an appropriate bibliography format...
+
+% The science-type option: numerical in-text citation with references in order of appearance.
+% \usepackage[style=numeric-comp, sorting=none, backend=biber, doi=false, isbn=false]{biblatex}
+% \newcommand*{\bibtitle}{References}
+
+% The humanities-type option: author-year in-text citation with an alphabetical works cited.
+% \usepackage[style=authoryear, sorting=nyt, backend=biber, maxcitenames=2, useprefix, doi=false, isbn=false]{biblatex}
+% \newcommand*{\bibtitle}{Works Cited}
+
+%UL 3 Dec 2018: set this from YAML in index.Rmd
+\usepackage[style=numeric-comp, sorting=none, backend=biber, doi=false, isbn=false]{biblatex}
+\newcommand*{\bibtitle}{References}
+
+% This makes the bibliography left-aligned (not 'justified') and slightly smaller font.
+\renewcommand*{\bibfont}{\raggedright\small}
+
+% Change this to the name of your .bib file (usually exported from a citation manager like Zotero or EndNote).
+\addbibresource{references.bib}
+
+%%%%% YOUR OWN PERSONAL MACROS
+% This is a good place to dump your own LaTeX macros as they come up.
+
+% To make text superscripts shortcuts
+	\renewcommand{\th}{\textsuperscript{th}} % ex: I won 4\th place
+	\newcommand{\nd}{\textsuperscript{nd}}
+	\renewcommand{\st}{\textsuperscript{st}}
+	\newcommand{\rd}{\textsuperscript{rd}}
+
+%%%%% THE ACTUAL DOCUMENT STARTS HERE
+\begin{document}
+
+%%%%% CHOOSE YOUR LINE SPACING HERE
+% This is the official option.  Use it for your submission copy and library copy:
+\setlength{\textbaselineskip}{22pt plus2pt}
+% This is closer spacing (about 1.5-spaced) that you might prefer for your personal copies:
+%\setlength{\textbaselineskip}{18pt plus2pt minus1pt}
+
+% UL: You can set the general paragraph spacing here - I've set it to 2pt (was 0) so
+% it's less claustrophobic
+\setlength{\parskip}{2pt plus 1pt}
+
+% Leave this line alone; it gets things started for the real document.
+\setlength{\baselineskip}{\textbaselineskip}
+
+% all your chapters and appendices will appear here
+\hypertarget{analysis}{%
+\chapter{Empirical Findings}\label{analysis}}
+
+\minitoc 
+
+\hypertarget{density-of-the-returns}{%
+\section{Density of the returns}\label{density-of-the-returns}}
+
+\hypertarget{mle-distribution-parameters}{%
+\subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
+
+In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.}
+
+Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
+
+\begin{table}[h!]
+
+\caption{\label{tab:MLEtable}Maximum likelihood estimates of unconditional distribution functions}
+\centering
+\begin{threeparttable}
+\begin{tabular}[t]{llllllrr}
+\toprule
+$\theta$ & $\alpha$ & $\beta$ & $\xi$ & $\kappa$ & $\eta$ & $LLH$ & AIC\\
+\midrule
+SGT & 0.02 & 1.321 & -0.04 & 1.381 & 3.314 & -13973.01 & 27956.01\\
+ & (0.013) & (0.026)*** & (0.013)*** & (0.071)*** & (0.538)*** &  & \\
+SGED & 0.019 & 1.274 & -0.018 & 0.916 & Inf & -14008.63 & 27956.01\\
+ & (0.013) & (0.016)*** & (0.01)*** & (0.017)*** &  &  & \\
+GED & 0.032 & 1.276 & 0 & 0.911 & Inf & -14009.52 & 28025.04\\
+\addlinespace
+ & (0.009)*** & (0.016)*** &  & (0.017)*** &  &  & \\
+ST & 0.019 & 1.481 & -0.052 & 2 & 2.793 & -13997.35 & 28002.71\\
+ & (0.014) & (0.054)*** & (0.013)*** &  & (0.098)*** &  & \\
+T & 0.056 & 1.494 & 0 & 2 & 1.383 & -14005.14 & 28016.29\\
+ & (0.01)*** & (0.056)*** &  &  & (0.097)*** &  & \\
+\addlinespace
+Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15101.73 & 30207.46\\
+ & (0.014) & (0.01)*** &  &  &  &  & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{results-of-garch-with-constant-higher-moments}{%
+\section{Results of GARCH with constant higher moments}\label{results-of-garch-with-constant-higher-moments}}
+
+\begin{verbatim}
+## Loading required package: plyr
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: dplyr
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:timeSeries':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:MASS':
+## 
+##     select
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:kableExtra':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:xts':
+## 
+##     first, last
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{table}[h!]
+
+\caption{\label{tab:dsTable}Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lllllllll}
+\toprule
+ & sGARCH & iGARCH & eGARCH & gjrGARCH & EWMA & NAGARCH & TGARCH & AVGARCH\\
+\midrule
+$\alpha_0$ & 0.049 & 0.049 & 0.026 & 0.028 & 0.053 & 0.02 & 0.023 & 0.019\\
+ & (5.278) & (5.192) & (2.74) & (3.022) & (5.853) & (2.148) & (2.404) & (2.03)\\
+$\alpha_1$ & -0.018 & -0.018 & -0.008 & -0.008 & -0.02 & -0.005 & -0.005 & -0.006\\
+ & (-1.64) & (-1.635) & (-0.809) & (-0.768) & (-1.885) & (-0.485) & (-0.47) & (-0.611)\\
+$\beta_0$ & 0.016 & 0.013 & 0.001 & 0.021 & 0 & 0.022 & 0.02 & 0.021\\
+\addlinespace
+ & (5.776) & (5.842) & (0.769) & (7.28) &  & (9.826) & (6.219) & (25.122)\\
+$\beta_1$ & 0.094 & 0.101 & -0.098 & 0.017 & 0.069 & 0.08 & 0.083 & 0.087\\
+ & (12.146) & (13.088) & (-15.53) & (3.021) & (15.02) & (6.292) & (9.717) & (30.759)\\
+$\beta_2$ & 0.898 & 0.899 & 0.983 & 0.897 & 0.931 & 0.845 & 0.919 & 0.904\\
+ & (115.678) &  & (1557.474) & (115.012) &  & (86.305) & (107.22) & (365.502)\\
+\addlinespace
+$\lambda$ & 0.917 & 0.917 & 0.905 & 0.906 & 0.917 & 0.903 & 0.904 & 0.902\\
+ & (68.351) & (67.44) & (67.153) & (67.765) & (73.31) & (67.756) & (67.28) & (67.834)\\
+$\kappa$ &  &  &  &  &  &  &  & \\
+ &  &  &  &  &  &  &  & \\
+$\eta$ & 6.339 & 5.997 & 6.897 & 6.819 & 7.036 & 6.972 & 6.928 & 6.944\\
+\addlinespace
+ & (15.442) & (16.925) & (14.582) & (14.635) & (18.325) & (14.541) & (14.568) & (14.514)\\
+$\gamma$ &  &  & 0.144 & 0.143 &  &  &  & \\
+ &  &  & (15.566) & (10.728) &  &  &  & \\
+$shift$ &  &  &  &  &  & 0.904 &  & 0.214\\
+ &  &  &  &  &  & (10.367) &  & (9.66)\\
+\addlinespace
+$rot$ &  &  &  &  &  &  & 0.723 & 0.552\\
+ &  &  &  &  &  &  & (12.112) & (9.638)\\
+$LLH$ & -13066.436 & -13068.628 & -12951.877 & -12973.456 & -13114.375 & -12936.278 & -12934.286 & -12930.492\\
+\bottomrule
+\multicolumn{9}{l}{\rule{0pt}{1em}Notes}\\
+\multicolumn{9}{l}{\rule{0pt}{1em}\textsuperscript{1} This table shows the maximum likelyhood estimates of various ST-GARCH models. The daily returns used on the EURO STOXX 50 price index cover the period from 1987-01-01 to 2021-04-27(8954 observations).}\\
+\multicolumn{9}{l}{\rule{0pt}{1em}\textsuperscript{2} The mean process is modeled as follows: $\\R_t=\alpha_0+\alpha_1 R_{t-1}+\varepsilon_t\\$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility, $\lambda$, $\kappa$ and $\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.}\\
+\end{tabular}}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"iGARCH"}\NormalTok{)}
+\NormalTok{garchfit.iGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.iGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"EWMA"}\NormalTok{)}
+\NormalTok{garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\FunctionTok{c}\NormalTok{(garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{],}\ConstantTok{NA}\NormalTok{,garchfit.EWMA[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{3}\NormalTok{], }\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"eGARCH"}\NormalTok{)}
+\NormalTok{garchfit.eGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.eGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"gjrGARCH"}\NormalTok{)}
+\NormalTok{garchfit.gjrGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.gjrGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"NAGARCH"}\NormalTok{)}
+\NormalTok{garchfit.fGARCH.NAGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.NAGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"TGARCH"}\NormalTok{)}
+\NormalTok{garchfit.fGARCH.TGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.TGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{garchfit.fGARCH.AVGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[h!]
+
+\caption{\label{tab:aicTable}Model selection according to AIC}
+\centering
+\begin{threeparttable}
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+  & SGARCH & IGARCH & EWMA & EGARCH & GJRGARCH & NAGARCH & TGARCH & AVGARCH\\
+\midrule
+norm & 2.995 & 2.998 & 3.034 & 2.962 & 2.967 & 2.955 & 2.957 & 2.954\\
+std & 2.924 & 2.924 & 2.935 & 2.900 & 2.904 & 2.897 & 2.896 & 2.896\\
+sstd & 2.920 & 2.920 & 2.930 & 2.895 & 2.900 & 2.891 & 2.891 & 2.890\\
+ged & 2.930 & 2.930 & 2.944 & 2.907 & 2.911 & 2.903 & 7.705 & 7.702\\
+sged & 2.927 & 2.927 & 2.940 & 2.902 & 2.906 & 2.898 & 7.675 & 7.672\\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\item Notes
+\item[1] This table shows the AIC value for the respective model
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# VaR table, unconditional coverage}
+\CommentTok{\# VaRTest(Egarch)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{results-of-garch-with-time-varying-higher-moments}{%
+\section{Results of GARCH with time-varying higher moments}\label{results-of-garch-with-time-varying-higher-moments}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(racd)}
+\FunctionTok{require}\NormalTok{(rugarch)}
+\FunctionTok{require}\NormalTok{(parallel)}
+\FunctionTok{require}\NormalTok{(xts)}
+\CommentTok{\# ACD specification}
+\NormalTok{sGARCH\_ACDspec }\OtherTok{=} \FunctionTok{acdspec}\NormalTok{(}\AttributeTok{mean.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{armaOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)), }\AttributeTok{variance.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{variance.targeting =} \ConstantTok{TRUE}\NormalTok{),}
+\AttributeTok{distribution.model =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{\textquotesingle{}jsu\textquotesingle{}}\NormalTok{, }\AttributeTok{skewOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{shapeOrder =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{skewmodel =} \StringTok{\textquotesingle{}quad\textquotesingle{}}\NormalTok{, }\AttributeTok{shapemodel =} \StringTok{\textquotesingle{}pwl\textquotesingle{}}\NormalTok{))}
+
+\CommentTok{\# sGARCH}
+\NormalTok{cl }\OtherTok{=} \FunctionTok{makePSOCKcluster}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\NormalTok{fit }\OtherTok{=} \FunctionTok{acdfit}\NormalTok{(sGARCH\_ACDspec, }\FunctionTok{as.data.frame}\NormalTok{(R), }\AttributeTok{solver =} \StringTok{\textquotesingle{}msoptim\textquotesingle{}}\NormalTok{, }\AttributeTok{solver.control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{restarts =} \DecValTok{10}\NormalTok{),}\AttributeTok{cluster =}\NormalTok{ cl) }\CommentTok{\#very long process: starts from different starting values to find an optimum}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))}
+\CommentTok{\# cm \textless{}{-} plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = \textquotesingle{}Conditional Mean\textquotesingle{},yaxis.right = F, col = \textquotesingle{}steelblue\textquotesingle{})}
+\CommentTok{\# cm \textless{}{-} lines(fitted(fit), col = 2)}
+\CommentTok{\# cm}
+\CommentTok{\# cs \textless{}{-} plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,}
+\CommentTok{\# minor.ticks = FALSE, main = \textquotesingle{}Conditional Sigma\textquotesingle{}, yaxis.right = F,col = \textquotesingle{}grey\textquotesingle{})}
+\CommentTok{\# cs \textless{}{-} lines(sigma(fit), col = \textquotesingle{}steelblue\textquotesingle{})}
+\CommentTok{\# cs}
+\CommentTok{\# plot(racd::skewness(fit), col = \textquotesingle{}steelblue\textquotesingle{},yaxis.right = F, main = \textquotesingle{}Conditional Skewness\textquotesingle{})}
+\CommentTok{\# plot(racd::kurtosis(fit), col = \textquotesingle{}steelblue\textquotesingle{}, yaxis.right = F,main = \textquotesingle{}Conditional Excess Kurtosis\textquotesingle{})}
+
+\CommentTok{\# pnl \textless{}{-} function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) \{}
+\CommentTok{\#   panel.number \textless{}{-} parent.frame()$panel.number}
+\CommentTok{\#   if (panel.number == 1) lines(fitted(fit), xts(fit@model$modeldata$data, fit@model$modeldata$index),col = "red")}
+\CommentTok{\#   lines(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), col = "red")}
+\CommentTok{\# \}}
+\CommentTok{\# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = \textquotesingle{}Conditional Mean\textquotesingle{}, col = \textquotesingle{}steelblue\textquotesingle{}, xlab = "", screens = 1, ylab="") \#panel = pnl}
+\CommentTok{\# \# lines(fitted(fit), col = 2) + grid()}
+\CommentTok{\# }
+\CommentTok{\# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = \textquotesingle{}Conditional Mean\textquotesingle{}, col = \textquotesingle{}steelblue\textquotesingle{}, xlab = "", screens = 1, ylab="", )}
+\end{Highlighting}
+\end{Shaded}
+
+
+
+%%%%% REFERENCES
+
+% JEM: Quote for the top of references (just like a chapter quote if you're using them).  Comment to skip.
+% \begin{savequote}[8cm]
+% The first kind of intellectual and artistic personality belongs to the hedgehogs, the second to the foxes \dots
+%   \qauthor{--- Sir Isaiah Berlin \cite{berlin_hedgehog_2013}}
+% \end{savequote}
+
+\setlength{\baselineskip}{0pt} % JEM: Single-space References
+
+{\renewcommand*\MakeUppercase[1]{#1}%
+\printbibliography[heading=bibintoc,title={\bibtitle}]}
+
+\end{document}
