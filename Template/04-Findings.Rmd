@@ -571,7 +571,7 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 
 
 <!-- What do we do, do we do 6 tables for all the distributions?  -->
-```{r table3prep, eval=FALSE}
+```{r table3prep, echo=FALSE}
 require(plyr)
 require(dplyr)
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
