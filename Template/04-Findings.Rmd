@@ -573,7 +573,7 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 <!-- What do we do, do we do 6 tables for all the distributions?  -->
 ```{r table3prep, eval=FALSE}
 require(plyr)
-
+require(dplyr)
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
 #Making objects to fill  
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
@@ -682,8 +682,25 @@ for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
 
+
+
+
 #Testing the kabling
-knitr::kable(Table.3$ST)
+
+fn1.3 <- sprintf(paste0('This table shows the maximum likelyhood estimates of various ST-GARCH models. The daily returns used on the ',gsub(pattern = '\\.', replacement=' ',colnames(R))," price index cover the period from ",gsub(" UTC", "",min(index(R)))," to ",gsub(" UTC", "",max(index(R))), "(", nrow(R)," observations)."))
+fn2.3 <- paste0("The mean process is modeled as follows: ", "$\\\\\\\\R_t=\\\\alpha_0+\\\\alpha_1 R_{t-1}+\\\\varepsilon_t\\\\\\\\$ ",  "Where, in the ", ncol(Table.3$ST)-1, " GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\lambda$, $\\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.")
+
+kbl(Table.3$ST,caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",
+      label = 'dsTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3, row.names = F, escape = F )%>%
+  kable_classic(full_width = F)%>% 
+  footnote(general = "Notes",number=c(fn1.3, fn2.3),threeparttable = F,footnote_as_chunk = F, escape=F, general_title = "")%>%
+  kable_styling(latex_options = "scale_down")
+
+
+
 
 ```
 
