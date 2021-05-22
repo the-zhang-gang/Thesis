@@ -216,10 +216,10 @@ DistMLE <- function(R) {
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$loglik
   GED_pv <- 2* stats::pnorm(-abs(GED_sumResult$estimate/(GED_sumResult$sd)))
-  GED_pv <- c(GED_pv[1:2], NA, NA, GED_pv[3])
+  GED_pv <- c(GED_pv[1:2], NA, GED_pv[3], NA)
   GED_significance <- matrix(ncol = 5,nrow = 1)
   colnames(GED_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
-  for(i in c(1,2,5)){
+  for(i in c(1,2,4)){
   if(GED_pv[i]>=0.10){
   GED_significance[i] <-  "" 
   }
@@ -313,7 +313,7 @@ DistMLE <- function(R) {
 
 #maximum likelihood estimates of unconditional distribution functions
 Table2 <- matrix(nrow = 6, ncol = 7)
-colnames(Table2) <- c("alpha","beta","xi","kappa","eta","L","AIC")
+colnames(Table2) <- c("alpha","beta","xi","kappa","eta","LLH","AIC")
 rownames(Table2) <- c("SGT","SGED","GED","ST","T","Normal")
 # "alpha","beta","xi","kappa","nu","L","AIC"
 Table2[1,1:5] <- SGT_result$estimate
@@ -321,7 +321,7 @@ Table2[1,6] <- SGT_result$maximum
 Table2[1,7] <- SGT_AIC
 # "alpha","beta","xi","kappa","nu","L","AIC"
 Table2[2,1:2] <- SGED_result$estimate[1:2]
-Table2[2,3] <- SGED_result$estimate[4]
+Table2[2,3] <- SGED_result$estimate[4] - 1
 Table2[2,4] <- SGED_result$estimate[3]
 Table2[2,5] <- Inf
 Table2[2,6] <- SGED_result$loglik
@@ -335,7 +335,7 @@ Table2[3,6] <- GED_result$loglik
 Table2[3,7] <- GED_AIC
 # "alpha","beta","xi","kappa","nu","L","AIC"
 Table2[4,1:2] <- ST_result$estimate[1:2]
-Table2[4,3] <- ST_result$estimate[4]
+Table2[4,3] <- ST_result$estimate[4] - 1
 Table2[4,4] <- 2
 Table2[4,5] <- ST_result$estimate[3] # eta parameter is not exactly true here... See formula SGT package
 Table2[4,6] <- ST_result$loglik
@@ -378,11 +378,11 @@ Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3) #round
 Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
 #sd is correct, but the significance has to be fixed, same for GED, ST and T
-Table2_SE[4,c("alpha","beta","kappa","xi")] <- paste0("(",round(c(SGED_result$sd[1:2],SGED_result$sd[4], SGED_result$sd[3], NA),3),")", SGED_significance)
+Table2_SE[4,2:6] <- paste0("(",round(c(SGED_result$sd[1:2],SGED_result$sd[4], SGED_result$sd[3], NA),3),")", SGED_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
-Table2_SE[6,c("alpha","beta","kappa")] <- paste0("(",round(c(GED_result$sd[1:2],NA,GED_result$sd[3],NA), 3),")",GED_significance)
+Table2_SE[6,2:6] <- paste0("(",round(c(GED_result$sd[1:2],NA,GED_result$sd[3],NA), 3),")",GED_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
-Table2_SE[8,c("alpha","beta","xi","eta")] <- paste0("(",round(c(ST_result$sd[1:2],ST_result$sd[4],NA,ST_result$sd[3]),3),")",ST_significance)
+Table2_SE[8,2:6] <- paste0("(",round(c(ST_result$sd[1:2],ST_result$sd[4],NA,ST_result$sd[3]),3),")",ST_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
 Table2_SE[10,2:6] <- paste0("(",round(c(T_result$sd[-3],NA,NA,T_result$sd[3]),3),")",T_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
@@ -415,21 +415,23 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
 
-```{r Euro Stoxx,, echo=FALSE}
-par(mfrow = c(3,2), mar = c(1,4,3,3))
+```{r Euro Stoxx, echo=FALSE}
+# par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
 table2[table2 == "(NA)"] <- NA
-colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\xi$","$\\kappa$","$\\eta$","$L$","AIC")  
+colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") 
+# table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
-```{r results='asis'}
-kbl(table2,caption = "Maximum likelihood estimates of unconditional distribution functions",
-      label = 'MLEtable',
+```{r table2final,echo=FALSE, results='asis'}
+kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
+      label = 'MLEtable',"latex",
       booktabs = T,
       position = "h!",
       digits = 3,
-      col.names = )%>%
+    escape=F
+      )%>%
   kable_classic(full_width = F)%>% 
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "")
 ```
@@ -462,7 +464,7 @@ garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
 # Compute stdret using residuals()
 stdret.sGARCH[[i]] <- residuals(garchfit.sGARCH[[i]], standardize = TRUE)
 }
-garchfit.sGARCH[[5]]
+
 #.eGARCH-------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
@@ -798,12 +800,13 @@ aics %>% kbl(caption = "Model selection according to AIC","latex",
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
+  footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  kable_styling(latex_options = "scale_down")
 ```
 
 ```{r}
 # VaR table, unconditional coverage
-VaRTest(Egarch)
+# VaRTest(Egarch)
 ```
 
 
