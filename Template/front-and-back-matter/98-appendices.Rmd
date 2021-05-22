@@ -95,25 +95,17 @@ $f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\n
 ```{=tex}
 \begin{equation}
 \begin{array}{c}
-f_{S G T}(x ; \alpha, \beta, \xi, \eta, q)=\frac{p}{2 v \beta q^{1 / p} B\left(\frac{1}{p}, q\right)\left(\frac{|x-\alpha +m|^{p}}{q(v \beta)^{p}(\xi \operatorname{sign}(x-\alpha+m)+1)^{p}}+1\right)^{\frac{1}{p}+q}} \\
-m=\frac{2 v \beta \xi q^{\frac{1}{p}} B\left(\frac{2}{p}, q-\frac{1}{p}\right)}{B\left(\frac{1}{p}, q\right)}
+f_{S G T}(x ; \alpha, \beta, \xi, \kappa, \eta)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\alpha +m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\
+m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}
 \end{array}
 (\#eq:sgt)
 \end{equation}
 ```
-\noindent where $B(1 / \eta, \kappa)$ is the beta function, the scale factor and one shape parameter $p$.
+\noindent Following @theodossiou1998 however, there are two parameters, $\kappa$[^appendices-2]and $\eta$[^appendices-3]) for the shape in the SGT distribution. The $p$ is the peakedness parameter. The $q$ is the tail-thickness parameter. It is equal to the degrees of freedom $\eta$ divided by 2 if $\xi = 0$ and $\kappa = 2$, there is referred to symbol $\nu$ in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure \@ref(fig:figure) adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
 
-\\alpha, \\beta, \\xi, \\eta,\\kappa (alpha = location, beta = scale, xi = skew, eta =
+[^appendices-2]: Referred to as $\kappa$ by @theodossiou1998 and @bali2008, but $p$ by Carter Davis in the "sgt" package.
 
-$\begin{array}{c}f_{S G T}(x ; \alpha, \beta, \xi, \eta,\kappa)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\mu+m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}\end{array}$
-
-$\begin{equation}f\left[\varepsilon_{t} \sigma_{t}^{-1} ; \kappa, \psi\right]=\frac{\kappa}{2 \sigma_{t} \cdot \psi^{1 / \kappa} B(1 / \kappa, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{\kappa} /\left(\psi b^{\kappa} \sigma_{t}^{\kappa}\right)\right]^{\psi+1 / \kappa}}\end{equation}$
-
-\noindent Again the skewed variant is given by equation \@ref(eq:skeweddist) of appendix but with $f_1(\cdot)$ equal to equation \@ref(eq:gt) . Following @theodossiou1998 however, there are two parameters, $p$[^appendices-2]and $q$[^appendices-3]) for the shape in the SGT distribution. The $p$ is the peakedness parameter. The $q$ is the tail-thickness parameter. It is equal to the degrees of freedom $\eta$ divided by 2 if $\xi = 0$ and $p = 2$, there is referred to symbol $\nu$ in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure \@ref(fig:figure) adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
-
-[^appendices-2]: Also referred to as $\kappa$ by @theodossiou1998 and @bali2008
-
-[^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008
+[^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008. This is the $q$ by Carter Davis in the "sgt" package.
 
     ```{r figure, echo=FALSE, fig.cap="Source: https://cran.r-project.org/web/packages/sgt", out.width = '100%', fig.align='center'}
     knitr::include_graphics("images/Screenshot%202021-05-21%20at%2010.30.48.png")
@@ -235,3 +227,13 @@ $\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right
 \end{align}
 ```
 In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan [@morganguarantytrustcompany1996].
+
+\newpage
+
+#### Goodness of fit 
+
+As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. As you can see in figure \@ref(fig:aic1)
+
+```{r aic1, fig.align='center', fig.cap='Goodness of fit symmetric GARCH and distributions'}
+
+```

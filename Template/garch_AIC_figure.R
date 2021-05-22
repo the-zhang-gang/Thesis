@@ -1,5 +1,3 @@
-autoarfima(R, ar.max = 2, ma.max = 2, criterion = c("AIC","BIC","SIC","HQIC"), method = c("partial", "full"))
-?autoarfima
 do_single_garch <- function(x, 
                             type_model, 
                             type_dist, 
@@ -261,22 +259,35 @@ df_long <- df_long %>%
   mutate(order_model = if_else(model_name %in% best_models, 'Best Model', 'Not Best Model') ) 
 df_long <- df_long %>%
   mutate(ARMA_order = substr(df_long$model_name, 1,9))
-meanaic <- df_long %>% group_by(ARMA_order,type_dist, name) %>% summarise(mean_aic = mean(value)) %>% arrange(mean_aic)  
-meanaicdf <- as.data.frame(meanaic)
-ggplot(meanaicdf,aes(x = ARMA_order, y = mean_aic)) + geom_bar(stat="identity") + facet_wrap(~ type_dist)
+df_long <- df_long %>% filter(value < 4)
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "fGARCH", "",model_name))
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "sstd", "ST",model_name))
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "std", "T",model_name))
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "sged", "SGED",model_name))
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "ged", "GED",model_name))
+df_long <- df_long %>% mutate(model_name = gsub(pattern = "norm", "NORM",model_name))
+df_long <- df_long %>% mutate(type_dist = gsub(pattern = "sstd", "ST",type_dist))
+df_long <- df_long %>% mutate(type_dist = gsub(pattern = "std", "T",type_dist))
+df_long <- df_long %>% mutate(type_dist = gsub(pattern = "sged", "SGED",type_dist))
+df_long <- df_long %>% mutate(type_dist = gsub(pattern = "ged", "GED",type_dist))
+df_long <- df_long %>% mutate(type_dist = gsub(pattern = "norm", "NORM",type_dist))
+
+# meanaic <- df_long %>% group_by(ARMA_order,type_dist, name) %>% summarise(mean_aic = mean(value)) %>% arrange(mean_aic)  
+# meanaicdf <- as.data.frame(meanaic)
+# ggplot(meanaicdf,aes(x = ARMA_order, y = mean_aic)) + geom_bar(stat="identity") + facet_wrap(~ type_dist)
 
 # symmetric garches and symmetric dists
-df_long1 <-  filter(df_long, type_model %in% c("sGARCH", "iGARCH") & type_dist %in% c("norm", "std", "ged"))
+df_long1 <-  filter(df_long, type_model %in% c("sGARCH", "iGARCH") & type_dist %in% c("NORM", "T", "GED")) 
 # symmetric garches and asymmetric dists with best symmetric
-df_long2 <- filter(df_long, type_model %in% c("sGARCH", "iGARCH") & type_dist %in% c("std","sstd", "sged"))
+df_long2 <- filter(df_long, type_model %in% c("sGARCH", "iGARCH") & type_dist %in% c("ST", "SGED","T"))
 # asymmetric garches and symmetric dists
-df_long3 <-  filter(df_long, type_model %in% c("eGARCH", "gjrGARCH") & type_dist %in% c("norm", "std", "ged"))
+df_long3 <-  filter(df_long, type_model %in% c("eGARCH", "gjrGARCH") & type_dist %in% c("NORM", "T", "GED"))
 # asymmetric garches and asymmetric dists with best symmetric
-df_long4 <-  filter(df_long, type_model %in% c("eGARCH", "gjrGARCH") & type_dist %in% c("std", "sstd", "sged"))
+df_long4 <-  filter(df_long, type_model %in% c("eGARCH", "gjrGARCH") & type_dist %in% c("ST", "SGED","T"))
 # treshhold garches and symmetric dists
-df_long5 <-  filter(df_long, type_model == "fGARCH" & type_dist %in% c("norm", "std", "ged") & !(sub_model %in% c("TGARCH", "AVGARCH") & type_dist == "ged"))
+df_long5 <-  filter(df_long, type_model == "fGARCH" & type_dist %in% c("NORM", "T", "GED")) # & !(sub_model %in% c("TGARCH", "AVGARCH") & type_dist == "GED"))
 # treshhold garches and asymmetric dists with best symmetric
-df_long6 <-  filter(df_long, type_model == "fGARCH" & type_dist %in% c("std", "sstd", "sged") & !(sub_model %in% c("TGARCH", "AVGARCH") & type_dist == "sged") )
+df_long6 <-  filter(df_long, type_model == "fGARCH" & type_dist %in% c("ST", "SGED","T"))# & !(sub_model %in% c("TGARCH", "AVGARCH") & type_dist == "sged") )
 
 # make table with best models
 df_best_models <- df_long %>%
@@ -289,25 +300,25 @@ df_best_models <- df_long %>%
 p1 <- ggplot(df_long1 %>%
                arrange(type_model), 
              aes(x = reorder(model_name, 
-                             order(type_model)),
+                                     order(type_model)), 
                  y = value, 
                  shape = type_dist,
                  color = type_model)) + 
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name, order(type_model)),
+                                                  y = value)) +
+  labs(title = 'Symmetric Garch Models and distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/symmetric aics.pdf", width =9.615, height= 9.23)
 p1
+dev.off()
 
 p2 <- ggplot(df_long2 %>%
                arrange(type_model), 
@@ -319,18 +330,18 @@ p2 <- ggplot(df_long2 %>%
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name,order(type_model)),
+                                                  y = value)) +
+  labs(title = 'Symmetric Garch Models and other distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/symmetric aics2.pdf", width =9.615, height= 9.23)
 p2
+dev.off()
 
 p3 <- ggplot(df_long3 %>%
                arrange(type_model), 
@@ -342,18 +353,19 @@ p3 <- ggplot(df_long3 %>%
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name,order(type_model)),
+                           y = value)) +
+  labs(title = 'Asymmetric Garch Models and symmetric distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/asymmetric aics.pdf", width =9.615, height= 9.23)
 p3
+dev.off()
+
 
 p4 <- ggplot(df_long4 %>%
                arrange(type_model), 
@@ -365,18 +377,18 @@ p4 <- ggplot(df_long4 %>%
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name,order(type_model)),
+                           y = value)) +
+  labs(title = 'Asymmetric Garch Models and other distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/asymmetric aics2.pdf", width =9.615, height= 9.23)
 p4
+dev.off()
 
 
 p5 <- ggplot(df_long5 %>%
@@ -389,18 +401,19 @@ p5 <- ggplot(df_long5 %>%
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name,order(type_model)),
+                           y = value)) +
+  labs(title = 'Family Garch Models and symmetric distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/family aics.pdf", width =9.615, height= 9.23)
 p5
+dev.off()
+# for the family garch model, the GED was very poorly for the TGARCH 
 
 p6 <- ggplot(df_long6 %>%
                arrange(type_model), 
@@ -412,16 +425,17 @@ p6 <- ggplot(df_long6 %>%
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   facet_wrap(~name, scales = 'free_x') + 
-  geom_point(data = df_best_models, mapping = aes(x = reorder(model_name, 
-                                                              order(type_model)),
-                                                  y = value), 
-             color = 'blue', size = 5, shape = 8) +
-  labs(title = 'Selecting Garch Models by Fitness Criteria', 
-       subtitle = 'The best model is the one with lowest AIC or BIC (with star)',
+  geom_point(mapping = aes(x = reorder(model_name,order(type_model)),
+                           y = value)) +
+  labs(title = 'Family Garch Models and other distributions', 
+       subtitle = 'The best model is the one with lowest AIC or BIC',
        x = '',
        y = 'Value of Fitness Criteria',
        shape = 'Type of Dist.',
        color = 'Type of Model') + 
   theme(legend.position = "right")
+pdf(file = "figures/aicfigures/family aics2.pdf", width =9.615, height= 9.23)
 p6
+dev.off()
+# for the family garch models, the SGED was very poorly for the TGARCH 
 

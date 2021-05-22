@@ -378,11 +378,11 @@ Table2_SE[c(1,3,5,7,9,11),-1] <- round(Table2_SE[c(1,3,5,7,9,11),-1], 3) #round
 Table2_SE[2,2:6] <- paste0("(",round(SGT_result$std.error, 3),")",SGT_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
 #sd is correct, but the significance has to be fixed, same for GED, ST and T
-Table2_SE[4,c("alpha","beta","kappa","xi")] <- paste0("(",round(SGED_result$sd, 3),")",SGED_significance)
+Table2_SE[4,c("alpha","beta","kappa","xi")] <- paste0("(",round(c(SGED_result$sd[1:2],SGED_result$sd[4], SGED_result$sd[3], NA),3),")", SGED_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
-Table2_SE[6,c("alpha","beta","kappa")] <- paste0("(",round(GED_result$sd, 3),")",GED_significance)
+Table2_SE[6,c("alpha","beta","kappa")] <- paste0("(",round(c(GED_result$sd[1:2],NA,GED_result$sd[3],NA), 3),")",GED_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
-Table2_SE[8,c("alpha","beta","xi","eta")] <- paste0("(",round(ST_result$sd,3),")",ST_significance)
+Table2_SE[8,c("alpha","beta","xi","eta")] <- paste0("(",round(c(ST_result$sd[1:2],ST_result$sd[4],NA,ST_result$sd[3]),3),")",ST_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
 Table2_SE[10,2:6] <- paste0("(",round(c(T_result$sd[-3],NA,NA,T_result$sd[3]),3),")",T_significance)
 # "alpha","beta","xi","kappa","eta","L","AIC"
@@ -419,12 +419,12 @@ Additionally, for every distribution fitted with MLE, plots are generated to com
 par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
-Eurostoxx$results$SGT
-colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\lambda$","$p$","$\\nu$","$L$","AIC")  
+table2[table2 == "(NA)"] <- NA
+colnames(table2) <- c("", "$\\mu$","$\\sigma$","$\\xi$","$\\kappa$","$\\eta$","$L$","AIC")  
 ```
 
 ```{r results='asis'}
-kbl(Eurostoxx$table,caption = "Maximum likelihood estimates of unconditional distribution functions",
+kbl(table2,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',
       booktabs = T,
       position = "h!",
