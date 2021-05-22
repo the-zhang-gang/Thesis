@@ -41,126 +41,17 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
 ```{r SGTMLE, include=FALSE}
 par(mfrow = c(3,2))
-sgt.mle2 <- function (X.f, mu.f = mu ~ mu, sigma.f = sigma ~ sigma, lambda.f = lambda ~ lambda, p.f = p ~ p, q.f = q ~ q, data = parent.frame(), start, subset, method = "BFGS", itnmax = NULL, hessian.method = "Richardson", gradient.method = "Richardson", mean.cent = TRUE, var.adj = TRUE, ..., lower =-Inf, upper=Inf) 
-  { formList = list(X = X.f, mu = mu.f, sigma = sigma.f, lambda = lambda.f, 
-                  p = p.f, q = q.f)
-  varNames = NULL
-  envir = new.env()
-  for (i in 1:6) {
-    formList[[i]] = stats::as.formula(formList[[i]])
-    if (length(formList[[i]]) == 2L) {
-      formList[[i]][[3L]] = formList[[i]][[2L]]
-      formList[[i]][[2L]] = as.name(names(formList)[i])
-    }
-    else if (as.character(formList[[i]][[2L]]) != names(formList)[i]) {
-      warning(paste("The left hand side of ", names(formList)[i], 
-                    ".f was changed from ", as.character(formList[[i]][[2L]]), 
-                    " to ", names(formList)[i], sep = ""))
-    }
-    varNames = c(varNames, all.vars(formList[[i]][[3L]]))
-  }
-  if (class(data)[1L] == "matrix") 
-    data = as.data.frame(data)
-  if (!is.list(data) && !is.environment(data)) 
-    stop("'data' must be a list or an environment")
-  start = as.list(start)
-  if (is.null(names(start))) 
-    stop("'start' must be a named list or named numeric vector")
-  if ("" %in% names(start)) 
-    stop("at least one of the elements in 'start' is missing a name")
-  parNames = names(start)
-  varNames = varNames[is.na(match(varNames, parNames))]
-  if (length(varNames) == 0L) 
-    stop("there is no reference to data in the given formulas")
-  for (i in varNames) {
-    if (!exists(i, data)) 
-      stop(paste(i, "is not contained in 'start' and it is not found in 'data'"))
-    assign(i, eval(parse(text = paste("as.numeric(data$", 
-                                      i, ")", sep = ""))), envir)
-  }
-  if (length(varNames) > 1) {
-    for (i in 2:length(varNames)) {
-      if (length(eval(parse(text = paste("envir$", varNames[1L], 
-                                         sep = "")))) != length(eval(parse(text = paste("envir$", 
-                                                                                        varNames[i], sep = ""))))) 
-        stop(paste("the length of the variable", varNames[i], 
-                   "does not match the length of the variable", 
-                   varNames[1L]))
-    }
-  }
-  control = list(...)
-  if (!is.null(control$maximize)) 
-    stop("'maximize' option not allowed")
-  if (!missing(subset)) 
-    for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
-                                                          i, "[subset]", sep = ""))), envir)
-  keep = rep(TRUE, length(eval(parse(text = paste("envir$", 
-                                                  varNames[1L], sep = "")))))
-  for (i in varNames) keep = keep & is.finite(eval(parse(text = paste("envir$", 
-                                                                      i, sep = ""))))
-  for (i in varNames) assign(i, eval(parse(text = paste("envir$", 
-                                                        i, "[keep]", sep = ""))), envir)
-  loglik = function(params) {
-    for (i in 1:length(parNames)) assign(parNames[i], unlist(params[i]))
-    X = eval(formList[[1L]][[3L]])
-    mu = eval(formList[[2L]][[3L]])
-    sigma = eval(formList[[3L]][[3L]])
-    lambda = eval(formList[[4L]][[3L]])
-    p = eval(formList[[5L]][[3L]])
-    q = eval(formList[[6L]][[3L]])
-    sum(dsgt(X, mu, sigma, lambda, p, q, mean.cent, var.adj, 
-             log = TRUE))
-  }
-  environment(loglik) = envir
-  negloglik = function(params) {
-    -loglik(params)
-  }
-  if (!is.finite(loglik(start))) 
-    stop("'start' yields infinite or non-computable SGT function values")
-  optimum = suppressWarnings(optimx::optimx(par = unlist(start), 
-                                            fn = negloglik, method = method, itnmax = itnmax, control = control, lower=lower, upper=upper))
-  minimum = min(optimum$value, na.rm = TRUE)
-  if (!is.finite(minimum)) 
-    stop("All Maximization Methods Failed")
-  whichbest = max(which(minimum == optimum$value))
-  optimal = optimum[whichbest, ]
-  estimate = as.numeric(optimum[whichbest, 1:length(parNames)])
-  names(estimate) = parNames
-  H = tryCatch(numDeriv::hessian(loglik, estimate, method = hessian.method), 
-               error = function(e) {
-                 warning("hessian matrix calculation failed")
-                 return(as.matrix(NaN))
-               })
-  varcov = tryCatch(-qr.solve(H), error = function(e) {
-    warning("covariance matrix calculation failed due to a problem with the hessian")
-    return(as.matrix(NaN))
-  })
-  std.error = sqrt(diag(varcov))
-  if (is.finite(varcov[1, 1])) 
-    names(std.error) = parNames
-  gradient = tryCatch(numDeriv::grad(loglik, estimate, method = gradient.method), 
-                      error = function(e) {
-                        warning("gradient calculation failed")
-                        return(NaN)
-                      })
-  result = list(maximum = -minimum, estimate = estimate, convcode = as.numeric(optimal$convcode), 
-                niter = as.numeric(optimal$niter), best.method.used = row.names(optimal), 
-                optimx = optimum, hessian = H, gradient = gradient, 
-                varcov = varcov, std.error = std.error)
-  class(result) = c("sgtest", class(result))
-  return(result)
-}
 ```
 
 ```{r mlesgt, include=FALSE}
 require(sgt)
 require(graphics)
 require(stats)
-DistMLE <- function(R) {
+DistMLE <- function(R=R) {
   ### SGT
   X.data <- X ~ coredata(R)
   SGT_start <- list(mu=0,sigma=1, lambda = 0.5, p=2, q=8) # p = kappa, q = nu
-  SGT_result <- sgt.mle2(X.f = X.data, start = SGT_start)
+  SGT_result <- sgt.mle(X.f = X.data, start = SGT_start)
   names(SGT_result$estimate) <- names(SGT_result$std.error) <-  c("alpha", "beta", "xi", "kappa", "eta")
   SGT_sumResult <- summary(SGT_result)
   SGT_AIC <- 2*length(SGT_result$estimate) - 2*SGT_sumResult$maximum
@@ -399,7 +290,6 @@ return(totalresults)
 ```
 
 ```{r MLE tables for different series, include=FALSE, eval=FALSE}
-
 R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
 R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
 R_covid <- window(R, start = "2009-03-31")
@@ -433,7 +323,8 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
     escape=F
       )%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "")
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  kable_styling(latex_options = "scale_down")
 ```
 
 
@@ -784,7 +675,10 @@ aics[,7] <- aic_tGARCH
 aics[,8] <- aic_avgarch
 
 tableAIC <- as.data.frame(round(aics,4))
+# try 2
+tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min(tableAIC$SGARCH), "green", "black"))
 
+# try 1
 # cf <-  condformat(tableAIC) %>%
 #   rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
 #   rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
@@ -794,7 +688,7 @@ tableAIC <- as.data.frame(round(aics,4))
 #   rule_fill_discrete(NAGARCH,expression =NAGARCH==min(NAGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))  %>%
 #   rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
 #   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) 
-aics %>% kbl(caption = "Model selection according to AIC","latex",
+aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
       label = 'aicTable',
       booktabs = T,
       position = "h!",

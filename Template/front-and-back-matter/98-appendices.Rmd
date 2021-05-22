@@ -105,11 +105,11 @@ m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\fra
 
 [^appendices-2]: Referred to as $\kappa$ by @theodossiou1998 and @bali2008, but $p$ by Carter Davis in the "sgt" package.
 
-[^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008. This is the $q$ by Carter Davis in the "sgt" package.
+[^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008. This is the $q$ by Carter Davis in the "sgt" packages.
 
-    ```{r figure, echo=FALSE, fig.cap="Source: https://cran.r-project.org/web/packages/sgt", out.width = '100%', fig.align='center'}
-    knitr::include_graphics("images/Screenshot%202021-05-21%20at%2010.30.48.png")
-    ```
+```{r figure, echo=FALSE, fig.cap="Source: https://cran.r-project.org/web/packages/sgt", out.width = '100%', fig.align='center', out.width='100%'}
+knitr::include_graphics("front-and-back-matter/images/SGT.png")
+```
 
 #### GARCH models
 
@@ -234,6 +234,6 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 
 As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. As you can see in figure \@ref(fig:aic1)
 
-```{r aic1, fig.align='center', fig.cap='Goodness of fit symmetric GARCH and distributions'}
-
+```{r aic1, fig.align='center', fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='100%'}
+knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
 ```

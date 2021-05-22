@@ -41,6 +41,46 @@
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -90,13 +130,16 @@ conditional normality by assuming the standardized innovation to follow
 a standardized Student t-distribution {[}@bollerslev2008{]}.
 
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \beta}\right)^{-(\nu+1)/2}
+f(x; \alpha, \beta,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
  (\#eq:stdghalanos)
 \end{align}
 
 \noindent where \(\alpha, \beta\) and \(\nu\) are respectively the
-location, scale and shape (tail-thickness) parameters. The symbol
-\(\Gamma\) is the Gamma function.
+location, scale and shape (tail-thickness) parameters. \(\nu/2\) is
+equal to the \(q\)\footnote{Also referred to as \(n\) by
+  @theodossiou1998 or \(\eta\) by @bali2008} parameter (which we call
+\(\eta\)) of the SGT distribution. The symbol \(\Gamma\) is the Gamma
+function.
 
 \noindent Unlike the normal distribution, which depends entirely on two
 moments only, the student t distribution allows for fatter tails. This
@@ -117,19 +160,19 @@ distribution by @mcdonald1988 is used in the GED-GARCH model by
 @nelson1991 to model stock market returns. This model replaced the
 assumption of conditional normally distributed error terms by
 standardized innovations that following a generalized error
-distribution. It is a symmetric, unimodal distribution (location
+distribution. It is a symmetric, uni-modal distribution (location
 parameter is the mode, median and mean). This is also sometimes called
 the exponential power distribution {[}@bollerslev2008{]}. The
 conditional density (pdf) is given by equation @ref(eq:ged) following
 @ghalanos2020.
 
 \begin{align}
-f(x) = \dfrac{p e^{\left|\dfrac{x-\alpha}{\beta}\right|^p}}{2^{1+p^(-1)}\beta\Gamma(p^{-1})}
+f(x; \alpha, \beta, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+1/\kappa}\beta\Gamma(1/\kappa)}
  (\#eq:ged)
 \end{align}
 
-where \(\alpha, \beta\) and \(p\) are respectively the location, scale
-and shape parameters .
+where \(\alpha, \beta\) and \(\kappa\) are respectively the location,
+scale and shape parameters.
 
 Skewed t-distribution
 
@@ -150,7 +193,14 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 \noindent where
 \(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\)
 and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case
-equation @ref(eq:stdghalanos), the pdf of the student t distribution.
+equation @ref(eq:stdghalanos), the pdf of the student t distribution
+coming to equation @ref(eq:stdist), which has the parameterization
+following the SGT parameters.
+
+\begin{equation}
+\begin{array}{c}f_{S T}(x ; \alpha, \beta, \xi, \eta)=\frac{\Gamma\left(\frac{1}{2}+\eta\right)}{\sqrt{\beta\pi \eta} \Gamma(\eta)\left(\frac{|x-\alpha+m|^{2}}{\eta\beta(\xi \operatorname{sign}(x-\alpha+m)+1)^{2}}+1\right)^{\frac{1}{2}+\eta}} \\m=\frac{2 \xi \sqrt{\beta\eta} \Gamma\left(\eta-\frac{1}{2}\right)}{\sqrt{\pi} \Gamma\left(\eta+\frac{1}{2}\right)}\end{array}
+ (\#eq:stdist)
+\end{equation}
 
 \noindent According to @giot2003; @giot2004, the skewed t-distribution
 outperforms the symmetric density distributions.
@@ -166,6 +216,17 @@ introduce skewness into uni-modal standardized distributions
 {[}@trottier2015{]}. It can also be found in @theodossiou2000. The pdf
 is then given by the same equation @ref(eq:skeweddist) as the skewed
 t-distribution but with \(f_1(\cdot)\) equal to equation @ref(eq:ged).
+To then get equation @ref(eq:sged).
+
+\begin{equation}
+\begin{array}{c}
+f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\
+m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
+\end{array}
+(\#eq:sged)
+\end{equation}
+
+\(f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}\)
 
 SGT (Skewed Generalized t-distribution)
 
@@ -175,35 +236,40 @@ solutions (use of historical simulation, student's t-distribution,
 generalized error distribution or a mixture of two normal distributions)
 to the non-normality of standardized financial returns only partially
 solved the issues of skewness and leptokurtosis. The density of the
-generalized t-distribution of @mcdonald1988 is given by equation
-@ref(eq:gt) {[}@bollerslev1994{]}.
+generalized t-distribution of @mcdonald1988 can be rewritten as its skew
+variant following @trottier2015. The pdf of the SGT distribition is
+given by eqution @ref(eq:sgt).
 
-\begin{align}
-f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
- (\#eq:gt)
-\end{align}
+\begin{equation}
+\begin{array}{c}
+f_{S G T}(x ; \alpha, \beta, \xi, \kappa, \eta)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\alpha +m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\
+m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}
+\end{array}
+(\#eq:sgt)
+\end{equation}
 
-\noindent where \(B(1 / \eta, \psi)\) is the beta function
-(=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)),
-\(\psi\eta>2,\ \eta>0 \ and \ \psi >0\),
-\(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)),
-the scale factor and one shape parameter \(p\).
-
-\noindent Again the skewed variant is given by equation
-@ref(eq:skeweddist) of appendix but with \(f_1(\cdot)\) equal to
-equation @ref(eq:gt) following @trottier2015. Following @theodossiou1998
-however, there are two parameters (\(p\), referred to as \(\kappa\) by
-Theodossiou and \(\eta\) by @bali2008 and \(q\), referred to as \(n\))
-for the shape in the SGT distribution. The \(p\) is the tail-thickness
-parameter. It is equal to the degrees of freedom divided by 2 if
-\(\lambda = 0\) and \(q = 2\). The \(q\) is the peakedness parameter. As
-shown in the following picture, from the SGT the other distributions in
-the figure are limiting cases of the SGT.
+\noindent Following @theodossiou1998 however, there are two parameters,
+\(\kappa\)\footnote{Referred to as \(\kappa\) by @theodossiou1998 and
+  @bali2008, but \(p\) by Carter Davis in the ``sgt'' package.}and
+\(\eta\)\footnote{Also referred to as \(n\) by @theodossiou1998 or
+  \(\eta\) by @bali2008. This is the \(q\) by Carter Davis in the
+  ``sgt'' packages.}) for the shape in the SGT distribution. The \(p\)
+is the peakedness parameter. The \(q\) is the tail-thickness parameter.
+It is equal to the degrees of freedom \(\eta\) divided by 2 if
+\(\xi = 0\) and \(\kappa = 2\), there is referred to symbol \(\nu\) in
+the tables (although this is not fully statistically correct to
+interprete this like degrees of freedom at all times). As shown in the
+following figure @ref(fig:figure) adapted by Carter Davis using , from
+the SGT the other distributions in the figure are limiting cases of the
+SGT.
 
 \begin{figure}
-\centering
-\includegraphics[width=6.11458in,height=\textheight]{images/Screenshot 2021-05-21 at 10.30.48.png}
-\caption{Source: \url{https://cran.r-project.org/web/packages/sgt}}
+
+{\centering \includegraphics[width=1\linewidth]{SGT} 
+
+}
+
+\caption{Source: https://cran.r-project.org/web/packages/sgt}\label{fig:figure}
 \end{figure}
 
 \hypertarget{garch-models}{%
@@ -225,6 +291,8 @@ external regressors.
 \sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
  (\#eq:eq13)
 \end{align}
+
+\(\sigma_t^2 = \omega + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2}\)
 
 \noindent where \(\sigma_t^2\) denotes the conditional variance,
 \(\omega\) the intercept and \(\varepsilon_t^2\) the residuals from the
@@ -308,6 +376,8 @@ large shock is not a linear transformation of a small shock.
  (\#eq:eq18)
 \end{align}
 
+\(\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2\)
+
 As before, \(\gamma_j\) represents the \emph{leverage} term.
 
 TGARCH model
@@ -347,6 +417,8 @@ with the absolute value of the shock term. It is specified as in
 
 \newpage
 
+\(\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}\)
+
 EWMA
 
 \noindent A alternative to the series of GARCH models is the
@@ -364,5 +436,36 @@ more weight is assigned to recent periods than distant periods. The
 In practice a \(\lambda\) of 0.94 is often used, such as by the
 financial risk management company RiskMetrics\(^{TM}\) model of J.P.
 Morgan {[}@morganguarantytrustcompany1996{]}.
+
+\newpage
+
+\hypertarget{goodness-of-fit}{%
+\paragraph{Goodness of fit}\label{goodness-of-fit}}
+
+As already mentioned, next to testing the models in part @ref(analysis),
+we also tested other models using the different distributions. This we
+did in order to check if distributions that capture the higher moment
+effects are really better in terms of goodness of fit. We did a small
+data mining experiment with 248 models that were estimated. This can
+ofcourse lead to overfitting if we from this list of models select the
+one with the lowest AIC for example. However, we can decide if there is
+a trend using the different distributions for the several GARCH models.
+Thus, in this experiment, our rule of thumb was to examine general
+trends. As you can see in figure @ref(fig:aic1)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{include\_graphics}\NormalTok{(}\StringTok{"symmetric aics.pdf"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{symmetric aics} 
+
+}
+
+\caption{Goodness of fit symmetric GARCH and distributions}\label{fig:aic1}
+\end{figure}
 
 \end{document}

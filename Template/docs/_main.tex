@@ -439,7 +439,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  \label{eq:eq8}
 \end{align}
 
-\noindent This leads to the properties of ARCH models: Stationarity\footnote{Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.} condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\). But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process \(\varepsilon_t\). The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates that the fat-tails (a stylized fact of returns).
+\noindent This leads to the properties of ARCH models: Stationarity\footnote{Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.} condition for variance: \(\omega>0\) and \(0 \le \alpha_1 < 1\). But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process \(\varepsilon_t\). The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates fat-tails.
 
 \begin{align} 
 3\dfrac{1-\alpha_1^2}{1-3\alpha_1^2}
@@ -476,7 +476,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \hypertarget{univ-garch}{%
 \subsection{Univariate GARCH models}\label{univ-garch}}
 
-\noindent An improvement of the ARCH model described in part @ is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)\footnote{\emph{Generalized} as it is a generalization by \textcite{bollerslev1986} of the ARCH model of \textcite{engle1982}. \emph{Autoregressive,} as it is a time series model with an autoregressive form (regression on itself). \emph{Conditional heteroscedasticity,} while time variation in conditional variance is built into the model \autocite{alexander2008}.}. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \ref{conditional-distributions} will be used. As \textcite{alexander2008} explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function\footnote{which makes the maximum likelihood estimation explained in part \ref{garch-method} complex with more parameters that have to be estimated.}. An overview (of a selection) of investigated GARCH models is given in the following table.
+\noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)\footnote{\emph{Generalized} as it is a generalization by \textcite{bollerslev1986} of the ARCH model of \textcite{engle1982}. \emph{Autoregressive,} as it is a time series model with an autoregressive form (regression on itself). \emph{Conditional heteroscedasticity,} while time variation in conditional variance is built into the model \autocite{alexander2008}.}. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \ref{conditional-distributions} will be used. As \textcite{alexander2008} explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function\footnote{which makes the maximum likelihood estimation explained in part \ref{garch-method} complex with more parameters that have to be estimated.}. An overview (of a selection) of investigated GARCH models is given in the following table.
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{GARCH models, the founders}\tabularnewline
@@ -548,18 +548,17 @@ Author & Higher moments\tabularnewline
 Author & Higher moments\tabularnewline
 \midrule
 \endhead
-\textcite{hansen1994} &\tabularnewline
-\textbackslash@harvey1999 &\tabularnewline
-&\tabularnewline
-&\tabularnewline
-&\tabularnewline
-&\tabularnewline
-&\tabularnewline
-\textcite{brooks2005} &\tabularnewline
-&\tabularnewline
-&\tabularnewline
+\textcite{hansen1994} & Skewness and kurtosis extended ARCH-model\tabularnewline
+\textbackslash@harvey1999 & Skewness, Effect of higher moments on lower moments\tabularnewline
+\textcite{brooks2005} & Kurtosis, Time varying degrees of freedom\tabularnewline
 \bottomrule
 \end{longtable}
+
+While it is relatively straightforward to include unconditional higher-moments in VaR and CVaR calculations, it is less simple to do so when the higher moments (in addition to the variance) are time-varying. \textcite{hansen1994} extends the ARCH model to include time-varying moments beyond mean and variance. While mean returns and variance are usually the parameters of most interest, disregarding these higher moments could provide an incomplete description of a conditional distribution. The model proposed by \textcite{hansen1994} allows for skewness and shape parameters to vary in a skewed-t density function through specifying them as functions of their errors in previous periods (in an similar way how variance is estimated). Applications on U.S. Treasuries and exchange rates are discussed.
+
+@harvey1999 extends a GARCH(1,1) model to include time varying skewness by estimating it jointly with time varying variance using a skewed t distribution. They find a significant impact of skewness on conditional volatility, suggesting that these moments should be jointly estimated for efficiency. Changes in conditional skewness have an impact on the persistence of volatility shocks. They also find that including skewness causes the leverage effects of variance to dissapear. They apply their methods on different stock indices (both developed and emerging) at daily, weekly and monthly frequency.
+
+\textcite{brooks2005} proposes a model based on a t-distribution that allows for both the variance and the degrees of freedom to be time-varying, independently from eachother. Their model allows for both assymetric variance and kurtosis through an indicator function (which has a positive effect on these moments only when the shock is in the right tail). They apply their model on different financial assets in the U.S. and U.K. at daily frequency.
 
 \begin{savequote}
 Volatility is unobservable. We can only ever estimate and forecast
@@ -594,14 +593,7 @@ are normally distributed.
 \hypertarget{table-of-summary-statistics}{%
 \subsubsection{Table of summary statistics}\label{table-of-summary-statistics}}
 
-Equation \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Returns are computed with equation \eqref{eq:logret}.
-
-\begin{align}
-R_{t}=100\left(\ln \left(I_{t}\right)-\ln \left(I_{t-1}\right)\right)
-  \label{eq:logret}
-\end{align}
-
-\noindent where \(I_{t}\) is the index price at time \(t\) and \(I_{t-1}\) is the index price at \(t-1\).
+Equation \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).
 
 \noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.208. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19528.62 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
 
@@ -709,7 +701,7 @@ Jarque-Bera & 19528.6196*** & 10431.0514***\\
 \hypertarget{garch-method}{%
 \subsection{Garch models}\label{garch-method}}
 
-\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood. As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.~\\
+\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood\footnote{ As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.}.~\\
 
 \noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
 
@@ -811,39 +803,37 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \hypertarget{mle-distribution-parameters}{%
 \subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
 
-In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.
+In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.}
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
-
-\includegraphics{_main_files/figure-latex/Euro Stoxx-1.pdf}
 
 \begin{table}[h!]
 
 \caption{\label{tab:MLEtable}Maximum likelihood estimates of unconditional distribution functions}
 \centering
 \begin{threeparttable}
-\begin{tabular}[t]{lllllllrr}
+\begin{tabular}[t]{llllllrr}
 \toprule
- & \$\textbackslash{}mu\$ & \$\textbackslash{}sigma\$ & \$\textbackslash{}lambda\$ & \$p\$ & \$q\$ & \$\textbackslash{}nu\$ & \$L\$ & AIC\\
+$\theta$ & $\alpha$ & $\beta$ & $\xi$ & $\kappa$ & $\eta$ & $LLH$ & AIC\\
 \midrule
-SGT & 0.02 & 1.321 & -0.04 & 1.381 & 3.317 &  & -13973.01 & 27956.01\\
- & (0.013) & (0.026)** & (0.012)** & (0.071)** & (0.534)** &  &  & \\
-SGED & 0.02 & 1.274 & -0.018 & 0.918 & Inf &  & -14008.18 & 27956.01\\
- & (0.01) & (0.016)** & (0.008)* & (0.016)** &  &  &  & \\
-GED & 0.032 & 1.276 & 0 & 0.913 & Inf &  & -14009.09 & 28028.17\\
+SGT & 0.02 & 1.321 & -0.04 & 1.381 & 3.314 & -13973.01 & 27956.01\\
+ & (0.013) & (0.026)*** & (0.013)*** & (0.071)*** & (0.538)*** &  & \\
+SGED & 0.019 & 1.274 & -0.018 & 0.916 & Inf & -14008.63 & 27956.01\\
+ & (0.013) & (0.016)*** & (0.01)*** & (0.017)*** &  &  & \\
+GED & 0.032 & 1.276 & 0 & 0.911 & Inf & -14009.52 & 28025.04\\
 \addlinespace
- & (0.005)** & (0.016)** &  & (0.016)** &  &  &  & \\
-ST & 0.019 & 1.487 & 0.949 &  &  & 2.785 & -13997.35 & 28002.70\\
- & (0.014)** & (0.056)** & (0.013)** &  &  & (0.1)** &  & \\
-T & 0.056 & 1.494 &  &  &  & 2.765 & -14005.14 & 28016.29\\
- & (0.01)** & (0.056)** &  &  &  & (0.097)** &  & \\
+ & (0.009)*** & (0.016)*** &  & (0.017)*** &  &  & \\
+ST & 0.019 & 1.481 & -0.052 & 2 & 2.793 & -13997.35 & 28002.71\\
+ & (0.014) & (0.054)*** & (0.013)*** &  & (0.098)*** &  & \\
+T & 0.056 & 1.494 & 0 & 2 & 1.383 & -14005.14 & 28016.29\\
+ & (0.01)*** & (0.056)*** &  &  & (0.097)*** &  & \\
 \addlinespace
-Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
- & (0.014) & (0.015)** &  &  &  &  &  & \\
+Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15101.73 & 30207.46\\
+ & (0.014) & (0.01)*** &  &  &  &  & \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
-\item Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** point out significance at 5% and 1% level.
+\item Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -853,31 +843,118 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{table3 }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{12}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{5}\NormalTok{)}
-\FunctionTok{colnames}\NormalTok{(table3) }\OtherTok{\textless{}{-}}\NormalTok{ distributions}
+\FunctionTok{require}\NormalTok{(plyr)}
 
-\CommentTok{\#trying a loop, maybe you can solve that @filippo?}
-\DocumentationTok{\#\# column loop i = normal distribution, std, sstd, ged, sged}
-\NormalTok{table3[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\CommentTok{\#first parameter estimate}
-\NormalTok{table3[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{1}\NormalTok{] }\CommentTok{\#first standard error}
-\NormalTok{table3[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\CommentTok{\#second parameter estimate}
-\NormalTok{table3[}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef[}\DecValTok{2}\NormalTok{]}
+\NormalTok{Table.GARCH.function }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.eGARCH)\{}
+\CommentTok{\#Making objects to fill  }
+\NormalTok{list.table.}\FloatTok{3.}\NormalTok{tmp }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions)}\SpecialCharTok{*}\DecValTok{2}\NormalTok{)}
+\NormalTok{list.table}\FloatTok{.3} \OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions))}
+\FunctionTok{names}\NormalTok{(list.table}\FloatTok{.3}\NormalTok{) }\OtherTok{\textless{}{-}}\NormalTok{ distributions}
+\NormalTok{ref.distr }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \DecValTok{1}\NormalTok{, }\AttributeTok{to =} \FunctionTok{length}\NormalTok{(distributions)}\SpecialCharTok{*}\DecValTok{2}\NormalTok{, }\AttributeTok{by =} \DecValTok{2}\NormalTok{)}
+\CommentTok{\#Retriving all the data from the original lists}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
+\NormalTok{    list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]]] }\OtherTok{\textless{}{-}}\NormalTok{ GARCHfit.object[[i]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
+\NormalTok{    list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]}\SpecialCharTok{+}\DecValTok{1}\NormalTok{]] }\OtherTok{\textless{}{-}}\NormalTok{ GARCHfit.object[[i]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{tval}
+\NormalTok{\}}
+\CommentTok{\#From list of vectors of different lengths to list of matrixes with empty spaces filled with NAs}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
+\NormalTok{  list.table}\FloatTok{.3}\NormalTok{[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]]], list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]}\SpecialCharTok{+}\DecValTok{1}\NormalTok{]][}\FunctionTok{match}\NormalTok{(}\FunctionTok{names}\NormalTok{(list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]]]), }\FunctionTok{names}\NormalTok{(list.table.}\FloatTok{3.}\NormalTok{tmp[[ref.distr[i]}\SpecialCharTok{+}\DecValTok{1}\NormalTok{]]))])}
+\NormalTok{\}}
+\CommentTok{\#Function to rearrange the list from a list of matrices to list of vectors}
+\NormalTok{list.restructure }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{object =}\NormalTok{ list.table}\FloatTok{.3}\NormalTok{)\{}
+\NormalTok{  len.table }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(object)}
+\NormalTok{  len.inside.list }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, len.table)}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{len.inside.list[i] }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(object[[i]])\}}
+\NormalTok{  adj.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =}\NormalTok{ len.table)}
+\NormalTok{  ref.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =}\NormalTok{ len.table)}
+\NormalTok{  names.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =}\NormalTok{ len.table)}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{ref.list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \DecValTok{1}\NormalTok{, }\AttributeTok{to =}\NormalTok{ len.inside.list[i]}\SpecialCharTok{*}\DecValTok{2}\NormalTok{, }\AttributeTok{by =} \DecValTok{2}\NormalTok{)\}}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{adj.list[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ names.list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, len.inside.list[i]}\SpecialCharTok{*}\DecValTok{2}\NormalTok{)\}}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{}
+\NormalTok{      adj.list[[i]][ref.list[[i]]] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(object[[i]][,}\DecValTok{1}\NormalTok{],}\DecValTok{3}\NormalTok{)}
+\NormalTok{      adj.list[[i]][ref.list[[i]]}\SpecialCharTok{+}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"("}\NormalTok{, }\FunctionTok{round}\NormalTok{(object[[i]][,}\DecValTok{2}\NormalTok{],}\DecValTok{3}\NormalTok{),}\StringTok{")"}\NormalTok{)}
+\NormalTok{  \}}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{}
+\NormalTok{    names.list[[i]][ref.list[[i]]] }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(object[[i]])}
+\NormalTok{    names.list[[i]][ref.list[[i]]}\SpecialCharTok{+}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"p{-}val "}\NormalTok{,}\FunctionTok{rownames}\NormalTok{(object[[i]]))}
+    \CommentTok{\#names.list[[i]][ref.list[[i]]+1] \textless{}{-} ""}
+\NormalTok{    \}}
+  \FunctionTok{names}\NormalTok{(adj.list) }\OtherTok{\textless{}{-}}\NormalTok{ distributions}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{len.table)\{}\FunctionTok{names}\NormalTok{(adj.list[[i]]) }\OtherTok{\textless{}{-}}\NormalTok{ names.list[[i]]\}}
+  \FunctionTok{return}\NormalTok{(adj.list)}
+\NormalTok{\}}
+\CommentTok{\#Unlisting and removing NAs}
+\NormalTok{adj.list }\OtherTok{\textless{}{-}} \FunctionTok{list.restructure}\NormalTok{(}\AttributeTok{object =}\NormalTok{ list.table}\FloatTok{.3}\NormalTok{)}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(adj.list, }\StringTok{\textasciigrave{}}\AttributeTok{length\textless{}{-}}\StringTok{\textasciigrave{}}\NormalTok{, }\FunctionTok{max}\NormalTok{(}\FunctionTok{lengths}\NormalTok{(adj.list)))),}\AttributeTok{ncol =} \FunctionTok{length}\NormalTok{(distributions),}\AttributeTok{nrow =} \FunctionTok{max}\NormalTok{(}\FunctionTok{lengths}\NormalTok{(adj.list)), }\AttributeTok{byrow =}\NormalTok{ F)}
+\FunctionTok{colnames}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix) }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(adj.list)}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[}\FunctionTok{is.na}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)] }\OtherTok{\textless{}{-}} \StringTok{""}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[table.}\FloatTok{3.}\NormalTok{matrix}\SpecialCharTok{==}\StringTok{"(NA)"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{""}
+\CommentTok{\#Adjustments for std \& ged distributions}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[}\FunctionTok{c}\NormalTok{(}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{2}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{2}\NormalTok{])),}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{2}\NormalTok{]}\SpecialCharTok{!=}\StringTok{""}\NormalTok{,}\DecValTok{2}\NormalTok{],}\DecValTok{2}\NormalTok{)}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[}\FunctionTok{c}\NormalTok{(}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{2}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{2}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{),}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{""}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[}\FunctionTok{c}\NormalTok{(}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{4}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{4}\NormalTok{])),}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{4}\NormalTok{]}\SpecialCharTok{!=}\StringTok{""}\NormalTok{,}\DecValTok{4}\NormalTok{],}\DecValTok{2}\NormalTok{)}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[}\FunctionTok{c}\NormalTok{(}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{4}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,}\FunctionTok{length}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[,}\DecValTok{4}\NormalTok{])}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{),}\DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{""}
+\CommentTok{\#Log{-}Likelyhoods}
+\NormalTok{LLH }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\FunctionTok{length}\NormalTok{(distributions))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{LLH[i] }\OtherTok{\textless{}{-}}\NormalTok{ GARCHfit.object[[i]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{LLH\}}
+\NormalTok{names.table}\FloatTok{.3} \OtherTok{\textless{}{-}} \FunctionTok{revalue}\NormalTok{(}\FunctionTok{names}\NormalTok{(adj.list[[}\DecValTok{3}\NormalTok{]]), }\FunctionTok{c}\NormalTok{(}\StringTok{"mu"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{alpha\_0$"}\NormalTok{, }\StringTok{"ar1"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{alpha\_1$"}\NormalTok{, }\StringTok{"omega"}\OtherTok{=} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_0$"}\NormalTok{, }\StringTok{"alpha1"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_1$"}\NormalTok{, }\StringTok{"beta1"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_2$"}\NormalTok{, }\StringTok{"gamma1"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{gamma$"}\NormalTok{, }\StringTok{"skew"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{lambda$"}\NormalTok{, }\StringTok{"shape"}\OtherTok{=}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{kappa$"}\NormalTok{, }\StringTok{"eta11"}\OtherTok{=}\StringTok{"$rot$"}\NormalTok{, }\StringTok{"eta21"}\OtherTok{=}\StringTok{"$shift$"}\NormalTok{), }\AttributeTok{warn\_missing =}\NormalTok{ F)}
+\NormalTok{kappa.object }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\FunctionTok{matrix}\NormalTok{(}\AttributeTok{data =} \StringTok{""}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{2}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{3}\NormalTok{) ,table.}\FloatTok{3.}\NormalTok{matrix[(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)),}\DecValTok{4}\SpecialCharTok{:}\DecValTok{5}\NormalTok{])}
+\NormalTok{eta }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix[(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)),}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{], }\FunctionTok{matrix}\NormalTok{(}\AttributeTok{data =} \StringTok{""}\NormalTok{, }\AttributeTok{nrow =} \DecValTok{2}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{) )}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix[(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)),] }\OtherTok{\textless{}{-}}\NormalTok{ kappa.object}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix, eta, }\FunctionTok{round}\NormalTok{(LLH,}\DecValTok{3}\NormalTok{))}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\FunctionTok{c}\NormalTok{(names.table}\FloatTok{.3}\NormalTok{,}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{eta$"}\NormalTok{,}\StringTok{"p{-}val eta"}\NormalTok{,}\StringTok{"$LLH$"}\NormalTok{), table.}\FloatTok{3.}\NormalTok{matrix)}
+\NormalTok{table.}\FloatTok{3.}\NormalTok{matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix, }\AttributeTok{row.names =} \FunctionTok{c}\NormalTok{(names.table}\FloatTok{.3}\NormalTok{,}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{eta$"}\NormalTok{,}\StringTok{""}\NormalTok{,}\StringTok{"LLH"}\NormalTok{))}
+\FunctionTok{return}\NormalTok{(table.}\FloatTok{3.}\NormalTok{matrix)}
+\NormalTok{\}}
 
+\CommentTok{\#PARTIAL RESULTS}
 
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{iGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.iGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{eGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.eGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{gjrGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.gjrGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{sGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.sGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{EWMA }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.EWMA)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{fGARCH.AVGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.fGARCH.AVGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{fGARCH.NAGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.fGARCH.NAGARCH)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{fGARCH.TGARCH }\OtherTok{\textless{}{-}} \FunctionTok{Table.GARCH.function}\NormalTok{(}\AttributeTok{GARCHfit.object =}\NormalTok{ garchfit.fGARCH.TGARCH)}
 
-\CommentTok{\#...}
-\NormalTok{table3 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(table3, }\DecValTok{3}\NormalTok{)}
+\NormalTok{Table.}\FloatTok{3.}\NormalTok{function }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}\AttributeTok{distribution =} \StringTok{"sstd"}\NormalTok{)\{}
+\NormalTok{ref }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(Table.}\FloatTok{3.}\NormalTok{eGARCH)}\SpecialCharTok{==}\NormalTok{distribution)}\CommentTok{\#Reference column}
+\CommentTok{\#Taking all the relevant values}
+\NormalTok{AVGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{fGARCH.AVGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{iGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{iGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{eGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{eGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{sGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{sGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{gjrGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{gjrGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{EWMA }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{EWMA[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{NAGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{fGARCH.NAGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\NormalTok{TGARCH }\OtherTok{\textless{}{-}}\NormalTok{ Table.}\FloatTok{3.}\NormalTok{fGARCH.TGARCH[,}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,ref)]}
+\CommentTok{\#Assigning the right names to columns}
+\FunctionTok{colnames}\NormalTok{(AVGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"AVGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(AVGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(iGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"iGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(iGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(eGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"eGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(eGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(sGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(sGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(gjrGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"gjrGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(gjrGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(EWMA)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"EWMA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(EWMA)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(NAGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"NAGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(NAGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\FunctionTok{colnames}\NormalTok{(TGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\StringTok{"TGARCH"}\NormalTok{, }\FunctionTok{length}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(TGARCH)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]))}
+\CommentTok{\#Binding all the columns \& cleaning \& ordering data }
+\NormalTok{Table3 }\OtherTok{\textless{}{-}} \FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(}\FunctionTok{full\_join}\NormalTok{(sGARCH, iGARCH),eGARCH),gjrGARCH),EWMA),NAGARCH),TGARCH),AVGARCH)}
+\NormalTok{Table3[}\FunctionTok{is.na}\NormalTok{(Table3)] }\OtherTok{\textless{}{-}} \StringTok{""}
+\NormalTok{Table3 }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(Table3[Table3[,}\DecValTok{1}\NormalTok{]}\SpecialCharTok{!=}\StringTok{"$LLH$"}\NormalTok{,], Table3[Table3[,}\DecValTok{1}\NormalTok{]}\SpecialCharTok{==}\StringTok{"$LLH$"}\NormalTok{,])}
+\NormalTok{Table3[}\FunctionTok{substr}\NormalTok{(Table3[,}\DecValTok{1}\NormalTok{],}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{)}\SpecialCharTok{==}\StringTok{"p{-}val"}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{""}
+\FunctionTok{colnames}\NormalTok{(Table3) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\FunctionTok{colnames}\NormalTok{(Table3)[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\FunctionTok{return}\NormalTok{(Table3)}
+\NormalTok{\}}
 
-\CommentTok{\# for (i in length(distributions)) \{}
-\CommentTok{\#   for (j in nrow(table3)) \{}
-\CommentTok{\#     table3[j,i] \textless{}{-} garchfit.sGARCH[[i]]@fit$coef}
-\CommentTok{\#     table3[j+1,i] \textless{}{-}garchfit.sGARCH[[i]]@fit$se.coef}
-\CommentTok{\#     \}}
-\CommentTok{\# \}}
+\NormalTok{Table}\FloatTok{.3} \OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{mode =} \StringTok{"list"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{length}\NormalTok{(distributions))}
+\FunctionTok{names}\NormalTok{(Table}\FloatTok{.3}\NormalTok{) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Norm"}\NormalTok{, }\StringTok{"T"}\NormalTok{, }\StringTok{"ST"}\NormalTok{, }\StringTok{"GED"}\NormalTok{, }\StringTok{"SGED"}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(distributions))\{}
+\NormalTok{  Table}\FloatTok{.3}\NormalTok{[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{suppressMessages}\NormalTok{(}\FunctionTok{Table.3.function}\NormalTok{(}\AttributeTok{distribution =}\NormalTok{ distributions[i]))}
+\NormalTok{\}}
 
-\FunctionTok{print}\NormalTok{(}\StringTok{"sGARCH"}\NormalTok{)}
-\NormalTok{garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef}
-\NormalTok{garchfit.sGARCH[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{@}\NormalTok{fit}\SpecialCharTok{$}\NormalTok{se.coef}
+\CommentTok{\#Testing the kabling}
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(Table}\FloatTok{.3}\SpecialCharTok{$}\NormalTok{ST)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -936,6 +1013,37 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
 \end{Highlighting}
 \end{Shaded}
 
+\begin{table}[h!]
+
+\caption{\label{tab:aicTable}Model selection according to AIC}
+\centering
+\begin{threeparttable}
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+  & SGARCH & IGARCH & EWMA & EGARCH & GJRGARCH & NAGARCH & TGARCH & AVGARCH\\
+\midrule
+norm & 2.995 & 2.998 & 3.034 & 2.962 & 2.967 & 2.955 & 2.957 & 2.954\\
+std & 2.924 & 2.924 & 2.935 & 2.900 & 2.904 & 2.897 & 2.896 & 2.896\\
+sstd & 2.920 & 2.920 & 2.930 & 2.895 & 2.900 & 2.891 & 2.891 & 2.890\\
+ged & 2.930 & 2.930 & 2.944 & 2.907 & 2.911 & 2.903 & 7.705 & 7.702\\
+sged & 2.927 & 2.927 & 2.940 & 2.902 & 2.906 & 2.898 & 7.675 & 7.672\\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\item Notes
+\item[1] This table shows the AIC value for the respective model
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# VaR table, unconditional coverage}
+\CommentTok{\# VaRTest(Egarch)}
+\end{Highlighting}
+\end{Shaded}
+
 \hypertarget{results-of-garch-with-time-varying-higher-moments}{%
 \section{Results of GARCH with time-varying higher moments}\label{results-of-garch-with-time-varying-higher-moments}}
 
@@ -957,7 +1065,6 @@ Normal & 0.017 & 1.304 & 0 & 2 & Inf &  & -15093.32 & 30196.64\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# plotxts comes from implementing https://stackoverflow.com/a/50051183/271616}
 \CommentTok{\# par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))}
 \CommentTok{\# cm \textless{}{-} plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = \textquotesingle{}Conditional Mean\textquotesingle{},yaxis.right = F, col = \textquotesingle{}steelblue\textquotesingle{})}
 \CommentTok{\# cm \textless{}{-} lines(fitted(fit), col = 2)}
@@ -1025,7 +1132,7 @@ no serial correlation in the squares
 \chapter{Appendix}\label{appendix}}
 
 \hypertarget{conditional-distributions}{%
-\paragraph{Alternative distributions than the normal}\label{conditional-distributions}}
+\subsubsection{Alternative distributions than the normal}\label{conditional-distributions}}
 
 \hypertarget{students-t-distribution}{%
 \subparagraph{Student's t-distribution}\label{students-t-distribution}}
@@ -1033,11 +1140,11 @@ no serial correlation in the squares
 \noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero if \(\nu > 3\)). The probability density function (pdf), consistent with \textcite{ghalanos2020}, is given by equation \eqref{eq:stdghalanos}. As will be seen in \ref{vol-mod}, GARCH models are used for volatility modeling in practice. \textcite{bollerslev1987} examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution \autocite{bollerslev2008}.
 
 \begin{align}
-f(x) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \beta}\right)^{-(\nu+1)/2}
+f(x; \alpha, \beta,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
  \label{eq:stdghalanos}
 \end{align}
 
-\noindent where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. The symbol \(\Gamma\) is the Gamma function.
+\noindent where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. \(\nu/2\) is equal to the \(q\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} or \(\eta\) by \textcite{bali2008}} parameter (which we call \(\eta\)) of the SGT distribution. The symbol \(\Gamma\) is the Gamma function.
 
 \noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \eqref{eq:kurt} if \(\nu>4\). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
 
@@ -1049,14 +1156,14 @@ kurt = 3 + \dfrac{6}{\nu-4}
 \hypertarget{generalized-error-distribution}{%
 \subparagraph{Generalized Error Distribution}\label{generalized-error-distribution}}
 
-\noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, unimodal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
+\noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, uni-modal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
 
 \begin{align}
-f(x) = \dfrac{p e^{\left|\dfrac{x-\mu}{\sigma}\right|^p}}{2^{1+p^(-1)}\sigma\Gamma(p^{-1})}
+f(x; \alpha, \beta, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+1/\kappa}\beta\Gamma(1/\kappa)}
  \label{eq:ged}
 \end{align}
 
-where \(\mu, \sigma\) and \(p\) are respectively the location, scale and shape parameters .
+where \(\alpha, \beta\) and \(\kappa\) are respectively the location, scale and shape parameters.
 
 \hypertarget{skewed-t-distribution}{%
 \subparagraph{Skewed t-distribution}\label{skewed-t-distribution}}
@@ -1071,31 +1178,56 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
  \label{eq:skeweddist}
 \end{align}
 
-\noindent where \(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\) and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case equation \eqref{eq:stdghalanos}, the pdf of the student t distribution.
+\noindent where \(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\) and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case equation \eqref{eq:stdghalanos}, the pdf of the student t distribution coming to equation \eqref{eq:stdist}, which has the parameterization following the SGT parameters.
+
+\begin{equation}
+\begin{array}{c}f_{S T}(x ; \alpha, \beta, \xi, \eta)=\frac{\Gamma\left(\frac{1}{2}+\eta\right)}{\sqrt{\beta\pi \eta} \Gamma(\eta)\left(\frac{|x-\alpha+m|^{2}}{\eta\beta(\xi \operatorname{sign}(x-\alpha+m)+1)^{2}}+1\right)^{\frac{1}{2}+\eta}} \\m=\frac{2 \xi \sqrt{\beta\eta} \Gamma\left(\eta-\frac{1}{2}\right)}{\sqrt{\pi} \Gamma\left(\eta+\frac{1}{2}\right)}\end{array}
+ \label{eq:stdist}
+\end{equation}
 
 \noindent According to \textcite{giot2003}; \textcite{giot2004}, the skewed t-distribution outperforms the symmetric density distributions.
 
 \hypertarget{skewed-generalized-error-distribution}{%
 \subparagraph{Skewed Generalized Error Distribution}\label{skewed-generalized-error-distribution}}
 
-\noindent What also will be interesting to examine is the SGED distribution of \textcite{theodossiou2000} in GARCH models, as in the work of \textcite{lee2008}. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}.
+\noindent What also will be interesting to examine is the SGED distribution of \textcite{theodossiou2000} in GARCH models, as in the work of \textcite{lee2008}. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}. To then get equation \eqref{eq:sged}.
+
+\begin{equation}
+\begin{array}{c}
+f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\
+m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
+\end{array}
+\label{eq:sged}
+\end{equation}
+
+\(f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}\)
 
 \hypertarget{sgt-skewed-generalized-t-distribution}{%
 \subparagraph{SGT (Skewed Generalized t-distribution)}\label{sgt-skewed-generalized-t-distribution}}
 
-\noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} is given by equation \eqref{eq:gt} \autocite{bollerslev1994}.
+\noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} can be rewritten as its skew variant following \textcite{trottier2015}. The pdf of the SGT distribition is given by eqution \eqref{eq:sgt}.
 
-\begin{align}
-f\left(\varepsilon_{t} \sigma_{t}^{-1} ; p, \psi\right)=\frac{p}{2 \sigma_{t} \ \cdot \psi^{1 / p} B(1 / p, \psi) \cdot\left[1+\left|\varepsilon_{t}\right|^{p} /\left(\psi b^{p} \sigma_{t}^{p}\right)\right]^{\psi+1 / p}}
- \label{eq:gt}
-\end{align}
+\begin{equation}
+\begin{array}{c}
+f_{S G T}(x ; \alpha, \beta, \xi, \kappa, \eta)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\alpha +m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\
+m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}
+\end{array}
+\label{eq:sgt}
+\end{equation}
 
-\noindent where \(B(1 / \eta, \psi)\) is the beta function (=\(\Gamma(1 / \eta) \Gamma(\psi) \Gamma(1 / \eta+\psi)\)), \(\psi\eta>2,\ \eta>0 \ and \ \psi >0\), \(\beta = [\Gamma(\psi)\Gamma(1 / \eta)/\Gamma(3 / \eta)\Gamma(\psi - 2/\eta)]^{1/2}\)), the scale factor and one shape parameter \(p\).
+\noindent Following \textcite{theodossiou1998} however, there are two parameters, \(\kappa\)\footnote{Referred to as \(\kappa\) by \textcite{theodossiou1998} and \textcite{bali2008}, but \(p\) by Carter Davis in the ``sgt'' package.}and \(\eta\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} or \(\eta\) by \textcite{bali2008}. This is the \(q\) by Carter Davis in the ``sgt'' packages.}) for the shape in the SGT distribution. The \(p\) is the peakedness parameter. The \(q\) is the tail-thickness parameter. It is equal to the degrees of freedom \(\eta\) divided by 2 if \(\xi = 0\) and \(\kappa = 2\), there is referred to symbol \(\nu\) in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure \ref{fig:figure} adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
 
-\noindent Again the skewed variant is given by equation \eqref{eq:skeweddist} of appendix but with \(f_1(\cdot)\) equal to equation \eqref{eq:gt} following \textcite{trottier2015}.
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{front-and-back-matter/images/SGT} 
+
+}
+
+\caption{Source: https://cran.r-project.org/web/packages/sgt}\label{fig:figure}
+\end{figure}
 
 \hypertarget{garch-models}{%
-\paragraph{GARCH models}\label{garch-models}}
+\subsubsection{GARCH models}\label{garch-models}}
 
 All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output.
 
@@ -1109,7 +1241,9 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
  \label{eq:eq13}
 \end{align}
 
-\noindent where \(\sigma_t^2\) denotes the conditional variance, \(\omega\) the intercept and \(\varepsilon_t^2\) the residuals from the used mean process. The GARCH order is defined by \((q, p)\) (ARCH, GARCH). As \textcite{ghalanos2020} describes: ``one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter \(\hat{P}\)'' specified as in equation \eqref{eq:eq14}.
+\(\sigma_t^2 = \omega + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2}\)
+
+\noindent where \(\sigma_t^2\) denotes the conditional variance, \(\omega\) the intercept and \(\varepsilon_t^2\) the residuals from the used mean process. The GARCH order is defined by \((q, p)\) (ARCH, GARCH). As \textcite{ghalanos2020} describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter \(\hat{P}\) specified as in equation \eqref{eq:eq14}.
 
 \begin{align}
 \hat{P} = \sum\limits_{j = 1}^q {{\alpha_j}}  + \sum\limits_{j = 1}^p {{\beta_j}}.
@@ -1166,6 +1300,8 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
  \label{eq:eq18}
 \end{align}
 
+\(\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2\)
+
 As before, \(\gamma_j\) represents the \emph{leverage} term.
 
 \hypertarget{tgarch-model}{%
@@ -1193,6 +1329,8 @@ As before, \(\gamma_j\) represents the \emph{leverage} term.
 
 \newpage
 
+\(\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}\)
+
 \hypertarget{ewma}{%
 \subparagraph{EWMA}\label{ewma}}
 
@@ -1204,6 +1342,28 @@ As before, \(\gamma_j\) represents the \emph{leverage} term.
 \end{align}
 
 In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk management company RiskMetrics\(^{TM}\) model of J.P. Morgan \autocite{morganguarantytrustcompany1996}.
+
+\newpage
+
+\hypertarget{goodness-of-fit}{%
+\subsubsection{Goodness of fit}\label{goodness-of-fit}}
+
+As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. As you can see in figure \ref{fig:aic1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{include\_graphics}\NormalTok{(}\StringTok{"figures/aicfigures/symmetric aics.pdf"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/symmetric aics} 
+
+}
+
+\caption{Goodness of fit symmetric GARCH and distributions}\label{fig:aic1}
+\end{figure}
 
 
 %%%%% REFERENCES
