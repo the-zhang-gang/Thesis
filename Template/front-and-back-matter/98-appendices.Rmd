@@ -157,7 +157,7 @@ All the GARCH models are estimated using the package "rugarch" by @alexios2020. 
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 = \omega + \sum\limits_{j=1}^q (\alpha_j \varepsilon_{t-j}^2 + \gamma_j I_{t-j} \varepsilon_{t-j}^2) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \beta_0 + \alpha_1 \varepsilon_{t-1}^2 + \gamma_j I_{t-1} \varepsilon_{t-1}^2 + \beta_2 \sigma_{t-1}^2
  (\#eq:eq17)
 \end{align}
 ```
@@ -169,7 +169,7 @@ All the GARCH models are estimated using the package "rugarch" by @alexios2020. 
 
 ```{=tex}
 \begin{align}
-\log_e(\sigma_t^2) = \omega + \sum\limits_{j=1}^q (\alpha_j z_{t-j} + \gamma_j (|z_{t-j}| - E|z_{t-j}|))+ \sum\limits_{j = 1}^p \beta_j \log_e(\sigma_{t-j}^2)
+\log_e(\sigma_t^2) = \beta_0 + \beta_1 z_{t-1} + \gamma_1 (|z_{t-1}| - E|z_{t-1}|)+ \beta_2 \log_e(\sigma_{t-j}^2)
  (\#eq:eq16)
 \end{align}
 ```
@@ -181,21 +181,19 @@ All the GARCH models are estimated using the package "rugarch" by @alexios2020. 
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2
+\sigma_t^2 = \beta_0 + \beta_1 (\varepsilon_{t-1}+ \gamma_1 \sqrt{\sigma_{t-1}})^2 + \beta_2 \sigma_{t-1}^2
  (\#eq:eq18)
 \end{align}
 ```
-$\sigma_t^2 = \omega + \sum\limits_{j=1}^q \alpha_j (\varepsilon_{t-j}+ \gamma_j \sqrt{\sigma_{t-j}})^2 + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}^2$
-
-As before, $\gamma_j$ represents the *leverage* term.
+As before, $\gamma_1$ represents the *leverage* term.
 
 ###### TGARCH model
 
-\noindent The TGarch or threshold model [@zakoian1994] also models assymetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
+\noindent The TGARCH or threshold model [@zakoian1994] also models asymmetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \@ref(eq:eq19).
 
 ```{=tex}
 \begin{align}
-\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j^+ \varepsilon_{t-j}^+ \alpha_j^{-} + \varepsilon_{t-j}^{-}) + \sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+\sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ \beta_1^{-} + \varepsilon_{t-1}^{-}) + \beta_2 \sigma_{t-1}
  (\#eq:eq19)
 \end{align}
 ```
@@ -207,26 +205,23 @@ As before, $\gamma_j$ represents the *leverage* term.
 
 ```{=tex}
 \begin{align}
-\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +
-\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}
+\sigma_t = \beta_0 + \beta_1 \left|\varepsilon_{t-1}\right|) + \beta_2 \sigma_{t-1}
  (\#eq:eq20)
 \end{align}
 ```
 \newpage
 
-$\sigma_t = \omega + \sum\limits_{j=1}^q (\alpha_j \left|\varepsilon_{t-j}\right|) +\sum\limits_{j = 1}^p \beta_j \sigma_{t-j}$
-
 ###### EWMA
 
-\noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\lambda$ more weight is assigned to recent periods than distant periods. The $\lambda$ must be less than 1. It is specified as in \@ref(eq:eq21).
+\noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter $\xi$ more weight is assigned to recent periods than distant periods. The $\xi$ must be less than 1. It is specified as in \@ref(eq:eq21).
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 = (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \varepsilon_{t-j}^2)
+\sigma_t^2 = (1-\xi) \sum\limits_{j=1}^\infty (\xi^j \varepsilon_{t-j}^2)
  (\#eq:eq21)
 \end{align}
 ```
-In practice a $\lambda$ of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan [@morganguarantytrustcompany1996].
+In practice a $\xi$ (or sometimes referred to as $\lambda$) of 0.94 is often used, such as by the financial risk management company RiskMetrics$^{TM}$ model of J.P. Morgan [@morganguarantytrustcompany1996].
 
 \newpage
 
