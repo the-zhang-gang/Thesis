@@ -729,7 +729,7 @@ require(parallel)
 require(xts)
 # ACD specification
 sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),
-distribution.model = list(model = 'jsu', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
+distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
 
 # sGARCH
 cl = makePSOCKcluster(10)
