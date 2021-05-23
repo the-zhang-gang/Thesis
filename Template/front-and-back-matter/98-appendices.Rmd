@@ -10,7 +10,7 @@ output:
 
 <!-- If you feel it necessary to include an appendix, it goes here. The first appendix should include the commands above. -->
 
-# Appendix
+# Appendix to literature review
 
 #### Alternative distributions than the normal {#conditional-distributions}
 
@@ -24,7 +24,7 @@ f(x; \alpha, \beta,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2}
  (\#eq:stdghalanos)
 \end{align}
 ```
-\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. $\nu/2$ is equal to the $q$[^appendices-1] parameter (which we call $\eta$) of the SGT distribution. The symbol $\Gamma$ is the Gamma function.
+\noindent where $\alpha, \beta$ and $\nu$ are respectively the location, scale and shape (tail-thickness) parameters. $\nu/2$ is equal to the $q$[^appendices-1] parameter (which we call $\eta$) of the SGT distribution with other restrictions (see part \@ref(sgtinfo)). The symbol $\Gamma$ is the Gamma function.
 
 [^appendices-1]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008
 
@@ -86,7 +86,7 @@ m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)
 ```
 $f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}$
 
-###### SGT (Skewed Generalized t-distribution)
+###### SGT (Skewed Generalized t-distribution) {#sgtinfo}
 
 <!-- I really don't know about this thing, because it's not that there is only lambda that comes with it it is also a q parameter... here it anly has p (or Kappa) -->
 
@@ -101,13 +101,15 @@ m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\fra
 (\#eq:sgt)
 \end{equation}
 ```
-\noindent Following @theodossiou1998 however, there are two parameters, $\kappa$[^appendices-2]and $\eta$[^appendices-3]) for the shape in the SGT distribution. The $p$ is the peakedness parameter. The $q$ is the tail-thickness parameter. It is equal to the degrees of freedom $\eta$ divided by 2 if $\xi = 0$ and $\kappa = 2$, there is referred to symbol $\nu$ in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure \@ref(fig:figure) adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
+\noindent Following @theodossiou1998 however, there are two parameters, $\kappa$[^appendices-2]and $\eta$[^appendices-3]) for the shape in the SGT distribution. The $p$ is the peakedness parameter. The $q$ is the tail-thickness parameter. It is equal to the degrees of freedom $\eta$ divided by 2 if $\xi = 0$ and $\kappa = 2$, there is referred to symbol $\nu$ in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure[^appendices-4] \@ref(fig:figure) adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
 
 [^appendices-2]: Referred to as $\kappa$ by @theodossiou1998 and @bali2008, but $p$ by Carter Davis in the "sgt" package.
 
 [^appendices-3]: Also referred to as $n$ by @theodossiou1998 or $\eta$ by @bali2008. This is the $q$ by Carter Davis in the "sgt" packages.
 
-```{r figure, echo=FALSE, fig.cap="Source: https://cran.r-project.org/web/packages/sgt", out.width = '100%', fig.align='center', out.width='100%'}
+[^appendices-4]: Source: [https://cran.r-project.org/web/packages/sgt](https://cran.r-project.org/web/packages/sgt")
+
+```{r figure, echo=FALSE, fig.cap="SGT distribution and limiting cases, out.width = '100%', fig.align='center', out.width='100%'}
 knitr::include_graphics("front-and-back-matter/images/SGT.png")
 ```
 
@@ -121,28 +123,26 @@ All the GARCH models are estimated using the package "rugarch" by @alexios2020. 
 
 ```{=tex}
 \begin{align}
-\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2} 
+\sigma_t^2 = \beta_0  +  {\beta_1}\varepsilon _{t-j}^2 + {\beta_2}\sigma_{t-j}^2
  (\#eq:eq13)
 \end{align}
 ```
-$\sigma_t^2 = \omega  + \sum\limits_{j = 1}^q {{\alpha_j}\varepsilon _{t-j}^2 +} \sum\limits_{j=1}^p {{\beta_j}\sigma_{t-j}^2}$
-
-\noindent where $\sigma_t^2$ denotes the conditional variance, $\omega$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH). As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$ specified as in equation \@ref(eq:eq14).
+\noindent where $\sigma_t^2$ denotes the conditional variance, $\beta_0$ the intercept and $\varepsilon_t^2$ the residuals from the used mean process. The GARCH order is defined by $(q, p)$ (ARCH, GARCH), which is here $(1, 1)$. As @ghalanos2020 describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter $\hat{P}$ specified as in equation \@ref(eq:eq14) for a GARCH model of order $(1,1)$.
 
 ```{=tex}
 \begin{align}
-\hat{P} = \sum\limits_{j = 1}^q {{\alpha_j}}  + \sum\limits_{j = 1}^p {{\beta_j}}.
+\hat{P} =  \beta_1  + \beta_2.
  (\#eq:eq14)
 \end{align}
 ```
-\noindent The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameters ($\beta$'s) included as in equation \@ref(eq:eq15).
+\noindent The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameter ($\beta_2$) included as in equation \@ref(eq:eq15).
 
 ```{=tex}
 \begin{equation}
 \begin{split}
 \hat{\sigma}^2 
-&= \dfrac{\hat{\omega}}{1 - \hat{P}} \\
-&= \dfrac{\hat{\omega}}{1 - \alpha - \beta}
+&= \dfrac{\beta_0}{1 - \hat{P}} \\
+&= \dfrac{\beta_1}{1 - \beta_1 - \beta_2}
 \end{split}
  (\#eq:eq15)
 \end{equation}
@@ -230,10 +230,18 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 
 \newpage
 
-#### Goodness of fit 
+# Appendix to findings
 
-As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. As you can see in figure \@ref(fig:aic1)
+#### Goodness of fit
 
-```{r aic1, fig.align='center', fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='100%'}
+As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
+
+```{r aic1, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='100%', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
+```
+
+First, in figure \@ref(fig:aic2), symmetric GARCH with the best symmetric distribution (T) and the other distributions (SGED, ST) are looked at. As you can see consistent with @giot2003
+
+```{r aic2, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and other distributions', out.width='100%', echo=F}
+knitr::include_graphics("figures/aicfigures/symmetric aics2.pdf")
 ```

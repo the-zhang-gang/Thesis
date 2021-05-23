@@ -10,12 +10,6 @@ documentclass: book
 bibliography: references.bib
 ---
 
-```{block type='savequote', quote_author='(ref:alexander-quote)', include=knitr::is_latex_output()}
-Volatility is unobservable. We can only ever estimate and forecast volatility, and this only within the context of an assumed statistical model. So there is no absolute ‘true’ volatility: what is ‘true’ depends only on the assumed model...
-
-Moreover, volatility is only a sufficient statistic for the dispersion of the returns distribution when we make a normality assumption. In other words, volatility does not provide a full description of the risks that are taken by the investment unless we assume the investment returns are normally distributed.
-```
-(ref:alexander-quote) --- Alexander (2008) in *Market Risk Analysis Practical Financial Econometrics*
 
 # Data and methodology {#dat-and-meth}
 

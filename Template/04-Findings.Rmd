@@ -27,6 +27,9 @@ require(sgt)
 require(devtools)
 require(condformat)
 require(zoo)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 # install_bitbucket("alexiosg/racd")
 options(knitr.kable.NA = "")
 
@@ -43,7 +46,7 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 par(mfrow = c(3,2))
 ```
 
-```{r mlesgt, include=FALSE}
+```{r mlesgt, eval=FALSE}
 require(sgt)
 require(graphics)
 require(stats)
@@ -305,7 +308,7 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
 
-```{r Euro Stoxx, echo=FALSE}
+```{r Euro Stoxx, eval=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
@@ -314,7 +317,7 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
-```{r table2final,echo=FALSE, results='asis'}
+```{r table2final,eval=FALSE, results='asis'}
 kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',"latex",
       booktabs = T,
@@ -323,7 +326,7 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
     escape=F
       )%>%
   kable_classic(full_width = F)%>% 
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Eurostoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $L$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting \\\\\\\\ cases. The underlying data is the daily return series of the Euro Stoxx 50 \\\\\\\\ for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
   kable_styling(latex_options = "scale_down")
 ```
 
@@ -465,6 +468,7 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 ```{r table3prep, echo=FALSE, results='asis'}
 require(plyr)
 require(dplyr)
+require(stringr)
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
 #Making objects to fill  
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
@@ -517,7 +521,7 @@ table.3.matrix[c(length(table.3.matrix[,4])-3,length(table.3.matrix[,4])-2),4] <
 #Log-Likelyhoods
 LLH <- rep(NA, length(distributions))
 for(i in 1:length(distributions)){LLH[i] <- GARCHfit.object[[i]]@fit$LLH}
-names.table.3 <- revalue(names(adj.list[[3]]), c("mu"="$\\alpha_0$", "ar1"="$\\alpha_1$", "omega"= "$\\beta_0$", "alpha1"="$\\beta_1$", "beta1"="$\\beta_2$", "gamma1"="$\\gamma$", "skew"="$\\lambda$", "shape"="$\\kappa$", "eta11"="$rot$", "eta21"="$shift$"), warn_missing = F)
+names.table.3 <- revalue(names(adj.list[[3]]), c("mu"="$\\alpha_0$", "ar1"="$\\alpha_1$", "omega"= "$\\beta_0$", "alpha1"="$\\beta_1$", "beta1"="$\\beta_2$", "gamma1"="$\\gamma$", "skew"="$\\xi$", "shape"="$\\kappa$", "eta11"="$rot$", "eta21"="$shift$"), warn_missing = F)
 kappa.object <- cbind(matrix(data = "", nrow = 2, ncol = 3) ,table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),4:5])
 eta <- cbind(table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),1:3], matrix(data = "", nrow = 2, ncol = 2) )
 table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),] <- kappa.object
@@ -578,19 +582,16 @@ for(i in 1:length(distributions)){
 
 #Testing the kabling
 
-fn1.3 <- sprintf(paste0('This table shows the maximum likelyhood estimates of various ST-GARCH models. The daily returns used on the ',gsub(pattern = '\\.', replacement=' ',colnames(R))," price index cover the period from ",gsub(" UTC", "",min(index(R)))," to ",gsub(" UTC", "",max(index(R))), "(", nrow(R)," observations)."))
-fn2.3 <- paste0("The mean process is modeled as follows: ", "$\\\\R_t=$$\\\\alpha_0+$$\\\\alpha_1$$R_{t-1}+$$\\\\varepsilon_t\\\\$ ",  "Where, in the ", ncol(Table.3$ST)-1, " GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\lambda$, $\\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.")
+fn1.3 <- sprintf(paste0('This table shows the maximum likelyhood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period \\\\\\\\ from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 
-kbl(Table.3$ST,caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
+
+kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
       label = 'dsTable',
       booktabs = T, row.names = F, escape = F )%>%
   #kable_classic(full_width = F)%>% 
-  footnote(general = "Notes",number=c(fn1.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "")%>%
+  footnote(general = "Notes",number=c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
   kable_styling(latex_options = "scale_down")
-
-
-
-
 ```
 
 ```{r table4prep, eval=FALSE}

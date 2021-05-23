@@ -12,6 +12,12 @@ documentclass: book
 bibliography: references.bib
 ---
 
+```{block type='savequote', quote_author='(ref:alexander-quote)', include=knitr::is_latex_output()}
+Volatility is unobservable. We can only ever estimate and forecast volatility, and this only within the context of an assumed statistical model. So there is no absolute ‘true’ volatility: what is ‘true’ depends only on the assumed model...
+
+Moreover, volatility is only a sufficient statistic for the dispersion of the returns distribution when we make a normality assumption. In other words, volatility does not provide a full description of the risks that are taken by the investment unless we assume the investment returns are normally distributed.
+```
+(ref:alexander-quote) --- Alexander (2008) in *Market Risk Analysis Practical Financial Econometrics*
 # Literature review {#lit-rev}
 
 \minitoc <!-- this will include a mini table of contents--> <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
@@ -36,7 +42,7 @@ bibliography: references.bib
 
 ### Rolling volatility
 
-\noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. @engle2001 explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations. For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined. Engle regards this formulation as the first ARCH model.
+\noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. @engle2001 explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations^[For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined.]. Engle regards this formulation as the first ARCH model.
 
 ### ARCH model
 
@@ -54,7 +60,7 @@ y_{t} &= \mu + \varepsilon_t
 \end{align} 
 
 \begin{align} 
-\sigma_{t}^{2} &= \omega + \alpha_1 \times  \varepsilon_{t-1}^2 
+\sigma_{t}^{2} &= \beta_0 + \beta_1 \times  \varepsilon_{t-1}^2 
  (\#eq:eq3)
 \end{align}
 ```
@@ -62,7 +68,7 @@ y_{t} &= \mu + \varepsilon_t
 
 ```{=tex}
 \begin{align} 
-\mathbb{E}_{t-1}(\varepsilon_{t}) = \mathbb{E}_{t-1}(\sqrt{\omega + \alpha_1 \times  \varepsilon_{t-1}^2} \times z_t) = \sigma_t\mathbb{E}_{t-1}(z_t) = 0
+\mathbb{E}_{t-1}(\varepsilon_{t}) = \mathbb{E}_{t-1}(\sqrt{\beta_0 + \beta_1 \times  \varepsilon_{t-1}^2} \times z_t) = \sigma_t\mathbb{E}_{t-1}(z_t) = 0
  (\#eq:eq4)
 \end{align} 
 ```
@@ -86,25 +92,25 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  (\#eq:eq7)
 \end{align}
 ```
-\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\alpha_1$, the slope of the variance equation.
+\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\beta_1$, the slope of the variance equation.
 
 ```{=tex}
 \begin{align} 
-\sigma^2 = \dfrac{\omega}{1-\alpha_1}
+\sigma^2 = \dfrac{\beta_0}{1-\beta_1}
  (\#eq:eq8)
 \end{align}
 ```
-\noindent This leads to the properties of ARCH models: Stationarity[^2] condition for variance: $\omega>0$ and $0 \le \alpha_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates fat-tails.
+\noindent This leads to the properties of ARCH models: Stationarity[^2] condition for variance: $\beta_0>0$ and $0 \le \beta_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates fat-tails.
 
 [^2]: Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
 
 ```{=tex}
 \begin{align} 
-3\dfrac{1-\alpha_1^2}{1-3\alpha_1^2}
+3\dfrac{1-\beta_1^2}{1-3\beta_1^2}
  (\#eq:eq9)
 \end{align}
 ```
-\noindent Another property of ARCH models is that it takes into account volatility clustering. Because we know that $var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)$, we can plug in $\omega$ for the conditional variance $var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1\times\varepsilon_t^2$. Thus it follows that equation \@ref(eq:eq10) displays volatility clustering. If we examine the RHS, as $\alpha_1>0$ (condition for stationarity), when shock $\varepsilon_t^2$ is larger than what you expect it to be on average $\sigma^2$ the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
+\noindent Another property of ARCH models is that it takes into account volatility clustering. Because we know that $var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)$, we can plug in $\beta_0$ for the conditional variance $var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1\times\varepsilon_t^2$. Thus it follows that equation \@ref(eq:eq10) displays volatility clustering. If we examine the RHS, as $\alpha_1>0$ (condition for stationarity), when shock $\varepsilon_t^2$ is larger than what you expect it to be on average $\sigma^2$ the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
 
 ```{=tex}
 \begin{align} 
