@@ -714,6 +714,18 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
   kable_styling(latex_options = "scale_down")
 ```
 
+```{r}
+par(mfrow = c(1,1))
+plot(garchfit.eGARCH[[3]], which = 9 )
+CV <- sigma(garchfit.eGARCH[[3]])
+M <- fitted(garchfit.eGARCH[[3]])
+RE <- garchfit.eGARCH[[3]]@fit$residuals
+Z <- garchfit.eGARCH[[3]]@fit$z
+all.equal(Z, as.numeric(RE/CV))
+n <- garchfit.eGARCH[[3]]@fit$coef["shape"]
+VaR <- as.numeric(M + CV*qdist("sstd",p=0.05,
+shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
+```
 
 
 ## Results of GARCH with time-varying higher moments
