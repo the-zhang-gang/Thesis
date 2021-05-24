@@ -22,7 +22,7 @@ require(PerformanceAnalytics)
 require(kableExtra)
 require(rugarch)
 require(fitdistrplus)
-require(fGarch) 
+require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 require(devtools)
@@ -64,7 +64,7 @@ DistMLE <- function(R=R) {
   colnames(SGT_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in 1:5){
   if(SGT_pv[i]>=0.10){
-  SGT_significance[i] <-  "" 
+  SGT_significance[i] <-  ""
   }
   if(SGT_pv[i]<0.10){
   SGT_significance[i] <-  "*"  
@@ -81,7 +81,7 @@ DistMLE <- function(R=R) {
   ### SGED
   SGED_start <- list(mean=0,sd=1, nu = 2, xi = 1.5)
   SGED_result <- fitdist(data = as.vector(coredata(R)), distr = "sged", method = "mle", SGED_start)
-  names(SGED_result$estimate) <- names(SGED_result$sd) <-  c("alpha", "beta", "kappa", "xi") 
+  names(SGED_result$estimate) <- names(SGED_result$sd) <-  c("alpha", "beta", "kappa", "xi")
   SGED_sumResult <- summary(SGED_result)
   SGED_AIC <- 2*length(SGED_result$estimate-1) - 2*SGED_sumResult$loglik
   SGED_pv <- 2* stats::pnorm(-abs(SGED_result$estimate/(SGED_result$sd)))
@@ -90,7 +90,7 @@ DistMLE <- function(R=R) {
   colnames(SGED_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in c(1:4)){
   if(SGED_pv[i]>=0.10){
-  SGED_significance[i] <-  "" 
+  SGED_significance[i] <-  ""
   }
   if(SGED_pv[i]<0.10){
   SGED_significance[i] <-  "*"  
@@ -103,11 +103,11 @@ DistMLE <- function(R=R) {
   }
   }
   SGED_significance[is.na(SGED_significance)] <- ""
-  
+
   ### GED
   GED_start <- list(mean = 0, sd = 1, nu = 2)
   GED_result <- fitdist(data = as.vector(R),distr="ged", start = GED_start)
-  names(GED_result$estimate) <- names(GED_result$sd) <-  c("alpha", "beta", "kappa") 
+  names(GED_result$estimate) <- names(GED_result$sd) <-  c("alpha", "beta", "kappa")
   GED_sumResult <- summary(GED_result)
   GED_AIC <- 2*length(GED_result$estimate-2) - 2*GED_sumResult$loglik
   GED_pv <- 2* stats::pnorm(-abs(GED_sumResult$estimate/(GED_sumResult$sd)))
@@ -116,7 +116,7 @@ DistMLE <- function(R=R) {
   colnames(GED_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in c(1,2,4)){
   if(GED_pv[i]>=0.10){
-  GED_significance[i] <-  "" 
+  GED_significance[i] <-  ""
   }
   if(GED_pv[i]<0.10){
   GED_significance[i] <-  "*"  
@@ -129,8 +129,8 @@ DistMLE <- function(R=R) {
   }
   }
   GED_significance[is.na(GED_significance)] <- ""
-  
-  ### ST (fitdist) 
+
+  ### ST (fitdist)
   ST_start <- list(mean=0,sd=1, nu = 5, xi=1.5)
   ST_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "sstd", method = "mle", ST_start)
   names(ST_result$estimate) <- names(ST_result$sd) <-  c("alpha", "beta", "eta","xi")
@@ -142,7 +142,7 @@ DistMLE <- function(R=R) {
   colnames(ST_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in c(1:3,5)){
   if(ST_pvalue[i]>=0.10){
-  ST_significance[i] <-  "" 
+  ST_significance[i] <-  ""
   }
   if(ST_pvalue[i]<0.10){
   ST_significance[i] <-  "*"  
@@ -155,8 +155,8 @@ DistMLE <- function(R=R) {
   }
   }
   ST_significance[is.na(ST_significance)] <- ""
-  
-  ### T (fitdist) 
+
+  ### T (fitdist)
   T_start <- list(mean = 0, sd = 1, nu = 5)
   T_result <- fitdistrplus::fitdist(data = as.vector(coredata(R)), distr = "std", method = "mle", T_start)
   names(T_result$estimate) <- names(T_result$sd) <-  c("alpha", "beta", "eta")
@@ -167,7 +167,7 @@ DistMLE <- function(R=R) {
   colnames(T_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in c(1,2,5)){
   if(T_pvalues[i]>=0.10){
-  T_significance[i] <-  "" 
+  T_significance[i] <-  ""
   }
   if(T_pvalues[i]<0.10){
   T_significance[i] <-  "*"  
@@ -180,7 +180,7 @@ DistMLE <- function(R=R) {
   }
   }
   T_significance[is.na(T_significance)] <- ""
-  
+
   ### Normal (fitdist)
   Normal_start <- list(mean = 0, sd=1)
   Normal_result <- fitdist(as.vector(coredata(R)), "norm","mle", Normal_start)
@@ -192,7 +192,7 @@ DistMLE <- function(R=R) {
   colnames(Normal_significance) <-  c("alpha", "beta", "xi", "kappa", "eta")
   for(i in c(1:2)){
   if(Normal_pv[i]>=0.10){
-  Normal_significance[i] <-  "" 
+  Normal_significance[i] <-  ""
   }
   if(Normal_pv[i]<0.10){
   Normal_significance[i] <-  "*"  
@@ -225,7 +225,7 @@ Table2[2,7] <- SGT_AIC
 Table2[3,1:2] <- GED_result$estimate[1:2]
 Table2[3,3] <- 0
 Table2[3,4] <- GED_result$estimate[3]
-Table2[3,5] <- Inf 
+Table2[3,5] <- Inf
 Table2[3,6] <- GED_result$loglik
 Table2[3,7] <- GED_AIC
 # "alpha","beta","xi","kappa","nu","L","AIC"
@@ -237,7 +237,7 @@ Table2[4,6] <- ST_result$loglik
 Table2[4,7] <- ST_result$aic
 # "alpha","beta","xi","kappa","nu","L","AIC"
 Table2[5,1:2] <- T_result$estimate[1:2]
-Table2[5,3] <- 0 
+Table2[5,3] <- 0
 Table2[5,4] <- 2
 Table2[5,5] <- T_result$estimate[3]/2 # eta parameters
 Table2[5,6] <- T_result$loglik
@@ -245,7 +245,7 @@ Table2[5,7] <- T_result$aic
 
 Table2[6,1:2] <- Normal_result$estimate[1:2]
 Table2[6,3] <- 0
-Table2[6,4] <- 2 
+Table2[6,4] <- 2
 Table2[6,5] <- Inf
 Table2[6,6] <- Normal_result$loglik
 Table2[6,7] <- Normal_result$aic
@@ -305,16 +305,16 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
-In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.^[To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and  up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.] 
+In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.^[To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and  up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.]
 
-Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution. 
+Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
 ```{r Euro Stoxx, eval=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
 table2[table2 == "(NA)"] <- NA
-colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") 
+colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
@@ -326,7 +326,7 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
       digits = 3,
     escape=F
       )%>%
-  kable_classic(full_width = F)%>% 
+  kable_classic(full_width = F)%>%
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting \\\\\\\\ cases. The underlying data is the daily return series of the Euro Stoxx 50 \\\\\\\\ for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
   kable_styling(latex_options = "scale_down")
 ```
@@ -346,13 +346,13 @@ for(i in 1:length(Models.garch)){
 assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
-} 
+}
 
 #.sGARCH--------------------------
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "sGARCH", garchOrder = c(1,1), variance.targeting = F), 
+                     variance.model = list(model = "sGARCH", garchOrder = c(1,1), variance.targeting = F),
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
@@ -364,7 +364,7 @@ stdret.sGARCH[[i]] <- residuals(garchfit.sGARCH[[i]], standardize = TRUE)
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.eGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "eGARCH", variance.targeting = F), 
+                     variance.model = list(model = "eGARCH", variance.targeting = F),
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.eGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.eGARCH[[i]])
@@ -400,7 +400,7 @@ stdret.fGARCH.AVGARCH[[i]] <- residuals(garchfit.fGARCH.AVGARCH[[i]], standardiz
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.gjrGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "gjrGARCH", variance.targeting = F), 
+                     variance.model = list(model = "gjrGARCH", variance.targeting = F),
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
@@ -412,7 +412,7 @@ stdret.gjrGARCH[[i]] <- residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.fGARCH.TGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "fGARCH", submodel = "TGARCH", variance.targeting = F), 
+                     variance.model = list(model = "fGARCH", submodel = "TGARCH", variance.targeting = F),
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.fGARCH.TGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.TGARCH[[i]])
@@ -424,7 +424,7 @@ stdret.fGARCH.TGARCH[[i]] <- residuals(garchfit.fGARCH.TGARCH[[i]], standardize 
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
 garchspec.iGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-                     variance.model = list(model = "iGARCH", variance.targeting = F), 
+                     variance.model = list(model = "iGARCH", variance.targeting = F),
                      distribution.model = distributions[i])
 # Estimate the model
 garchfit.iGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.iGARCH[[i]])
@@ -459,13 +459,14 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 
 
 #  make the histogram
-# 
+#
 # chart.Histogram(stdret.iGARCH[[1]], methods = c("add.normal","add.density" ),
 #                 colorset = c("gray","red","blue"))
 ```
 
+\noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of [[[HOW TO BEST INTERPRET??????????]]] Skewness in the returns.
 
-<!-- What do we do, do we do 6 tables for all the distributions?  -->
+
 ```{r table3prep, echo=FALSE, results='asis'}
 require(plyr)
 require(dplyr)
@@ -563,7 +564,7 @@ colnames(gjrGARCH)[-1] <- rep("gjrGARCH", length(colnames(gjrGARCH)[-1]))
 colnames(EWMA)[-1] <- rep("EWMA", length(colnames(EWMA)[-1]))
 colnames(NAGARCH)[-1] <- rep("NAGARCH", length(colnames(NAGARCH)[-1]))
 colnames(TGARCH)[-1] <- rep("TGARCH", length(colnames(TGARCH)[-1]))
-#Binding all the columns & cleaning & ordering data 
+#Binding all the columns & cleaning & ordering data
 Table3 <- full_join(full_join(full_join(full_join(full_join(full_join(full_join(sGARCH, iGARCH),eGARCH),gjrGARCH),EWMA),NAGARCH),TGARCH),AVGARCH)
 Table3[is.na(Table3)] <- ""
 Table3 <- rbind(Table3[Table3[,1]!="$LLH$",], Table3[Table3[,1]=="$LLH$",])
@@ -588,12 +589,13 @@ fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\
 
 
 kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
-      label = 'dsTable',
+      label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
-  #kable_classic(full_width = F)%>% 
+  #kable_classic(full_width = F)%>%
   footnote(general = "",number=c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
   kable_styling(latex_options = "scale_down")
 ```
+
 
 ```{r table4prep, eval=FALSE}
 print("iGARCH")
@@ -637,45 +639,45 @@ garchfit.fGARCH.AVGARCH[[1]]@fit$se.coef
 ```
 <!-- Here comes the description -->
 ```{r aictableprep, echo=F}
-aic_sGARCH <- vector(length=length(distributions)) 
+aic_sGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_sGARCH[i] = infocriteria(garchfit.sGARCH[[i]])[1]
-} 
+}
 
-aic_iGARCH <- vector(length=length(distributions)) 
+aic_iGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_iGARCH[i] = infocriteria(garchfit.iGARCH[[i]])[1]
-} 
+}
 
-aic_EWMA <- vector(length=length(distributions)) 
+aic_EWMA <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_EWMA[i] = infocriteria(garchfit.EWMA[[i]])[1]
-} 
+}
 
-aic_eGARCH <- vector(length=length(distributions)) 
+aic_eGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_eGARCH[i] = infocriteria(garchfit.eGARCH[[i]])[1]
-} 
+}
 
-aic_gjrGARCH <- vector(length=length(distributions)) 
+aic_gjrGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_gjrGARCH[i] = infocriteria(garchfit.gjrGARCH[[i]])[1]
-} 
+}
 
-aic_naGARCH <- vector(length=length(distributions)) 
+aic_naGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_naGARCH[i] = infocriteria(garchfit.fGARCH.NAGARCH[[i]])[1]
-} 
+}
 
-aic_tGARCH <- vector(length=length(distributions)) 
+aic_tGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_tGARCH[i] = infocriteria(garchfit.fGARCH.TGARCH[[i]])[1]
-} 
+}
 
-aic_avgarch <- vector(length=length(distributions)) 
+aic_avgarch <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_avgarch[i] = infocriteria(garchfit.fGARCH.AVGARCH[[i]])[1]
-} 
+}
 
 aics <- matrix(ncol=length(Models.garch), nrow = length(distributions))
 rownames(aics) <- distributions
@@ -706,7 +708,7 @@ tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min
 ```
 
 \newpage
-As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC. 
+As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
 ```{r aictablelatex, echo=F, results='asis'}
 aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
@@ -714,14 +716,14 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
-  kable_classic(full_width = F)%>% 
+  kable_classic(full_width = F)%>%
   footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down")
 ```
 
 \newpage
 ### Value-at-risk
-As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events. 
+As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events.
 ```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='80%'}
 par(mfrow = c(2,1), mar = c(2, 2.5, 0.5, 2.5))
 Conditional.variance <- sigma(garchfit.eGARCH[[3]])
@@ -748,13 +750,13 @@ xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.t
 \newpage
 ```{r garchroll, eval = FALSE, echo = FALSE}
 #VaR garchroll forecasting and backtesting skewed student t
-# EGARCH parsimonous model 
+# EGARCH parsimonous model
 backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
 Repbacktest1<-report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
 backtest2<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
 Repbacktest2<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 
-# normal distribution 
+# normal distribution
 backtest3NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
 Repbacktest3<-report(backtest3NORM,type="VaR",VaR.alpha=0.01,conf.level=0.99)
 backtest4NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
@@ -865,6 +867,6 @@ fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.contro
 # }
 # plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="") #panel = pnl
 # # lines(fitted(fit), col = 2) + grid()
-# 
+#
 # plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="", )
 ```
