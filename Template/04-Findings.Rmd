@@ -723,9 +723,54 @@ RE <- garchfit.eGARCH[[3]]@fit$residuals
 Z <- garchfit.eGARCH[[3]]@fit$z
 all.equal(Z, as.numeric(RE/CV))
 n <- garchfit.eGARCH[[3]]@fit$coef["shape"]
-VaR <- as.numeric(M + CV*qdist("sstd",p=0.05,
+VaR05 <- as.numeric(M + CV*qdist("sstd",p=0.05,
 shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
+plot(as.matrix(R), type = "l" , xlab = "Day" ,
+ylab = "95% VaR value", col = "darkgray"); lines(VaR05,col = adjustcolor("red",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("red" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.05][","][t])))
+
+VaR01 <- as.numeric(M + CV*qdist("sstd",p=0.01,
+shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
+plot(as.matrix(R), type = "l" , xlab = "Day" ,
+ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("orange",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("orange" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
+
+```{r}
+#VaR garchroll forecasting and backtesting skewed student t
+par(mfrow = c(3,2))
+# EGARCH parsimonous model 
+backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
+Repbacktest1<-report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+plot(backtest1,which=4,VaR.alpha=0.01)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+
+backtest2<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
+Repbacktest2<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+plot(backtest2,which=4,VaR.alpha=0.05)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+
+# normal distribution 
+backtest3NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
+Repbacktest3<-report(backtest3NORM,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+plot(backtest3NORM,which=4,VaR.alpha=0.01)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+
+backtest4NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
+Repbacktest4<-report(backtest4NORM,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+plot(backtest4NORM,which=4,VaR.alpha=0.05)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+
+# sstd distribution NAGARCH
+backtest5NAGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
+Repbacktest5<-report(backtest5NAGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+plot(backtest5NAGARCHST,which=4,Var.alpha=0.01)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+
+backtest6NAGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
+Repbacktest4<-report(backtest4NORM,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+plot(backtest6NAGARCHST,which=4,VaR.alpha=0.05)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+```
+
 
 
 ## Results of GARCH with time-varying higher moments
