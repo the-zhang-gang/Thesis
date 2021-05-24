@@ -41,12 +41,6 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
 
 ## Backtest
-Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with Brexit and the recent COVID crisis.
-```{r figbacktest}
-par(mfrow = c(1,1))
-xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),1500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
-```
-
 ```{r}
 model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH')
 submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  23 MAY 2021 11:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  24 MAY 2021 21:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1615,38 +1615,67 @@ Overfull \hbox (173.19891pt too wide) in paragraph at lines 196--237
  [] 
  []
 
+[2]
 
-Overfull \hbox (142.89297pt too wide) in paragraph at lines 244--261
+LaTeX Warning: Reference `goodness-of-fit' on page 3 undefined on input line 24
+1.
+
+
+Overfull \hbox (142.89297pt too wide) in paragraph at lines 248--265
  [] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[3]
+<04-Findings_files/figure-latex/figVaRinsample-1.pdf, id=67, 400.49625pt x 297.
+11pt>
+File: 04-Findings_files/figure-latex/figVaRinsample-1.pdf Graphic file (type pd
+f)
+<use 04-Findings_files/figure-latex/figVaRinsample-1.pdf>
+Package pdftex.def Info: 04-Findings_files/figure-latex/figVaRinsample-1.pdf  u
+sed on input line 276.
+(pdftex.def)             Requested size: 294.76903pt x 218.6883pt.
 
-LaTeX Warning: Empty bibliography on input line 278.
+LaTeX Warning: Reference `fig:figbacktest' on page 4 undefined on input line 28
+3.
+
+<04-Findings_files/figure-latex/figbacktest-1.pdf, id=68, 399.4925pt x 280.0462
+5pt>
+File: 04-Findings_files/figure-latex/figbacktest-1.pdf Graphic file (type pdf)
+<use 04-Findings_files/figure-latex/figbacktest-1.pdf>
+Package pdftex.def Info: 04-Findings_files/figure-latex/figbacktest-1.pdf  used
+ on input line 285.
+(pdftex.def)             Requested size: 294.76903pt x 206.64554pt.
+[4 <./04-Findings_files/figure-latex/figVaRinsample-1.pdf>] [5 <./04-Findings_f
+iles/figure-latex/figbacktest-1.pdf>] [6]
+
+LaTeX Warning: Empty bibliography on input line 308.
 
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 04-Findings.maf file.
 \openout3 = `04-Findings.maf'.
 
-[2] [3] (./04-Findings.aux)
+[7
+
+] (./04-Findings.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `04-Findings.out' has not changed.
-(rerunfilecheck)             Checksum: 8C4A703D3B2F6D09D5C791FED815215B;1125.
+(rerunfilecheck)             Checksum: 5F75E06C30AEFDACF6C059D386B01062;1007.
 Package logreq Info: Writing requests to '04-Findings.run.xml'.
 \openout1 = `04-Findings.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29377 strings out of 478994
- 485486 string characters out of 5858184
- 1341597 words of memory out of 5000000
- 46057 multiletter control sequences out of 15000+600000
- 483831 words of font info for 127 fonts, out of 8000000 for 9000
+ 29411 strings out of 478994
+ 486376 string characters out of 5858184
+ 1340685 words of memory out of 5000000
+ 46077 multiletter control sequences out of 15000+600000
+ 484001 words of font info for 129 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  86i,14n,89p,2067b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/lo
@@ -1665,10 +1694,10 @@ m/lmr7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb><
 /texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2
 021/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-d
 ist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 04-Findings.pdf (3 pages, 207680 bytes).
+Output written on 04-Findings.pdf (7 pages, 427095 bytes).
 PDF statistics:
- 118 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
- 19 named destinations out of 1000 (max. 500000)
- 39977 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 166 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
+ 39995 words of extra memory for PDF output out of 42996 (max. 10000000)
 
