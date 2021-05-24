@@ -10,11 +10,10 @@ bibliography: references.bib
 ---
 
 
-  
-# Robustness Analysis {#Robustness}
 \minitoc <!-- this will include a mini table of contents-->
 
-<!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->
+# Robustness Analysis {#Robustness}
+
 ```{r include=F}
 require(readxl)
 require(xts)
@@ -94,6 +93,7 @@ q5[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.05, mu 
 px[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) pdist(dist[i], x['Realized'], mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
 }
 VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
+VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
 VaR5cc = apply(q5, 2, function(x) VaRTest(0.05, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
 # BT1 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
 # BT5 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
@@ -109,10 +109,23 @@ garchmodel <- gsub("-.*","",rownames(VTable))
 
 VTable <- as.data.frame(VTable)
 V2Table <- VTable %>% mutate(dist = dists, model = garchmodel)
-V2Table <-V2Table %>% filter(dist != "NORM")
+# V2Table <-V2Table %>% filter(dist != "NORM")
 V2Table_long <- V2Table %>%
   gather("Stat", "Value", -c(dist, model))
-ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +   geom_col(position = "dodge") + facet_wrap(~dist) + theme(axis.text.x=element_text(angle = 90))
+ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +   geom_col(position = "dodge") + facet_wrap(~dist) + geom_hline(yintercept=0.05, 
+                color = "blue", size=0.3) + geom_hline(yintercept=0.01,  
+                color = "black", size=0.3) + 
+scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" = "grey")) + theme_bw() + theme(axis.text.x=element_text(angle = 90)) + theme(
+    legend.position = "top",
+    legend.box.just = "right",
+    legend.margin = margin(1, 1, 1, 1)
+    ) + theme(
+    legend.box.background = element_rect(color="black", size=0.3),
+    legend.box.margin = margin(2, 2, 2, 2)
+) + theme(legend.title = element_blank())
+
+
+
 ```
 
 ## Specification checks

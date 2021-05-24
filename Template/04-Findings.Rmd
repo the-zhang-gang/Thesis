@@ -14,7 +14,7 @@ bibliography: references.bib
 \minitoc <!-- this will include a mini table of contents-->
 
 ## Density of the returns
-```{r include=F}
+```{r librariesfindings, include=F}
 require(readxl)
 require(xts)
 require(PerformanceAnalytics)
@@ -470,7 +470,7 @@ require(plyr)
 require(dplyr)
 require(stringr)
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
-#Making objects to fill  
+#Making objects to fill   
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
 list.table.3 <- vector(mode = "list", length = length(distributions))
 names(list.table.3) <- distributions
@@ -714,10 +714,6 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
   kable_styling(latex_options = "scale_down")
 ```
 
-```{r}
-# VaR table, unconditional coverage
-# VaRTest(Egarch)
-```
 
 
 ## Results of GARCH with time-varying higher moments
@@ -728,8 +724,8 @@ require(rugarch)
 require(parallel)
 require(xts)
 # ACD specification
-sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),
-distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
+sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
+distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # sGARCH
 cl = makePSOCKcluster(10)
