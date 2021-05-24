@@ -734,53 +734,66 @@ plot(as.matrix(R), type = "l" , xlab = "Day" ,
 ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("orange",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("orange" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
-```{r}
+```{r garchroll, include=FALSE, echo = FALSE}
 #VaR garchroll forecasting and backtesting skewed student t
-par(mfrow = c(3,2))
 # EGARCH parsimonous model 
 backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
 Repbacktest1<-report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-
 backtest2<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
 Repbacktest2<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 
 # normal distribution 
 backtest3NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
 Repbacktest3<-report(backtest3NORM,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-
 backtest4NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
 Repbacktest4<-report(backtest4NORM,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 
 # sstd distribution NAGARCH
 backtest5NAGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
 Repbacktest5<-report(backtest5NAGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-
-
 backtest6NAGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
 Repbacktest4<-report(backtest4NORM,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
 ```
 
 ```{r}
+# EGARCH with sstd vs EGARCH with norm
+par(mfrow = c(2,2), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD
 plot(backtest1,which=4,VaR.alpha=0.01)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+title(main = "EGARCH-ST (1%)")
 plot(backtest2,which=4,VaR.alpha=0.05)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+title(main = "EGARCH-ST (5%)")
 
 # EGARCH with NORM
 plot(backtest3NORM,which=4,VaR.alpha=0.01)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+title(main = "EGARCH-N (1%)")
 plot(backtest4NORM,which=4,VaR.alpha=0.05)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+title(main = "EGARCH-N (5%)")
+```
+
+
+```{r}
+# EGARCH with sstd vs NAGARCH with sstd
+
+# EGARCH with SSTD
+plot(backtest1,which=4,VaR.alpha=0.01)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+title(main = "EGARCH-ST (1%)")
+plot(backtest2,which=4,VaR.alpha=0.05)
+legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
+title(main = "EGARCH-ST (5%)")
 
 # NAGARCH with SSTD
 plot(backtest5NAGARCHST,which=4,Var.alpha=0.01)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
+title(main = "NAGARCH-ST (1%)")
 plot(backtest6NAGARCHST,which=4,VaR.alpha=0.05)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
-
-
+title(main = "NAGARCH-ST (5%)")
 ```
 
 
