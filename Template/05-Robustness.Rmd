@@ -27,6 +27,7 @@ require(sgt)
 require(devtools)
 require(condformat)
 require(zoo)
+require(tictoc)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -41,12 +42,17 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 ```
 
 ## Backtest
-```{r}
+```{r eval=FALSE}
 model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH')
 submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
 
 spec1 <- spec2 <- spec3 <- spec4 <- spec5 <- vector(mode = 'list', length = 7)
-for (i in 1:7) spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
+start <- Sys.time()
+for (i in 1:7) {
+  spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
+}
+Sys.time () - start
+
 
 for (i in 1:7) spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
 
@@ -75,7 +81,7 @@ fitlist[[i]] = as.data.frame(tmp, which = 'density')
 }
 ```
 
-```{r}
+```{r eval=FALSE}
 vmodels = c('SGARCH(1,1)', 'IGARCH(1,1)', 'EGARCH(1,1)', 'GJRGARCH(1,1)', 'TGARCH(1,1)','AVGARCH(1,1)', 'NAGARCH(1,1)')
 modelnames = c(paste(vmodels, '-NORM', sep = ''), paste(vmodels, '-ST', sep = ''), paste(vmodels, '-T', sep = ''), paste(vmodels, '-SGED', sep = ''),paste(vmodels, '-GED', sep = ''))
 q1 = q5 = px = matrix(NA, ncol = 35, nrow = 1500)
@@ -96,7 +102,7 @@ rownames(VTable) = modelnames
 colnames(VTable) = c('VaR.CC(1%)', 'VaR.CC(5%)')#, 'BT(1%)', 'BT(5%)')
 ```
 
-```{r}
+```{r eval=FALSE}
 dists <- regmatches(rownames(VTable),gregexpr("(?<=-).*",rownames(VTable),perl=T)) %>% unlist
 garchmodel <- gsub("-.*","",rownames(VTable))
 

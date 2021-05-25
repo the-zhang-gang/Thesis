@@ -78,14 +78,12 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 ```{=tex}
 \begin{equation}
 \begin{array}{c}
-f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\
-m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
+f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{\kappa}}}{2 \nu \beta \Gamma(1 / \kappa)} \\
+m=\frac{2^{\frac{2}{\kappa}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
 \end{array}
 (\#eq:sged)
 \end{equation}
 ```
-$f_{S G E D}(x ; \alpha, \beta, \xi, p)=\frac{p e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{p}}}{2 \nu \beta \Gamma(1 / p)} \\m=\frac{2^{\frac{2}{p}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}$
-
 ###### SGT (Skewed Generalized t-distribution) {#sgtinfo}
 
 <!-- I really don't know about this thing, because it's not that there is only lambda that comes with it it is also a q parameter... here it anly has p (or Kappa) -->
@@ -109,7 +107,7 @@ m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\fra
 
 [^appendices-4]: Source: [https://cran.r-project.org/web/packages/sgt](https://cran.r-project.org/web/packages/sgt%22)
 
-```{r figure, echo=FALSE, fig.cap="SGT distribution and limiting cases, out.width = '100%', fig.align='center', out.width='100%'}
+```{r figure, echo=FALSE, fig.cap="SGT distribution and limiting cases", out.width = '100%', fig.align='center'}
 knitr::include_graphics("front-and-back-matter/images/SGT.png")
 ```
 
@@ -229,7 +227,7 @@ In practice a $\xi$ (or sometimes referred to as $\lambda$) of 0.94 is often use
 
 #### Goodness of fit {#goodness-of-fit}
 
-As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 248 models that were estimated. This can ofcourse lead to overfitting if we from this list of models select the one with the lowest AIC for example. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
+As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting iusing the this dataset in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
 ```{r aic1, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='100%', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
