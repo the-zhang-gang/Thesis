@@ -571,15 +571,14 @@ names(Table.3) <- c("Norm", "T", "ST", "GED", "SGED")
 for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
-
-#Testing the kabling
+#Kabling
 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the  \\\\\\\\ periodfrom ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 ```
 \noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of [[[HOW TO BEST INTERPRET??????????]]] Skewness in the returns.
 
-```{r table3final, echo=F}
+```{r table3final, echo=F, results='asis'}
 kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
       label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
@@ -676,7 +675,7 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
 \newpage
 ### Value-at-risk
 As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events.
-```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='90%', echo=FALSE}
+```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='50%', echo=FALSE}
 par(mfrow = c(2,1))
 Conditional.variance <- sigma(garchfit.eGARCH[[3]])
 Conditional.mean <- fitted(garchfit.eGARCH[[3]])
@@ -685,13 +684,13 @@ VaR05 <- as.numeric(Conditional.mean + Conditional.variance*qdist("sstd",p=0.05,
 shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
 par(mai = c(0.4, 2, 0, 2))
 plot(as.matrix(R), type = "l" , xlab = "" ,
-ylab = "95% VaR value", col = "darkgray"); lines(VaR05,col = adjustcolor("red",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("red" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.05][","][t])))
+ylab = "95% VaR value", col = "darkgray"); lines(VaR05,col = adjustcolor("red",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("red" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.05][","][t])))
 
 VaR01 <- as.numeric(Conditional.mean + Conditional.variance*qdist("sstd",p=0.01,
 shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
 par(mai = c(0.8, 2, 0.2, 2))
 plot(as.matrix(R), type = "l" , xlab = "T" ,
-ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
+ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
 Let us examine this further using a moving window approach whilst forecasting 1-day ahead results with a window size of 1500. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent COVID-crisis.
@@ -759,7 +758,7 @@ title(main = "NAGARCH-ST (5%)")
 
 \clearpage
 ## Time-varying higher moments
-```{r acdcode, echo = FALSE, eval=FALSE}
+```{r acdcode, echo = FALSE}
 require(racd)
 require(rugarch)
 require(parallel)
@@ -773,7 +772,7 @@ cl = makePSOCKcluster(10)
 fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE, echo=FALSE}
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.",, echo=FALSE}
 par(mfrow = c(2, 2), mai = c(0.4, 0.75, 0.2, 0.3))
 plot.zoo(fitted(fit),main = 'Conditional Mean', col = 'steelblue',xlab = "Time", ylab = "")
 plot(absolutereturns, main = 'Conditional Sigma',col = c('grey'),xlab = "Time", ylab = "");lines(condvar,col= 'steelblue'); legend(x="topleft", legend = c("absolute log-returns", "conditional volatility"), col = c('grey', 'steelblue'),lty = c(1,1), bty = 'n', cex = 0.8)
