@@ -703,32 +703,28 @@ xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.t
 \newpage
 ```{r garchroll, eval = FALSE, echo = FALSE}
 #VaR garchroll forecasting and backtesting skewed student t
-# EGARCH parsimonous model
-backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
+# EGARCH parsimonous model sstd
+backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
 Repbacktest1<- report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest2<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest2<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
-# sstd distribution NAGARCH
-backtest5NAGARCHST <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest5<-report(backtest5NAGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest6NAGARCHST <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest6<-report(backtest6NAGARCHST,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
-backtest7AVGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest7<-report(backtest7AVGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest8AVGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest8<-report(backtest8AVGARCHST,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+Repbacktest2<-report(backtest1,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+# NAGARCH sstd
+backtest2 <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
+Repbacktest3<-report(backtest2,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+Repbacktest4<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+#
+# backtest3 <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
+# Repbacktest5<-report(backtest3,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+# Repbacktest6<-report(backtest3,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 ```
 As you can see in figure \@ref(fig.)
 ```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, eval = FALSE}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(3,2), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD
-plot(backtest1,which=4,VaR.alpha=0.01)
+plot(backtest1,which=4,VaR.alpha=c(0.01),
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
 title(main = "EGARCH-ST (1%)")
-plot(backtest2,which=4,VaR.alpha=0.05)
+plot(backtest1,which=4,VaR.alpha=0.05)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
 title(main = "EGARCH-ST (5%)")
 
@@ -768,7 +764,7 @@ distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c
 cl = makePSOCKcluster(10)
 fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
 
-rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.ahead = 1, refit.every = 50, refit.window = "moving", window.size = 1500, forecast.length = 1500, solver = "msoptim", calculate.VaR = TRUE, VaR.alpha = c(0.01,0.05), keep.coef = TRUE,  solver.control =list(restarts = 10), cluster = cl)
+rollacd = racd::acdroll(spec = sGARCH_ACDspec, data = R, n.ahead = 1, refit.every = 50, refit.window = "moving", window.size = NULL, forecast.length = 1500, solver = "msoptim", calculate.VaR = TRUE, VaR.alpha = c(0.01,0.05), keep.coef = TRUE,  solver.control =list(restarts = 10))
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.",, echo=FALSE}
