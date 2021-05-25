@@ -14,7 +14,7 @@ bibliography: references.bib
 
 # Robustness Analysis {#Robustness}
 
-```{r include=F}
+```{r setuprobustness, include=F}
 require(readxl)
 require(xts)
 require(PerformanceAnalytics)
@@ -27,7 +27,6 @@ require(sgt)
 require(devtools)
 require(condformat)
 require(zoo)
-require(tictoc)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -47,13 +46,9 @@ model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH'
 submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
 
 spec1 <- spec2 <- spec3 <- spec4 <- spec5 <- vector(mode = 'list', length = 7)
-start <- Sys.time()
 for (i in 1:7) {
   spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
 }
-Sys.time () - start
-
-
 for (i in 1:7) spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
 
 for (i in 1:7) spec3[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'std')
@@ -69,6 +64,7 @@ clusterEvalQ(cluster, library(rugarch))
 # Out of sample estimation
 n = length(spec)
 fitlist = vector(mode = 'list', length = n)
+start <- Sys.time()
 for (i in 1:n) {
 tmp = ugarchroll(spec[[i]], R, n.ahead = 1, forecast.length = 1500, refit.every = 50, refit.window = 'moving', windows.size = 1500, solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
 if (!is.null(tmp@model$noncidx)) {
@@ -79,6 +75,7 @@ fitlist[[i]] = NA
 fitlist[[i]] = as.data.frame(tmp, which = 'density')
 }
 }
+Sys.time() - start
 ```
 
 ```{r eval=FALSE}

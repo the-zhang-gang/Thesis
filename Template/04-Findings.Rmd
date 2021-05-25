@@ -27,6 +27,7 @@ require(tree)  # do we need this?
 require(sgt)
 require(devtools)
 require(zoo)
+require(parallel)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -759,34 +760,23 @@ title(main = "NAGARCH-ST (5%)")
 \clearpage
 ## Time-varying higher moments
 ```{r acdcode, echo = FALSE}
-require(racd)
-require(rugarch)
-require(parallel)
-require(xts)
 # ACD specification
-sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
+sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
 distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'quad'))
 
 # sGARCH, takes 6 minutes
 cl = makePSOCKcluster(10)
-fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+
+rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.ahead = 1, refit.every = 50, refit.window = "moving", window.size = 1500, forecast.length = 1500, solver = "msoptim", calculate.VaR = TRUE, VaR.alpha = c(0.01,0.05), keep.coef = TRUE,  solver.control =list(restarts = 10), cluster = cl)
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.",, echo=FALSE}
 par(mfrow = c(2, 2), mai = c(0.4, 0.75, 0.2, 0.3))
 plot.zoo(fitted(fit),main = 'Conditional Mean', col = 'steelblue',xlab = "Time", ylab = "")
-plot(absolutereturns, main = 'Conditional Sigma',col = c('grey'),xlab = "Time", ylab = "");lines(condvar,col= 'steelblue'); legend(x="topleft", legend = c("absolute log-returns", "conditional volatility"), col = c('grey', 'steelblue'),lty = c(1,1), bty = 'n', cex = 0.8)
+plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", ylab = "");lines(as.zoo(sigma(fit)),col= 'steelblue'); legend(x="topleft", legend = c("absolute log-returns", "conditional volatility"), col = c('grey', 'steelblue'),lty = c(1,1), bty = 'n', cex = 0.8)
 
 plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditional Skewness',xlab = "Time")
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
-
-# pnl <- function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) {
-#   panel.number <- parent.frame()$panel.number
-# 	if (panel.number == 1) lines(fitted(fit), xts(fit@model$modeldata$data, fit@model$modeldata$index),col = "red")
-# 	lines(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), col = "red")
-# }
-# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="") #panel = pnl
-# # lines(fitted(fit), col = 2) + grid()
-#
-# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="", )
 ```
+oll
