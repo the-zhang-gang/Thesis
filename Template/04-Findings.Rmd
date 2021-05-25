@@ -579,14 +579,10 @@ for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
 
-
-
-
-#Testing the kabling
+#Kabling
 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the  \\\\\\\\ periodfrom ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
-
 
 kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
       label = 'Table3',
