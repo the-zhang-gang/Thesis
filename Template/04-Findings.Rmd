@@ -43,6 +43,7 @@ require(readr)
 ```
 
 ### MLE distribution parameters
+
 ```{r mlesgt, echo=FALSE}
 require(sgt)
 require(graphics)
@@ -301,7 +302,9 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
-In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation.  For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.^[To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and  up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.]
+In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.[^1]
+
+[^1]: To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
@@ -326,8 +329,6 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting \\\\\\\\ cases. The underlying data is the daily return series of the Euro Stoxx 50 \\\\\\\\ for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
   kable_styling(latex_options = "scale_down")
 ```
-
-
 
 ## Constant higher moments
 
@@ -460,7 +461,6 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 #                 colorset = c("gray","red","blue"))
 ```
 
-
 ```{r table3prep, echo=FALSE}
 require(plyr)
 require(dplyr)
@@ -582,7 +582,8 @@ fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\
 
 
 ```
-\noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for eGARCH and gjrGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in fGARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in \@ref(tab:Table3), the model with the highest value is the `r colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))]` while, excluding the fGARCH models from the analysis, the model that performs best is the `r colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))]`.
+
+\noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for eGARCH and gjrGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in fGARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in \@ref(tab:Table3), the model with the highest value is the `r colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))]` while, excluding the non-standard GARCH models from the analysis, the model that performs best is the `r colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))]`.
 
 ```{r table3final, echo=F, results='asis'}
 kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
@@ -594,6 +595,7 @@ kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum lik
 ```
 
 \newpage
+
 As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
 ```{r aictableprep, echo=F}
@@ -666,7 +668,6 @@ tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min
 #   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))
 ```
 
-
 ```{r aictablelatex, echo=F, results='asis'}
 aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
       label = 'aicTable',
@@ -679,8 +680,11 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
 ```
 
 \newpage
+
 ### Value-at-risk
+
 As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events.
+
 ```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='50%', echo=FALSE}
 par(mfrow = c(2,1))
 Conditional.variance <- sigma(garchfit.eGARCH[[3]])
@@ -700,12 +704,14 @@ ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green
 ```
 
 Let us examine this further using a moving window approach whilst forecasting 1-day ahead results with a window size of 1500. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent COVID-crisis.
+
 ```{r figbacktest, out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),1500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
 ```
 
 \newpage
+
 ```{r garchroll, eval = FALSE, echo = FALSE}
 #VaR garchroll forecasting and backtesting skewed student t
 # EGARCH parsimonous model sstd
@@ -721,7 +727,9 @@ Repbacktest4<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 # Repbacktest5<-report(backtest3,type="VaR",VaR.alpha=0.01,conf.level=0.99)
 # Repbacktest6<-report(backtest3,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 ```
+
 As you can see in figure \@ref(fig.)
+
 ```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, eval = FALSE}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(3,2), mar = c(2.5,2.5,1.5,2.5))
@@ -751,6 +759,7 @@ title(main = "NAGARCH-ST (5%)")
 ```
 
 ### Expected shortfall
+
 ```{r}
 # Bootstrap Test for the Expected Shortfall?
 # V-TEST?
@@ -759,7 +768,9 @@ title(main = "NAGARCH-ST (5%)")
 ```
 
 \clearpage
+
 ## Time-varying higher moments
+
 ```{r acdcode, echo = FALSE}
 # ACD specification
 sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
@@ -780,4 +791,5 @@ plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", y
 plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditional Skewness',xlab = "Time")
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
+
 oll
