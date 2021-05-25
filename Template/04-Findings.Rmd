@@ -26,8 +26,8 @@ require(fGarch)
 require(tree)  # do we need this?
 require(sgt)
 require(devtools)
-require(condformat)
 require(zoo)
+require(parallel)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -39,14 +39,10 @@ colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , col
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
+require(readr)
 ```
 
 ### MLE distribution parameters
-
-```{r SGTMLE, include=FALSE}
-par(mfrow = c(3,2))
-```
-
 ```{r mlesgt, echo=FALSE}
 require(sgt)
 require(graphics)
@@ -309,7 +305,7 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
-```{r Euro Stoxx, eval=FALSE}
+```{r Euro Stoxx, echo=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
@@ -318,7 +314,7 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
-```{r table2final,eval=FALSE, results='asis'}
+```{r table2final,echo=FALSE, results='asis'}
 kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',"latex",
       booktabs = T,
@@ -464,10 +460,8 @@ stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
 #                 colorset = c("gray","red","blue"))
 ```
 
-\noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of [[[HOW TO BEST INTERPRET??????????]]] Skewness in the returns.
 
-
-```{r table3prep, echo=FALSE, results='asis'}
+```{r table3prep, echo=FALSE}
 require(plyr)
 require(dplyr)
 require(stringr)
@@ -578,66 +572,25 @@ names(Table.3) <- c("Norm", "T", "ST", "GED", "SGED")
 for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
-
-
-
-
-#Testing the kabling
+#Kabling
 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the  \\\\\\\\ periodfrom ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+```
+\noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of [[[HOW TO BEST INTERPRET??????????]]] Skewness in the returns.
 
-
+```{r table3final, echo=F, results='asis'}
 kbl(Table.3$ST, col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters","latex",
       label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
   #kable_classic(full_width = F)%>%
-  footnote(general = "",number=c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
+  footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
   kable_styling(latex_options = "scale_down")
 ```
 
+\newpage
+As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
-```{r table4prep, eval=FALSE}
-print("iGARCH")
-garchfit.iGARCH[[1]]@fit$coef
-garchfit.iGARCH[[1]]@fit$se.coef
-```
-
-```{r table5prep, eval=FALSE}
-print("EWMA")
-garchfit.EWMA[[1]]@fit$coef
-c(garchfit.EWMA[[1]]@fit$se.coef[1:2],NA,garchfit.EWMA[[1]]@fit$se.coef[3], NA)
-```
-
-```{r table7prep, eval=FALSE}
-print("eGARCH")
-garchfit.eGARCH[[1]]@fit$coef
-garchfit.eGARCH[[1]]@fit$se.coef
-```
-
-```{r table6prep, eval=FALSE}
-print("gjrGARCH")
-garchfit.gjrGARCH[[1]]@fit$coef
-garchfit.gjrGARCH[[1]]@fit$se.coef
-```
-
-```{r table8prep, eval=FALSE}
-print("NAGARCH")
-garchfit.fGARCH.NAGARCH[[1]]@fit$coef
-garchfit.fGARCH.NAGARCH[[1]]@fit$se.coef
-```
-
-```{r table9prep, eval=FALSE}
-print("TGARCH")
-garchfit.fGARCH.TGARCH[[1]]@fit$coef
-garchfit.fGARCH.TGARCH[[1]]@fit$se.coef
-```
-
-```{r table10prep, eval=FALSE}
-garchfit.fGARCH.AVGARCH[[1]]@fit$coef
-garchfit.fGARCH.AVGARCH[[1]]@fit$se.coef
-```
-<!-- Here comes the description -->
 ```{r aictableprep, echo=F}
 aic_sGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
@@ -695,7 +648,8 @@ tableAIC <- as.data.frame(round(aics,4))
 # try 2
 tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min(tableAIC$SGARCH), "green", "black"))
 
-# try 1
+# for ourselves: quick conditional formatting
+#require(condformat)
 # cf <-  condformat(tableAIC) %>%
 #   rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
 #   rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
@@ -707,8 +661,6 @@ tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min
 #   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))
 ```
 
-\newpage
-As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
 ```{r aictablelatex, echo=F, results='asis'}
 aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
@@ -724,25 +676,26 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
 \newpage
 ### Value-at-risk
 As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events.
-```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='80%'}
-par(mfrow = c(2,1), mar = c(2, 2.5, 0.5, 2.5))
+```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='50%', echo=FALSE}
+par(mfrow = c(2,1))
 Conditional.variance <- sigma(garchfit.eGARCH[[3]])
 Conditional.mean <- fitted(garchfit.eGARCH[[3]])
 n <- garchfit.eGARCH[[3]]@fit$coef["shape"]
 VaR05 <- as.numeric(Conditional.mean + Conditional.variance*qdist("sstd",p=0.05,
 shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
-par(mar =  c(3.5, 2.5, 0.5, 2.5))
+par(mai = c(0.4, 2, 0, 2))
 plot(as.matrix(R), type = "l" , xlab = "" ,
-ylab = "95% VaR value", col = "darkgray"); lines(VaR05,col = adjustcolor("red",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("red" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.05][","][t])))
+ylab = "95% VaR value", col = "darkgray"); lines(VaR05,col = adjustcolor("red",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("red" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.05][","][t])))
 
 VaR01 <- as.numeric(Conditional.mean + Conditional.variance*qdist("sstd",p=0.01,
 shape = coef(garchfit.eGARCH[[3]])["shape"],skew  = coef(garchfit.eGARCH[[3]])["skew"]))
+par(mai = c(0.8, 2, 0.2, 2))
 plot(as.matrix(R), type = "l" , xlab = "T" ,
-ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topright", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
+ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
 Let us examine this further using a moving window approach whilst forecasting 1-day ahead results with a window size of 1500. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent COVID-crisis.
-```{r figbacktest, out.width='70%', fig.align='center'}
+```{r figbacktest, out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),1500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
 ```
@@ -750,59 +703,28 @@ xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.t
 \newpage
 ```{r garchroll, eval = FALSE, echo = FALSE}
 #VaR garchroll forecasting and backtesting skewed student t
-# EGARCH parsimonous model
-backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest1<-report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest2<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest2<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
-# normal distribution
-backtest3NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest3<-report(backtest3NORM,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest4NORM <-ugarchroll(garchspec.eGARCH[[1]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest4<-report(backtest4NORM,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
-# sstd distribution NAGARCH
-backtest5NAGARCHST <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest5<-report(backtest5NAGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest6NAGARCHST <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest6<-report(backtest6NAGARCHST,type="VaR",VaR.alpha=0.05,conf.level=0.95)
-
-backtest7AVGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.01, keep.coef=TRUE)
-Repbacktest7<-report(backtest7AVGARCHST,type="VaR",VaR.alpha=0.01,conf.level=0.99)
-backtest8AVGARCHST <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=0.05, keep.coef=TRUE)
-Repbacktest8<-report(backtest8AVGARCHST,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+# EGARCH parsimonous model sstd
+backtest1<-ugarchroll(garchspec.eGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
+Repbacktest1<- report(backtest1,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+Repbacktest2<-report(backtest1,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+# NAGARCH sstd
+backtest2 <-ugarchroll(garchspec.fGARCH.NAGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
+Repbacktest3<-report(backtest2,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+Repbacktest4<-report(backtest2,type="VaR",VaR.alpha=0.05,conf.level=0.95)
+#
+# backtest3 <-ugarchroll(garchspec.fGARCH.AVGARCH[[3]],data=R,n.ahead=1,forecast.length=1500,refit.every=50,refit.window="moving",windows.size = 1500, solver="hybrid", fit.control=list(), solver.control=list(), calculate.VaR=TRUE,VaR.alpha=c(0.01,0.05), keep.coef=TRUE)
+# Repbacktest5<-report(backtest3,type="VaR",VaR.alpha=0.01,conf.level=0.99)
+# Repbacktest6<-report(backtest3,type="VaR",VaR.alpha=0.05,conf.level=0.95)
 ```
 As you can see in figure \@ref(fig.)
-```{r figurebacktests, fig.cap = "Comparison between VaR-EGARCH-ST and VaR-EGARCH-N", fig.align='center',eval = FALSE}
-# EGARCH with sstd vs EGARCH with norm
-par(mfrow = c(2,2), mar = c(2.5,2.5,1.5,2.5))
-# EGARCH with SSTD
-plot(backtest1,which=4,VaR.alpha=0.01)
-legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
-title(main = "EGARCH-ST (1%)")
-plot(backtest2,which=4,VaR.alpha=0.05)
-legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
-title(main = "EGARCH-ST (5%)")
-
-# EGARCH with NORM
-plot(backtest3NORM,which=4,VaR.alpha=0.01)
-legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
-title(main = "EGARCH-N (1%)")
-plot(backtest4NORM,which=4,VaR.alpha=0.05)
-legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
-title(main = "EGARCH-N (5%)")
-```
-
-
 ```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, eval = FALSE}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(3,2), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD
-plot(backtest1,which=4,VaR.alpha=0.01)
+plot(backtest1,which=4,VaR.alpha=c(0.01),
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
 title(main = "EGARCH-ST (1%)")
-plot(backtest2,which=4,VaR.alpha=0.05)
+plot(backtest1,which=4,VaR.alpha=0.05)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.05"))
 title(main = "EGARCH-ST (5%)")
 
@@ -829,44 +751,28 @@ title(main = "NAGARCH-ST (5%)")
 # V-TEST?
 
 # what's in rugarch?
-
 ```
 
 \clearpage
 ## Time-varying higher moments
-```{r acdcode, echo = FALSE, eval=FALSE}
-require(racd)
-require(rugarch)
-require(parallel)
-require(xts)
+```{r acdcode, echo = FALSE}
 # ACD specification
-sGARCH_ACDspec = acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
-distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
+sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),
+distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'quad'))
 
-# sGARCH
+# sGARCH, takes 6 minutes
 cl = makePSOCKcluster(10)
-fit = acdfit(sGARCH_ACDspec, as.data.frame(R), solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10),cluster = cl) #very long process: starts from different starting values to find an optimum
+
+rollacd = racd::acdroll(spec = sGARCH_ACDspec, data = R, n.ahead = 1, refit.every = 50, refit.window = "moving", window.size = NULL, forecast.length = 1500, solver = "msoptim", calculate.VaR = TRUE, VaR.alpha = c(0.01,0.05), keep.coef = TRUE,  solver.control =list(restarts = 10))
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE, echo=FALSE}
-# par(mfrow = c(2, 2), mai = c(0.75, 0.75, 0.3, 0.3))
-# cm <- plot.zoo(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = FALSE,minor.ticks = FALSE, main = 'Conditional Mean',yaxis.right = F, col = 'steelblue')
-# cm <- lines(fitted(fit), col = 2)
-# cm
-# cs <- plot(xts(abs(fit@model$modeldata$data),fit@model$modeldata$index), auto.grid = FALSE,
-# minor.ticks = FALSE, main = 'Conditional Sigma', yaxis.right = F,col = 'grey')
-# cs <- lines(sigma(fit), col = 'steelblue')
-# cs
-# plot(racd::skewness(fit), col = 'steelblue',yaxis.right = F, main = 'Conditional Skewness')
-# plot(racd::kurtosis(fit), col = 'steelblue', yaxis.right = F,main = 'Conditional Excess Kurtosis')
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.",, echo=FALSE}
+par(mfrow = c(2, 2), mai = c(0.4, 0.75, 0.2, 0.3))
+plot.zoo(fitted(fit),main = 'Conditional Mean', col = 'steelblue',xlab = "Time", ylab = "")
+plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", ylab = "");lines(as.zoo(sigma(fit)),col= 'steelblue'); legend(x="topleft", legend = c("absolute log-returns", "conditional volatility"), col = c('grey', 'steelblue'),lty = c(1,1), bty = 'n', cex = 0.8)
 
-# pnl <- function(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), ...) {
-#   panel.number <- parent.frame()$panel.number
-# 	if (panel.number == 1) lines(fitted(fit), xts(fit@model$modeldata$data, fit@model$modeldata$index),col = "red")
-# 	lines(fitted(fit),xts(fit@model$modeldata$data, fit@model$modeldata$index), col = "red")
-# }
-# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="") #panel = pnl
-# # lines(fitted(fit), col = 2) + grid()
-#
-# plot(xts(fit@model$modeldata$data, fit@model$modeldata$index), auto.grid = T,minor.ticks = FALSE,major.ticks=T, yaxis.right = F, main = 'Conditional Mean', col = 'steelblue', xlab = "", screens = 1, ylab="", )
+plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditional Skewness',xlab = "Time")
+plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
+oll
