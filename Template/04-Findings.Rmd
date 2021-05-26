@@ -789,7 +789,7 @@ gettests <- function(x) {
   cc <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$LRcc
   ae <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$AE
   dq <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$DQ
-  return(list = list(uc = uc, cc = cc, ae = ae, dq = dq))
+  return(list = list(ae = ae, uc = uc, cc = cc, dq = dq))
 }
 
 gettests(VaR.sstd.egarch)
@@ -800,6 +800,76 @@ BacktestVaR(R, VaR.normegarch,0.01, 5)
 
 ```{r tableStephane, echo=F, results='asis'}
 ## table %>% kbl() %>%... 
+
+
+e_sged <- gettests(VaR.sged.egarch)
+e_ged <- gettests(VaR.ged.egarch)
+e_sstd <- gettests(VaR.sstd.egarch)
+e_std <- gettests(VaR.std.egarch)
+e_norm <- gettests(VaR.norm.egarch)
+
+gjr_sged <- gettests(VaR.sged.gjrgarch)
+gjr_ged <- gettests(VaR.ged.gjrgarch)
+gjr_sstd <- gettests(VaR.sstd.gjrgarch)
+gjr_std <- gettests(VaR.std.gjrgarch)
+gjr_norm <- gettests(VaR.norm.gjrgarch)
+
+t_sged <- gettests(VaR.sged.tgarch)
+t_ged <- gettests(VaR.ged.tgarch)
+t_sstd <- gettests(VaR.sstd.tgarch)
+t_std <- gettests(VaR.std.tgarch)
+t_norm <- gettests(VaR.norm.tgarch)
+
+
+
+
+na_sged <- gettests(VaR.sged.nagarch)
+na_ged <- gettests(VaR.ged.nagarch)
+na_sstd <- gettests(VaR.sstd.nagarch)
+na_std <- gettests(VaR.std.nagarch)
+na_norm <- gettests(VaR.norm.nagarch)
+
+av_sged <- gettests(VaR.sged.avgarch)
+av_ged <- gettests(VaR.ged.avgarch)
+av_sstd <- gettests(VaR.sstd.avgarch)
+av_std <- gettests(VaR.std.avgarch)
+av_norm <- gettests(VaR.norm.avgarch)
+
+#TABLE LAYOUT 
+
+table_tests <- matrix(nrow=25,ncol=5)
+rownames(table_tests) <- c("SGED","AP-ratio", "UC","CC","DQ","GED","AP-ratio","UC","CC","DQ","ST","AP-ratio","UC","CC","DQ","T","AP-ratio","UC","CC","DQ","Norm","AP-ratio","UC","CC","DQ")
+colnames(table_tests) <- c("eGarch","gjrGarch","tGarch","naGarch","avGarch")
+
+#STATISTICS
+
+table_tests[2,] <- c(e_sged$ae, gjr_sged$ae,t_sged$ae,na_sged$ae,av_sged$ae)
+table_tests[7,]<- c(e_ged$ae, gjr_ged$ae,t_ged$ae,na_ged$ae,av_ged$ae)
+table_tests[12,]<- c(e_sstd$ae, gjr_sstd$ae,t_sstd$ae,na_sstd$ae,av_sstd$ae)
+table_tests[17,]<- c(e_std$ae, gjr_std$ae,t_std$ae,na_std$ae,av_std$ae)
+table_tests[22,]<- c(e_norm$ae, gjr_norm$ae,t_norm$ae,na_norm$ae,av_norm$ae)
+
+table_tests[3,] <- c(e_sged$uc[1], gjr_sged$uc[1],t_sged$uc[1],na_sged$uc[1],av_sged$uc[1])
+table_tests[8,]<- c(e_ged$uc[1], gjr_ged$uc[1],t_ged$uc[1],na_ged$uc[1],av_ged$uc[1])
+table_tests[13,]<- c(e_sstd$uc[1], gjr_sstd$uc[1],t_sstd$uc[1],na_sstd$uc[1],av_sstd$uc[1])
+table_tests[18,]<- c(e_std$uc[1], gjr_std$uc[1],t_std$uc[1],na_std$uc[1],av_std$uc[1])
+table_tests[23,]<- c(e_norm$uc[1], gjr_norm$uc[1],t_norm$uc[1],na_norm$uc[1],av_norm$uc[1])
+
+table_tests[4,] <- c(e_sged$cc[1], gjr_sged$cc[1],t_sged$cc[1],na_sged$cc[1],av_sged$cc[1])
+table_tests[9,]<- c(e_ged$cc[1], gjr_ged$cc[1],t_ged$cc[1],na_ged$cc[1],av_ged$cc[1])
+table_tests[14,]<- c(e_sstd$cc[1], gjr_sstd$cc[1],t_sstd$cc[1],na_sstd$cc[1],av_sstd$cc[1])
+table_tests[19,]<- c(e_std$cc[1], gjr_std$cc[1],t_std$cc[1],na_std$cc[1],av_std$cc[1])
+table_tests[24,]<- c(e_norm$cc[1], gjr_norm$cc[1],t_norm$cc[1],na_norm$cc[1],av_norm$cc[1])
+
+table_tests[5,] <- c(e_sged$dq$stat, gjr_sged$dq$stat,t_sged$dq$stat,na_sged$dq$stat,av_sged$dq$stat)
+table_tests[10,]<- c(e_ged$dq$stat, gjr_ged$dq$stat,t_ged$dq$stat,na_ged$dq$stat,av_ged$dq$stat)
+table_tests[15,]<- c(e_sstd$dq$stat, gjr_sstd$dq$stat,t_sstd$dq$stat,na_sstd$dq$stat,av_sstd$dq$stat)
+table_tests[20,]<- c(e_std$dq$stat, gjr_std$dq$stat,t_std$dq$stat,na_std$dq$stat,av_std$dq$stat)
+table_tests[25,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$stat,av_norm$dq$stat)
+
+#PVALUES LOOPS
+
+#KABLE OUTPUT
 ```
 
 
