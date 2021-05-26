@@ -750,16 +750,51 @@ title(main = "EGARCH-N")
 But let us formally test this.
 ```{r gaspackagetests, include=F, echo=F}
 require(GAS)
-VaRsstdegarch <- as.data.frame(egarch.sstdback,which="VaR")$`alpha(1%)`
-length(VaRsstdegarch)
-VaRnormegarch <- as.data.frame(egarch.normback,which="VaR")$`alpha(1%)`
-length(R[2501:nrow(R)])
-BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$LRuc
-BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$LRcc
-BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$AE
-BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$DQ
+getVaR <- function(x) {
+  VaRresult <- as.data.frame(x,which="VaR")$`alpha(1%)`
+}
+VaR.norm.egarch <- getVaR(egarch.normback)
+VaR.std.egarch <- getVaR(egarch.stdback)
+VaR.ged.egarch <- getVaR(egarch.gedback)
+VaR.sstd.egarch <- getVaR(egarch.sstdback)
+VaR.sged.egarch <- getVaR(egarch.sgedback)
+
+VaR.norm.gjrgarch <- getVaR(gjrgarch.normback)
+VaR.std.gjrgarch <- getVaR(gjrgarch.stdback)
+VaR.ged.gjrgarch <- getVaR(gjrgarch.gedback)
+VaR.sstd.gjrgarch <- getVaR(gjrgarch.sstdback)
+VaR.sged.gjrgarch <- getVaR(gjrgarch.sgedback)
+
+VaR.norm.tgarch <- getVaR(tgarch.normback)
+VaR.std.tgarch <- getVaR(tgarch.stdback)
+VaR.ged.tgarch <- getVaR(tgarch.gedback)
+VaR.sstd.tgarch <- getVaR(tgarch.sstdback)
+VaR.sged.tgarch <- getVaR(tgarch.sgedback)
+
+VaR.norm.nagarch <- getVaR(nagarch.normback)
+VaR.std.nagarch <- getVaR(nagarch.stdback)
+VaR.ged.nagarch <- getVaR(nagarch.gedback)
+VaR.sstd.nagarch <- getVaR(nagarch.sstdback)
+VaR.sged.nagarch <- getVaR(nagarch.sgedback)
+
+VaR.norm.avgarch <- getVaR(avgarch.normback)
+VaR.std.avgarch <- getVaR(avgarch.stdback)
+VaR.ged.avgarch <- getVaR(avgarch.gedback)
+VaR.sstd.avgarch <- getVaR(avgarch.sstdback)
+VaR.sged.avgarch <- getVaR(avgarch.sgedback)
+
+gettests <- function(x) { 
+  # modify this according to your needs
+  uc <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$LRuc
+  cc <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$LRcc
+  ae <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$AE
+  dq <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$DQ
+  return(list = list(uc = uc, cc = cc, ae = ae, dq = dq))
+}
+
+gettests(VaR.sstd.egarch)
 report(egarch.sstdback, type = "VaR") #if we use the rugarch method we get the same LRuc and LRcc, only thing that is additional is the amount of exceed and actual exceed that is present in the report and not in the BacktestVaR
-BacktestVaR(R, VaRnormegarch,0.01, 5)
+BacktestVaR(R, VaR.normegarch,0.01, 5)
 
 ```
 
