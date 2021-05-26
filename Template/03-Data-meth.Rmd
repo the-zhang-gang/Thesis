@@ -355,5 +355,41 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 
 #### Dynamic quantile test
 
-\noindent @engle1999 with the aim to provide completeness to the conditional coverage test of @christoffersen2001 developed the Dynamic quantile test. It consists in testing some restriction in a ...(work-in-progress).
+\noindent @engle2004 provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \@ref(eq:dq1), with $I(.)$ a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. $\theta$ is the confidence level. They test jointly $H_0$ that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period ($B$), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \@ref(eq:dq2). $X\delta$ corresponds to the matrix notation. Under $H_0$, this regression should have no explanatory power. As a final step, a $\chi^2$-distributed test statistic is constructed as in \@ref(eq:dq3). 
 
+```{=tex}
+\begin{align}
+\text { Hit }_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
+(\#eq:dq1)
+\end{align}
+```
+
+```{=tex}
+\begin{align}
+\begin{array}{c}
+Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+1} VaR_{t}+ \\
+\delta_{p+2} I_{year1, t}+\ldots+\delta_{p+2+n} I_{year n, t}+u_{t}
+\end{array}
+\
+
+Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
+-\theta & \text { prob }(1-\theta) \\
+(1-\theta) & \text { prob } \theta
+\end{array}\right.
+
+\end{equation}
+(\#eq:dq2)
+\end{align}
+```
+
+```{=tex}
+\begin{align}
+
+\begin{equation}
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(p+n+2)
+\end{equation}
+
+\end{equation}
+(\#eq:dq3)
+\end{align}
+```
