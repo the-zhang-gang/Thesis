@@ -352,7 +352,7 @@ garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
 # Estimate the model
 garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
 # Compute stdret using residuals()
-stdret.sGARCH[[i]] <- residuals(garchfit.sGARCH[[i]], standardize = TRUE)
+stdret.sGARCH[[i]] <- rugarch::residuals(garchfit.sGARCH[[i]], standardize = TRUE)
 }
 
 #.eGARCH-------------------
@@ -364,7 +364,7 @@ garchspec.eGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
 # Estimate the model
 garchfit.eGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.eGARCH[[i]])
 # Compute stdret using residuals()
-stdret.eGARCH[[i]] <- residuals(garchfit.eGARCH[[i]], standardize = TRUE)
+stdret.eGARCH[[i]] <- rugarch::residuals(garchfit.eGARCH[[i]], standardize = TRUE)
 }
 
 #.fGARCH.NAGARCH------------------------
@@ -376,7 +376,7 @@ garchspec.fGARCH.NAGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)
 # Estimate the model
 garchfit.fGARCH.NAGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.NAGARCH[[i]])
 # Compute stdret using residuals()
-stdret.fGARCH.NAGARCH[[i]] <- residuals(garchfit.fGARCH.NAGARCH[[i]], standardize = TRUE)
+stdret.fGARCH.NAGARCH[[i]] <- rugarch::residuals(garchfit.fGARCH.NAGARCH[[i]], standardize = TRUE)
 }
 
 #.fGARCH.AVGARCH------------------------
@@ -388,7 +388,7 @@ garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)
 # Estimate the model
 garchfit.fGARCH.AVGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.AVGARCH[[i]])
 # Compute stdret using residuals()
-stdret.fGARCH.AVGARCH[[i]] <- residuals(garchfit.fGARCH.AVGARCH[[i]], standardize = TRUE)
+stdret.fGARCH.AVGARCH[[i]] <- rugarch::residuals(garchfit.fGARCH.AVGARCH[[i]], standardize = TRUE)
 }
 
 #.gjrGARCH------------------
@@ -400,7 +400,7 @@ garchspec.gjrGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
 # Estimate the model
 garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
 # Compute stdret using residuals()
-stdret.gjrGARCH[[i]] <- residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
+stdret.gjrGARCH[[i]] <- rugarch::residuals(garchfit.gjrGARCH[[i]], standardize = TRUE)
 }
 
 #fGARCH.TGARCH-------------------
@@ -412,7 +412,7 @@ garchspec.fGARCH.TGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0))
 # Estimate the model
 garchfit.fGARCH.TGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.TGARCH[[i]])
 # Compute stdret using residuals()
-stdret.fGARCH.TGARCH[[i]] <- residuals(garchfit.fGARCH.TGARCH[[i]], standardize = TRUE)
+stdret.fGARCH.TGARCH[[i]] <- rugarch::residuals(garchfit.fGARCH.TGARCH[[i]], standardize = TRUE)
 }
 
 #.iGARCH--------------------
@@ -424,7 +424,7 @@ garchspec.iGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
 # Estimate the model
 garchfit.iGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.iGARCH[[i]])
 # Compute stdret using residuals()
-stdret.iGARCH[[i]] <- residuals(garchfit.iGARCH[[i]], standardize = TRUE)
+stdret.iGARCH[[i]] <- rugarch::residuals(garchfit.iGARCH[[i]], standardize = TRUE)
 }
 
 #.EWMA-----------------
@@ -437,7 +437,7 @@ garchspec.EWMA[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
 # Estimate the model
 garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 # Compute stdret using residuals()
-stdret.EWMA[[i]] <- residuals(garchfit.EWMA[[i]], standardize = TRUE)
+stdret.EWMA[[i]] <- rugarch::residuals(garchfit.EWMA[[i]], standardize = TRUE)
 }
 
 
@@ -562,11 +562,6 @@ for(i in 1:length(distributions)){
 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the  \\\\\\\\ periodfrom ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
-
-
-
-
-
 ```
 
 \noindent \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for eGARCH and gjrGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in fGARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in \@ref(tab:Table3), the model with the highest value is `r colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))]` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))]`.
@@ -669,8 +664,7 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
 
 ### Value-at-risk
 
-As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique.  A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. 
-<!-- It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ overestimates a lot of the downside events. -->
+As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique.  A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ captures more of the downside events.
 ```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='60%', echo=FALSE}
 par(mfrow = c(2,1))
 par(mar = c(2.1, 3.1, 1.1, 3.1))
@@ -688,16 +682,15 @@ plot(as.matrix(R), type = "l" , xlab = "T" ,
 ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
-
-Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating [note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 100, solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers...)]{.correction} the parameters every 100 days. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent Covid-crisis.
-<!-- {r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE} -->
-<!-- # par(mfrow = c(1,1), mar = c(2, 2, 2, 2)) -->
-<!-- # xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),1500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE) -->
-<!-- ``` -->
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year [note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)]{.correction}. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+``` {r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
+par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
+xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
+```
 
 \newpage
 
-```{r garchroll, eval = FALSE, echo = FALSE}
+```{r garchroll, echo = FALSE}
 # VaR garchroll forecasting and backtesting----
 # x = garchspec.eGARCH[[i]]
 roll <- function(x) { 
@@ -754,8 +747,6 @@ title(main = "EGARCH-N")
 ```
 
 But let us formally test this.
-
-
 ```{r gaspackagetests, include=F, echo=F}
 require(GAS)
 VaRsstdegarch <- as.data.frame(egarch.sstdback,which="VaR")$`alpha(1%)`
