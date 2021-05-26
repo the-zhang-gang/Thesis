@@ -699,35 +699,36 @@ roll <- function(x) {
   stopCluster(cl)
   return(result)
 }
-egarch.normback <- roll(garchspec.eGARCH[[1]])
-egarch.stdback <- roll(garchspec.eGARCH[[2]])
-egarch.sstdback <- roll(garchspec.eGARCH[[3]])
-egarch.gedback <- roll(garchspec.eGARCH[[4]])
-egarch.sgedback <- roll(garchspec.eGARCH[[5]])
+# Enjo Timing = first hash
+egarch.normback <- roll(garchspec.eGARCH[[1]]) #19.66 sec
+egarch.stdback <- roll(garchspec.eGARCH[[2]])  #22.68 sec
+egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #24.02 sec
+egarch.gedback <- roll(garchspec.eGARCH[[4]])  #20.54 sec
+egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #30.70 sec
 
-gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]])
-gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])
-gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]])
-gjrgarch.gedback <- roll(garchspec.gjrGARCH[[4]])
-gjrgarch.sgedback <- roll(garchspec.gjrGARCH[[5]])
+gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
+gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
+gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
+gjrgarch.gedback <- roll(garchspec.gjrGARCH[[4]])  #21.13 sec
+gjrgarch.sgedback <- roll(garchspec.gjrGARCH[[5]]) #30.24 sec
 
-nagarch.normback <- roll(garchspec.fGARCH.NAGARCH[[1]])
-nagarch.stdback <- roll(garchspec.fGARCH.NAGARCH[[2]])
-nagarch.sstdback <- roll(garchspec.fGARCH.NAGARCH[[3]])
-nagarch.gedback <- roll(garchspec.fGARCH.NAGARCH[[4]])
-nagarch.sgedback <- roll(garchspec.fGARCH.NAGARCH[[5]])
+nagarch.normback <- roll(garchspec.fGARCH.NAGARCH[[1]]) #14.88 sec
+nagarch.stdback <- roll(garchspec.fGARCH.NAGARCH[[2]])  #20.31 sec
+nagarch.sstdback <- roll(garchspec.fGARCH.NAGARCH[[3]]) #27.25 sec
+nagarch.gedback <- roll(garchspec.fGARCH.NAGARCH[[4]])  #22.39 sec
+nagarch.sgedback <- roll(garchspec.fGARCH.NAGARCH[[5]]) #34.98 sec
 
-tgarch.normback <- roll(garchspec.fGARCH.TGARCH[[1]])
-tgarch.stdback <- roll(garchspec.fGARCH.TGARCH[[2]])
-tgarch.sstdback <- roll(garchspec.fGARCH.TGARCH[[3]])
-tgarch.gedback <- roll(garchspec.fGARCH.TGARCH[[4]])
-tgarch.sgedback <- roll(garchspec.fGARCH.TGARCH[[5]])
+tgarch.normback <- roll(garchspec.fGARCH.TGARCH[[1]]) #15.48 sec
+tgarch.stdback <- roll(garchspec.fGARCH.TGARCH[[2]])  #19.32 sec
+tgarch.sstdback <- roll(garchspec.fGARCH.TGARCH[[3]]) #26.27 sec
+tgarch.gedback <- roll(garchspec.fGARCH.TGARCH[[4]])  #20.26 sec
+tgarch.sgedback <- roll(garchspec.fGARCH.TGARCH[[5]]) #29.29 sec
 
-avgarch.normback <- roll(garchspec.fGARCH.AVGARCH[[1]])
-avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])
-avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]])
-avgarch.gedback <- roll(garchspec.fGARCH.AVGARCH[[4]])
-avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]])
+avgarch.normback <- roll(garchspec.fGARCH.AVGARCH[[1]]) #20.65 sec
+avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])  #35.63 sec
+avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]]) #52.54 sec
+avgarch.gedback <- roll(garchspec.fGARCH.AVGARCH[[4]])  #42.59 sec
+avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
 ```
 
 As you can see in figure \@ref(figurebacktests2) the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
@@ -750,8 +751,14 @@ But let us formally test this.
 ```{r gaspackagetests, include=F, echo=F}
 require(GAS)
 VaRsstdegarch <- as.data.frame(egarch.sstdback,which="VaR")$`alpha(1%)`
+length(VaRsstdegarch)
 VaRnormegarch <- as.data.frame(egarch.normback,which="VaR")$`alpha(1%)`
-BacktestVaR(R,VaRsstdegarch,0.01, 5)
+length(R[2501:nrow(R)])
+BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$LRuc
+BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$LRcc
+BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$AE
+BacktestVaR(R[2501:nrow(R)],VaRsstdegarch,0.01, 5)$DQ
+report(egarch.sstdback, type = "VaR") #if we use the rugarch method we get the same LRuc and LRcc, only thing that is additional is the amount of exceed and actual exceed that is present in the report and not in the BacktestVaR
 BacktestVaR(R, VaRnormegarch,0.01, 5)
 
 ```
