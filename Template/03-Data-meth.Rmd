@@ -39,7 +39,7 @@ knitr::opts_chunk$set(warning = FALSE)
 data <- readxl::read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) 
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
-Estoxx <- Price_indices[,1] #see if price index
+Estoxx <- Price_indices[-1,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 
 Rbali <- window(R, end = "2004-12-31") #up till end of balis dataset
