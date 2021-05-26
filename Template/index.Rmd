@@ -30,7 +30,7 @@ csl: templates/apa.csl
 ## PDF layout options ###
 #########################
 masters-submission: false
-corrections: false # correction highlighting 
+corrections: true # correction highlighting 
 
 ## binding / margins ##
 page-layout: twoside #'nobind' for equal margins (PDF output), 'twoside' for two-sided binding (mirror margins and blank pages), leave blank for one-sided binding (left margin > right margin)

@@ -290,7 +290,7 @@ return(totalresults)
 }
 ```
 
-```{r MLE tables for different series, include=FALSE, echo=FALSE}
+```{r MLE tables for different series, include=FALSE, eval=FALSE, echo=FALSE}
 R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
 R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
 R_covid <- window(R, start = "2009-03-31")
@@ -315,7 +315,7 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
-```{r table2final,echo=FALSE,eval=FALSE, results='asis'}
+```{r table2final,echo=FALSE, results='asis'}
 kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',"latex",
       booktabs = T,
@@ -327,6 +327,8 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting \\\\\\\\ cases. The underlying data is the daily return series of the Euro Stoxx 50 \\\\\\\\ for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
   kable_styling(latex_options = "scale_down")
 ```
+
+\newpage
 
 ## Constant higher moments
 
@@ -794,7 +796,9 @@ gettests <- function(x) {
 
 gettests(VaR.sstd.egarch)
 report(egarch.sstdback, type = "VaR") #if we use the rugarch method we get the same LRuc and LRcc, only thing that is additional is the amount of exceed and actual exceed that is present in the report and not in the BacktestVaR
-BacktestVaR(R, VaR.normegarch,0.01, 5)
+
+gettests(VaR.sstd.egarch)
+gettests(VaR.norm.egarch)
 
 ```
 

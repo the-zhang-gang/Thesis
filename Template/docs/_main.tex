@@ -117,6 +117,7 @@
 % This highlights (in blue) corrections marked with (for words) \mccorrect{blah} or (for whole
 % paragraphs) \begin{mccorrection} . . . \end{mccorrection}.  This can be useful for sending a PDF of
 % your corrected thesis to your examiners for review.  Turn it off, and the blue disappears.
+\correctionstrue
 
 % IP feb 2021: option to include line numbers in PDF
 \usepackage{lineno}
@@ -313,11 +314,12 @@ of the returns distribution when we make a normality assumption. In
 other words, volatility does not provide a full description of the risks
 that are taken by the investment unless we assume the investment returns
 are normally distributed.
-\qauthor{--- Alexander (2008) in \emph{Market Risk Analysis Practical Financial Econometrics}
-\# Literature review \{\#lit-rev\}}\end{savequote}
+\qauthor{--- Alexander (2008) in \emph{Market Risk Analysis Practical Financial Econometrics}}\end{savequote}
 
 
 
+\hypertarget{lit-rev}{%
+\chapter{Literature review}\label{lit-rev}}
 
 \minitoc 
 
@@ -534,7 +536,7 @@ While it is relatively straightforward to include unconditional higher-moments i
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 31 December, 1986 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet \autocite{EUROSTOXXFactSheet}.
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 01 January, 1987 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to 1987
 
 \hypertarget{descriptives}{%
 \subsection{Descriptives}\label{descriptives}}
@@ -544,7 +546,7 @@ While it is relatively straightforward to include unconditional higher-moments i
 
 Equation \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).
 
-\noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.208. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19528.62 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
+\noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.207. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19520.307 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
 
 \noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2\(*\). Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at NA, given its high significance, confirms the rejection of the normality assumption.
 
@@ -558,21 +560,21 @@ Equation \ref{tab:dsTable} provides the main statistics describing the return se
 Statistics & Euro Stoxx 50 & Standardized Residuals\\
 \midrule
 Arithmetic Mean & 0.0167 & -0.0409\\
-Median & 0.0357 & -0.0193\\
-Maximum & 10.4376 & 5.7126\\
-Minimum & -13.2404 & -11.7732\\
+Median & 0.0358 & -0.0192\\
+Maximum & 10.4376 & 5.7128\\
+Minimum & -13.2404 & -11.7738\\
 Stdev & 1.307 & 0.9992\\
 \addlinespace
-Skewness & -0.31 & -0.6327\\
+Skewness & -0.31 & -0.6326\\
  & (0***) & (0***)\\
-Excess Kurtosis & 7.2083 & 5.134\\
+Excess Kurtosis & 7.2071 & 5.1341\\
  & (0***) & (0***)\\
-Jarque-Bera & 19528.6196*** & 10431.0514***\\
+Jarque-Bera & 19520.3072*** & 10429.9193***\\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \item Notes
-\item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-01 to 2021-04-27 (8954 observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.
+\item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-02 to 2021-04-27 (8953 observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.
 \item[2] The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
 \item[3] *, **, *** represent significance levels at the 5%, 1% and <1%.
 \end{tablenotes}
@@ -766,19 +768,19 @@ Additionally, for every distribution fitted with MLE, plots are generated to com
 \toprule
 $\theta$ & $\alpha$ & $\beta$ & $\xi$ & $\kappa$ & $\eta$ & $LLH$ & AIC\\
 \midrule
-SGT & 0.02 & 1.321 & -0.04 & 1.381 & 3.314 & -13973.01 & 27956.01\\
- & (0.013) & (0.026)*** & (0.013)*** & (0.071)*** & (0.538)*** &  & \\
-SGED & 0.019 & 1.274 & -0.018 & 0.916 & Inf & -14008.63 & 27956.01\\
- & (0.013) & (0.016)*** & (0.01)*** & (0.017)*** &  &  & \\
-GED & 0.032 & 1.276 & 0 & 0.911 & Inf & -14009.52 & 28025.04\\
+SGT & 0.02 & 1.324 & -0.04 & 1.392 & 3.231 & -13972.33 & 27954.66\\
+ & (0.014) & (0.027)*** & (0.013)*** & (0.071)*** & (0.509)*** &  & \\
+SGED & 0.042 & 1.26 & -0.026 & 0.907 & Inf & -14012.64 & 27954.66\\
+ & (0.012)*** & (0.015)*** & (0.009)*** & (0.016)*** &  &  & \\
+GED & 0.032 & 1.276 & 0 & 0.911 & Inf & -14009.00 & 28023.99\\
 \addlinespace
  & (0.009)*** & (0.016)*** &  & (0.017)*** &  &  & \\
-ST & 0.019 & 1.481 & -0.052 & 2 & 2.793 & -13997.35 & 28002.71\\
- & (0.014) & (0.054)*** & (0.013)*** &  & (0.098)*** &  & \\
-T & 0.056 & 1.494 & 0 & 2 & 1.383 & -14005.14 & 28016.29\\
- & (0.01)*** & (0.056)*** &  &  & (0.097)*** &  & \\
+ST & 0.019 & 1.487 & -0.051 & 2 & 2.785 & -13996.57 & 28001.14\\
+ & (0.014) & (0.055)*** & (0.013)*** &  & (0.099)*** &  & \\
+T & 0.055 & 1.493 & 0 & 2 & 1.384 & -14004.37 & 28014.74\\
+ & (0.01)*** & (0.057)*** &  &  & (0.099)*** &  & \\
 \addlinespace
-Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15101.73 & 30207.46\\
+Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15100.54 & 30205.08\\
  & (0.014) & (0.01)*** &  &  &  &  & \\
 \bottomrule
 \end{tabular}}
@@ -789,10 +791,12 @@ Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15101.73 & 30207.46\\
 \end{threeparttable}
 \end{table}
 
+\newpage
+
 \hypertarget{constant-higher-moments}{%
 \section{Constant higher moments}\label{constant-higher-moments}}
 
-\noindent \ref{tab:Table3} presents the maximum likelihood estimates for 8 symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters (\(t\) values are presented in parenthesis). The parameters in the conditional mean equations (\(\alpha_0\)) are all statistically significant with \(t\) values from 6 to 11. The AR(1) coefficient, \(\alpha_1\), has parameters going from 2 to 2 with \(t\) values ranging from 4 to 5 not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant with \(t\) values ranging from 1 to 11. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 20 to 34), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 12 to 18 confirming the presence of {[}{[}{[}HOW TO BEST INTERPRET??????????{]}{]}{]} Skewness in the returns.
+\noindent \ref{tab:Table3} presents the maximum likelihood estimates for 8 symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters (\(t\) values are presented in parenthesis). The parameters in the conditional mean equations (\(\alpha_0\)) are all statistically significant with \(t\) values from 6 to 11. The AR(1) coefficient, \(\alpha_1\), has parameters going from 2 to 2 with \(t\) values ranging from 4 to 5 not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant with \(t\) values ranging from 1 to 11. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 20 to 33), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 12 to 18 confirming the presence of Skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between 14 and 19. The parameter \(\gamma\), which is present only for eGARCH and gjrGARCH is significant and with values around 4.5. The absolute value function in fGARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in \ref{tab:Table3}, the model with the highest value is eGARCH while, excluding the non-standard GARCH models from the analysis, the model that performs best is eGARCH.
 
 \begin{table}
 
@@ -804,40 +808,37 @@ Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15101.73 & 30207.46\\
 \toprule
  & SGARCH & IGARCH & EGARCH & GJRGARCH & EWMA & NAGARCH & TGARCH & AVGARCH\\
 \midrule
-$\alpha_0$ & 0.049 & 0.049 & 0.026 & 0.028 & 0.053 & 0.02 & 0.023 & 0.019\\
- & (5.278) & (5.192) & (2.747) & (3.022) & (5.852) & (2.148) & (2.404) & (2.03)\\
-$\alpha_1$ & -0.018 & -0.018 & -0.008 & -0.008 & -0.02 & -0.005 & -0.005 & -0.006\\
- & (-1.64) & (-1.635) & (-0.795) & (-0.768) & (-1.885) & (-0.485) & (-0.47) & (-0.611)\\
-$\beta_0$ & 0.016 & 0.013 & 0.001 & 0.021 & 0 & 0.022 & 0.02 & 0.021\\
+$\alpha_0$ & 0.049 & 0.049 & 0.026 & 0.028 & 0.053 & 0.02 & 0.023 & 0.018\\
+ & (5.281) & (5.195) & (2.762) & (3.026) & (5.855) & (2.15) & (2.394) & (2.292)\\
+$\alpha_1$ & -0.018 & -0.018 & -0.008 & -0.008 & -0.02 & -0.005 & -0.005 & -0.007\\
+ & (-1.64) & (-1.634) & (-0.766) & (-0.769) & (-1.885) & (-0.485) & (-0.464) & (-0.755)\\
+$\beta_0$ & 0.016 & 0.013 & 0.001 & 0.021 & 0 & 0.022 & 0.02 & 0.022\\
 \addlinespace
- & (5.776) & (5.842) & (0.77) & (7.28) &  & (9.811) & (6.219) & (25.122)\\
-$\beta_1$ & 0.094 & 0.101 & -0.098 & 0.017 & 0.069 & 0.08 & 0.083 & 0.087\\
- & (12.146) & (13.088) & (-15.524) & (3.021) & (15.02) & (6.286) & (9.717) & (30.759)\\
-$\beta_2$ & 0.898 & 0.899 & 0.983 & 0.897 & 0.931 & 0.845 & 0.919 & 0.904\\
- & (115.678) &  & (1557.507) & (115.012) &  & (86.237) & (107.22) & (365.502)\\
+ & (5.778) & (5.842) & (0.768) & (7.281) &  & (9.947) & (6.224) & (2.808)\\
+$\beta_1$ & 0.094 & 0.101 & -0.098 & 0.017 & 0.069 & 0.08 & 0.083 & 0.088\\
+ & (12.149) & (13.092) & (-15.506) & (3.023) & (15.022) & (6.335) & (9.728) & (4.962)\\
+$\beta_2$ & 0.898 & 0.899 & 0.983 & 0.897 & 0.931 & 0.845 & 0.919 & 0.902\\
+ & (115.671) &  & (1557.528) & (115.021) &  & (86.838) & (107.318) & (49.085)\\
 \addlinespace
 $\xi$ & 0.917 & 0.917 & 0.905 & 0.906 & 0.917 & 0.903 & 0.904 & 0.902\\
- & (68.351) & (67.44) & (67.131) & (67.765) & (73.31) & (67.757) & (67.28) & (67.834)\\
-$\kappa$ &  &  &  &  &  &  &  & \\
- &  &  &  &  &  &  &  & \\
-$\eta$ & 6.339 & 5.997 & 6.897 & 6.819 & 7.036 & 6.974 & 6.928 & 6.944\\
-\addlinespace
- & (15.442) & (16.925) & (14.582) & (14.635) & (18.325) & (14.536) & (14.568) & (14.514)\\
+ & (68.347) & (67.434) & (67.158) & (67.761) & (73.304) & (67.75) & (67.219) & (69.587)\\
+$\eta$ & 6.342 & 6 & 6.899 & 6.823 & 7.037 & 6.975 & 6.932 & 6.95\\
+ & (15.441) & (16.919) & (14.583) & (14.632) & (18.327) & (14.539) & (14.564) & (14.526)\\
 $\gamma$ &  &  & 0.144 & 0.143 &  &  &  & \\
- &  &  & (15.566) & (10.728) &  &  &  & \\
-$shift$ &  &  &  &  &  & 0.904 &  & 0.214\\
- &  &  &  &  &  & (10.355) &  & (9.66)\\
 \addlinespace
-$rot$ &  &  &  &  &  &  & 0.723 & 0.552\\
- &  &  &  &  &  &  & (12.112) & (9.638)\\
-$LLH$ & -13066.436 & -13068.628 & -12951.877 & -12973.456 & -13114.375 & -12936.278 & -12934.286 & -12930.492\\
+ &  &  & (15.568) & (10.728) &  &  &  & \\
+$shift$ &  &  &  &  &  & 0.904 &  & 0.248\\
+ &  &  &  &  &  & (10.462) &  & (3.067)\\
+$rot$ &  &  &  &  &  &  & 0.723 & 0.523\\
+ &  &  &  &  &  &  & (12.112) & (8.67)\\
+\addlinespace
+$LLH$ & -13065.425 & -13067.628 & -12950.977 & -12972.473 & -13113.368 & -12935.328 & -12933.581 & -12929.723\\
 \bottomrule
 \end{tabular}}
 \begin{tablenotes}
 \item \textit{Notes} 
-\item 
-\item[1] This table shows the maximum likelihood estimates of various ST-GARCH \\ models. The daily returns used on the Euro Stoxx 50 Price index cover the  \\ periodfrom 01 January, 1987 to 27 April, 2021 (8954 observations).
-\item[2] The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t \\$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility \\, $\xi, \kappa$ and $\eta$ are constant and $t$ statistics are displayed in parenthesis. \\$LLH$ is the maximized log likelihood value.
+\item This table shows the maximum likelihood estimates of various ST-GARCH \\ models. The daily returns used on the Euro Stoxx 50 Price index cover the  \\ periodfrom 02 January, 1987 to 27 April, 2021 (8953 observations).
+\item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t \\$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility \\, $\xi, \kappa$ and $\eta$ are constant and $t$ statistics are displayed in parenthesis. \\$LLH$ is the maximized log likelihood value.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -846,18 +847,62 @@ $LLH$ & -13066.436 & -13068.628 & -12951.877 & -12973.456 & -13114.375 & -12936.
 
 As you can see in table \ref{tab:aicTable} the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \ref{goodness-of-fit}. The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
+\begin{table}[h!]
+
+\caption{\label{tab:aicTable}Model selection according to AIC}
+\centering
+\begin{threeparttable}
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lrrrrrrrr}
+\toprule
+  & SGARCH & IGARCH & EWMA & EGARCH & GJRGARCH & NAGARCH & TGARCH & AVGARCH\\
+\midrule
+norm & 2.995 & 2.998 & 3.034 & 2.962 & 2.967 & 2.955 & 2.957 & 2.955\\
+std & 2.924 & 2.924 & 2.935 & 2.900 & 2.905 & 2.897 & 2.896 & 2.896\\
+sstd & 2.920 & 2.921 & 2.930 & 2.895 & 2.900 & 2.891 & 2.891 & 2.890\\
+ged & 2.930 & 2.931 & 2.945 & 2.907 & 2.911 & 2.903 & 7.704 & 7.701\\
+sged & 2.927 & 2.928 & 2.940 & 2.902 & 2.907 & 2.898 & 7.675 & 7.672\\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\item Notes
+\item[1] This table shows the AIC value for the respective model
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
 \newpage
 
 \hypertarget{value-at-risk-1}{%
 \subsection{Value-at-risk}\label{value-at-risk-1}}
 
-As already mentioned 3 candidate models seem to be candidates to check if they perform well using a forecasting technique and backtest. This includes the EGARCH, the NAGARCH and AVGARCH. A simple graph is shown in figure \ref{fig:figVaRinsample} for the EGARCH-ST model. It seems that the VaR model for \(\alpha=0.05\) underestimates the downside events, while the VaR model for \(\alpha=0.01\) overestimates a lot of the downside events.
+As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique. A simple graph is shown in figure \ref{fig:figVaRinsample} for the EGARCH-ST model. It seems that the VaR model for \(\alpha=0.05\) underestimates the downside events, while the VaR model for \(\alpha=0.01\) captures more of the downside events.
 
-Let us examine this further using a moving window approach whilst forecasting 1-day ahead results with a window size of 1500. Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent COVID-crisis.
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{_main_files/figure-latex/figVaRinsample-1} 
+
+}
+
+\caption{Value-at-Risk (in-sample) for the EGARCH-ST model}\label{fig:figVaRinsample}
+\end{figure}
+
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year {note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package\ldots)}. Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{_main_files/figure-latex/figbacktest-1} 
+
+}
+
+\caption{Selected period to start forecast from}\label{fig:figbacktest}
+\end{figure}
 
 \newpage
 
-As you can see in figure @ref(fig.)
+As you can see in figure \ref{figurebacktests2} the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
+
+But let us formally test this.
 
 \hypertarget{expected-shortfall}{%
 \subsection{Expected shortfall}\label{expected-shortfall}}
@@ -866,6 +911,11 @@ As you can see in figure @ref(fig.)
 
 \hypertarget{time-varying-higher-moments}{%
 \section{Time-varying higher moments}\label{time-varying-higher-moments}}
+
+\hypertarget{robustcheck-testtitle-robusttest}{%
+\chapter{Robustcheck testtitle (\#Robusttest)}\label{robustcheck-testtitle-robusttest}}
+
+checks checks checks
 
 \minitoc 
 
@@ -914,7 +964,36 @@ no serial correlation in the squares
 \chapter{Appendix to literature review}\label{appendix-to-literature-review}}
 
 \hypertarget{conditional-distributions}{%
-\subsubsection{Alternative distributions than the normal}\label{conditional-distributions}}
+\subsubsection{Alternatives to the normal distribution}\label{conditional-distributions}}
+
+\hypertarget{sgtinfo}{%
+\subparagraph{SGT (Skewed Generalized t-distribution)}\label{sgtinfo}}
+
+\noindent The SGT distribution is introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of accounting for skewness and leptokurtosis.The Pdf of the SGT distribition is given by eqution \eqref{eq:sgt}. B is the beta function (also called Euler integral).
+
+\begin{equation}
+\begin{array}{c}
+\begin{array}{c}
+f_{S G T}(x ; \mu, \sigma, \xi, \kappa, \eta)=\frac{\kappa}{2 v \sigma \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\mu +m|^{\kappa}}{\eta(v \sigma)^{\kappa}(\xi \operatorname{sign}(x-\mu + m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\ \\ \\ 
+
+m=\frac{2 v \sigma \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}
+\end{array}
+\\ \\ \\ 
+v=\frac{\eta^{-\frac{1}{\kappa}}}{\sqrt{\left(3 \xi^{2}+1\right) \frac{B\left(\frac{3}{\kappa}, \eta-\frac{2}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}-4 \xi^{2} \frac{B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)^{2}}{B\left(\frac{1}{\kappa}, \eta\right)^{2}}}}
+\end{array}
+\label{eq:sgt}
+\end{equation}
+
+\noindent Following \textcite{theodossiou1998} however, there are two parameters, \(\kappa\)\footnote{Referred to as \(\kappa\) by \textcite{theodossiou1998} and \textcite{bali2008}, but \(p\) by Carter Davis in the ``sgt'' package.}and \(\eta\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} and \(\eta\) by \textcite{bali2008}, but \(q\) by Carter Davis in the ``sgt'' packages.}) for the shape in the SGT distribution. \(\kappa\) is the peakedness parameter. \(\eta\) is the tail-thickness parameter. It is equal to the degrees of freedom \(\nu\) divided by 2 if \(\xi = 0\) and \(\kappa = 2\). As shown in the following figure\footnote{Source: \href{https://cran.r-project.org/web/packages/sgt\%22}{https://cran.r-project.org/web/packages/sgt}} \ref{fig:figure} by Carter Davis, from the SGT the other distributions in the figure are limiting cases of the SGT.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{front-and-back-matter/images/SGT} 
+
+}
+
+\caption{SGT distribution and limiting cases}\label{fig:figure}
+\end{figure}
 
 \hypertarget{students-t-distribution}{%
 \subparagraph{Student's t-distribution}\label{students-t-distribution}}
@@ -922,13 +1001,13 @@ no serial correlation in the squares
 \noindent A common alternative for the normal distribution is the Student t distribution. Similarly to the normal distribution, it is also symmetric (skewness is equal to zero if \(\nu > 3\)). The probability density function (pdf), consistent with \textcite{ghalanos2020}, is given by equation \eqref{eq:stdghalanos}. As will be seen in \ref{vol-mod}, GARCH models are used for volatility modeling in practice. \textcite{bollerslev1987} examined the use of the GARCH-Student or GARCH-t model as an alternative to the standard Normal distribution, which relaxes the assumption of conditional normality by assuming the standardized innovation to follow a standardized Student t-distribution \autocite{bollerslev2008}.
 
 \begin{align}
-f(x; \alpha, \beta,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\beta \pi \nu}} \left(1+\dfrac{(x-\alpha)^2}{\beta \nu}\right)^{-(\nu+1)/2}
+f(x; \mu, \sigma,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\sqrt{\sigma \pi \nu}} \left(1+\dfrac{(x-\mu)^2}{\sigma \nu}\right)^{-(\nu+1)/2}
  \label{eq:stdghalanos}
 \end{align}
 
-\noindent where \(\alpha, \beta\) and \(\nu\) are respectively the location, scale and shape (tail-thickness) parameters. \(\nu/2\) is equal to the \(q\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} or \(\eta\) by \textcite{bali2008}} parameter (which we call \(\eta\)) of the SGT distribution with other restrictions (see part \ref{sgtinfo}). The symbol \(\Gamma\) is the Gamma function.
+\noindent where \(\mu, \sigma\) and \(\nu\) are respectively the mean, scale and shape (tail-thickness) parameters. \(\nu/2\) is equal to the \(\eta\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} or \(q\) by Carter Davis in the ``sgt'' package.} parameter of the SGT distribution with other restrictions (see part \ref{sgtinfo}). The symbol \(\Gamma\) is the Gamma function.
 
-\noindent Unlike the normal distribution, which depends entirely on two moments only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \eqref{eq:kurt} if \(\nu>4\). This is useful while as already mentioned, the standardized residuals appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
+\noindent Unlike the normal distribution, which depends on two parameters only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \eqref{eq:kurt} if \(\nu>4\). This is useful while the standardized residuals of stock returns appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
 
 \begin{align}
 kurt = 3 + \dfrac{6}{\nu-4}
@@ -938,14 +1017,14 @@ kurt = 3 + \dfrac{6}{\nu-4}
 \hypertarget{generalized-error-distribution}{%
 \subparagraph{Generalized Error Distribution}\label{generalized-error-distribution}}
 
-\noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, uni-modal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
+\noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} and is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, uni-modal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
 
 \begin{align}
-f(x; \alpha, \beta, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\alpha}{\beta}\right|^\kappa}}{2^{1+1/\kappa}\beta\Gamma(1/\kappa)}
+f(x; \mu, \sigma, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\mu}{\sigma}\right|^\kappa}}{2^{1+1/\kappa}\sigma\Gamma(1/\kappa)}
  \label{eq:ged}
 \end{align}
 
-where \(\alpha, \beta\) and \(\kappa\) are respectively the location, scale and shape parameters.
+where \(\mu, \sigma\) and \(\kappa\) are respectively the mean, scale and shape parameters.
 
 \hypertarget{skewed-t-distribution}{%
 \subparagraph{Skewed t-distribution}\label{skewed-t-distribution}}
@@ -963,53 +1042,25 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 \noindent where \(\mu_{\xi} \equiv M_{1}\left(\xi-\xi^{-1}\right), \quad \sigma_{\xi}^{2} \equiv\left(1-M_{1}^{2}\right)\left(\xi^{2}+\xi^{-2}\right)+2 M_{1}^{2}-1, \quad M_{1} \equiv 2 \int_{0}^{\infty} u f_{1}(u) d u\) and \(\xi\) between \(0\) and \(\infty\). \(f_1(\cdot)\) is in this case equation \eqref{eq:stdghalanos}, the pdf of the student t distribution coming to equation \eqref{eq:stdist}, which has the parameterization following the SGT parameters.
 
 \begin{equation}
-\begin{array}{c}f_{S T}(x ; \alpha, \beta, \xi, \eta)=\frac{\Gamma\left(\frac{1}{2}+\eta\right)}{\sqrt{\beta\pi \eta} \Gamma(\eta)\left(\frac{|x-\alpha+m|^{2}}{\eta\beta(\xi \operatorname{sign}(x-\alpha+m)+1)^{2}}+1\right)^{\frac{1}{2}+\eta}} \\m=\frac{2 \xi \sqrt{\beta\eta} \Gamma\left(\eta-\frac{1}{2}\right)}{\sqrt{\pi} \Gamma\left(\eta+\frac{1}{2}\right)}\end{array}
+\begin{array}{c}f_{S T}(x ; \alpha, \beta, \xi, \eta)=\frac{\Gamma\left(\frac{1}{2}+\eta\right)}{\sqrt{\beta\pi \eta} \Gamma(\eta)\left(\frac{|x-\alpha+m|^{2}}{\eta\beta(\xi \operatorname{sign}(x-\alpha+m)+1)^{2}}+1\right)^{\frac{1}{2}+\eta}} \\ \\ \\ m=\frac{2 \xi \sqrt{\beta\eta} \Gamma\left(\eta-\frac{1}{2}\right)}{\sqrt{\pi} \Gamma\left(\eta+\frac{1}{2}\right)}\end{array}
  \label{eq:stdist}
 \end{equation}
 
-\noindent According to \textcite{giot2003}; \textcite{giot2004}, the skewed t-distribution outperforms the symmetric density distributions.
+\noindent According to \textcite{giot2003} as well as \textcite{giot2004}, the skewed t-distribution outperforms the symmetric density distributions.
 
 \hypertarget{skewed-generalized-error-distribution}{%
 \subparagraph{Skewed Generalized Error Distribution}\label{skewed-generalized-error-distribution}}
 
-\noindent What also will be interesting to examine is the SGED distribution of \textcite{theodossiou2000} in GARCH models, as in the work of \textcite{lee2008}. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}. To then get equation \eqref{eq:sged}.
+\noindent A further distribution to analyse is the SGED distribution of \textcite{theodossiou2000}. It is applied in GARCH models by \textcite{lee2008}. The SGED distribution extends the Generalized Error Distribution (GED) to allow for skewness and leptokurtosis. The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. It can also be found in \textcite{theodossiou2000}. The pdf is then given by the same equation \eqref{eq:skeweddist} as the skewed t-distribution but with \(f_1(\cdot)\) equal to equation \eqref{eq:ged}. To then get equation \eqref{eq:sged}.
 
 \begin{equation}
-\begin{array}{c}
-f_{S G E D}(x ; \alpha, \beta, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\alpha+m|}{\nu \beta(1+\xi \operatorname{sig}(x-\alpha+m))}\right)^{\kappa}}}{2 \nu \beta \Gamma(1 / \kappa)} \\
-m=\frac{2^{\frac{2}{\kappa}} \nu \beta \xi \Gamma\left(\frac{1}{2}+\frac{1}{p}\right)}{\sqrt{\pi}}
-\end{array}
-\label{eq:sged}
+\begin{array}{c}f_{S G E D}(x ; \mu, \sigma, \xi, \kappa)=\frac{\kappa e^{-\left(\frac{|x-\mu+m|}{v \sigma(1+\xi \operatorname{sig}(x-\mu+m))}\right)^{\kappa}}}{2 \nu \sigma \Gamma(1 / \kappa)} \\ \\ \\ m=\frac{2^{\frac{2}{\kappa}} \nu \sigma \xi \Gamma\left(\frac{1}{2}+\frac{1}{\kappa}\right)}{\sqrt{\pi}} \\ \\ \\ v=\sqrt{\frac{\pi \Gamma\left(\frac{1}{\kappa}\right)}{\pi\left(1+3 \xi^{2}\right) \Gamma\left(\frac{3}{\kappa}\right)-16^{\frac{1}{\kappa}} \lambda^{2} \Gamma\left(\frac{1}{2}+\frac{1}{\kappa}\right)^{2} \Gamma\left(\frac{1}{\kappa}\right)}}\end{array}\label{eq:sged}
 \end{equation}
-
-\hypertarget{sgtinfo}{%
-\subparagraph{SGT (Skewed Generalized t-distribution)}\label{sgtinfo}}
-
-\noindent The SGT distribution of introduced by \textcite{theodossiou1998} and applied by \textcite{bali2007} and \textcite{bali2008}. According to \textcite{bali2008} the proposed solutions (use of historical simulation, student's t-distribution, generalized error distribution or a mixture of two normal distributions) to the non-normality of standardized financial returns only partially solved the issues of skewness and leptokurtosis. The density of the generalized t-distribution of \textcite{mcdonald1988} can be rewritten as its skew variant following \textcite{trottier2015}. The pdf of the SGT distribition is given by eqution \eqref{eq:sgt}.
-
-\begin{equation}
-\begin{array}{c}
-f_{S G T}(x ; \alpha, \beta, \xi, \kappa, \eta)=\frac{\kappa}{2 v \beta \eta^{1 / \kappa} B\left(\frac{1}{\kappa}, \eta\right)\left(\frac{|x-\alpha +m|^{\kappa}}{\eta(v \beta)^{\kappa}(\xi \operatorname{sign}(x-\alpha+m)+1)^{\kappa}}+1\right)^{\frac{1}{\kappa}+\eta}} \\
-m=\frac{2 v \beta \xi \eta^{\frac{1}{\kappa}} B\left(\frac{2}{\kappa}, \eta-\frac{1}{\kappa}\right)}{B\left(\frac{1}{\kappa}, \eta\right)}
-\end{array}
-\label{eq:sgt}
-\end{equation}
-
-\noindent Following \textcite{theodossiou1998} however, there are two parameters, \(\kappa\)\footnote{Referred to as \(\kappa\) by \textcite{theodossiou1998} and \textcite{bali2008}, but \(p\) by Carter Davis in the ``sgt'' package.}and \(\eta\)\footnote{Also referred to as \(n\) by \textcite{theodossiou1998} or \(\eta\) by \textcite{bali2008}. This is the \(q\) by Carter Davis in the ``sgt'' packages.}) for the shape in the SGT distribution. The \(p\) is the peakedness parameter. The \(q\) is the tail-thickness parameter. It is equal to the degrees of freedom \(\eta\) divided by 2 if \(\xi = 0\) and \(\kappa = 2\), there is referred to symbol \(\nu\) in the tables (although this is not fully statistically correct to interprete this like degrees of freedom at all times). As shown in the following figure\footnote{Source: \href{https://cran.r-project.org/web/packages/sgt\%22}{https://cran.r-project.org/web/packages/sgt}} \ref{fig:figure} adapted by Carter Davis using , from the SGT the other distributions in the figure are limiting cases of the SGT.
-
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{front-and-back-matter/images/SGT} 
-
-}
-
-\caption{SGT distribution and limiting cases}\label{fig:figure}
-\end{figure}
 
 \hypertarget{garch-models}{%
 \subsubsection{GARCH models}\label{garch-models}}
 
-All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model does not mathematically allow for a negative output.
+All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model mathematically ensures the output is positive.
 
 \hypertarget{symmetric-normal-garch-model}{%
 \subparagraph{Symmetric (normal) GARCH model}\label{symmetric-normal-garch-model}}
@@ -1047,10 +1098,10 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 \hypertarget{gjrgarch-model}{%
 \subparagraph{GJRGARCH model}\label{gjrgarch-model}}
 
-\noindent The GJRGARCH model \autocite{glosten1993}, which is an alternative for the asymmetric GARCH (AGARCH) by \textcite{engle1990} and \textcite{engle1993}, models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I_t-j\), it is specified as in equation \eqref{eq:eq17}.
+\noindent The GJRGARCH model \autocite{glosten1993}, which is an alternative for the asymmetric GARCH (AGARCH) by \textcite{engle1990} and \textcite{engle1993}, models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I_t-1\), it is specified as in equation \eqref{eq:eq17}.
 
 \begin{align}
-\sigma_t^2 = \beta_0 + \alpha_1 \varepsilon_{t-1}^2 + \gamma_j I_{t-1} \varepsilon_{t-1}^2 + \beta_2 \sigma_{t-1}^2
+\sigma_t^2 = \beta_0 + \beta_1 \varepsilon_{t-1}^2 + \gamma_j I_{t-1} \varepsilon_{t-1}^2 + \beta_2 \sigma_{t-1}^2
  \label{eq:eq17}
 \end{align}
 
@@ -1066,7 +1117,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
  \label{eq:eq16}
 \end{align}
 
-\noindent where \(\alpha_j\) captures the sign effect and \(\gamma_j\) the size effect.
+\noindent where \(\beta_1\) captures the sign effect and \(\gamma_j\) the size effect.
 
 \hypertarget{nagarch-model}{%
 \subparagraph{NAGARCH model}\label{nagarch-model}}
@@ -1086,7 +1137,7 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 \noindent The TGARCH or threshold model \autocite{zakoian1994} also models asymmetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
 
 \begin{align}
-\sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ \beta_1^{-} + \varepsilon_{t-1}^{-}) + \beta_2 \sigma_{t-1}
+\sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ \beta_1^{-} + \varepsilon_{t-1}^{-} + \beta_2 \sigma_{t-1}
  \label{eq:eq19}
 \end{align}
 
@@ -1098,7 +1149,7 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 \noindent The absolute value Garch model or TS-Garch model, as named after \textcite{taylor1986} and \textcite{schwert1989}, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \eqref{eq:eq20}.
 
 \begin{align}
-\sigma_t = \beta_0 + \beta_1 \left|\varepsilon_{t-1}\right|) + \beta_2 \sigma_{t-1}
+\sigma_t = \beta_0 + \beta_1 \left|\varepsilon_{t-1}\right| + \beta_2 \sigma_{t-1}
  \label{eq:eq20}
 \end{align}
 
@@ -1107,14 +1158,14 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 \hypertarget{ewma}{%
 \subparagraph{EWMA}\label{ewma}}
 
-\noindent A alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\xi\) more weight is assigned to recent periods than distant periods. The \(\xi\) must be less than 1. It is specified as in \eqref{eq:eq21}.
+\noindent An alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\xi\) more weight is assigned to recent periods than distant periods. The \(\xi\) must be less than 1. It is specified as in \eqref{eq:eq21}.
 
 \begin{align}
 \sigma_t^2 = (1-\xi) \sum\limits_{j=1}^\infty (\xi^j \varepsilon_{t-j}^2)
  \label{eq:eq21}
 \end{align}
 
-In practice a \(\xi\) (or sometimes referred to as \(\lambda\)) of 0.94 is often used, such as by the financial risk management company RiskMetrics\(^{TM}\) model of J.P. Morgan \autocite{morganguarantytrustcompany1996}.
+In practice a \(\xi\) of 0.94 is often used, such as by the financial risk management company RiskMetrics\(^{TM}\) model of J.P. Morgan \autocite{morganguarantytrustcompany1996}.
 
 \newpage
 
@@ -1124,27 +1175,59 @@ In practice a \(\xi\) (or sometimes referred to as \(\lambda\)) of 0.94 is often
 \hypertarget{goodness-of-fit}{%
 \subsubsection{Goodness of fit}\label{goodness-of-fit}}
 
-As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting iusing the this dataset in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
+\noindent As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. ~\textbackslash{}
 
-\begin{figure}
+First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
-{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/symmetric aics} 
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/symmetric aics} 
 
 }
 
 \caption{Goodness of fit symmetric GARCH and distributions}\label{fig:aic1}
 \end{figure}
+\newpage
 
-First, in figure \ref{fig:aic2}, symmetric GARCH with the best symmetric distribution (T) and the other distributions (SGED, ST) are looked at. As you can see consistent with \textcite{giot2003}
+\noindent Second, in figure \ref{fig:aic2}, symmetric GARCH with the best symmetric distribution (T) and the other distributions (SGED, ST) are looked at. As you can see consistent with \textcite{giot2003} the skewed student's t (ST) distribution outperforms the symmetric distributions. It also outperforms in terms of goodness of fit the SGED.
 
-\begin{figure}
+\begin{figure}[h]
 
-{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/symmetric aics2} 
+{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/symmetric aics2} 
 
 }
 
 \caption{Goodness of fit symmetric GARCH and other distributions}\label{fig:aic2}
 \end{figure}
+
+\newpage
+
+\noindent In figure \ref{fig:aic3} you can see the same patter as in figure \ref{fig:aic1}, the student's t distribution performs best among the symmetric distributions.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/asymmetric aics} 
+
+}
+
+\caption{Goodness of fit asymmetric GARCH and symmetric distributions}\label{fig:aic3}
+\end{figure}
+\newpage
+\clearpage
+
+\noindent Then, in figure \ref{fig:aic4} the same patter arises as in figure \ref{fig:aic2}, the skewed student's t distribution again seems to be the most optimal one to use. Therefore the ST distribution is chosen as final model for the Euro Stoxx 50 index.
+
+\begin{figure}[h]
+
+{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/asymmetric aics2} 
+
+}
+
+\caption{Goodness of fit asymmetric GARCH and symmetric distributions}\label{fig:aic4}
+\end{figure}
+\clearpage
+
+\noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above\footnote{Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.}.
 
 
 %%%%% REFERENCES
