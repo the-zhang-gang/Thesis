@@ -50,7 +50,7 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ## Data
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Price Index^[The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.] denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition we refer to the factsheet [@EUROSTOXXFactSheet].
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index^[The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.] denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet [@EUROSTOXXFactSheet]. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to `r  format(index(head(Estoxx,1)), '%Y'))`
 
 ### Descriptives
 

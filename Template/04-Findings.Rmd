@@ -44,7 +44,7 @@ require(readr)
 
 ### MLE distribution parameters
 
-```{r mlesgt, eval=FALSE}
+```{r mlesgt, echo=FALSE}
 require(sgt)
 require(graphics)
 require(stats)
@@ -290,7 +290,7 @@ return(totalresults)
 }
 ```
 
-```{r MLE tables for different series, include=FALSE, echo=FALSE, eval=FALSE}
+```{r MLE tables for different series, include=FALSE, echo=FALSE}
 R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
 R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
 R_covid <- window(R, start = "2009-03-31")
@@ -306,7 +306,7 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
-```{r Euro Stoxx, echo=FALSE, eval=FALSE}
+```{r table2prep, echo=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
@@ -427,19 +427,7 @@ garchfit.iGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.iGARCH[[i]])
 stdret.iGARCH[[i]] <- residuals(garchfit.iGARCH[[i]], standardize = TRUE)
 }
 
-#.csGARCH-----------------
-# for(i in 1:length(distributions)){
-# # Specify a GARCH model with constant mean
-# garchspec.csGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
-#                      variance.model = list(model = "csGARCH", variance.targeting = F),
-#                      distribution.model = distributions[i])
-# # Estimate the model
-# garchfit.csGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.csGARCH[[i]])
-# # Compute stdret using residuals()
-# stdret.csGARCH[[i]] <- residuals(garchfit.csGARCH[[i]], standardize = TRUE)
-# }
-
-
+#.EWMA-----------------
 # we need EWMA
 for(i in 1:length(distributions)){
 # Specify a GARCH model with constant mean
@@ -701,7 +689,7 @@ ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green
 ```
 
 
-Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating [note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 100, solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers...)]{.correction} the parameters every 100 days. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent COVID-crisis.
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating [note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 100, solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers...)]{.correction} the parameters every 100 days. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important, while it includes the decline in 2016 with among which Brexit and the recent Covid-crisis.
 ```{r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),1500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)

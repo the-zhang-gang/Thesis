@@ -18,6 +18,7 @@ Volatility is unobservable. We can only ever estimate and forecast volatility, a
 Moreover, volatility is only a sufficient statistic for the dispersion of the returns distribution when we make a normality assumption. In other words, volatility does not provide a full description of the risks that are taken by the investment unless we assume the investment returns are normally distributed.
 ```
 (ref:alexander-quote) --- Alexander (2008) in *Market Risk Analysis Practical Financial Econometrics*
+
 # Literature review {#lit-rev}
 
 \minitoc <!-- this will include a mini table of contents--> <!-- LaTeX normally does not indent the first line after a heading - however, it does so after the mini table of contents. You can manually tell it not to with \noindent -->

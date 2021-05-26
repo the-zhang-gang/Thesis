@@ -46,17 +46,24 @@ model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH'
 submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
 
 spec1 <- spec2 <- spec3 <- spec4 <- spec5 <- vector(mode = 'list', length = 7)
+#.norm-----
 for (i in 1:7) {
   spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
 }
-for (i in 1:7) spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
+#.sstd-----
+for (i in 1:7) {spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
+}
+#.std-----
+for (i in 1:7) {
+  spec3[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'std')}
+#.sged-----
+for (i in 1:7) {
+  spec4[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sged')}
+#.ged-----
+for (i in 1:7) {
+  spec5[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'ged')}
 
-for (i in 1:7) spec3[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'std')
-
-for (i in 1:7) spec4[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sged')
-
-for (i in 1:7) spec5[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'ged')
-
+#.ugarchroll-----
 spec = c(spec1, spec2, spec3, spec4, spec5)
 cluster = makePSOCKcluster(15)
 clusterExport(cluster, c('spec', 'R'))
