@@ -226,22 +226,23 @@ In practice a $\xi$ of 0.94 is often used, such as by the financial risk managem
 
 #### Goodness of fit {#goodness-of-fit}
 
-\noindent As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined.  \\
+\noindent As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined.  \
 
+\newpage
 First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
 ```{r aic1, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='70%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
 ```
+\clearpage
 \newpage
 \noindent Second, in figure \@ref(fig:aic2), symmetric GARCH with the best symmetric distribution (T) and the other distributions (SGED, ST) are looked at. As you can see consistent with @giot2003 the skewed student's t (ST) distribution outperforms the symmetric distributions. It also outperforms in terms of goodness of fit the SGED.
 
 ```{r aic2, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and other distributions', out.width='70%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics2.pdf")
 ```
-
+\clearpage
 \newpage
-
 \noindent In figure \@ref(fig:aic3) you can see the same patter as in figure \@ref(fig:aic1), the student's t distribution performs best among the symmetric distributions.
 
 ```{r aic3, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='70%',fig.pos='h', echo=F}
@@ -250,7 +251,6 @@ knitr::include_graphics("figures/aicfigures/asymmetric aics.pdf")
 \newpage
 \clearpage
 \noindent Then, in figure \@ref(fig:aic4) the same patter arises as in figure \@ref(fig:aic2), the skewed student's t distribution again seems to be the most optimal one to use. Therefore the ST distribution is chosen as final model for the Euro Stoxx 50 index.
-
 ```{r aic4, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='70%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/asymmetric aics2.pdf")
 ```

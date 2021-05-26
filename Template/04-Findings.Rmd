@@ -44,7 +44,7 @@ require(readr)
 
 ### MLE distribution parameters
 
-```{r mlesgt, echo=FALSE}
+```{r mlesgt, eval=FALSE}
 require(sgt)
 require(graphics)
 require(stats)
@@ -306,7 +306,7 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
-```{r table2prep, echo=FALSE}
+```{r table2prep, eval=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
@@ -315,7 +315,7 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
 ```
 
-```{r table2final,echo=FALSE, results='asis'}
+```{r table2final,eval=FALSE, results='asis'}
 kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',"latex",
       booktabs = T,
@@ -874,6 +874,18 @@ table_tests[25,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$
 #PVALUES LOOPS
 
 #KABLE OUTPUT
+df <- table_tests[-c(1,6,11,16,21),] %>% as.data.frame()
+colnames(df) <- c("EGARCH", "GJRGARCH", "TGARCH", "NAGARCH", "AVGARCH")
+row_group_label_fonts <- list(
+list(bold = T, italic = T)
+)
+df %>% kbl(booktabs=T, format="latex") %>% 
+  kable_styling() %>%
+  pack_rows("Panel A: SGED", 1,4) %>%
+  pack_rows("Panel B: GED", 5,8) %>%
+  pack_rows("Panel C: ST", 9,12) %>%
+  pack_rows("Panel D: T", 13,17) %>%
+  pack_rows("Panel E: N", 17,20) %>% add_indent(c(1:16, 18:20))
 ```
 
 
