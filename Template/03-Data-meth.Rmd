@@ -338,6 +338,7 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 (\#eq:uccov)
 \end{align}
 ```
+
 #### Conditional coverage test of @christoffersen2001
 
 \noindent @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
@@ -351,6 +352,7 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 (\#eq:ccov)
 \end{align}
 ```
+
 \noindent It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$. While it tests both unconditional coverage as independence of violations, only this test has been performed and the unconditional coverage test is not reported.
 
 #### Dynamic quantile test
@@ -368,28 +370,18 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \begin{align}
 \begin{array}{c}
 Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+1} VaR_{t}+ \\
-\delta_{p+2} I_{year1, t}+\ldots+\delta_{p+2+n} I_{year n, t}+u_{t}
-\end{array}
-\
-
-Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
--\theta & \text { prob }(1-\theta) \\
-(1-\theta) & \text { prob } \theta
-\end{array}\right.
-
-\end{equation}
+\delta_{p+2} I_{year1, t}+\ldots+\delta_{p+2+n} I_{year n, t}+u_{t} \end{array}
 (\#eq:dq2)
 \end{align}
 ```
+$$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
+-\theta & \text { prob }(1-\theta) \\
+(1-\theta) & \text { prob } \theta
+\end{array}\right.$$
 
 ```{=tex}
 \begin{align}
-
-\begin{equation}
 \frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(p+n+2)
-\end{equation}
-
-\end{equation}
 (\#eq:dq3)
 \end{align}
 ```

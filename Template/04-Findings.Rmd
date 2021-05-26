@@ -684,7 +684,11 @@ plot(as.matrix(R), type = "l" , xlab = "T" ,
 ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
-Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year [note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)]{.correction}. Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year. 
+```{block type='correction'}
+[note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)]{.correction}.
+```
+Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
 ``` {r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
@@ -925,9 +929,123 @@ plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditio
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
 
+## Backtest
+```{r eval=FALSE}
+model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH')
+submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
 
-# Robustcheck testtitle (#Robusttest)
+spec1 <- spec2 <- spec3 <- spec4 <- spec5 <- vector(mode = 'list', length = 7)
+#.norm-----
+for (i in 1:7) {
+  spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
+}
+#.sstd-----
+for (i in 1:7) {spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
+}
+#.std-----
+for (i in 1:7) {
+  spec3[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'std')}
+#.sged-----
+for (i in 1:7) {
+  spec4[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sged')}
+#.ged-----
+for (i in 1:7) {
+  spec5[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'ged')}
+
+#.ugarchroll-----
+spec = c(spec1, spec2, spec3, spec4, spec5)
+cluster = makePSOCKcluster(15)
+clusterExport(cluster, c('spec', 'R'))
+clusterEvalQ(cluster, library(rugarch))
+# Out of sample estimation
+n = length(spec)
+fitlist = vector(mode = 'list', length = n)
+start <- Sys.time()
+for (i in 1:n) {
+tmp = ugarchroll(spec[[i]], R, n.ahead = 1, forecast.length = 1500, refit.every = 50, refit.window = 'moving', windows.size = 1500, solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
+if (!is.null(tmp@model$noncidx)) {
+tmp = resume(tmp, solver = 'solnp', fit.control = list(scale = 1), solver.control = list(tol = 1e-07, delta = 1e-06), cluster = cluster)
+if (!is.null(tmp@model$noncidx))
+fitlist[[i]] = NA
+} else {
+fitlist[[i]] = as.data.frame(tmp, which = 'density')
+}
+}
+Sys.time() - start
+```
+
+```{r eval=FALSE}
+vmodels = c('SGARCH(1,1)', 'IGARCH(1,1)', 'EGARCH(1,1)', 'GJRGARCH(1,1)', 'TGARCH(1,1)','AVGARCH(1,1)', 'NAGARCH(1,1)')
+modelnames = c(paste(vmodels, '-NORM', sep = ''), paste(vmodels, '-ST', sep = ''), paste(vmodels, '-T', sep = ''), paste(vmodels, '-SGED', sep = ''),paste(vmodels, '-GED', sep = ''))
+q1 = q5 = px = matrix(NA, ncol = 35, nrow = 1500)
+dist = c(rep('norm', 7), rep('sstd', 7), rep('std', 7), rep('sged', 7),rep('ged', 7))
+# use apply since nig and gh distributions are not yet vectorized
+for (i in 1:35) {
+q1[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+q5[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+px[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) pdist(dist[i], x['Realized'], mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+}
+VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
+VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
+VaR5cc = apply(q5, 2, function(x) VaRTest(0.05, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
+# BT1 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
+# BT5 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
+VTable = cbind(VaR1cc, VaR5cc)
+rownames(VTable) = modelnames
+colnames(VTable) = c('VaR.CC(1%)', 'VaR.CC(5%)')#, 'BT(1%)', 'BT(5%)')
+```
+
+```{r eval=FALSE}
+dists <- regmatches(rownames(VTable),gregexpr("(?<=-).*",rownames(VTable),perl=T)) %>% unlist
+garchmodel <- gsub("-.*","",rownames(VTable))
 
 
-checks checks checks
+VTable <- as.data.frame(VTable)
+V2Table <- VTable %>% mutate(dist = dists, model = garchmodel)
+# V2Table <-V2Table %>% filter(dist != "NORM")
+V2Table_long <- V2Table %>%
+  gather("Stat", "Value", -c(dist, model))
+ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +   geom_col(position = "dodge") + facet_wrap(~dist) + geom_hline(yintercept=0.05, 
+                color = "blue", size=0.3) + geom_hline(yintercept=0.01,  
+                color = "black", size=0.3) + 
+scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" = "grey")) + theme_bw() + theme(axis.text.x=element_text(angle = 90)) + theme(
+    legend.position = "top",
+    legend.box.just = "right",
+    legend.margin = margin(1, 1, 1, 1)
+    ) + theme(
+    legend.box.background = element_rect(color="black", size=0.3),
+    legend.box.margin = margin(2, 2, 2, 2)
+) + theme(legend.title = element_blank())
+
+
+
+```
+
+# Robustness checks  {#Robusttest}
+
+## Specification checks
+In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
+$$ 
+\hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
+$$
+### Figures control tests
+Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+
+Then the density can be examined standardized residuals and compared with the normal distribution. 
+
+Also the QQ-plot can be examined.
+
+### Residual heteroscedasticity
+Ljung-Box test on the squared or absolute standardized residuals.  
+
+ 
+
+<!-- ### GMM test -->
+zero-mean
+unit-variance
+not skewed
+no excess kurtosis
+no serial correlation in the squares
+no serial correlation in the cubes
+no serial correlation in the squares
 
