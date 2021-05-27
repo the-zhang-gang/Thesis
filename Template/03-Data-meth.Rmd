@@ -311,7 +311,7 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 
 #### Dynamic quantile test
 
-\noindent @engle2004 provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \@ref(eq:dq1), with $I(.)$ a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. $\theta$ is the confidence level. They test jointly $H_0$ that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period ($B$), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \@ref(eq:dq2). $X\delta$ corresponds to the matrix notation. Under $H_0$, this regression should have no explanatory power. As a final step, a $\chi^2$-distributed test statistic is constructed as in \@ref(eq:dq3). 
+\noindent @engle2004 provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \@ref(eq:dq1), with $I(.)$ a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. $\theta$ is the confidence level. They test jointly $H_0$ that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period ($B$), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \@ref(eq:dq2). $X\delta$ corresponds to the matrix notation. Under $H_0$, this regression should have no explanatory power. As a final step, a $\chi^2$-distributed test statistic with $m$ degrees of freedom equal to the parameters to be estimated (constant, number of hits and VaR estimate) is constructed as in \@ref(eq:dq3). 
 
 ```{=tex}
 \begin{align}
@@ -335,7 +335,7 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 
 ```{=tex}
 \begin{align}
-\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(p+n+2)
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(m)
 (\#eq:dq3)
 \end{align}
 ```
