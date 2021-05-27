@@ -741,7 +741,29 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \hypertarget{dynamic-quantile-test}{%
 \subsubsection{Dynamic quantile test}\label{dynamic-quantile-test}}
 
-\noindent \textcite{engle1999} with the aim to provide completeness to the conditional coverage test of \textcite{christoffersen2001} developed the Dynamic quantile test. It consists in testing some restriction in a \ldots(work-in-progress).
+\noindent \textcite{engle2004} provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \eqref{eq:dq1}, with \(I(.)\) a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. \(\theta\) is the confidence level. They test jointly \(H_0\) that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period (\(B\)), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \eqref{eq:dq2}. \(X\delta\) corresponds to the matrix notation. Under \(H_0\), this regression should have no explanatory power. As a final step, a \(\chi^2\)-distributed test statistic is constructed as in \eqref{eq:dq3}.
+
+\begin{align}
+\text { Hit }_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
+\label{eq:dq1}
+\end{align}
+
+\begin{align}
+\begin{array}{c}
+Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+1} VaR_{t}+ \\
+\delta_{p+2} I_{year1, t}+\ldots+\delta_{p+2+n} I_{year n, t}+u_{t} \end{array}
+\label{eq:dq2}
+\end{align}
+
+\[Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
+-\theta & \text { prob }(1-\theta) \\
+(1-\theta) & \text { prob } \theta
+\end{array}\right.\]
+
+\begin{align}
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(p+n+2)
+\label{eq:dq3}
+\end{align}
 
 \hypertarget{analysis}{%
 \chapter{Empirical Findings}\label{analysis}}
@@ -757,39 +779,6 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.}
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
-
-\begin{table}[h!]
-
-\caption{\label{tab:MLEtable}Maximum likelihood estimates of unconditional distribution functions}
-\centering
-\begin{threeparttable}
-\resizebox{\linewidth}{!}{
-\begin{tabular}[t]{llllllrr}
-\toprule
-$\theta$ & $\alpha$ & $\beta$ & $\xi$ & $\kappa$ & $\eta$ & $LLH$ & AIC\\
-\midrule
-SGT & 0.02 & 1.324 & -0.04 & 1.392 & 3.231 & -13972.33 & 27954.66\\
- & (0.014) & (0.027)*** & (0.013)*** & (0.071)*** & (0.509)*** &  & \\
-SGED & 0.042 & 1.26 & -0.026 & 0.907 & Inf & -14012.64 & 27954.66\\
- & (0.012)*** & (0.015)*** & (0.009)*** & (0.016)*** &  &  & \\
-GED & 0.032 & 1.276 & 0 & 0.911 & Inf & -14009.00 & 28023.99\\
-\addlinespace
- & (0.009)*** & (0.016)*** &  & (0.017)*** &  &  & \\
-ST & 0.019 & 1.487 & -0.051 & 2 & 2.785 & -13996.57 & 28001.14\\
- & (0.014) & (0.055)*** & (0.013)*** &  & (0.099)*** &  & \\
-T & 0.055 & 1.493 & 0 & 2 & 1.384 & -14004.37 & 28014.74\\
- & (0.01)*** & (0.057)*** &  &  & (0.099)*** &  & \\
-\addlinespace
-Normal & 0.017 & 1.307 & 0 & 2 & Inf & -15100.54 & 30205.08\\
- & (0.014) & (0.01)*** &  &  &  &  & \\
-\bottomrule
-\end{tabular}}
-\begin{tablenotes}
-\item \textit{Notes} 
-\item Table contains parameter estimates for SGT-distribution and some of its limiting \\ cases. The underlying data is the daily return series of the Euro Stoxx 50 \\ for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
 
 \newpage
 
@@ -870,7 +859,7 @@ sged & 2.927 & 2.928 & 2.940 & 2.902 & 2.907 & 2.898 & 7.675 & 7.672\\
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
-
+\clearpage
 \newpage
 
 \hypertarget{value-at-risk-1}{%
@@ -878,7 +867,7 @@ sged & 2.927 & 2.928 & 2.940 & 2.902 & 2.907 & 2.898 & 7.675 & 7.672\\
 
 As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique. A simple graph is shown in figure \ref{fig:figVaRinsample} for the EGARCH-ST model. It seems that the VaR model for \(\alpha=0.05\) underestimates the downside events, while the VaR model for \(\alpha=0.01\) captures more of the downside events.
 
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=0.6\linewidth]{_main_files/figure-latex/figVaRinsample-1} 
 
@@ -887,7 +876,9 @@ As already mentioned 2 candidate models seem to be very appropriate. This includ
 \caption{Value-at-Risk (in-sample) for the EGARCH-ST model}\label{fig:figVaRinsample}
 \end{figure}
 
-Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year {note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package\ldots)}. Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
+
+Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
 
 \begin{figure}
 
@@ -904,6 +895,46 @@ As you can see in figure \ref{figurebacktests2} the EGARCH with a normal distrib
 
 But let us formally test this.
 
+\begin{table}[H]
+\centering
+\begin{tabular}[t]{lrrrrr}
+\toprule
+  & EGARCH & GJRGARCH & TGARCH & NAGARCH & AVGARCH\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Panel A: SGED}}\\
+\hspace{1em}\hspace{1em}AP.ratio & 1.193243 & 1.131257 & 4.029134 & 1.208740 & 4.029134\\
+\hspace{1em}\hspace{1em}UC & 2.292336 & 1.077299 & 339.749534 & 2.662682 & 339.749534\\
+\hspace{1em}\hspace{1em}CC & 2.299459 & 2.748130 & 377.424279 & 4.571735 & 380.220681\\
+\hspace{1em}\hspace{1em}DQ & 34.442542 & 24.936113 & 1783.621469 & 25.812320 & 1805.881981\\
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Panel B: GED}}\\
+\hspace{1em}\hspace{1em}AP.ratio.1 & 1.410197 & 1.549667 & 4.215094 & 1.425693 & 4.215094\\
+\hspace{1em}\hspace{1em}UC.1 & 9.728556 & 16.865292 & 374.509356 & 10.435424 & 374.509356\\
+\hspace{1em}\hspace{1em}CC.1 & 9.798167 & 20.014037 & 407.453235 & 13.097152 & 410.034187\\
+\hspace{1em}\hspace{1em}DQ.1 & 38.252121 & 45.476044 & 1802.464000 & 38.449617 & 1818.799317\\
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Panel C: ST}}\\
+\hspace{1em}\hspace{1em}AP.ratio.2 & 1.193243 & 1.162250 & 1.177747 & 1.177747 & 1.162250\\
+\hspace{1em}\hspace{1em}UC.2 & 2.292336 & 1.630851 & 1.948278 & 1.948278 & 1.630851\\
+\hspace{1em}\hspace{1em}CC.2 & 2.299459 & 3.395044 & 1.960383 & 3.760115 & 1.649281\\
+\hspace{1em}\hspace{1em}DQ.2 & 34.302619 & 25.005120 & 33.249369 & 19.102820 & 22.753461\\
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Panel D: T}}\\
+\hspace{1em}\hspace{1em}AP.ratio.3 & 1.472184 & 1.642647 & 1.487680 & 1.456687 & 1.503177\\
+\hspace{1em}\hspace{1em}UC.3 & 12.687425 & 22.547261 & 13.481127 & 11.915090 & 14.295977\\
+\hspace{1em}\hspace{1em}CC.3 & 12.922959 & 26.088554 & 13.628718 & 14.694682 & 14.482276\\
+\hspace{1em}\hspace{1em}DQ.3 & 43.912495 & 52.784288 & 41.642033 & 39.803194 & 54.968600\\
+\addlinespace[0.3em]
+\multicolumn{6}{l}{\textbf{Panel E: N}}\\
+\hspace{1em}\hspace{1em}AP.ratio.4 & 1.983574 & 2.076554 & 1.983574 & 1.937083 & 1.828607\\
+\hspace{1em}\hspace{1em}UC.4 & 49.027087 & 57.648354 & 49.027087 & 44.930069 & 35.947622\\
+\hspace{1em}\hspace{1em}CC.4 & 49.109426 & 57.902257 & 49.109426 & 45.011116 & 36.252515\\
+\hspace{1em}\hspace{1em}DQ.4 & 79.685528 & 90.173737 & 83.390986 & 75.628854 & 78.372757\\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \hypertarget{expected-shortfall}{%
 \subsection{Expected shortfall}\label{expected-shortfall}}
 
@@ -912,18 +943,11 @@ But let us formally test this.
 \hypertarget{time-varying-higher-moments}{%
 \section{Time-varying higher moments}\label{time-varying-higher-moments}}
 
-\hypertarget{robustcheck-testtitle-robusttest}{%
-\chapter{Robustcheck testtitle (\#Robusttest)}\label{robustcheck-testtitle-robusttest}}
-
-checks checks checks
-
-\minitoc 
-
-\hypertarget{Robustness}{%
-\chapter{Robustness Analysis}\label{Robustness}}
-
 \hypertarget{backtest}{%
 \section{Backtest}\label{backtest}}
+
+\hypertarget{Robusttest}{%
+\chapter{Robustness checks}\label{Robusttest}}
 
 \hypertarget{specification-checks}{%
 \section{Specification checks}\label{specification-checks}}
@@ -932,10 +956,7 @@ In order to check if the models are specified correctly, some specification chec
 \[ 
 \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
 \]
-
-\hypertarget{figures-control-tests}{%
-\subsection{Figures control tests}\label{figures-control-tests}}
-
+\#\#\# Figures control tests
 Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
 
 Then the density can be examined standardized residuals and compared with the normal distribution.
@@ -1175,7 +1196,9 @@ In practice a \(\xi\) of 0.94 is often used, such as by the financial risk manag
 \hypertarget{goodness-of-fit}{%
 \subsubsection{Goodness of fit}\label{goodness-of-fit}}
 
-\noindent As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. ~\textbackslash{}
+\noindent As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 124 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. ~\\
+
+\newpage
 
 First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions are looked at. As you can see the student's t distribution (T) performs better than general error distribution (GED), that performs better than the normal distribution (NORM) according to both the AIC and BIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
@@ -1187,6 +1210,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \caption{Goodness of fit symmetric GARCH and distributions}\label{fig:aic1}
 \end{figure}
+\clearpage
 \newpage
 
 \noindent Second, in figure \ref{fig:aic2}, symmetric GARCH with the best symmetric distribution (T) and the other distributions (SGED, ST) are looked at. As you can see consistent with \textcite{giot2003} the skewed student's t (ST) distribution outperforms the symmetric distributions. It also outperforms in terms of goodness of fit the SGED.
@@ -1199,7 +1223,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \caption{Goodness of fit symmetric GARCH and other distributions}\label{fig:aic2}
 \end{figure}
-
+\clearpage
 \newpage
 
 \noindent In figure \ref{fig:aic3} you can see the same patter as in figure \ref{fig:aic1}, the student's t distribution performs best among the symmetric distributions.

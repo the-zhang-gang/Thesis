@@ -659,15 +659,14 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
   footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
-  kable_styling(latex_options = "scale_down")
+  kable_styling(latex_options = "scale_down") %>% landscape()
 ```
-
+\clearpage
 \newpage
-
 ### Value-at-risk
 
 As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique.  A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ captures more of the downside events.
-```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', out.width='60%', echo=FALSE}
+```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', fig.pos = 'h', out.width='60%', echo=FALSE}
 par(mfrow = c(2,1))
 par(mar = c(2.1, 3.1, 1.1, 3.1))
 Conditional.variance <- sigma(garchfit.eGARCH[[3]])
@@ -685,10 +684,11 @@ ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green
 ```
 
 Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year. 
-```{block type='correction'}
-[note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)]{.correction}.
-```
+
+[|Note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)|]{highlight="pink"}
+
 Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+\newpage
 ``` {r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
@@ -711,7 +711,7 @@ egarch.stdback <- roll(garchspec.eGARCH[[2]])  #22.68 sec
 egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #24.02 sec
 egarch.gedback <- roll(garchspec.eGARCH[[4]])  #20.54 sec
 egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #30.70 sec
-
+View(egarch.sstdback)
 gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
 gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
 gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
@@ -739,7 +739,7 @@ avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
 
 As you can see in figure \@ref(figurebacktests2) the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
 
-```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, eval = FALSE}
+```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, echo=FALSE}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(2,1), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD
@@ -892,16 +892,6 @@ df %>% kbl(booktabs=T, format="latex") %>%
   pack_rows("Panel E: N", 17,20) %>% add_indent(c(1:16, 18:20))
 ```
 
-
-### Expected shortfall
-
-```{r}
-# Bootstrap Test for the Expected Shortfall?
-# V-TEST?
-
-# what's in rugarch?
-```
-
 \clearpage
 
 ## Time-varying higher moments
@@ -962,7 +952,7 @@ n = length(spec)
 fitlist = vector(mode = 'list', length = n)
 start <- Sys.time()
 for (i in 1:n) {
-tmp = ugarchroll(spec[[i]], R, n.ahead = 1, forecast.length = 1500, refit.every = 50, refit.window = 'moving', windows.size = 1500, solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
+tmp = ugarchroll(spec[[i]], R, n.ahead = 1,n.start=2500, forecast.length = 1, refit.every = 252, refit.window = 'moving', solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
 if (!is.null(tmp@model$noncidx)) {
 tmp = resume(tmp, solver = 'solnp', fit.control = list(scale = 1), solver.control = list(tol = 1e-07, delta = 1e-06), cluster = cluster)
 if (!is.null(tmp@model$noncidx))
@@ -1021,7 +1011,7 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 
 ```
 
-# Robustness checks  {#Robusttest}
+# Robustness checks  {#Robustness}
 
 ## Specification checks
 In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
