@@ -712,7 +712,7 @@ egarch.stdback <- roll(garchspec.eGARCH[[2]])  #22.68 sec
 egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #24.02 sec
 egarch.gedback <- roll(garchspec.eGARCH[[4]])  #20.54 sec
 egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #30.70 sec
-View(egarch.sstdback)
+
 gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
 gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
 gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
@@ -798,19 +798,9 @@ gettests <- function(x) {
   dq <- BacktestVaR(R[2501:nrow(R)],x,0.01, 5)$DQ
   return(list = list(ae = ae, uc = uc, cc = cc, dq = dq))
 }
-
-gettests(VaR.sstd.egarch)
-report(egarch.sstdback, type = "VaR") #if we use the rugarch method we get the same LRuc and LRcc, only thing that is additional is the amount of exceed and actual exceed that is present in the report and not in the BacktestVaR
-
-gettests(VaR.sstd.egarch)
-gettests(VaR.norm.egarch)
-
 ```
 
 ```{r tableStephane, echo=F, results='asis'}
-## table %>% kbl() %>%... 
-
-
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
 e_sstd <- gettests(VaR.sstd.egarch)
@@ -828,9 +818,6 @@ t_ged <- gettests(VaR.ged.tgarch)
 t_sstd <- gettests(VaR.sstd.tgarch)
 t_std <- gettests(VaR.std.tgarch)
 t_norm <- gettests(VaR.norm.tgarch)
-
-
-
 
 na_sged <- gettests(VaR.sged.nagarch)
 na_ged <- gettests(VaR.ged.nagarch)

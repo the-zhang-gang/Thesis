@@ -98,10 +98,11 @@ output:
     citation_package: biblatex
     template: templates/template.tex
     keep_tex: true
-    #pandoc_args: "--lua-filter=scripts_and_filters/colour_and_highlight.lua"
+    #pandoc_args: 
     pandoc_args:
       - '--lua-filter=templates/scholarly-metadata.lua'
       - '--lua-filter=templates/author-info-blocks.lua'
+      - '--lua-filter=scripts_and_filters/colour_and_highlight.lua'
   bookdown::bs4_book: 
     css: 
       - templates/bs4_style.css

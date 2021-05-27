@@ -201,7 +201,7 @@ m <- mean(R)
 # Define the series of prediction errors
 e <- R - m
 # Plot the absolute value of the prediction errors
-par(mfrow = c(2,2),mar=c(1,4,4,2)+0.1)
+par(mfrow = c(2,2),mar=c(2,4,4,2)+0.1)
 plot.zoo(abs(e), main = "Absolute Prediction Error",col = "steelblue", ylab = expression(paste("|",epsilon,"|")))
 plot.zoo(e^2,main = "Squared Prediction Error", col = "steelblue", ylab =(expression(paste(epsilon^2))))
 # Plot the acf of the absolute prediction errors

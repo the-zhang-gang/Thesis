@@ -326,7 +326,7 @@ are normally distributed.
 \hypertarget{styl-facts}{%
 \section{Stylized facts of returns}\label{styl-facts}}
 
-\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distribution. Are these valid assumptions? Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
+\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are iid, or independently and identically distributed, another is that they are normally distributed. Are these valid assumptions? Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
 
 \begin{itemize}
 \tightlist
@@ -342,7 +342,7 @@ are normally distributed.
   Returns are \emph{not normally distributed} which is also one of the conclusions by \textcite{fama1965}. Returns have tails fatter than a normal distribution (leptokurtosis) and thus are riskier than under the normal distribution. Log returns \textbf{can} be assumed to be normally distributed. However, this will be examined in our empirical analysis if this is appropriate. This makes that simple returns follow a log-normal distribution, which is a skewed density distribution. A good summary is given by \textcite{alexander2008} as: ``In general, we need to know more about the distribution of returns than its expected return and its volatility. Volatility tells us the \emph{scale} and the mean tells us the \emph{location}, but the dispersion also depends on the \textbf{\emph{shape}} of the distribution. The best dispersion metric would be based on the entire distribution function of returns.''
 \end{itemize}
 
-\noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix we summarize some alternative distributions (T, GED, ST, SGED, SGT) that could be a better approximation of returns than the normal one.
+\noindent Firms holding a portfolio have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or the density function. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix part \ref{conditional-distributions} we summarize some alternative distributions (T, GED, ST, SGED, SGT) that could be a better approximation of returns than the normal one.
 
 \newpage
 
@@ -536,19 +536,11 @@ While it is relatively straightforward to include unconditional higher-moments i
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 01 January, 1987 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to 1987
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index\footnote{The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.} denoted in EUR from 01 January, 1987 to 27 April, 2021. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to 1987).~\\
 
-\hypertarget{descriptives}{%
-\subsection{Descriptives}\label{descriptives}}
+\noindent Table \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).~\\
 
-\hypertarget{table-of-summary-statistics}{%
-\subsubsection{Table of summary statistics}\label{table-of-summary-statistics}}
-
-Equation \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).
-
-\noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.207. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 19520.307 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. ~\\
-
-\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2\(*\). Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at NA, given its high significance, confirms the rejection of the normality assumption.
+\noindent The arithmetic mean of the series is 0.017\% with a standard deviation of 1.307\% and a median of 0.036 which translate to an annualized mean of 4.208\% and an annualized standard deviation of 20.748\%. The skewness statistic is highly significant and negative at -0.31 and the excess kurtosis is also highly significant and positive at 7.207. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 10429.919 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.
 
 \begin{table}[h!]
 
@@ -574,55 +566,56 @@ Jarque-Bera & 19520.3072*** & 10429.9193***\\
 \end{tabular}
 \begin{tablenotes}
 \item Notes
-\item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-02 to 2021-04-27 (8953 observations). Including arithmetic mean, median, maximum, minimum, standard deviation, skewness, excess kurtosis and the Jarque-Bera test.
+\item[1] This table shows the descriptive statistics of the daily percentage returns of EURO STOXX 50 over the period 1987-01-02 to 2021-04-27 (8953 observations). Including arithmetic mean, median, maximum, minimum, standard deviation. The skewness, excess kurtosis with p-value and signicance and the Jarque-Bera test with significance.
 \item[2] The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
 \item[3] *, **, *** represent significance levels at the 5%, 1% and <1%.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-\hypertarget{descriptive-figures}{%
-\subsubsection{Descriptive figures}\label{descriptive-figures}}
+\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2. Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at 19520.307, given its high significance, confirms the rejection of the normality assumption.~\\
 
-\textbf{Stylized facts}~\\
 \noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the Euro Stoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/plot1-1} 
+{\centering \includegraphics[width=0.95\linewidth]{_main_files/figure-latex/plot1-1} 
 
 }
 
 \caption{Euro Stoxx 50 Price Index prices}\label{fig:plot1}
 \end{figure}
 
-\newpage
-
 \noindent In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.75\linewidth]{figures/vol-clustering-final} 
+{\centering \includegraphics[width=0.7\linewidth]{figures/vol-clustering-finalized-2} 
 
 }
 
 \caption{Euro Stoxx 50 Price Index log returns}\label{fig:plot2}
 \end{figure}
 
+\newpage
+
+\noindent In figure \ref{fig:plot3} you can see a proxy for risk, the rolling volatility over one month (22 trading days) calculated using a rolling window of 252 days. As in figure \ref{fig:plot2}, you can see again the pattern of volatility clustering arise.
+
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.75\linewidth]{_main_files/figure-latex/plot3-1} 
+{\centering \includegraphics[width=0.65\linewidth]{_main_files/figure-latex/plot3-1} 
 
 }
 
 \caption{Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)}\label{fig:plot3}
 \end{figure}
 
+\clearpage
 \newpage
 
-\noindent In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed. So
+\noindent In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed.
 
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=0.75\linewidth]{_main_files/figure-latex/plot4-1} 
 
@@ -633,7 +626,7 @@ Jarque-Bera & 19520.3072*** & 10429.9193***\\
 
 \newpage
 
-\noindent ACF plots: to do\ldots{}
+\noindent In figure \ref{fig:acfplots} the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this, while in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component\footnote{\(\alpha_0\) is most of the time referred to as the \(\mu\) in the conditional mean equation. Here we have followed \textcite{bali2008}.} \(\alpha_0\) is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.
 
 \begin{figure}[h]
 
@@ -652,9 +645,9 @@ Jarque-Bera & 19520.3072*** & 10429.9193***\\
 \hypertarget{garch-method}{%
 \subsection{Garch models}\label{garch-method}}
 
-\noindent As already mentioned in part \ref{univ-garch}, GARCH models GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood\footnote{ As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language (v.3.6.1) with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.}.~\\
+\noindent As already mentioned in part \ref{univ-garch}, the following models: symmetric GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood\footnote{ As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language\footnotemark{} \autocite{Rteam} with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.}.~\\
 
-\noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) (equation \eqref{eq:pdf}). These functions are based on the joint probability distribution of the observed data (equation \eqref{eq:logl}). Subsequently, the (log)likelihood function is maximized using an optimization algorithm (equation \eqref{eq:optim}).
+\noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) in equation \eqref{eq:pdf}. These functions are based on the joint probability distribution of the observed data as in equation \eqref{eq:logl}. Subsequently, the (log)likelihood function is maximized using an optimization algorithm shown inequation \eqref{eq:optim}.
 
 \begin{align} 
   y_1,y_2,...,y_N \sim i.i.d
@@ -665,16 +658,17 @@ Jarque-Bera & 19520.3072*** & 10429.9193***\\
 
 \begin{align} 
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
-  \\
- \log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)
  \label{eq:logl}
 \end{align}
 
+\[\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)\]
+
 \begin{align} 
-\theta^{*} = arg \max_{\theta} [ L] \\
-\theta^{*} = arg \max_{\theta} [\log(L)]
+\theta^{*} = arg \max_{\theta} [ L] 
  \label{eq:optim}
 \end{align}
+
+\[\theta^{*} = arg \max_{\theta} [\log(L)]\]
 
 \hypertarget{acd-models-meth}{%
 \subsection{ACD models}\label{acd-models-meth}}
@@ -744,7 +738,7 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \noindent \textcite{engle2004} provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \eqref{eq:dq1}, with \(I(.)\) a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. \(\theta\) is the confidence level. They test jointly \(H_0\) that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period (\(B\)), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \eqref{eq:dq2}. \(X\delta\) corresponds to the matrix notation. Under \(H_0\), this regression should have no explanatory power. As a final step, a \(\chi^2\)-distributed test statistic is constructed as in \eqref{eq:dq3}.
 
 \begin{align}
-\text { Hit }_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
+Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
 \label{eq:dq1}
 \end{align}
 
@@ -836,7 +830,7 @@ $LLH$ & -13065.425 & -13067.628 & -12950.977 & -12972.473 & -13113.368 & -12935.
 
 As you can see in table \ref{tab:aicTable} the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \ref{goodness-of-fit}. The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
-\begin{table}[h!]
+\begin{landscape}\begin{table}[h!]
 
 \caption{\label{tab:aicTable}Model selection according to AIC}
 \centering
@@ -859,6 +853,7 @@ sged & 2.927 & 2.928 & 2.940 & 2.902 & 2.907 & 2.898 & 7.675 & 7.672\\
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+\end{landscape}
 \clearpage
 \newpage
 
@@ -878,7 +873,10 @@ As already mentioned 2 candidate models seem to be very appropriate. This includ
 
 Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
 
+\sethlcolor{pink}\hl{\textbar Note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package\ldots)\textbar{}}\sethlcolor{correctioncolor}
+
 Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
+\newpage
 
 \begin{figure}
 
@@ -892,6 +890,15 @@ Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period 
 \newpage
 
 As you can see in figure \ref{figurebacktests2} the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
+
+\begin{figure}
+
+{\centering \includegraphics{_main_files/figure-latex/figurebacktests2-1} 
+
+}
+
+\caption{Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N}\label{fig:figurebacktests2}
+\end{figure}
 
 But let us formally test this.
 
@@ -935,9 +942,6 @@ But let us formally test this.
 \end{tabular}
 \end{table}
 
-\hypertarget{expected-shortfall}{%
-\subsection{Expected shortfall}\label{expected-shortfall}}
-
 \clearpage
 
 \hypertarget{time-varying-higher-moments}{%
@@ -946,8 +950,8 @@ But let us formally test this.
 \hypertarget{backtest}{%
 \section{Backtest}\label{backtest}}
 
-\hypertarget{Robusttest}{%
-\chapter{Robustness checks}\label{Robusttest}}
+\hypertarget{Robustness}{%
+\chapter{Robustness checks}\label{Robustness}}
 
 \hypertarget{specification-checks}{%
 \section{Specification checks}\label{specification-checks}}
@@ -1106,7 +1110,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 \begin{split}
 \hat{\sigma}^2 
 &= \dfrac{\beta_0}{1 - \hat{P}} \\
-&= \dfrac{\beta_1}{1 - \beta_1 - \beta_2}
+&= \dfrac{\beta_0}{1 - \beta_1 - \beta_2}
 \end{split}
  \label{eq:eq15}
 \end{equation}
@@ -1174,8 +1178,6 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
  \label{eq:eq20}
 \end{align}
 
-\newpage
-
 \hypertarget{ewma}{%
 \subparagraph{EWMA}\label{ewma}}
 
@@ -1204,7 +1206,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/symmetric aics} 
+{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/symmetric aics} 
 
 }
 
@@ -1217,7 +1219,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/symmetric aics2} 
+{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/symmetric aics2} 
 
 }
 
@@ -1230,7 +1232,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/asymmetric aics} 
+{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/asymmetric aics} 
 
 }
 
@@ -1243,13 +1245,12 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.7\linewidth]{figures/aicfigures/asymmetric aics2} 
+{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/asymmetric aics2} 
 
 }
 
 \caption{Goodness of fit asymmetric GARCH and symmetric distributions}\label{fig:aic4}
 \end{figure}
-\clearpage
 
 \noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above\footnote{Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.}.
 
