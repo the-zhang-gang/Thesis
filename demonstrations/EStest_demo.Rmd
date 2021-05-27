@@ -1,0 +1,40 @@
+---
+title: "EStest_demo"
+author: "Stephane Mertens de Wilmars"
+date: "27-5-2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(rugarch)
+```
+
+```{r}
+
+
+roll <- as.data.frame(egarch.sstdback, which = "density")
+dist <- "sstd"
+
+f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
+
+#VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
+# VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
+
+
+ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
+  integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
+names(ES) <- "ES"
+
+ESTest(0.01, R[-c(1:2500),], ES[,1], VaR.sstd.egarch, conf.level = 0.99, boot = T)
+
+# length(R)
+# nrow(ES)
+# length(VaR.sstd.egarch)
+
+
+
+
+
+```
+

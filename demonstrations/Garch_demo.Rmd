@@ -1,0 +1,271 @@
+---
+title: "rugarch tutorial"
+author: "Stephane Mertens de Wilmars"
+date: "26-4-2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(BatchGetSymbols)
+library(PerformanceAnalytics)
+library(lubridate)
+library(rugarch)
+```
+
+```{r}
+index_ticker <- "SPY"
+n <- 10
+
+sp500 <- BatchGetSymbols(
+index_ticker,
+first.date = Sys.Date() - years(n),
+last.date = Sys.Date(),
+type.return = "arit",
+freq.data = "daily",
+how.to.aggregate = "first",
+be.quiet = T,
+do.complete.data = TRUE,
+do.fill.missing.prices = F,
+)$df.tickers
+
+sp500prices <- xts(sp500$price.close, order.by = sp500$ref.date)
+
+sp500ret <- CalculateReturns(sp500prices)
+```
+
+```{r}
+sqrt(252) * sd(sp500ret["2017"]) #annualized volatility for a given year
+
+par(mfrow=c(2,1))
+chart.RollingPerformance(R= sp500ret["2010::2017"], width = 22, FUN = "sd.annualized", main = "One Month rolling volatility")
+chart.RollingPerformance(R= sp500ret["2010::2017"], width = 66, FUN = "sd.annualized", main = "Three Month rolling volatility")
+
+
+```
+```{r}
+# Compute the mean daily return
+m <- mean(sp500ret[-1,])
+
+# Define the series of prediction errors
+e <- sp500ret[-1,] - m
+
+# Plot the absolute value of the prediction errors
+par(mfrow = c(2,1),mar = c(3, 2, 2, 2))
+plot(abs(e))
+
+# Plot the acf of the absolute prediction errors
+acf(abs(e))
+
+sp500ret <- sp500ret[-1,]
+```
+
+```{r}
+# Compute the predicted variances
+
+nobs <- length(sp500ret)
+predvar <- sp500ret*0
+
+#parametrization
+e2 <- e^2
+alpha <- 0.1
+beta <- 0.8
+omega <- var(sp500ret)*(1-alpha-beta)
+
+#loop
+predvar[1] <- var(sp500ret) 
+for(t in 2:nobs){
+   predvar[t] <- omega + alpha * e2[t-1] + beta * predvar[t-1]
+}
+
+# Create annualized predicted volatility
+ann_predvol <- xts(sqrt(252) * sqrt(predvar), order.by = time(sp500ret))
+
+# Plot the annual predicted volatility in 2008 and 2009
+plot(ann_predvol["2010::2017"], main = "Ann. S&P 500 vol in 2010-2017")
+```
+
+```{r estimating garch}
+#1. ugarchspec()
+#2. ugarchfit()
+#3. ugarchforecast()
+
+#coefficients
+# garchcoef <- coef(garchfit)
+#unc. variance
+#garchuncvar <- uncvariance(garchfit)
+#pred. mean
+#garchmean <- fitted(garchfit)
+#garchvol <- sigma(garchfit)
+
+#last day volatility
+# tail(garchvol, 1)
+
+# Specify a standard GARCH model with constant mean
+garchspec <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
+                 variance.model = list(model = "sGARCH"), 
+                 distribution.model = "norm")
+
+# Estimate the model
+garchfit <- ugarchfit(data = sp500ret, spec = garchspec)
+
+# Use the method sigma to retrieve the estimated volatilities 
+garchvol <- sigma(garchfit)
+
+# Plot the volatility for 2017
+plot(garchvol["2017"])
+```
+
+
+```{r forecasting volatility}
+
+# Compute unconditional volatility
+sqrt(uncvariance(garchfit))
+
+# Print last 10 ones in garchvol
+tail(garchvol, 10)
+
+# Forecast volatility 5 days ahead and add 
+garchforecast <- ugarchforecast(fitORspec = garchfit, 
+                                n.ahead = 5)
+
+# Extract the predicted volatilities and print them
+print(sigma(garchforecast))
+
+```
+
+```{r skewed student t distribution}
+
+#Specify the garch model to be used
+garchspec <- ugarchspec(mean.model = list(armaOrder = c(0,0)),
+                        variance.model = list(model = "sGARCH"),
+                        distribution.model = "sstd")
+
+# Estimate the model
+garchfit <- ugarchfit(data = sp500ret, spec = garchspec)
+
+# Inspect the coefficients
+coef(garchfit) #shape is degrees of freedom
+```
+
+
+```{r}
+# Specify AR(1)-GJR GARCH model
+garchspec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                        variance.model = list(model = "gjrGARCH"),
+                        distribution.model = "sstd")
+# Estimate the model
+garchfit <- ugarchfit(data = sp500ret, spec = garchspec)
+
+# Print the coefficients
+coef(garchfit)[c(1:2)]
+
+#all.equal()
+?all.equal()
+```
+
+```{r statistical significance}
+# Specify model with AR(1) dynamics, GJR GARCH and skewed student t
+flexgarchspec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                            variance.model = list(model = "gjrGARCH"),
+                            distribution.model = "sstd")
+
+# Estimate the model
+flexgarchfit <- ugarchfit(data = sp500ret, spec = flexgarchspec)
+
+# Complete and study the statistical significance of the estimated parameters 
+round(flexgarchfit@fit$matcoef,6)
+```
+```{r testing garch performance}
+
+likelihood(flexgarchfit)
+infocriteria(flexgarchfit)
+garcherrors <- residuals(flexgarchfit) #prediction errors
+mean((sigma(flexgarchfit)^2 - garcherrors^2)^2)
+
+length(coef(garchfit)) #amount of parameters
+
+```
+
+```{r constant mean & error should be 0 and 1, for normaldist returns}
+# Compute the standardized returns
+stdret <- residuals(flexgarchfit, standardize = TRUE)
+ 
+# Compute their sample mean and standard deviation
+mean(stdret)
+sd(stdret)
+
+
+```
+
+```{r corrolelogram & jungbox}
+# Correlogram of the absolute (standardized) returns
+par(mfrow = c(1, 2))
+acf(abs(stdret), lag.max=22)
+acf(abs(stdret), lag.max=22)
+
+# Ljung-Box test
+Box.test(abs(stdret), 22, type = "Ljung-Box") #H0: residuals of autocorrelation model are zero. No rejection means model is valid
+```
+
+```{r VaR}
+
+#specify the model
+
+garchspec <- ugarchspec(mean.model = list(armaOrder = c(1,0)), variance.model = list(model = "gjrGARCH"), distribution.model = "sstd")
+
+#estimate the model on rolling samples
+
+garchroll <- ugarchroll(garch)
+
+# Extract the dataframe with predictions from the rolling GARCH estimation
+garchpreds <- as.data.frame(garchroll)
+
+# Extract the VaR 
+garchVaR <- quantile(garchroll, probs = 0.05)
+
+# Extract the volatility from garchpreds
+garchvol <- xts(garchpreds$Sigma, order.by = time(garchVaR))
+
+# Analyze the comovement in a time series plot
+garchplot <- plot(garchvol, ylim = c(-0.1, 0.1))
+garchplot <- addSeries(garchVaR, on = 1, col = "blue")
+plot(garchplot, main = "Daily vol and 5% VaR")
+```
+
+```{r max likelihood}
+
+
+
+heads <- rbinom(1,100,0.5)
+
+
+likelihood <- function(p){
+  dbinom(heads, 100, p)*-1
+}
+
+nlm(likelihood,0.5,stepmax=0.5)
+
+
+data <- rnorm(1000, 2, 0.1)
+
+likelihood2 <- function(parameters){
+  p <- parameters[1]
+  q <- parameters[2]
+  dnorm(data,p, q)*-1
+}
+
+
+
+parameters <- array(c(1.5,0.09), dim = c(2,1))
+
+likelihood2(parameters)
+
+
+
+nlm(likelihood2,parameters,stepmax=0.5)
+
+
+
+```
+
