@@ -800,6 +800,150 @@ gettests <- function(x) {
 }
 ```
 
+```{r ES_Test}
+ESTesting <- function(garch.back, var, dist){
+  
+  roll <- as.data.frame(garch.back, which = "density",)
+  
+  
+  f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
+  
+  #VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
+  # VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
+  
+  
+  ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
+    integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
+  names(ES) <- "ES"
+  
+  ESTest_object <- ESTest(0.01, R[-c(1:2500),], ES[,1], var, conf.level = 0.99, boot = T)
+  
+  # length(R)
+  # nrow(ES)
+  # length(VaR.sstd.egarch)
+  
+  AE_ES <- as.numeric(ESTest_object[2])/as.numeric(ESTest_object[1])
+  AE_ES.p <- ESTest_object[4] #bootstrapped p-value
+  
+  
+  return(list(ES,AE_ES,AE_ES.p))
+}
+
+
+#ES for egarch
+
+e_sged_ES <- ESTesting(egarch.sgedback, VaR.sged.egarch, "sged")
+e_sged_AE_ES <- e_sged_ES[2]
+e_sged_AE_p <- e_sged_ES[[3]] 
+
+e_ged_ES <- ESTesting(egarch.gedback, VaR.ged.egarch, "ged")
+e_ged_AE_ES <- e_ged_ES[2]
+e_ged_AE_p <- e_ged_ES[[3]] 
+
+e_sstd_ES <- ESTesting(egarch.sstdback, VaR.sstd.egarch, "sstd")
+e_sstd_AE_ES <- e_sstd_ES[2]
+e_sstd_AE_p <- e_sstd_ES[[3]] 
+
+e_std_ES <- ESTesting(egarch.sstdback, VaR.std.egarch, "std")
+e_std_AE_ES <- e_std_ES[2]
+e_std_AE_p <- e_std_ES[[3]] 
+
+e_norm_ES <- ESTesting(egarch.normback, VaR.norm.egarch, "norm")
+e_norm_AE_ES <- e_norm_ES[2]
+e_norm_AE_p <- e_norm_ES[[3]]
+
+#ES for gjrgarch
+
+gjr_sged_ES <- ESTesting(gjrgarch.sgedback, VaR.sged.gjrgarch,"sged")
+gjr_sged_AE_ES <- gjr_sged_ES[2]
+gjr_sged_AE_p <- gjr_sged_ES[[3]] 
+
+gjr_ged_ES <- ESTesting(gjrgarch.gedback, VaR.ged.gjrgarch,"ged")
+gjr_ged_AE_ES <- gjr_ged_ES[2]
+gjr_ged_AE_p <- gjr_ged_ES[[3]] 
+
+gjr_sstd_ES <- ESTesting(gjrgarch.sstdback, VaR.sstd.gjrgarch,"sstd")
+gjr_sstd_AE_ES <- gjr_sstd_ES[2]
+gjr_sstd_AE_p <- gjr_sstd_ES[[3]] 
+
+gjr_std_ES <- ESTesting(gjrgarch.sstdback,VaR.std.gjrgarch, "std")
+gjr_std_AE_ES <- gjr_std_ES[2]
+gjr_std_AE_p <- gjr_std_ES[[3]] 
+
+gjr_norm_ES <- ESTesting(gjrgarch.normback, VaR.norm.gjrgarch,"norm")
+gjr_norm_AE_ES <- gjr_norm_ES[2]
+gjr_norm_AE_p <- gjr_norm_ES[[3]]
+
+#ES for tgarch
+
+t_sged_ES <- ESTesting(tgarch.sgedback, VaR.sged.tgarch,"sged")
+t_sged_AE_ES <- t_sged_ES[2]
+t_sged_AE_p <- t_sged_ES[[3]] 
+
+t_ged_ES <- ESTesting(tgarch.gedback, VaR.ged.tgarch,"ged")
+t_ged_AE_ES <- t_ged_ES[2]
+t_ged_AE_p <- t_ged_ES[[3]] 
+
+t_sstd_ES <- ESTesting(tgarch.sstdback, VaR.sstd.tgarch,"sstd")
+t_sstd_AE_ES <- t_sstd_ES[2]
+t_sstd_AE_p <- t_sstd_ES[[3]] 
+
+t_std_ES <- ESTesting(tgarch.sstdback, VaR.std.tgarch,"std")
+t_std_AE_ES <- t_std_ES[2]
+t_std_AE_p <- t_std_ES[[3]] 
+
+t_norm_ES <- ESTesting(tgarch.normback, VaR.norm.tgarch,"norm")
+t_norm_AE_ES <- t_norm_ES[2]
+t_norm_AE_p <- t_norm_ES[[3]]
+
+#ES for nagarch
+
+na_sged_ES <- ESTesting(nagarch.sgedback, VaR.sged.nagarch,"sged")
+na_sged_AE_ES <- na_sged_ES[2]
+na_sged_AE_p <- na_sged_ES[[3]] 
+
+na_ged_ES <- ESTesting(nagarch.gedback, VaR.ged.nagarch,"ged")
+na_ged_AE_ES <- na_ged_ES[2]
+na_ged_AE_p <- na_ged_ES[[3]] 
+
+na_sstd_ES <- ESTesting(nagarch.sstdback, VaR.sstd.nagarch,"sstd")
+na_sstd_AE_ES <- na_sstd_ES[2]
+na_sstd_AE_p <- na_sstd_ES[[3]] 
+
+na_std_ES <- ESTesting(nagarch.sstdback, VaR.std.nagarch,"std")
+na_std_AE_ES <- na_std_ES[2]
+na_std_AE_p <- na_std_ES[[3]] 
+
+na_norm_ES <- ESTesting(nagarch.normback, VaR.norm.nagarch,"norm")
+na_norm_AE_ES <- na_norm_ES[2]
+na_norm_AE_p <- na_norm_ES[[3]]
+
+#ES for avgarch
+
+av_sged_ES <- ESTesting(avgarch.sgedback, VaR.sged.avgarch,"sged")
+av_sged_AE_ES <- av_sged_ES[2]
+av_sged_AE_p <- av_sged_ES[[3]] 
+
+av_ged_ES <- ESTesting(avgarch.gedback, VaR.ged.avgarch,"ged")
+av_ged_AE_ES <- av_ged_ES[2]
+av_ged_AE_p <- av_ged_ES[[3]] 
+
+av_sstd_ES <- ESTesting(avgarch.sstdback, VaR.sstd.avgarch,"sstd")
+av_sstd_AE_ES <- av_sstd_ES[2]
+av_sstd_AE_p <- av_sstd_ES[[3]] 
+
+av_std_ES <- ESTesting(avgarch.sstdback, VaR.std.avgarch,"std")
+av_std_AE_ES <- av_std_ES[2]
+av_std_AE_p <- av_std_ES[[3]] 
+
+av_norm_ES <- ESTesting(avgarch.normback, VaR.norm.avgarch,"norm")
+av_norm_AE_ES <- av_norm_ES[2]
+av_norm_AE_p <- av_norm_ES[[3]]
+
+
+```
+
+
 ```{r tableStephane, echo=F, results='asis'}
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
@@ -833,35 +977,37 @@ av_norm <- gettests(VaR.norm.avgarch)
 
 #TABLE LAYOUT 
 
-table_tests <- matrix(nrow=25,ncol=5)
-rownames(table_tests) <- c("SGED","AP-ratio", "UC","CC","DQ","GED","AP-ratio","UC","CC","DQ","ST","AP-ratio","UC","CC","DQ","T","AP-ratio","UC","CC","DQ","Norm","AP-ratio","UC","CC","DQ")
+table_tests <- matrix(nrow=30,ncol=5)
+rownames(table_tests) <- c("SGED","AE_var","AE_ES", "UC","CC","DQ","GED","AE_var","AE_ES","UC","CC","DQ","ST","AE_var","AE_ES","UC","CC","DQ","T","AE_var","AE_ES","UC","CC","DQ","Norm","AE_var","AE_ES","UC","CC","DQ")
 colnames(table_tests) <- c("eGarch","gjrGarch","tGarch","naGarch","avGarch")
 
 #STATISTICS
 
 table_tests[2,] <- c(e_sged$ae, gjr_sged$ae,t_sged$ae,na_sged$ae,av_sged$ae)
-table_tests[7,]<- c(e_ged$ae, gjr_ged$ae,t_ged$ae,na_ged$ae,av_ged$ae)
-table_tests[12,]<- c(e_sstd$ae, gjr_sstd$ae,t_sstd$ae,na_sstd$ae,av_sstd$ae)
-table_tests[17,]<- c(e_std$ae, gjr_std$ae,t_std$ae,na_std$ae,av_std$ae)
-table_tests[22,]<- c(e_norm$ae, gjr_norm$ae,t_norm$ae,na_norm$ae,av_norm$ae)
-
-table_tests[3,] <- c(e_sged$uc[1], gjr_sged$uc[1],t_sged$uc[1],na_sged$uc[1],av_sged$uc[1])
-table_tests[8,]<- c(e_ged$uc[1], gjr_ged$uc[1],t_ged$uc[1],na_ged$uc[1],av_ged$uc[1])
-table_tests[13,]<- c(e_sstd$uc[1], gjr_sstd$uc[1],t_sstd$uc[1],na_sstd$uc[1],av_sstd$uc[1])
-table_tests[18,]<- c(e_std$uc[1], gjr_std$uc[1],t_std$uc[1],na_std$uc[1],av_std$uc[1])
-table_tests[23,]<- c(e_norm$uc[1], gjr_norm$uc[1],t_norm$uc[1],na_norm$uc[1],av_norm$uc[1])
-
-table_tests[4,] <- c(e_sged$cc[1], gjr_sged$cc[1],t_sged$cc[1],na_sged$cc[1],av_sged$cc[1])
-table_tests[9,]<- c(e_ged$cc[1], gjr_ged$cc[1],t_ged$cc[1],na_ged$cc[1],av_ged$cc[1])
-table_tests[14,]<- c(e_sstd$cc[1], gjr_sstd$cc[1],t_sstd$cc[1],na_sstd$cc[1],av_sstd$cc[1])
-table_tests[19,]<- c(e_std$cc[1], gjr_std$cc[1],t_std$cc[1],na_std$cc[1],av_std$cc[1])
-table_tests[24,]<- c(e_norm$cc[1], gjr_norm$cc[1],t_norm$cc[1],na_norm$cc[1],av_norm$cc[1])
-
-table_tests[5,] <- c(e_sged$dq$stat, gjr_sged$dq$stat,t_sged$dq$stat,na_sged$dq$stat,av_sged$dq$stat)
-table_tests[10,]<- c(e_ged$dq$stat, gjr_ged$dq$stat,t_ged$dq$stat,na_ged$dq$stat,av_ged$dq$stat)
-table_tests[15,]<- c(e_sstd$dq$stat, gjr_sstd$dq$stat,t_sstd$dq$stat,na_sstd$dq$stat,av_sstd$dq$stat)
-table_tests[20,]<- c(e_std$dq$stat, gjr_std$dq$stat,t_std$dq$stat,na_std$dq$stat,av_std$dq$stat)
-table_tests[25,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$stat,av_norm$dq$stat)
+table_tests[3,] <- c(as.numeric(e_sged_AE_ES), as.numeric(gjr_sged_AE_ES), as.numeric(t_sged_AE_ES), as.numeric(na_sged_AE_ES), as.numeric(av_sged_AE_ES))
+table_tests[4,] <- c(e_sged$uc[1], gjr_sged$uc[1],t_sged$uc[1],na_sged$uc[1],av_sged$uc[1])
+table_tests[5,] <- c(e_sged$cc[1], gjr_sged$cc[1],t_sged$cc[1],na_sged$cc[1],av_sged$cc[1])
+table_tests[6,] <- c(e_sged$dq$stat, gjr_sged$dq$stat,t_sged$dq$stat,na_sged$dq$stat,av_sged$dq$stat)
+table_tests[8,]<- c(e_ged$ae, gjr_ged$ae,t_ged$ae,na_ged$ae,av_ged$ae)
+table_tests[9,] <- c(as.numeric(e_ged_AE_ES), as.numeric(gjr_ged_AE_ES), as.numeric(t_ged_AE_ES), as.numeric(na_ged_AE_ES), as.numeric(av_ged_AE_ES))
+table_tests[10,]<- c(e_ged$uc[1], gjr_ged$uc[1],t_ged$uc[1],na_ged$uc[1],av_ged$uc[1])
+table_tests[11,]<- c(e_ged$cc[1], gjr_ged$cc[1],t_ged$cc[1],na_ged$cc[1],av_ged$cc[1])
+table_tests[12,]<- c(e_ged$dq$stat, gjr_ged$dq$stat,t_ged$dq$stat,na_ged$dq$stat,av_ged$dq$stat)
+table_tests[14,]<- c(e_sstd$ae, gjr_sstd$ae,t_sstd$ae,na_sstd$ae,av_sstd$ae)
+table_tests[15,] <- c(as.numeric(e_sstd_AE_ES), as.numeric(gjr_sstd_AE_ES), as.numeric(t_sstd_AE_ES), as.numeric(na_sstd_AE_ES), as.numeric(av_sstd_AE_ES))
+table_tests[16,]<- c(e_sstd$uc[1], gjr_sstd$uc[1],t_sstd$uc[1],na_sstd$uc[1],av_sstd$uc[1])
+table_tests[17,]<- c(e_sstd$cc[1], gjr_sstd$cc[1],t_sstd$cc[1],na_sstd$cc[1],av_sstd$cc[1])
+table_tests[18,]<- c(e_sstd$dq$stat, gjr_sstd$dq$stat,t_sstd$dq$stat,na_sstd$dq$stat,av_sstd$dq$stat)
+table_tests[20,]<- c(e_std$ae, gjr_std$ae,t_std$ae,na_std$ae,av_std$ae)
+table_tests[21,] <- c(as.numeric(e_std_AE_ES), as.numeric(gjr_std_AE_ES), as.numeric(t_std_AE_ES), as.numeric(na_std_AE_ES), as.numeric(av_std_AE_ES))
+table_tests[22,]<- c(e_std$uc[1], gjr_std$uc[1],t_std$uc[1],na_std$uc[1],av_std$uc[1])
+table_tests[23,]<- c(e_std$cc[1], gjr_std$cc[1],t_std$cc[1],na_std$cc[1],av_std$cc[1])
+table_tests[24,]<- c(e_std$dq$stat, gjr_std$dq$stat,t_std$dq$stat,na_std$dq$stat,av_std$dq$stat)
+table_tests[26,]<- c(e_norm$ae, gjr_norm$ae,t_norm$ae,na_norm$ae,av_norm$ae)
+table_tests[27,] <- c(as.numeric(e_norm_AE_ES), as.numeric(gjr_norm_AE_ES), as.numeric(t_norm_AE_ES), as.numeric(na_norm_AE_ES), as.numeric(av_norm_AE_ES))
+table_tests[28,]<- c(e_norm$uc[1], gjr_norm$uc[1],t_norm$uc[1],na_norm$uc[1],av_norm$uc[1])
+table_tests[29,]<- c(e_norm$cc[1], gjr_norm$cc[1],t_norm$cc[1],na_norm$cc[1],av_norm$cc[1])
+table_tests[30,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$stat,av_norm$dq$stat)
 
 #PVALUES LOOPS
 
@@ -871,7 +1017,7 @@ colnames(df) <- c("EGARCH", "GJRGARCH", "TGARCH", "NAGARCH", "AVGARCH")
 row_group_label_fonts <- list(
 list(bold = T, italic = T)
 )
-df %>% kbl(booktabs=T, format="latex") %>% 
+df %>% kbl(booktabs=T) %>% 
   kable_styling() %>%
   pack_rows("Panel A: SGED", 1,4) %>%
   pack_rows("Panel B: GED", 5,8) %>%

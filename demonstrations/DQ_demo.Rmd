@@ -1,0 +1,55 @@
+---
+title: "demo quantile test"
+author: "Stephane Mertens de Wilmars"
+date: "25-5-2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("remotes")
+# remotes::install_github("steinarv/quantileVaR")
+# require(remotes)
+require(PerformanceAnalytics)
+require(rugarch)
+require(GAS)
+require(readxl)
+
+```
+
+```{r retrieve data}
+Data <- read_excel("data/Price_Return.xlsx")
+ES50_1 <- Data[,1:2]
+ES50 <- xts(ES50_1$ES50, order.by = ES50_1$Name)
+Returns <- Return.calculate(ES50)[-(1:2)]
+```
+
+```{r simple VaR }
+
+spec <- ugarchspec(variance.model = list(model = 'eGARCH', garchOrder = c(1, 1)), distribution = 'sstd')
+# fit <- ugarchfit(spec, Returns)
+# var <- fit@fit$var
+# var <- xts(var, order.by = ES50_1$Name[-(1:2)])
+# plot.xts(-var)
+
+model.roll <- ugarchroll(spec = spec , data = Returns, n.ahead = 1, refit.every = 252 ,refit.window = 'moving', VaR.alpha = 0.05,n.start = 2500)
+
+
+var0.05 <- as.data.frame(model.roll, which = "VaR")$'alpha(5%)'
+realized <- as.data.frame(model.roll, which = "VaR")$realized
+
+report(model.roll, type="VaR", VaR.alpha = 0.05)
+View(model.roll)
+#
+```
+
+```{r quantile coverage test}
+Backtest <- BacktestVaR(realized, var0.05, 0.05, Lags =20)
+
+#amount of lags to be specified because exceedances should be not autocorrelated
+
+
+#Rejecting H0 means that the model does not appropriately predict exceedances
+Backtest$DQ$pvalue
+```
+
