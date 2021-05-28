@@ -575,7 +575,7 @@ Jarque-Bera & 19520.3072*** & 10429.9193***\\
 
 \noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2. Again, Skewness statistic at -0.633 with a high statistical significance level and the excess Kurtosis at 5.134 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at 19520.307, given its high significance, confirms the rejection of the normality assumption.~\\
 
-\noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the Euro Stoxx 50 went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+\noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech (``dot com'') bubble reaching an ATH of €5464.43. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 09 March, 2009 of €1809.98. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 \begin{figure}[h]
 
@@ -735,7 +735,7 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \hypertarget{dynamic-quantile-test}{%
 \subsubsection{Dynamic quantile test}\label{dynamic-quantile-test}}
 
-\noindent \textcite{engle2004} provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \eqref{eq:dq1}, with \(I(.)\) a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. \(\theta\) is the confidence level. They test jointly \(H_0\) that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period (\(B\)), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \eqref{eq:dq2}. \(X\delta\) corresponds to the matrix notation. Under \(H_0\), this regression should have no explanatory power. As a final step, a \(\chi^2\)-distributed test statistic is constructed as in \eqref{eq:dq3}.
+\noindent \textcite{engle2004} provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \eqref{eq:dq1}, with \(I(.)\) a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. \(\theta\) is the confidence level. They test jointly \(H_0\) that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period (\(B\)), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \eqref{eq:dq2}. \(X\delta\) corresponds to the matrix notation. Under \(H_0\), this regression should have no explanatory power. As a final step, a \(\chi^2\)-distributed test statistic with \(m\) degrees of freedom equal to the parameters to be estimated (constant, number of hits and VaR estimate) is constructed as in \eqref{eq:dq3}.
 
 \begin{align}
 Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
@@ -755,7 +755,7 @@ Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+
 \end{array}\right.\]
 
 \begin{align}
-\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(p+n+2)
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(m)
 \label{eq:dq3}
 \end{align}
 
@@ -854,6 +854,7 @@ sged & 2.927 & 2.928 & 2.940 & 2.902 & 2.907 & 2.898 & 7.675 & 7.672\\
 \end{threeparttable}
 \end{table}
 \end{landscape}
+
 \clearpage
 \newpage
 
@@ -873,10 +874,15 @@ As already mentioned 2 candidate models seem to be very appropriate. This includ
 
 Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
 
-\sethlcolor{pink}\hl{\textbar Note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package\ldots)\textbar{}}\sethlcolor{correctioncolor}
+\sethlcolor{pink}\hl{\textbar{}\textbf{Note for prof. Annaert: choices}:\\
+-- n.start = 2500 ==\textgreater{} sample = 2500 observations to forecast the next,\\
+-- refit.every = 252 (trading days in a year) ==\textgreater{} so recompute the parameters every year,\\
+-- solver = hybrid using cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package\ldots)\\
+-- forecast.length = 1 ==\textgreater{} length of total forecast for which out of sample data from dataset will be used for testing \textbar{}}\sethlcolor{correctioncolor}
 
-Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
 \newpage
+
+Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used. \newpage
 
 \begin{figure}
 
@@ -887,20 +893,18 @@ Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period 
 \caption{Selected period to start forecast from}\label{fig:figbacktest}
 \end{figure}
 
-\newpage
-
-As you can see in figure \ref{figurebacktests2} the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
+As you can see in figure \ref{figurebacktests2} the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution. But let us formally test this.
 
 \begin{figure}
 
-{\centering \includegraphics{_main_files/figure-latex/figurebacktests2-1} 
+{\centering \includegraphics[width=0.7\linewidth]{_main_files/figure-latex/figurebacktests2-1} 
 
 }
 
 \caption{Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N}\label{fig:figurebacktests2}
 \end{figure}
 
-But let us formally test this.
+\newpage
 
 \begin{table}[H]
 \centering
@@ -910,34 +914,39 @@ But let us formally test this.
 \midrule
 \addlinespace[0.3em]
 \multicolumn{6}{l}{\textbf{Panel A: SGED}}\\
-\hspace{1em}\hspace{1em}AP.ratio & 1.193243 & 1.131257 & 4.029134 & 1.208740 & 4.029134\\
+\hspace{1em}\hspace{1em}AE\_var & 1.193243 & 1.131257 & 4.029134 & 1.208740 & 4.029134\\
+\hspace{1em}\hspace{1em}AE\_ES & 1.203125 & 1.140625 & 4.062500 & 1.218750 & 4.062500\\
 \hspace{1em}\hspace{1em}UC & 2.292336 & 1.077299 & 339.749534 & 2.662682 & 339.749534\\
 \hspace{1em}\hspace{1em}CC & 2.299459 & 2.748130 & 377.424279 & 4.571735 & 380.220681\\
 \hspace{1em}\hspace{1em}DQ & 34.442542 & 24.936113 & 1783.621469 & 25.812320 & 1805.881981\\
 \addlinespace[0.3em]
 \multicolumn{6}{l}{\textbf{Panel B: GED}}\\
-\hspace{1em}\hspace{1em}AP.ratio.1 & 1.410197 & 1.549667 & 4.215094 & 1.425693 & 4.215094\\
-\hspace{1em}\hspace{1em}UC.1 & 9.728556 & 16.865292 & 374.509356 & 10.435424 & 374.509356\\
-\hspace{1em}\hspace{1em}CC.1 & 9.798167 & 20.014037 & 407.453235 & 13.097152 & 410.034187\\
-\hspace{1em}\hspace{1em}DQ.1 & 38.252121 & 45.476044 & 1802.464000 & 38.449617 & 1818.799317\\
+\hspace{1em}\hspace{1em}AE\_var & 1.410197 & 1.549667 & 4.215094 & 1.425693 & 4.215094\\
+\hspace{1em}\hspace{1em}AE\_ES & 1.421875 & 1.562500 & 4.250000 & 1.437500 & 4.250000\\
+\hspace{1em}\hspace{1em}UC & 9.728556 & 16.865292 & 374.509356 & 10.435424 & 374.509356\\
+\hspace{1em}\hspace{1em}CC & 9.798167 & 20.014037 & 407.453235 & 13.097152 & 410.034187\\
+\hspace{1em}\hspace{1em}DQ & 38.252121 & 45.476044 & 1802.464000 & 38.449617 & 1818.799317\\
 \addlinespace[0.3em]
 \multicolumn{6}{l}{\textbf{Panel C: ST}}\\
-\hspace{1em}\hspace{1em}AP.ratio.2 & 1.193243 & 1.162250 & 1.177747 & 1.177747 & 1.162250\\
-\hspace{1em}\hspace{1em}UC.2 & 2.292336 & 1.630851 & 1.948278 & 1.948278 & 1.630851\\
-\hspace{1em}\hspace{1em}CC.2 & 2.299459 & 3.395044 & 1.960383 & 3.760115 & 1.649281\\
-\hspace{1em}\hspace{1em}DQ.2 & 34.302619 & 25.005120 & 33.249369 & 19.102820 & 22.753461\\
+\hspace{1em}\hspace{1em}AE\_var & 1.193243 & 1.162250 & 1.177747 & 1.177747 & 1.162250\\
+\hspace{1em}\hspace{1em}AE\_ES & 1.203125 & 1.171875 & 1.187500 & 1.187500 & 1.171875\\
+\hspace{1em}\hspace{1em}UC & 2.292336 & 1.630851 & 1.948278 & 1.948278 & 1.630851\\
+\hspace{1em}\hspace{1em}CC & 2.299459 & 3.395044 & 1.960383 & 3.760115 & 1.649281\\
+\hspace{1em}\hspace{1em}DQ & 34.302619 & 25.005120 & 33.249369 & 19.102820 & 22.753461\\
 \addlinespace[0.3em]
 \multicolumn{6}{l}{\textbf{Panel D: T}}\\
-\hspace{1em}\hspace{1em}AP.ratio.3 & 1.472184 & 1.642647 & 1.487680 & 1.456687 & 1.503177\\
-\hspace{1em}\hspace{1em}UC.3 & 12.687425 & 22.547261 & 13.481127 & 11.915090 & 14.295977\\
-\hspace{1em}\hspace{1em}CC.3 & 12.922959 & 26.088554 & 13.628718 & 14.694682 & 14.482276\\
-\hspace{1em}\hspace{1em}DQ.3 & 43.912495 & 52.784288 & 41.642033 & 39.803194 & 54.968600\\
+\hspace{1em}\hspace{1em}AE\_var & 1.472184 & 1.642647 & 1.487680 & 1.456687 & 1.503177\\
+\hspace{1em}AE\_ES & 1.484375 & 1.656250 & 1.500000 & 1.468750 & 1.515625\\
+\hspace{1em}\hspace{1em}UC & 12.687425 & 22.547261 & 13.481127 & 11.915090 & 14.295977\\
+\hspace{1em}\hspace{1em}CC & 12.922959 & 26.088554 & 13.628718 & 14.694682 & 14.482276\\
+\hspace{1em}\hspace{1em}DQ & 43.912495 & 52.784288 & 41.642033 & 39.803194 & 54.968600\\
 \addlinespace[0.3em]
 \multicolumn{6}{l}{\textbf{Panel E: N}}\\
-\hspace{1em}\hspace{1em}AP.ratio.4 & 1.983574 & 2.076554 & 1.983574 & 1.937083 & 1.828607\\
-\hspace{1em}\hspace{1em}UC.4 & 49.027087 & 57.648354 & 49.027087 & 44.930069 & 35.947622\\
-\hspace{1em}\hspace{1em}CC.4 & 49.109426 & 57.902257 & 49.109426 & 45.011116 & 36.252515\\
-\hspace{1em}\hspace{1em}DQ.4 & 79.685528 & 90.173737 & 83.390986 & 75.628854 & 78.372757\\
+\hspace{1em}AE\_var & 1.983574 & 2.076554 & 1.983574 & 1.937083 & 1.828607\\
+\hspace{1em}AE\_ES & 2.000000 & 2.093750 & 2.000000 & 1.953125 & 1.843750\\
+\hspace{1em}UC & 49.027087 & 57.648354 & 49.027087 & 44.930069 & 35.947622\\
+\hspace{1em}CC & 49.109426 & 57.902257 & 49.109426 & 45.011116 & 36.252515\\
+\hspace{1em}DQ & 79.685528 & 90.173737 & 83.390986 & 75.628854 & 78.372757\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -947,21 +956,15 @@ But let us formally test this.
 \hypertarget{time-varying-higher-moments}{%
 \section{Time-varying higher moments}\label{time-varying-higher-moments}}
 
-\hypertarget{backtest}{%
-\section{Backtest}\label{backtest}}
-
 \hypertarget{Robustness}{%
 \chapter{Robustness checks}\label{Robustness}}
 
 \hypertarget{specification-checks}{%
 \section{Specification checks}\label{specification-checks}}
 
-In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation:
-\[ 
+In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: \[ 
 \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
-\]
-\#\#\# Figures control tests
-Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+\] Figures control tests Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
 
 Then the density can be examined standardized residuals and compared with the normal distribution.
 
@@ -972,13 +975,7 @@ Also the QQ-plot can be examined.
 
 Ljung-Box test on the squared or absolute standardized residuals.
 
-zero-mean
-unit-variance
-not skewed
-no excess kurtosis
-no serial correlation in the squares
-no serial correlation in the cubes
-no serial correlation in the squares
+zero-mean unit-variance not skewed no excess kurtosis no serial correlation in the squares no serial correlation in the cubes no serial correlation in the squares
 
 \hypertarget{Conclusion}{%
 \chapter{Conclusion}\label{Conclusion}}

@@ -1030,7 +1030,7 @@ row_group_label_fonts <- list(
 list(bold = T, italic = T)
 )
 df <- as.matrix(df)
-rownames(df) <- c("AE_var","AE_ES", "UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ")
+rownames(df) <- c("AE_var","AE_ES", "UC","CC","DQ","AE var","AE ES","UC","CC","DQ","AE var","AE ES","UC","CC","DQ","AE var","AE ES","UC","CC","DQ","AE var","AE ES","UC","CC","DQ")
 ```
 
 <!--# description @stephane -->
@@ -1038,13 +1038,13 @@ rownames(df) <- c("AE_var","AE_ES", "UC","CC","DQ","AE_var","AE_ES","UC","CC","D
 \newpage
 
 ```{r table4, echo=F, results='asis'}
-df %>% kbl(booktabs=T) %>% 
+df %>% kbl(booktabs=T, format="latex") %>% 
   kable_styling() %>%
   pack_rows("Panel A: SGED", 1,5) %>%
   pack_rows("Panel B: GED", 6,10) %>%
   pack_rows("Panel C: ST", 11,15) %>%
   pack_rows("Panel D: T", 16,20) %>%
-  pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:16, 18:20)) 
+  pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:17, 18:25)) 
 ```
 
 \clearpage
@@ -1162,7 +1162,6 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 
 ```{r eval=FALSE}
 #LJUNG-BOX TEST
-
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test) <- Models.garch
 for(i in 1:length(LJ.Test)){
@@ -1289,7 +1288,7 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
 
 In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: $$ 
 \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
-$$ \#\#\# Figures control tests Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+$$ Figures control tests Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
 
 Then the density can be examined standardized residuals and compared with the normal distribution.
 
