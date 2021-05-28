@@ -1012,18 +1012,22 @@ table_tests[30,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$
 #PVALUES LOOPS
 
 #KABLE OUTPUT
-df <- table_tests[-c(1,6,11,16,21),] %>% as.data.frame()
+df <- table_tests[-c(1,7,13,19,25),] %>% as.data.frame()
 colnames(df) <- c("EGARCH", "GJRGARCH", "TGARCH", "NAGARCH", "AVGARCH")
 row_group_label_fonts <- list(
 list(bold = T, italic = T)
 )
+df <- as.matrix(df)
+rownames(df) <- c("AE_var","AE_ES", "UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ")
+
 df %>% kbl(booktabs=T) %>% 
   kable_styling() %>%
-  pack_rows("Panel A: SGED", 1,4) %>%
-  pack_rows("Panel B: GED", 5,8) %>%
-  pack_rows("Panel C: ST", 9,12) %>%
-  pack_rows("Panel D: T", 13,17) %>%
-  pack_rows("Panel E: N", 17,20) %>% add_indent(c(1:16, 18:20))
+  pack_rows("Panel A: SGED", 1,5) %>%
+  pack_rows("Panel B: GED", 6,10) %>%
+  pack_rows("Panel C: ST", 11,15) %>%
+  pack_rows("Panel D: T", 16,20) %>%
+  pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:16, 18:20)) 
+
 ```
 
 \clearpage
@@ -1123,7 +1127,6 @@ colnames(VTable) = c('VaR.CC(1%)', 'VaR.CC(5%)')#, 'BT(1%)', 'BT(5%)')
 dists <- regmatches(rownames(VTable),gregexpr("(?<=-).*",rownames(VTable),perl=T)) %>% unlist
 garchmodel <- gsub("-.*","",rownames(VTable))
 
-
 VTable <- as.data.frame(VTable)
 V2Table <- VTable %>% mutate(dist = dists, model = garchmodel)
 # V2Table <-V2Table %>% filter(dist != "NORM")
@@ -1140,9 +1143,6 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
     legend.box.background = element_rect(color="black", size=0.3),
     legend.box.margin = margin(2, 2, 2, 2)
 ) + theme(legend.title = element_blank())
-
-
-
 ```
 
 # Robustness checks  {#Robustness}
@@ -1157,7 +1157,7 @@ for(i in 1:length(LJ.Test)){
 #create a function to make Lj box test(((Change the number 1 into how many days back you want to test)))
 
 Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- Box.test(residuals(garchmodel[[n.list]], standardize = T),1, "Ljung-Box") 
+  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T),1, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
@@ -1213,7 +1213,7 @@ names(ARCH.lm.Test) <- Models.garch
 
 #Create a function to make archlmtest ((((((change lags??????))))))
 archlmtest = function (x, lags = 5, demean = FALSE, n.list = 1){
-  x <- residuals(x[[n.list]], standardize = T) #STANDARDIZE TRUE OR FALSE????????????
+  x <- rugarch::residuals(x[[n.list]], standardize = T) 
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
 	x = as.vector(x)
 	if(demean) x = scale(x, center = TRUE, scale = FALSE)
