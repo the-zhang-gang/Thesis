@@ -699,36 +699,47 @@ roll <- function(x) {
   return(result)
 }
 # Enjo Timing = first hash
+```
+
+
+```{r garchrollegarch, echo = FALSE}
 egarch.normback <- roll(garchspec.eGARCH[[1]]) #19.66 sec
 egarch.stdback <- roll(garchspec.eGARCH[[2]])  #22.68 sec
 egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #24.02 sec
 egarch.gedback <- roll(garchspec.eGARCH[[4]])  #20.54 sec
 egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #30.70 sec
+```
 
+```{r garchrollgjrgarch, echo = FALSE}
 gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
 gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
 gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
 gjrgarch.gedback <- roll(garchspec.gjrGARCH[[4]])  #21.13 sec
 gjrgarch.sgedback <- roll(garchspec.gjrGARCH[[5]]) #30.24 sec
+```
 
+```{r garchrollnagarch, echo = FALSE}
 nagarch.normback <- roll(garchspec.fGARCH.NAGARCH[[1]]) #14.88 sec
 nagarch.stdback <- roll(garchspec.fGARCH.NAGARCH[[2]])  #20.31 sec
 nagarch.sstdback <- roll(garchspec.fGARCH.NAGARCH[[3]]) #27.25 sec
 nagarch.gedback <- roll(garchspec.fGARCH.NAGARCH[[4]])  #22.39 sec
 nagarch.sgedback <- roll(garchspec.fGARCH.NAGARCH[[5]]) #34.98 sec
+```
 
+```{r garchrolltgarch, echo = FALSE}
 tgarch.normback <- roll(garchspec.fGARCH.TGARCH[[1]]) #15.48 sec
 tgarch.stdback <- roll(garchspec.fGARCH.TGARCH[[2]])  #19.32 sec
 tgarch.sstdback <- roll(garchspec.fGARCH.TGARCH[[3]]) #26.27 sec
 tgarch.gedback <- roll(garchspec.fGARCH.TGARCH[[4]])  #20.26 sec
 tgarch.sgedback <- roll(garchspec.fGARCH.TGARCH[[5]]) #29.29 sec
+```
 
+```{r garchrollavgarch, echo = FALSE}
 avgarch.normback <- roll(garchspec.fGARCH.AVGARCH[[1]]) #20.65 sec
 avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])  #35.63 sec
 avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]]) #52.54 sec
 avgarch.gedback <- roll(garchspec.fGARCH.AVGARCH[[4]])  #42.59 sec
 avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
-
 # q1 = q5 = px = matrix(NA, ncol = 1, nrow = 6453)
 # q1[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
 # q5[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
