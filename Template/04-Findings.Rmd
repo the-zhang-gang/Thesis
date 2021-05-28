@@ -303,7 +303,9 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
-In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.^[To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.]
+In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Aikake Information Criterion (AIC) is reported to compare goodness of fit of the different distributions. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.[^findings-1]
+
+[^findings-1]: To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.
 
 Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
@@ -332,8 +334,6 @@ kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$"
 \newpage
 
 ## Constant higher moments
-
-<!--# Here comes our main part [FILIPPO] -> to do!  -->
 
 ```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
@@ -662,11 +662,15 @@ aics %>% kbl(caption = "Model selection according to AIC",format = "latex",
   footnote(general = "Notes",number="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+
+```{=tex}
 \clearpage
 \newpage
+```
 ### Value-at-risk
 
-As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique.  A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ captures more of the downside events.
+As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique. A simple graph is shown in figure \@ref(fig:figVaRinsample) for the EGARCH-ST model. It seems that the VaR model for $\alpha=0.05$ underestimates the downside events, while the VaR model for $\alpha=0.01$ captures more of the downside events.
+
 ```{r figVaRinsample, fig.cap="Value-at-Risk (in-sample) for the EGARCH-ST model", fig.align='center', fig.pos = 'h', out.width='60%', echo=FALSE}
 par(mfrow = c(2,1))
 par(mar = c(2.1, 3.1, 1.1, 3.1))
@@ -684,18 +688,22 @@ plot(as.matrix(R), type = "l" , xlab = "T" ,
 ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green",alpha.f=0.5)); legend ("topleft", bty = "n", lty = c (1,1) , col = c("darkgrey", adjustcolor("green" ,alpha.f =0.5)) ,legend = c(expression(R[t]), expression(VaR[0.01][","][t])))
 ```
 
-Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year. 
+Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
 
-[|Note for prof. Annaert: choices: n.start = 1500 days before the end of the series, refit.every = 252 (trading days in a year), solver = hybrid using a cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)|]{highlight="pink"}
+[\|**Note for prof. Annaert: choices**: \
+-- n.start = 2500 ==\> sample = 2500 observations to forecast the next, \
+-- refit.every = 252 (trading days in a year) ==\> so recompute the parameters every year, \
+-- solver = hybrid using cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)\
+-- forecast.length = 1 ==\> length of total forecast for which out of sample data from dataset will be used for testing \|]{highlight="pink"}
 
-Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used.
 \newpage
-``` {r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
+
+Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used. \newpage
+
+```{r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
 ```
-
-\newpage
 
 ```{r garchroll, echo = FALSE}
 # VaR garchroll forecasting and backtesting----
@@ -736,11 +744,17 @@ avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])  #35.63 sec
 avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]]) #52.54 sec
 avgarch.gedback <- roll(garchspec.fGARCH.AVGARCH[[4]])  #42.59 sec
 avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
+
+q1 = q5 = px = matrix(NA, ncol = 1, nrow = 6453)
+q1[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+q5[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+VaR1cc1 = apply(q1, 2, function(x) VaRTest(0.01, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
+VaR5cc1 = apply(q5, 2, function(x) VaRTest(0.05, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
 ```
 
-As you can see in figure \@ref(figurebacktests2) the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution.
+As you can see in figure \@ref(figurebacktests2) the EGARCH with a normal distribution seems to capture the extreme events a bit less compared with the skewed t-distribution. But let us formally test this.
 
-```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALSE, echo=FALSE}
+```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', echo=FALS, echo=FALSE, out.width="70%"}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(2,1), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD
@@ -754,7 +768,6 @@ legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
 title(main = "EGARCH-N")
 ```
 
-But let us formally test this.
 ```{r gaspackagetests, include=F, echo=F}
 require(GAS)
 getVaR <- function(x) {
@@ -943,8 +956,7 @@ av_norm_AE_p <- av_norm_ES[[3]]
 
 ```
 
-
-```{r tableStephane, echo=F, results='asis'}
+```{r table4prep, echo=F}
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
 e_sstd <- gettests(VaR.sstd.egarch)
@@ -1019,7 +1031,13 @@ list(bold = T, italic = T)
 )
 df <- as.matrix(df)
 rownames(df) <- c("AE_var","AE_ES", "UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ","AE_var","AE_ES","UC","CC","DQ")
+```
 
+<!--# description @stephane -->
+
+\newpage
+
+```{r table4, echo=F, results='asis'}
 df %>% kbl(booktabs=T) %>% 
   kable_styling() %>%
   pack_rows("Panel A: SGED", 1,5) %>%
@@ -1027,25 +1045,18 @@ df %>% kbl(booktabs=T) %>%
   pack_rows("Panel C: ST", 11,15) %>%
   pack_rows("Panel D: T", 16,20) %>%
   pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:16, 18:20)) 
-
 ```
 
 \clearpage
 
 ## Time-varying higher moments
+
 ```{r acdcode, eval = FALSE}
 # ACD specification
 sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # sGARCH, takes 6 minutes
 fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #very long process: starts from different starting values to find an optimum
-
-cl = makePSOCKcluster(10)
-rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.start = 2500, refit.every = 500,refit.window = "moving", solver = "hybrid", calculate.VaR = TRUE, VaR.alpha = 0.05, cluster = cl,fit.control = list(), solver.control = list())
-stopCluster(cl)
-cl = makePSOCKcluster(10)
-rollacd = resume(rollacd, solver = 'optim')
-stopCluster(cl)
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE}
@@ -1057,32 +1068,29 @@ plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditio
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
 
-## Backtest
+```{r acdbacktest, echo=FALSE, eval=FALSE}
+# cl = makePSOCKcluster(10)
+# rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.start = 2500, refit.every = 500,refit.window = "moving", solver = "hybrid", calculate.VaR = TRUE, VaR.alpha = 0.05, cluster = cl,fit.control = list(), solver.control = list())
+# stopCluster(cl)
+# cl = makePSOCKcluster(10)
+# rollacd = resume(rollacd, solver = 'optim')
+# stopCluster(cl)
+```
+
+<!-- ## Backtest -->
+
 ```{r eval=FALSE}
 model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH')
 submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
 
-spec1 <- spec2 <- spec3 <- spec4 <- spec5 <- vector(mode = 'list', length = 7)
+spec1 <-  vector(mode = 'list', length = 7)
 #.norm-----
 for (i in 1:7) {
   spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
 }
-#.sstd-----
-for (i in 1:7) {spec2[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sstd')
-}
-#.std-----
-for (i in 1:7) {
-  spec3[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'std')}
-#.sged-----
-for (i in 1:7) {
-  spec4[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'sged')}
-#.ged-----
-for (i in 1:7) {
-  spec5[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL), distribution = 'ged')}
-
 #.ugarchroll-----
-spec = c(spec1, spec2, spec3, spec4, spec5)
-cluster = makePSOCKcluster(15)
+spec = c(spec1)
+cluster = makePSOCKcluster(10)
 clusterExport(cluster, c('spec', 'R'))
 clusterEvalQ(cluster, library(rugarch))
 # Out of sample estimation
@@ -1091,31 +1099,36 @@ fitlist = vector(mode = 'list', length = n)
 start <- Sys.time()
 for (i in 1:n) {
 tmp = ugarchroll(spec[[i]], R, n.ahead = 1,n.start=2500, forecast.length = 1, refit.every = 252, refit.window = 'moving', solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
+print(i)
 if (!is.null(tmp@model$noncidx)) {
 tmp = resume(tmp, solver = 'solnp', fit.control = list(scale = 1), solver.control = list(tol = 1e-07, delta = 1e-06), cluster = cluster)
+print(i)
 if (!is.null(tmp@model$noncidx))
 fitlist[[i]] = NA
+print(i)
 } else {
 fitlist[[i]] = as.data.frame(tmp, which = 'density')
 }
+print(i)
 }
 Sys.time() - start
 ```
 
 ```{r eval=FALSE}
 vmodels = c('SGARCH(1,1)', 'IGARCH(1,1)', 'EGARCH(1,1)', 'GJRGARCH(1,1)', 'TGARCH(1,1)','AVGARCH(1,1)', 'NAGARCH(1,1)')
-modelnames = c(paste(vmodels, '-NORM', sep = ''), paste(vmodels, '-ST', sep = ''), paste(vmodels, '-T', sep = ''), paste(vmodels, '-SGED', sep = ''),paste(vmodels, '-GED', sep = ''))
-q1 = q5 = px = matrix(NA, ncol = 35, nrow = 1500)
-dist = c(rep('norm', 7), rep('sstd', 7), rep('std', 7), rep('sged', 7),rep('ged', 7))
+modelnames = c(paste(vmodels, '-NORM', sep = ''))
+q1 = q5 = px = matrix(NA, ncol = 7, nrow = 6453)
+dist = c(rep('norm', 7))
 # use apply since nig and gh distributions are not yet vectorized
-for (i in 1:35) {
+for (i in 1:7) {
 q1[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
 q5[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
 px[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) pdist(dist[i], x['Realized'], mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
 }
-VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
-VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
-VaR5cc = apply(q5, 2, function(x) VaRTest(0.05, actual = fitlist[[1]][, 'Realized'], VaR = x)$cc.LRp)
+VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x))
+VaR5cc = apply(q5, 2, function(x) VaRTest(0.05, actual = fitlist[[1]][, 'Realized'], VaR = x))
+# VarCC01 = apply(q1, 2, function(x) VaRTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
+# VarCC05 = apply(q5, 2, function(x) VaRTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
 # BT1 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
 # BT5 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
 VTable = cbind(VaR1cc, VaR5cc)
@@ -1145,7 +1158,8 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 ) + theme(legend.title = element_blank())
 ```
 
-# Robustness checks  {#Robustness}
+# Robustness checks {#Robustness}
+
 ```{r eval=FALSE}
 #LJUNG-BOX TEST
 
@@ -1272,28 +1286,19 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
 ```
 
 ## Specification checks
-In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
-$$ 
-\hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
-$$
-### Figures control tests
-Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
 
-Then the density can be examined standardized residuals and compared with the normal distribution. 
+In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: $$ 
+\hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}
+$$ \#\#\# Figures control tests Autocorrelation function of the standardized residuals and autocorrelation function of the squared standardized residuals.
+
+Then the density can be examined standardized residuals and compared with the normal distribution.
 
 Also the QQ-plot can be examined.
 
 ### Residual heteroscedasticity
-Ljung-Box test on the squared or absolute standardized residuals.  
 
- 
+Ljung-Box test on the squared or absolute standardized residuals.
 
 <!-- ### GMM test -->
-zero-mean
-unit-variance
-not skewed
-no excess kurtosis
-no serial correlation in the squares
-no serial correlation in the cubes
-no serial correlation in the squares
 
+zero-mean unit-variance not skewed no excess kurtosis no serial correlation in the squares no serial correlation in the cubes no serial correlation in the squares
