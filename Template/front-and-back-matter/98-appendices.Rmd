@@ -255,4 +255,4 @@ knitr::include_graphics("figures/aicfigures/asymmetric aics2.pdf")
 ```
 \noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above[^appendices-5].
 
-[^appendices-5]: Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.
+[^appendices-5]: Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.
