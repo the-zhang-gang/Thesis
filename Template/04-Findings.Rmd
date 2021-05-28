@@ -1213,7 +1213,11 @@ LJ.test.df %>% kbl(caption = "Ljung Box Test",
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
-#---------------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 #ARCH lm TEST
 
@@ -1222,7 +1226,7 @@ names(ARCH.lm.Test) <- Models.garch
 
 #Create a function to make archlmtest ((((((change lags??????))))))
 archlmtest = function (x, lags = 5, demean = FALSE, n.list = 1){
-  x <- residuals(x[[n.list]], standardize = T)/sigma(x[[n.list]]) #STANDARDIZE TRUE OR FALSE????????????
+  x <- residuals(x[[n.list]], standardize = T) #STANDARDIZE TRUE OR FALSE????????????
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
 	x = as.vector(x)
 	if(demean) x = scale(x, center = TRUE, scale = FALSE)
@@ -1268,6 +1272,16 @@ ARCH.lm.Test[[i]] <- ARCH.lm.Test[[i]][-2,]
 
 ARCH.lm.Test.matrix <- cbind(ARCH.lm.Test[[1]],ARCH.lm.Test[[2]],ARCH.lm.Test[[3]],ARCH.lm.Test[[4]],ARCH.lm.Test[[5]],ARCH.lm.Test[[6]],ARCH.lm.Test[[7]],ARCH.lm.Test[[8]])
 colnames(ARCH.lm.Test.matrix) <- Models.garch.clean
+ARCH.lm.Test.df <- as.data.frame(ARCH.lm.Test.matrix)
+
+ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
+      label = 'ARCHLMTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
 ## Specification checks
