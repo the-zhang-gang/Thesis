@@ -295,7 +295,7 @@ return(totalresults)
 R_dotcom <- window(R, start = "1987-01-01", end = "2001-12-31")
 R_GFC <- window(R, start = "2002-01-01", end = "2009-03-31")
 R_covid <- window(R, start = "2009-03-31")
-length(R_dotcom); length(R_GFC); length(R_covid)
+#length(R_dotcom); length(R_GFC); length(R_covid)
 
 MLE_Full <- DistMLE(R)
 MLE_dotcom <- DistMLE(R_dotcom)
@@ -442,7 +442,6 @@ garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 # Compute stdret using residuals()
 stdret.EWMA[[i]] <- rugarch::residuals(garchfit.EWMA[[i]], standardize = TRUE)
 }
-
 
 #  make the histogram
 #
@@ -1170,7 +1169,7 @@ for(i in 1:length(LJ.Test)){
 #create a function to make Lj box test(((Change the number 1 into how many days back you want to test)))
 
 Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T),1, "Ljung-Box") 
+  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T),22, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
@@ -1225,7 +1224,7 @@ ARCH.lm.Test <- vector(mode = "list", length = length(Models.garch))
 names(ARCH.lm.Test) <- Models.garch
 
 #Create a function to make archlmtest ((((((change lags??????))))))
-archlmtest = function (x, lags = 5, demean = FALSE, n.list = 1){
+archlmtest = function (x, lags = 22, demean = FALSE, n.list = 1){
   x <- rugarch::residuals(x[[n.list]], standardize = T) 
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
 	x = as.vector(x)
