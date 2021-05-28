@@ -1160,7 +1160,6 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 
 # Robustness checks  {#Robustness}
 ```{r eval=FALSE}
-require(FinTS)
 #LJUNG-BOX TEST
 
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
@@ -1168,10 +1167,10 @@ names(LJ.Test) <- Models.garch
 for(i in 1:length(LJ.Test)){
   LJ.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
 }
-#create a function to make Lj box test(((Change the number 5 into how many days back you want to test)))
+#create a function to make Lj box test(((Change the number 1 into how many days back you want to test)))
 
 Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- Box.test(residuals(garchmodel[[n.list]], standardize = T),5, "Ljung-Box")
+  tmp.1 <- Box.test(residuals(garchmodel[[n.list]], standardize = T),1, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
@@ -1199,8 +1198,19 @@ LJ.Test[[i]] <- LJ.Test[[i]][-2,]
 
 LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.Test[[5]],LJ.Test[[6]],LJ.Test[[7]],LJ.Test[[8]])
 colnames(LJ.test.matrix) <- Models.garch.clean
-as.data.frame(LJ.test.matrix)
+LJ.test.df <- as.data.frame(LJ.test.matrix)
 
+LJ.test.df %>% kbl(caption = "Ljung Box Test",
+      label = 'LjboxTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general = "Notes",number=c("This table shows the Ljung box statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+```
+
+```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
 #---------------------------------------------------------------------------------------------------------
