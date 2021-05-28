@@ -30,11 +30,11 @@ require(rugarch)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-# install_bitbucket("alexiosg/racd")
+install_bitbucket("alexiosg/racd")
 options(knitr.kable.NA = "")
 remotes::install_github("R-Finance/xtsExtra")
 
-data <- read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2) #warnings are NA's
+data <- suppressWarnings(read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2)) #warnings are NA's
 colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
 Price_indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- Price_indices[-1,1] #see if price index
@@ -495,7 +495,7 @@ eta <- cbind(table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),1:3]
 table.3.matrix[(nrow(table.3.matrix)-1):(nrow(table.3.matrix)),] <- kappa.object
 table.3.matrix <- rbind(table.3.matrix, eta, round(LLH,3))
 table.3.matrix <- cbind(c(names.table.3,"$\\eta$","p-val eta","$LLH$"), table.3.matrix)
-table.3.matrix <- base::as.data.frame(table.3.matrix, row.names = c(names.table.3,"$\\eta$","","LLH"), stringsAsFactors=FALSE)
+table.3.matrix <- as.data.frame(table.3.matrix, row.names = c(names.table.3,"$\\eta$","","LLH"), stringsAsFactors = FALSE)
 return(table.3.matrix)
 }
 
@@ -509,7 +509,6 @@ Table.3.EWMA <- Table.GARCH.function(GARCHfit.object = garchfit.EWMA)
 Table.3.fGARCH.AVGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.AVGARCH)
 Table.3.fGARCH.NAGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.NAGARCH)
 Table.3.fGARCH.TGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.TGARCH)
-
 
 Table.3.function <- function(distribution = "sstd"){
 ref <- which(names(Table.3.eGARCH)==distribution)#Reference column
@@ -558,7 +557,7 @@ require(stringr)
 kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",
       label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
-  #kable_classic(full_width = F)%>%
+  kable_classic(full_width = F)%>%
   footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
   kable_styling(latex_options = "scale_down")
 ```
@@ -1122,6 +1121,7 @@ colnames(VTable) = c('VaR.CC(1%)', 'VaR.CC(5%)')#, 'BT(1%)', 'BT(5%)')
 ```
 
 ```{r eval=FALSE}
+require(ggplot2)
 dists <- regmatches(rownames(VTable),gregexpr("(?<=-).*",rownames(VTable),perl=T)) %>% unlist
 garchmodel <- gsub("-.*","",rownames(VTable))
 
@@ -1129,8 +1129,8 @@ VTable <- as.data.frame(VTable)
 V2Table <- VTable %>% mutate(dist = dists, model = garchmodel)
 # V2Table <-V2Table %>% filter(dist != "NORM")
 V2Table_long <- V2Table %>%
-  gather("Stat", "Value", -c(dist, model))
-ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +   geom_col(position = "dodge") + facet_wrap(~dist) + geom_hline(yintercept=0.05, 
+  tidyr::gather("Stat", "Value", -c(dist, model))
+ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +geom_col(position = "dodge") + facet_wrap(~dist) + geom_hline(yintercept=0.05, 
                 color = "blue", size=0.3) + geom_hline(yintercept=0.01,  
                 color = "black", size=0.3) + 
 scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" = "grey")) + theme_bw() + theme(axis.text.x=element_text(angle = 90)) + theme(
@@ -1141,6 +1141,7 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
     legend.box.background = element_rect(color="black", size=0.3),
     legend.box.margin = margin(2, 2, 2, 2)
 ) + theme(legend.title = element_blank())
+
 ```
 
 # Robustness checks {#Robustness}
@@ -1198,11 +1199,6 @@ LJ.test.df %>% kbl(caption = "Ljung Box Test",
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
-
-
-
-
-
 
 #ARCH lm TEST
 
@@ -1283,6 +1279,6 @@ Also the QQ-plot can be examined.
 
 Ljung-Box test on the squared or absolute standardized residuals.
 
-<!-- ### GMM test -->
+<!-- ### GMM test ?????? -->
 
 zero-mean unit-variance not skewed no excess kurtosis no serial correlation in the squares no serial correlation in the cubes no serial correlation in the squares
