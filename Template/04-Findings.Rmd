@@ -30,7 +30,7 @@ require(rugarch)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-install_bitbucket("alexiosg/racd")
+suppressMessages(install_bitbucket("alexiosg/racd"))
 options(knitr.kable.NA = "")
 remotes::install_github("R-Finance/xtsExtra")
 
