@@ -1153,8 +1153,8 @@ for(i in 1:length(LJ.Test)){
 }
 #create a function to make Lj box test(((Change the number 1 into how many days back you want to test)))
 
-Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T),22, "Ljung-Box") 
+Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1, days.lag = 22){
+  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T),days.lag, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
@@ -1184,13 +1184,13 @@ LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.T
 colnames(LJ.test.matrix) <- Models.garch.clean
 LJ.test.df <- as.data.frame(LJ.test.matrix)
 
-LJ.test.df %>% kbl(caption = "Ljung Box Test",
+LJ.test.df %>% kbl(caption = "Ljung Box Test on standardized residuals",
       label = 'LjboxTable',
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general = "Notes",number=c(paste0("Table displays the Ljung box statistics value for the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level."),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+  footnote(general = "Notes",number=c(paste0("Table displays the Ljung box statistics value for the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
