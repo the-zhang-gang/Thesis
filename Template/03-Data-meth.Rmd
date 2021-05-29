@@ -10,7 +10,6 @@ documentclass: book
 bibliography: references.bib
 ---
 
-
 # Data and methodology {#dat-and-meth}
 
 \chaptermark{Data and methodology}
@@ -32,6 +31,7 @@ require(openxlsx)
 require(TTR)
 require(lmtest)
 require(latex2exp)
+require(stringr)
 
 options(scipen = 999)
 knitr::opts_chunk$set(message = FALSE)
@@ -50,9 +50,12 @@ write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50",
 
 ## Data
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Price Index^[The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.] denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet [@EUROSTOXXFactSheet]. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to `r  format(index(head(Estoxx,1)), '%Y')`). \
+\noindent We worked with daily returns on the Euro Stoxx 50 Price Index[^data-meth-1] retrieved from Datastream denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. It is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet [@EUROSTOXXFactSheet]. The Euro Stoxx 50 Price index was chosen while this one has more data available (going back to `r  format(index(head(Estoxx,1)), '%Y')`). \
+
+[^data-meth-1]: The same analysis has been performed for the INDEX 1, INDEX 2, INDEX 3 and the INDEX 4 indexes with the same conclusions. The findings of these researches are available upon requests.
 
 \noindent Table \@ref(tab:dsTable) provides the main statistics describing the return series analyzed. Let daily returns be computed as $R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)$,where $P_{t}$ is the index price at time $t$ and $P_{t-1}$ is the index price at $t-1$. \
+
 ```{r prepstats, echo=F}
 ## RETURNS
 #selecting relevant statistics only from table.Stats
@@ -120,11 +123,13 @@ Statistics.S <- c(Statistics.S[1:5], Skewness, paste0("(",skewness.pvalue,"***)"
 table1 <- data.frame(Statistics = names(Statistics.S)[c(3,2,4,1,5:10)], `Euro Stoxx 50` = Statistics[c(3,2,4,1,5:10)], `Standardized Residuals`= Statistics.S[c(3,2,4,1,5:10)])
 colnames(table1) <- gsub(pattern = '\\.', replacement=' ',colnames(table1))
 
-fn1 <- sprintf(paste0('This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including arithmetic mean, median, maximum, minimum, standard deviation. The skewness, excess kurtosis with p-value and signicance and the Jarque-Bera test with significance.'),gsub(pattern = '\\.', replacement=' ',colnames(R)),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
+fn1 <- sprintf(paste0('This table shows the descriptive statistics of the daily percentage returns of %s over the period %s to %s (', nrow(R),' observations). Including arithmetic mean, median, maximum, minimum, standard deviation. The skewness, excess kurtosis with p-value and signicance and the Jarque-Bera test with significance.'),str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R))),gsub(" UTC", "",min(index(R))),gsub(" UTC", "",max(index(R))))
 fn2 <- paste("The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows: ", "$ R_t=\\\\alpha_0+\\\\alpha_1 R_{t-1}+z_t \\\\sigma_t \\\\\\\\ \\\\sigma_t^2=\\\\beta_0+\\\\beta_1 \\\\sigma_{t-1}^2 z_{t-1}^2+\\\\beta_2 \\\\sigma_{t-1}^2, \\\\\\\\$",  "Where $z$ is the standard residual (assumed to have a normal distribution).")
 fn3 <- '*, **, *** represent significance levels at the 5%, 1% and <1%.'
 ```
-\noindent The arithmetic mean of the series is `r round(as.numeric(levels(table1[1,2][,drop=T])),3)`% with a standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T])),3)`% and a median of `r round(as.numeric(levels(table1[2,2][,drop=T])),3)` which translate to an annualized mean of `r round(as.numeric(levels(table1[1,2][,drop=T]))*252,3)`% and an annualized standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T]))*sqrt(252),3)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(levels(table1[6,2][,drop=T])),3)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(levels(table1[8,2][,drop=T])),3)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(stdret.R)$statistic,3)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. 
+
+\noindent The arithmetic mean of the series is `r round(as.numeric(levels(table1[1,2][,drop=T])),2)`% with a standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T])),2)`% and a median of `r round(as.numeric(levels(table1[2,2][,drop=T])),2)` which translate to an annualized mean of `r round(as.numeric(levels(table1[1,2][,drop=T]))*252,2)`% and an annualized standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T]))*sqrt(252),2)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(levels(table1[6,2][,drop=T])),2)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(levels(table1[8,2][,drop=T])),2)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(stdret.R)$statistic,2)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.
+
 ```{r stats, echo=F, results='asis'}
 table1 %>% kbl(caption = "Summary statistics of the returns","latex",
       label = 'dsTable',
@@ -134,9 +139,11 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
   kable_classic(full_width = F)%>% 
   footnote(general = "Notes",number=c(fn1,fn2,fn3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 ```
+
 \noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(normtest::jb.norm.test(R)$statistic,3)`, given its high significance, confirms the rejection of the normality assumption. \
 
 \noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+
 ```{r plot1, echo=F, fig.cap='Euro Stoxx 50 Price Index prices', fig.align='center', out.width="95%", fig.pos='h'}
 par(mfrow=c(1,1))
 plot(as.zoo(Estoxx), screen = 1, col = "steelblue", xlab = "Date", ylab = "Price", main = "Euro Stoxx 50 Price"); grid(); abline(v= index(Estoxx$`EURO STOXX 50`["1999-01-01"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["1998-07-01"]), y = 1550,"Launch of Euro", cex=0.7, srt=90,font=4);  
@@ -151,6 +158,7 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2011-01-03"]),lty = 2); text(index(Estox
 
 abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["2019-08-27"]), y = 1570,"COVID-19 crisis", cex=0.7, srt =90,font=4); 
 ```
+
 \noindent In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
 ```{r plot2, echo=F, fig.cap='Euro Stoxx 50 Price Index log returns', fig.align='center', out.width="70%", fig.pos='h'}
@@ -161,7 +169,8 @@ knitr::include_graphics('figures/vol-clustering-finalized-2.png')
 ```
 
 \newpage
-\noindent In figure \@ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days) calculated using a rolling window of 252 days. As in figure \@ref(fig:plot2), you can see again the pattern of volatility clustering arise.
+
+\noindent In figure \@ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days), annualized 252 days. As in figure \@ref(fig:plot2), you can see again the pattern of volatility clustering arise.
 
 ```{r plot3, echo=F, fig.cap='Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "65%", fig.align='center', fig.pos='h'}
 #Plotting volatility
@@ -171,10 +180,11 @@ plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Ann
 # chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 
+```{=tex}
 \clearpage
 \newpage
-
-\noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. 
+```
+\noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed.
 
 ```{r plot4, echo=F,fig.cap='Density vs. Normal Euro Stoxx 50 log returns)', out.width= "75%", fig.align='center', fig.pos='h'}
 #Histogram to eyeball normality
@@ -191,9 +201,9 @@ chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns 
 
 \newpage
 
-\noindent In figure \@ref(fig:acfplots) the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this, while in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component[^12] $\alpha_0$ is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters. 
+\noindent In figure \@ref(fig:acfplots) the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this, while in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component[^data-meth-2] $\alpha_0$ is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.
 
-[^12]: $\alpha_0$ is most of the time referred to as the $\mu$ in the conditional mean equation. Here we have followed @bali2008.
+[^data-meth-2]: $\alpha_0$ is most of the time referred to as the $\mu$ in the conditional mean equation. Here we have followed @bali2008.
 
 ```{r acfplots, echo=F, fig.align='center', fig.cap="Absolute prediction errors", fig.subcap="This figure shows the absolute prediction errors and the autocorrelation function for the Euro Stoxx 50.", out.width= "100%", fig.pos='h'}
 # Compute the mean daily return
@@ -212,9 +222,14 @@ title("ACF (Squared prediction errors)")
 ```
 
 \clearpage
+
 ## Methodology
+
 ### Garch models {#garch-method}
-\noindent As already mentioned in part \@ref(univ-garch), the following models: symmetric GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood^[ As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language^[Version 3.6.1] [@Rteam] with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation.]. \
+
+\noindent As already mentioned in part \@ref(univ-garch), the following models: symmetric GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood[^data-meth-3]. \
+
+[^data-meth-3]: As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language[\^data-meth-4] [@Rteam] with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation.
 
 \noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function $f$ with one or more parameters that generate the data, defined as a vector $\theta$ in equation \@ref(eq:pdf). These functions are based on the joint probability distribution of the observed data as in equation \@ref(eq:logl). Subsequently, the (log)likelihood function is maximized using an optimization algorithm shown inequation \@ref(eq:optim).
 
@@ -225,15 +240,15 @@ title("ACF (Squared prediction errors)")
   y_i \sim f(y|\theta)
  (\#eq:pdf)
 \end{align}
-````
-
+```
 ```{=tex}
 \begin{align} 
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
  (\#eq:logl)
 \end{align}
-````
+```
 $$\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)$$
+
 ```{=tex}
 \begin{align} 
 \theta^{*} = arg \max_{\theta} [ L] 
@@ -241,6 +256,14 @@ $$\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)$$
 \end{align}
 ```
 $$\theta^{*} = arg \max_{\theta} [\log(L)]$$
+
+After estimation of the GARCH models in-sample, out-sample analysis is done by performing a rolling window approach. With assumptions: a window of 2500 observations and re-estimation every year.
+
+[\|**Note for profs: choices**:\
+-- n.start = 2500 ==\> sample = 2500 observations to forecast the next,\
+-- refit.every = 252 (trading days in a year) ==\> so recompute the parameters every year,\
+-- solver = hybrid using cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)\
+-- forecast.length = 1 ==\> length of total forecast for which out of sample data from dataset will be used for testing \|]{highlight="pink"}
 
 ### ACD models {#acd-models-meth}
 
@@ -292,7 +315,6 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 (\#eq:uccov)
 \end{align}
 ```
-
 #### Conditional coverage test of @christoffersen2001
 
 \noindent @christoffersen2001 proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the $L R^{u c}$ can give a false picture while at any point in time it classifies inaccurate VaR estimates as "acceptably accurate" [@bali2007]. For a certain VaR estimate an indicator variable, $I_t(\alpha)$, is computed as equation \@ref(eq:ccov).
@@ -306,12 +328,11 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 (\#eq:ccov)
 \end{align}
 ```
-
 \noindent It involves a likelihood ratio test's null hypothesis is that the statistic is $\chi^2$-distributed with two degrees of freedom or that the probability of violation $\hat p$ (unconditional coverage) as well as the conditional coverage (independence) is equal to the chosen percentile $\alpha$. While it tests both unconditional coverage as independence of violations, only this test has been performed and the unconditional coverage test is not reported.
 
 #### Dynamic quantile test
 
-\noindent @engle2004 provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \@ref(eq:dq1), with $I(.)$ a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. $\theta$ is the confidence level. They test jointly $H_0$ that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period ($B$), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \@ref(eq:dq2). $X\delta$ corresponds to the matrix notation. Under $H_0$, this regression should have no explanatory power. As a final step, a $\chi^2$-distributed test statistic with $m$ degrees of freedom equal to the parameters to be estimated (constant, number of hits and VaR estimate) is constructed as in \@ref(eq:dq3). 
+\noindent @engle2004 provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurence of an exceedance (here hit) as in \@ref(eq:dq1), with $I(.)$ a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. $\theta$ is the confidence level. They test jointly $H_0$ that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period ($B$), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \@ref(eq:dq2). $X\delta$ corresponds to the matrix notation. Under $H_0$, this regression should have no explanatory power. As a final step, a $\chi^2$-distributed test statistic with $m$ degrees of freedom equal to the parameters to be estimated (constant, number of hits and VaR estimate) is constructed as in \@ref(eq:dq3).
 
 ```{=tex}
 \begin{align}
@@ -319,7 +340,6 @@ Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
 (\#eq:dq1)
 \end{align}
 ```
-
 ```{=tex}
 \begin{align}
 \begin{array}{c}
@@ -339,3 +359,6 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 (\#eq:dq3)
 \end{align}
 ```
+#### ES Test
+
+The Expected Shortfall test by @mcneil2000 tests whether the excess conditional shortfall has zero mean. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
