@@ -1146,17 +1146,16 @@ $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\
 
 A first test performed is the Ljung-box test on the absolute value of the standardized residuals of the GARCH models.
 ```{r echo=FALSE, results='asis'}
-#LJUNG-BOX TEST
+#LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test) <- Models.garch
 for(i in 1:length(LJ.Test)){
   LJ.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
 }
-#create a function to make Lj box test(((Change the number 1 into how many days back you want to test)))
+#create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
 
-
-Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- Box.test(abs(rugarch::residuals(garchmodel[[n.list]], standardize = T)),22, "Ljung-Box") 
+Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag = 22){
+  tmp.1 <- Box.test(abs(rugarch::residuals(garchmodel[[n.list]], standardize = T)),n.lag, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
@@ -1186,16 +1185,68 @@ LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.T
 colnames(LJ.test.matrix) <- Models.garch.clean
 LJ.test.df <- as.data.frame(LJ.test.matrix)
 
-
 LJ.test.df %>% kbl(caption = "Ljung Box Test on standardized residuals in absolute values",
       label = 'LjboxTable',
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the absolute values of the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+
+
+```{r echo=FALSE, results='asis'}
+#LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
+LJ.Test.2 <- vector(mode = "list", length = length(Models.garch))
+names(LJ.Test.2) <- Models.garch
+for(i in 1:length(LJ.Test.2)){
+  LJ.Test.2[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
+}
+#create a function to make Lj box test for squared residuals(((Change the number 22 into how many days back you want to test)))
+
+Lj.box.test.function.2 <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag=22){
+  tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T)^2,n.lag, "Ljung-Box") 
+  test <- c(tmp.1$statistic, tmp.1$p.value)
+  return(test)
+}
+
+for(i in 1:length(distributions)){
+  LJ.Test.2[[1]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.sGARCH, n.list = i)
+    LJ.Test.2[[2]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.eGARCH, n.list = i)
+      LJ.Test.2[[3]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
+        LJ.Test.2[[4]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
+          LJ.Test.2[[5]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.gjrGARCH, n.list = i)
+            LJ.Test.2[[6]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
+              LJ.Test.2[[7]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.iGARCH, n.list = i)
+                LJ.Test.2[[8]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.EWMA, n.list = i)
+}
+
+LJ.Test.2 <- lapply(LJ.Test.2, round, 3)
+
+for(i in 1:length(LJ.Test.2)){
+LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]>=0.10)] <- LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]>=0.10)]
+LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<0.10&LJ.Test.2[[i]][2,]>0.05)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<0.10&LJ.Test.2[[i]][2,]>0.05)],"*")
+LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.05&LJ.Test.2[[i]][2,]>0.01)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.05&LJ.Test.2[[i]][2,]>0.01)],"**")
+LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.01)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.01)],"***")
+LJ.Test.2[[i]] <- LJ.Test.2[[i]][-2,]
+}
+
+LJ.test.matrix.2 <- cbind(LJ.Test.2[[1]],LJ.Test.2[[2]],LJ.Test.2[[3]],LJ.Test.2[[4]],LJ.Test.2[[5]],LJ.Test.2[[6]],LJ.Test.2[[7]],LJ.Test.2[[8]])
+colnames(LJ.test.matrix.2) <- Models.garch.clean
+LJ.test.df.2 <- as.data.frame(LJ.test.matrix.2)
+
+LJ.test.df.2 %>% kbl(caption = "Ljung Box Test on standardized squared residuals",
+      label = 'LjboxTablesquared',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+```
+
+
 
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
