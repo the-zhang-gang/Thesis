@@ -1024,18 +1024,26 @@ dq.signific <- function(x) {
   else if(x$dq$pvalue>0.1) y = ""
   return(y)
 }
+
+ES.signific <- function(x) {
+  if(x<0.1)  y = "*"
+  if(x<0.05) y = "**"
+  if(x<0.01) y = "***"
+  else if(x>0.1) y = ""
+  return(y)
+}
 #PVALUES LOOPS
-r3 <- 
+r3 <- c(ES.signific(e_sged_AE_ES_p),ES.signific(gjr_sged_AE_ES_p),ES.signific(t_sged_AE_ES_p),ES.signific(na_sged_AE_ES_p),ES.signific(av_sged_AE_ES_p))
 r4 <- c(uc.signific(e_sged),uc.signific(gjr_sged),uc.signific(t_sged),uc.signific(na_sged),uc.signific(av_sged))
 r5 <- c(cc.signific(e_sged),cc.signific(gjr_sged),cc.signific(t_sged),cc.signific(na_sged),cc.signific(av_sged))
 r6 <- c(dq.signific(e_sged),dq.signific(gjr_sged),dq.signific(t_sged),dq.signific(na_sged),dq.signific(av_sged))
 
-r9 <- 
+r9 <- c(ES.signific(e_ged_AE_ES_p),ES.signific(gjr_ged_AE_ES_p),ES.signific(t_ged_AE_ES_p),ES.signific(na_ged_AE_ES_p),ES.signific(av_ged_AE_ES_p))
 r10 <- c(uc.signific(e_ged),uc.signific(gjr_ged),uc.signific(t_ged),uc.signific(na_ged),uc.signific(av_ged))
 r11 <- c(cc.signific(e_ged),cc.signific(gjr_ged),cc.signific(t_ged),cc.signific(na_ged),cc.signific(av_ged))
 r12 <- c(dq.signific(e_ged),dq.signific(gjr_ged),dq.signific(t_ged),dq.signific(na_ged),dq.signific(av_ged))
 
-r15 <- 
+r15 <- c(ES.signific(e_sstd_AE_ES_p),ES.signific(gjr_sstd_AE_ES_p),ES.signific(t_sstd_AE_ES_p),ES.signific(na_sstd_AE_ES_p),ES.signific(av_sstd_AE_ES_p))
 r16 <- c(uc.signific(e_sstd),uc.signific(gjr_sstd),uc.signific(t_sstd),uc.signific(na_sstd),uc.signific(av_sstd))
 r17 <- c(cc.signific(e_sstd),cc.signific(gjr_sstd),cc.signific(t_sstd),cc.signific(na_sstd),cc.signific(av_sstd))
 r18 <- c(dq.signific(e_sstd),dq.signific(gjr_sstd),dq.signific(t_sstd),dq.signific(na_sstd),dq.signific(av_sstd))
