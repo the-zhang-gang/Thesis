@@ -556,8 +556,8 @@ fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\
 \noindent Table \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for EGARCH and GJRGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in table \@ref(tab:Table3), the model with the highest value is `r toupper(colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))])` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r toupper(colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))])`.
 
 ```{r table3final, echo=F, results='asis'}
-kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",
-      label = 'Table3',format="latex",
+kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",format="latex",
+      label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
   kable_classic(full_width = F)%>%
   footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
@@ -1327,6 +1327,7 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
   pack_rows("Panel B: Ljung Box Test on standardized squared residuals", 6,10) %>%
   footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics for the absolute value of the standardized residuals and for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in Panel A is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$", "The null hypothesis of the test in Panel B is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
+
 ```
 
 
@@ -1334,7 +1335,14 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
+#t.test(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), sd = 1)
 
+jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+qqnorm(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
+qqline(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
+
+plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)))
 #ARCH lm TEST
 
 ARCH.lm.Test <- vector(mode = "list", length = length(Models.garch))
