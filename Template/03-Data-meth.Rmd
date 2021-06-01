@@ -270,7 +270,7 @@ After estimation of the GARCH models in-sample, out-sample analysis is done by p
 
 ### ACD models {#acd-models-meth}
 
-\noindent Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \nu_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\nu_t=\nu(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters.
+\noindent Following @ghalanos2016, arguments of ACD models are specified as in @hansen1994. The density function $f(y|\alpha)$ has parameters $\alpha_t = (\mu_t, \sigma_t, \eta_t)$, with equation \@ref(eq:cmean), the conditional mean equation. Equation \@ref(eq:cvariance) as the conditional variance. And $\eta_t=\eta(\theta,x_t)$ the remaining parameters of the distribution like the skewness and kurtosis (shape) parameters which are constant in GARCH models (or time-invariant).
 
 ```{=tex}
 \begin{align} 
