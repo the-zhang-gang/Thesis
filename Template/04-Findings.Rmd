@@ -449,7 +449,7 @@ ref.distr <- seq(from = 1, to = length(distributions)*2, by = 2)
 #Retriving all the data from the original lists
 for(i in 1:length(distributions)){
     list.table.3.tmp[[ref.distr[i]]] <- GARCHfit.object[[i]]@fit$coef
-    list.table.3.tmp[[ref.distr[i]+1]] <- GARCHfit.object[[i]]@fit$tval
+    list.table.3.tmp[[ref.distr[i]+1]] <- GARCHfit.object[[i]]@fit$robust.tval
 }
 #From list of vectors of different lengths to list of matrixes with empty spaces filled with NAs
 for(i in 1:length(distributions)){
@@ -550,8 +550,7 @@ for(i in 1:length(distributions)){
 #Kabling
 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
-require(stringr)
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust $t$ statistics (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 ```
 
 \noindent Table \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for EGARCH and GJRGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in table \@ref(tab:Table3), the model with the highest value is `r toupper(colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))])` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r toupper(colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))])`.
@@ -743,6 +742,10 @@ avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
 # VaR5cc1 = apply(q5, 2, function(x) VaRTest(0.05, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
 ```
 
+```{r backup, echo=FALSE}
+save.image(file='myEnvironment.RData')
+```
+
 \noindent If we look at the results of the rolling window, we can for example compare as in figure \@ref(fig:figurebacktests2) the EGARCH-ST (with skewed student's t-distribution) with the EGARCH-N (with normal distribution). The EGARCH-N seems to capture the extreme events a bit less compared EGARCH-ST. But let us formally test this. \
 
 \newpage
@@ -753,7 +756,6 @@ par(mfrow = c(2,1), mar = c(2.5,2.5,1.5,2.5))
 plot(egarch.sstdback,which=4,VaR.alpha=0.01)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
 title(main = "EGARCH-ST")
-
 # NAGARCH with SSTD
 plot(egarch.normback,which=4,Var.alpha=0.01)
 legend("topright",bty="n",legend= bquote(~ alpha == "0.01"))
@@ -1000,27 +1002,53 @@ table_tests[28,]<- c(e_norm$uc[1], gjr_norm$uc[1],t_norm$uc[1],na_norm$uc[1],av_
 table_tests[29,]<- c(e_norm$cc[1], gjr_norm$cc[1],t_norm$cc[1],na_norm$cc[1],av_norm$cc[1])
 table_tests[30,]<- c(e_norm$dq$stat, gjr_norm$dq$stat,t_norm$dq$stat,na_norm$dq$stat,av_norm$dq$stat)
 
+uc.signific <- function(x) {
+  if(x$uc[2]<0.1)  y = "*"
+  if(x$uc[2]<0.05) y = "**"
+  if(x$uc[2]<0.01) y = "***"
+  else if(x$uc[2]>0.1) y = ""
+  return(y)
+}
+cc.signific <- function(x) {
+  if(x$cc[2]<0.1)  y = "*"
+  if(x$cc[2]<0.05) y = "**"
+  if(x$cc[2]<0.01) y = "***"
+  else if(x$cc[2]>0.1) y = ""
+  return(y)
+}
+
+dq.signific <- function(x) {
+  if(x$dq$pvalue<0.1)  y = "*"
+  if(x$dq$pvalue<0.05) y = "**"
+  if(x$dq$pvalue<0.01) y = "***"
+  else if(x$dq$pvalue>0.1) y = ""
+  return(y)
+}
 #PVALUES LOOPS
-r3 <- c("*","**","***","","***")
-r4 <- c("","","***","","")
-r5 <- c("","","***","","")
-r6 <- c("","***","***","***","***")
-r9 <- c("***","*","***","**","***")
-r10 <- c("","","***","***","")
-r11 <- c("***","***","***","***","***")
-r12 <- c("***","***","***","","***")
-r15 <- c("","","","","")
-r16 <- c("","","","","")
-r17 <- c("","","","","")
-r18 <- c("***","***","***","**","")
-r21 <- c("","","","","")
-r22 <- c("","","","","")
-r23 <- c("***","***","***","***","***")
-r24 <- c("***","***","***","***","***")
-r27 <- c("***","***","***","***","***")
-r28 <- c("***","***","***","***","***")
-r29 <- c("***","***","***","***","***")
-r30 <- c("***","***","***","***","***")
+r3 <- 
+r4 <- c(uc.signific(egarch.sgedback),uc.signific(gjrgarch.sgedback),uc.signific(tgarch.sgedback),uc.signific(nagarch.sgedback),uc.signific(avgarch.sgedback))
+r5 <- c(cc.signific(egarch.sgedback),cc.signific(gjrgarch.sgedback),cc.signific(tgarch.sgedback),cc.signific(nagarch.sgedback),cc.signific(avgarch.sgedback))
+r6 <- c(dq.signific(egarch.sgedback),dq.signific(gjrgarch.sgedback),dq.signific(tgarch.sgedback),dq.signific(nagarch.sgedback),dq.signific(avgarch.sgedback))
+
+r9 <- 
+r10 <- c(uc.signific(egarch.gedback),uc.signific(gjrgarch.gedback),uc.signific(tgarch.gedback),uc.signific(nagarch.gedback),uc.signific(avgarch.gedback))
+r11 <- c(cc.signific(egarch.gedback),cc.signific(gjrgarch.gedback),cc.signific(tgarch.gedback),cc.signific(nagarch.gedback),cc.signific(avgarch.gedback))
+r12 <- c(dq.signific(egarch.gedback),dq.signific(gjrgarch.gedback),dq.signific(tgarch.gedback),dq.signific(nagarch.gedback),dq.signific(avgarch.gedback))
+
+r15 <- 
+r16 <- c(uc.signific(egarch.sstdback),uc.signific(gjrgarch.sstdback),uc.signific(tgarch.sstdback),uc.signific(nagarch.sstdback),uc.signific(avgarch.sstdback))
+r17 <- c(cc.signific(egarch.sstdback),cc.signific(gjrgarch.sstdback),cc.signific(tgarch.sstdback),cc.signific(nagarch.sstdback),cc.signific(avgarch.sstdback))
+r18 <- c(dq.signific(egarch.sstdback),dq.signific(gjrgarch.sstdback),dq.signific(tgarch.sstdback),dq.signific(nagarch.sstdback),dq.signific(avgarch.sstdback))
+
+r21 <- 
+r22 <- c(uc.signific(egarch.stdback),uc.signific(gjrgarch.stdback),uc.signific(tgarch.stdback),uc.signific(nagarch.stdback),uc.signific(avgarch.stdback))
+r23 <- c(cc.signific(egarch.stdback),cc.signific(gjrgarch.stdback),cc.signific(tgarch.stdback),cc.signific(nagarch.stdback),cc.signific(avgarch.stdback))
+r24 <- c(dq.signific(egarch.stdback),dq.signific(gjrgarch.stdback),dq.signific(tgarch.stdback),dq.signific(nagarch.stdback),dq.signific(avgarch.stdback))
+
+r27 <- 
+r28 <- c(uc.signific(egarch.normback),uc.signific(gjrgarch.normback),uc.signific(tgarch.normback),uc.signific(nagarch.normback),uc.signific(avgarch.normback))
+r29 <- c(cc.signific(egarch.normback),cc.signific(gjrgarch.normback),cc.signific(tgarch.normback),cc.signific(nagarch.normback),cc.signific(avgarch.normback))
+r30 <- c(dq.signific(egarch.normback),dq.signific(gjrgarch.normback),dq.signific(tgarch.normback),dq.signific(nagarch.normback),dq.signific(avgarch.normback))
 
 table_tests[2,] <- paste0(round(table_tests[2,],2),"") #placeholder
 table_tests[3,] <- paste0(round(as.numeric(table_tests[3,]),2),r3)
@@ -1055,6 +1083,7 @@ row_group_label_fonts <- list(
 list(bold = T, italic = T)
 )
 df <- as.matrix(df)
+df <- round(df,3)
 rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
 ```
 
@@ -1064,7 +1093,8 @@ rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC",
 \newpage
 
 ```{r table4, echo=F, results='asis'}
-df %>% kbl(booktabs=T, format="latex",caption = "VaR and CVaR tests",
+df %>% kbl(booktabs=T,
+           caption = "VaR and CVaR tests",
       label = 'Table4',row.names = T) %>%
   kable_styling() %>%
   kable_classic(full_width = F)%>%
@@ -1194,7 +1224,7 @@ In order to check if the models are specified correctly, some specification chec
 $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$. 
 
 A first test performed is the Ljung-box test on the absolute value of the standardized residuals of the GARCH models.
-```{r echo=FALSE, results='asis'}
+```{r lbprep, echo=FALSE, results='asis'}
 #LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test) <- Models.garch
@@ -1245,7 +1275,7 @@ LJ.test.df <- as.data.frame(LJ.test.matrix)
 ```
 
 
-```{r echo=FALSE, results='asis'}
+```{r lbtable, echo=FALSE, results='asis'}
 #LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
 LJ.Test.2 <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test.2) <- Models.garch
