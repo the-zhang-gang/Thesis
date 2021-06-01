@@ -1297,6 +1297,7 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
   pack_rows("Panel B: Ljung Box Test on standardized squared residuals", 6,10) %>%
   footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics for the absolute value of the standardized residuals and for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in Panel A is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$", "The null hypothesis of the test in Panel B is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
+
 ```
 
 
@@ -1304,6 +1305,7 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
+#t.test(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), mu = 0)
 
 #ARCH lm TEST
 
