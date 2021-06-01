@@ -34,11 +34,20 @@ suppressMessages(install_bitbucket("alexiosg/racd"))
 options(knitr.kable.NA = "")
 remotes::install_github("R-Finance/xtsExtra")
 
-data <- suppressWarnings(read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2)) #warnings are NA's
-colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
-Price_indices <- as.xts(data[,-1], order.by = data$Date)
-Estoxx <- Price_indices[-1,1] #see if price index
-R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
+# data <- suppressWarnings(read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2)) #warnings are NA's
+# colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
+# Price_indices <- as.xts(data[,-1], order.by = data$Date)
+# Estoxx <- Price_indices[-1,1] #see if price index
+# R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
+
+Return <- read_excel("data/Price_Return.xlsx", 
+    sheet = "Return", col_types = c("date", 
+        rep("numeric", 4)))
+
+Return <- xts(Return[,-1], order.by = Return$Name)
+Return <- window(Return, start = "2001-01-02")
+Return <- diff(Return, log = TRUE, na.pad = FALSE)*100
+R <- Return$ES50
 require(readr)
 ```
 
