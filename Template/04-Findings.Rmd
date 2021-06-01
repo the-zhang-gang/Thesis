@@ -34,7 +34,6 @@ suppressMessages(install_bitbucket("alexiosg/racd"))
 options(knitr.kable.NA = "")
 remotes::install_github("R-Finance/xtsExtra")
 
-
 data <- suppressWarnings(read_excel("data/Price_Return.xlsx", 
     sheet = "Return", col_types = c("date", 
         "numeric", "numeric", "numeric", 
@@ -43,7 +42,7 @@ colnames(data) <- c("Date", colnames(data)[-1])
 indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- indices[-1,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
-R <- na.omit(R)
+R <- na.omit(R) 
 ```
 
 ### MLE distribution parameters

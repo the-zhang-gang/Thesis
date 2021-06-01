@@ -44,14 +44,15 @@ knitr::opts_chunk$set(warning = FALSE)
 # write.xlsx(R, "data/Eurostoxx50.xlsx", sheetName = "Eurostoxx50", 
 #   col.names = TRUE, row.names = TRUE, append = FALSE)
 
-Return <- read_excel("data/Price_Return.xlsx", 
+data <- suppressWarnings(read_excel("data/Price_Return.xlsx", 
     sheet = "Return", col_types = c("date", 
-        rep("numeric", 4)))
-
-Return <- xts(Return[,-1], order.by = Return$Name)
-Return <- window(Return, start = "2001-01-02")
-Return <- diff(Return, log = TRUE, na.pad = FALSE)*100
-R <- Return$ES50
+        "numeric", "numeric", "numeric", 
+        "numeric"))) #warnings are NA's
+colnames(data) <- c("Date", colnames(data)[-1])
+indices <- as.xts(data[,-1], order.by = data$Date)
+Estoxx <- indices[-1,1] #see if price index
+R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
+R <- na.omit(R) 
 
 Rbali <- window(R, end = "2004-12-31") #up till end of balis dataset
 
