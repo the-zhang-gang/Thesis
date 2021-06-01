@@ -48,103 +48,27 @@ Moreover, volatility is only a sufficient statistic for the dispersion of the re
 
 [^literature-review-2]: For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e. residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined.
 
-### ARCH model
+### From ARCH to GARCH models {#univ-garch}
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling.
 
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by @engle1982, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling. To fully capture the logic behind GARCH models, the building blocks are examined in the first place. There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\mu$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (**i**id), notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
-
+There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \@ref(eq:eq1), \@ref(eq:eq2) and \@ref(eq:eq3). Returns are written as a constant part ($\alpha_0$) and an unexpected part, called noise or the innovation process. The innovation process is the volatility ($\sigma_t$) times $z_t$, which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (**i**id), notes the fact that the $z$-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant $\omega$, plus the random part which depends on the return shock of the previous period squared ($\varepsilon_{t-1}^2$). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element $\sigma_t^2$ is thus known at time $t-1$, while it is a deterministic function of a random variable observed at time $t-1$ (i.e. $\varepsilon_{t-1}^2$).
 ```{=tex}
-\begin{align} 
-y_{t} &= \mu + \varepsilon_t
- (\#eq:eq1)
-\end{align}
+\begin{equation} 
+y_{t} = \alpha_0 + \alpha_1 \times \varepsilon_t
+ (\#eq:eq1) 
+\end{equation}
 
-\begin{align} 
-\varepsilon_{t} &= \sigma_t \times z_t, \ where \ z_t \stackrel{iid}{\sim} (0,1)
- (\#eq:eq2)
-\end{align} 
+\begin{equation}
+\varepsilon_{t} = \sigma_t \times z_t, \ where \ z_t \stackrel{iid}{\sim} (0,1)
+ (\#eq:eq2) 
+\end{equation}
 
-\begin{align} 
-\sigma_{t}^{2} &= \beta_0 + \beta_1 \times  \varepsilon_{t-1}^2 
+\begin{equation}
+\sigma_{t}^{2} = \beta_0 + \beta_1 \times  \varepsilon_{t-1}^2 
  (\#eq:eq3)
-\end{align}
+\end{equation}
 ```
-\noindent From these components we could look at the conditional moments (or expected returns and variance). We can plug in the component $\sigma_t$ into the conditional mean innovation $\varepsilon_{t}$ and use the conditional mean innovation to examine the conditional mean return. In equation \@ref(eq:eq4) and \@ref(eq:eq5) they are derived. Because the random variable $z_t$ is distributed with a zero-mean, the conditional expectation is 0. As a consequence, the conditional mean return in equation \@ref(eq:eq5) is equal to the unconditional mean in the most simple case. But variations are possible using ARMA (eg. AR(1)) processes.
-
-```{=tex}
-\begin{align} 
-\mathbb{E}_{t-1}(\varepsilon_{t}) = \mathbb{E}_{t-1}(\sqrt{\beta_0 + \beta_1 \times  \varepsilon_{t-1}^2} \times z_t) = \sigma_t\mathbb{E}_{t-1}(z_t) = 0
- (\#eq:eq4)
-\end{align} 
-```
-```{=tex}
-\begin{align} 
-\mathbb{E}_{t-1}(y_{t}) = \mu + \mathbb{E}_{t-1}(\varepsilon_{t}) = \mu
- (\#eq:eq5)
-\end{align}
-```
-\noindent For the conditional variance, knowing everything that happened until and including period $t-1$ the conditional innovation variance is given by equation \@ref(eq:eq6). This is equal to $\sigma_t^2$, while the variance of $z_t$ is equal to 1. Then it is easy to derive the conditional variance of returns in equation \@ref(eq:eq7), that is why equation \@ref(eq:eq3) is called the variance equation.
-
-```{=tex}
-\begin{align} 
-var_{t-1}(\varepsilon_t) = \mathbb{E}_{t-1}(\varepsilon_{t}^2) = \mathbb{E}_{t-1}(\sigma_t^2 \times z_t^2) = \sigma_t^2\mathbb{E}_{t-1}(z_t^2) = \sigma_t^2
- (\#eq:eq6)
-\end{align} 
-```
-```{=tex}
-\begin{align} 
-var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
- (\#eq:eq7)
-\end{align}
-```
-\noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \@ref(eq:eq11). After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \@ref(eq:eq8) for the unconditional variance, equal to the constant $c$ and divided by $1-\beta_1$, the slope of the variance equation.
-
-```{=tex}
-\begin{align} 
-\sigma^2 = \dfrac{\beta_0}{1-\beta_1}
- (\#eq:eq8)
-\end{align}
-```
-\noindent This leads to the properties of ARCH models: Stationarity[^literature-review-3] condition for variance: $\beta_0>0$ and $0 \le \beta_1 < 1$. But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process $\varepsilon_t$. The unconditional 4th moment, kurtosis $\mathbb{E}(\varepsilon_t^4)/\sigma^4$ of an ARCH model is given by equation \@ref(eq:eq9). This term is larger than 3, which implicates fat-tails.
-
-[^literature-review-3]: Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.
-
-```{=tex}
-\begin{align} 
-3\dfrac{1-\beta_1^2}{1-3\beta_1^2}
- (\#eq:eq9)
-\end{align}
-```
-\noindent Another property of ARCH models is that it takes into account volatility clustering. Because we know that $var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \omega/(1-\alpha_1)$, we can plug in $\beta_0$ for the conditional variance $var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = c + \alpha_1\times\varepsilon_t^2$. Thus it follows that equation \@ref(eq:eq10) displays volatility clustering. If we examine the RHS, as $\alpha_1>0$ (condition for stationarity), when shock $\varepsilon_t^2$ is larger than what you expect it to be on average $\sigma^2$ the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
-
-```{=tex}
-\begin{align} 
-\sigma_{t+1}^2 - \sigma^2 = \alpha_1\times(\varepsilon_t^2 - \sigma^2)
- (\#eq:eq10)
-\end{align}
-```
-\noindent Excess kurtosis can be modeled, even when the conditional distribution is assumed to be normally distributed. The third moment, skewness, can be introduced using a skewed conditional distribution as we saw in part \@ref(conditional-distributions). The serial correlation for squared innovations is positive if fourth moment exists (equation \@ref(eq:eq9), this is volatility clustering once again.
-
-\noindent How will then the variance be forecasted? Well, the conditional variance for the $k$-periods ahead , denoted as period $T+k$, is given by equation \@ref(eq:eq11). This can already be simplified, while we know that $\sigma_{T+1}^2 = \omega + \alpha_1 \times \varepsilon_T^2$ from equation \@ref(eq:eq3).
-
-```{=tex}
-\begin{align} 
-\begin{split}
-\mathbb{E}_T(\varepsilon_{T+k}^2) 
-&= \omega\times(1+\alpha_1 + ... + \alpha^{k-2}) + \alpha^{k-1}\times\sigma_{T+1}^2 \\
-&= \omega\times(1+\alpha_1 + ... + \alpha^{k-1}) + \alpha^{k}\times\sigma_{T}^2
-\end{split}
- (\#eq:eq11)
-\end{align}
-```
-\noindent It can be shown that then the conditional variance in period $T+k$ is equal to equation \@ref(eq:eq12). The LHS is the predicted conditional variance $k$-periods ahead above its unconditional variance, $\sigma^2$. The RHS is the difference current last-observed return residual $\varepsilon_T^2$ above the unconditional average multiplied by $\alpha_1^k$, a decreasing function of $k$ (given that $0 \le\alpha_1 <1$). The further ahead predicting the variance, the closer $\alpha_1^k$ comes to zero, the closer to the unconditional variance, i.e. the long-run variance.
-
-```{=tex}
-\begin{align} 
-\mathbb{E}_T(\varepsilon_{T+k}^2) - \sigma^2 = \alpha_1^k\times(\varepsilon_T^2 - \sigma^2)
- (\#eq:eq12)
-\end{align}
-```
-### Univariate GARCH models {#univ-garch}
+The full description of the ARCH model is given in appendix part \@ref(ARCH).
 
 \noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)[^literature-review-4]. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \@ref(conditional-distributions) will be used. As @alexander2008 explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function[^literature-review-5]. An overview (of a selection) of investigated GARCH models is given in the following table.
 

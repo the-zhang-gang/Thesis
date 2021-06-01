@@ -250,12 +250,15 @@ title("ACF (Squared prediction errors)")
 $$\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)$$
 
 ```{=tex}
-\begin{align} 
+\begin{equation} 
 \theta^{*} = arg \max_{\theta} [ L] 
  (\#eq:optim)
-\end{align}
+\end{equation}
+
+\begin{equation} 
+\theta^{*} = arg \max_{\theta} [\log(L)]
+\end{equation}
 ```
-$$\theta^{*} = arg \max_{\theta} [\log(L)]$$
 
 After estimation of the GARCH models in-sample, out-sample analysis is done by performing a rolling window approach. With assumptions: a window of 2500 observations and re-estimation every year.
 
