@@ -34,12 +34,15 @@ suppressMessages(install_bitbucket("alexiosg/racd"))
 options(knitr.kable.NA = "")
 remotes::install_github("R-Finance/xtsExtra")
 
-data <- suppressWarnings(read_excel("data/datastream.xlsx",col_types = c("date", rep("numeric", 6)),skip = 2)) #warnings are NA's
-colnames(data) <- c("Date",gsub(pattern = " - PRICE INDEX", replacement='' , colnames(data)[2:7]))
-Price_indices <- as.xts(data[,-1], order.by = data$Date)
-Estoxx <- Price_indices[-1,1] #see if price index
+data <- suppressWarnings(read_excel("data/Price_Return.xlsx", 
+    sheet = "Return", col_types = c("date", 
+        "numeric", "numeric", "numeric", 
+        "numeric"))) #warnings are NA's
+colnames(data) <- c("Date", colnames(data)[-1])
+indices <- as.xts(data[,-1], order.by = data$Date)
+Estoxx <- indices[-1,1] #see if price index
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
-require(readr)
+R <- na.omit(R)
 ```
 
 ### MLE distribution parameters
@@ -318,15 +321,15 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 ```
 
 ```{r table2final,echo=FALSE, results='asis'}
-kbl(table2,col.names= c("$\\theta$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
-      label = 'MLEtable',"latex",
+kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
+      label = 'MLEtable',format="latex",
       booktabs = T,
       position = "h!",
       digits = 3,
     escape=F
       )%>%
   kable_classic(full_width = F)%>%
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases.  \\\\\\\\ The underlying data is the daily return series of the Euro Stoxx 50for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 \clearpage
@@ -546,8 +549,8 @@ for(i in 1:length(distributions)){
 }
 #Kabling
 
-fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH \\\\\\\\ models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the  \\\\\\\\ periodfrom ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t \\\\\\\\$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility \\\\\\\\, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. \\\\\\\\$LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and $t$ statistics are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 require(stringr)
 ```
 
@@ -609,7 +612,7 @@ for (i in 1:length(distributions)) {
 }
 
 aics <- matrix(ncol=length(Models.garch), nrow = length(distributions))
-rownames(aics) <- distributions
+rownames(aics) <- c("N", "T", "ST", "GED", "SGED")
 colnames(aics) <- Models.garch.clean[c(1,7,8,2,5,4,6,3)]
 aics[,1] <- aic_sGARCH
 aics[,2] <- aic_iGARCH
@@ -639,12 +642,12 @@ tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min
 \newpage
 ```{r aictablelatex, echo=F, results='asis'}
 aics %>% kbl(caption = "Model selection according to AIC",
-      label = 'aicTable',
+      label = 'aicTable',format="latex",
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title= "Notes",general="This table shows the AIC value for the respective model",threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title= "Notes",general="This table shows the AIC value for the respective model. With on the rows the distributions. ",threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
@@ -680,7 +683,7 @@ ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green
 
 ```{r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center',fig.pos='h', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
-xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
+xtsExtra::plot.xts(na.omit(Estoxx), col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
 ```
 
 ```{r garchroll, echo = FALSE}
@@ -688,7 +691,7 @@ xtsExtra::plot.xts(Estoxx, col = 'steelblue', screens = 1, blocks = list(start.t
 # x = garchspec.eGARCH[[i]]
 roll <- function(x) { 
   cl = makePSOCKcluster(10)
-  result = ugarchroll(x,data = R,n.ahead = 1,n.start = 2500,forecast.length=1,refit.every = 252,solver = "hybrid",refit.window="moving",calculate.VaR=TRUE,VaR.alpha=0.01, cluster = cl, keep.coef=TRUE)
+  result = ugarchroll(x,data = R,n.ahead = 1,n.start = 2500,forecast.length=1,refit.every = 22,solver = "hybrid",refit.window="moving",calculate.VaR=TRUE,VaR.alpha=0.01, cluster = cl, keep.coef=TRUE)
   stopCluster(cl)
   return(result)
 }
@@ -696,11 +699,11 @@ roll <- function(x) {
 ```
 
 ```{r garchrollegarch, echo = FALSE}
-egarch.normback <- roll(garchspec.eGARCH[[1]]) #19.66 sec
-egarch.stdback <- roll(garchspec.eGARCH[[2]])  #22.68 sec
-egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #24.02 sec
-egarch.gedback <- roll(garchspec.eGARCH[[4]])  #20.54 sec
-egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #30.70 sec
+egarch.normback <- roll(garchspec.eGARCH[[1]]) #37.66 sec
+egarch.stdback <- roll(garchspec.eGARCH[[2]])  #1,3min 
+egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #1.5min
+egarch.gedback <- roll(garchspec.eGARCH[[4]])  #1.1min
+egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #2min 
 ```
 
 ```{r garchrollgjrgarch, echo = FALSE}
