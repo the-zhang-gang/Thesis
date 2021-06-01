@@ -154,7 +154,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 
 \noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(normtest::jb.norm.test(R)$statistic,3)`, given its high significance, confirms the rejection of the normality assumption. \
 
-\noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with it's peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
+\noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with its peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 ```{r plot1, echo=F, fig.cap='Euro Stoxx 50 Price Index prices', fig.align='center', out.width="95%", fig.pos='h'}
 par(mfrow=c(1,1))
@@ -180,15 +180,13 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estox
 knitr::include_graphics('figures/vol-clustering-finalized-2.png')
 ```
 
-\newpage
-
-\noindent In figure \@ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days), annualized 252 days. As in figure \@ref(fig:plot2), you can see again the pattern of volatility clustering arise.
+<!-- \noindent In figure \@ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days), annualized 252 days. As in figure \@ref(fig:plot2), you can see again the pattern of volatility clustering arise. -->
 
 ```{r plot3, echo=F, fig.cap='Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "65%", fig.align='center', fig.pos='h'}
 #Plotting volatility
-par(mfrow = c(1,1))
-realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
-plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Euro Stoxx 50 rolling 22-day volatility (annualized)");grid()
+# par(mfrow = c(1,1))
+# realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
+# plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Euro Stoxx 50 rolling 22-day volatility (annualized)");grid()
 # chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```
 

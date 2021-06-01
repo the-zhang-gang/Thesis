@@ -305,7 +305,7 @@ MLE_GFC <- DistMLE(R_GFC)
 MLE_covid <- DistMLE(R_covid)
 ```
 
-In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) is reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one less parameter, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.[^findings-1]  \
+In table \@ref(tab:MLEtable) we can see the estimated parameters of the unconditional distribution functions. They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) is reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one parameter less, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1% and 5% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1% level, though the $q$ parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.[^findings-1]  \
 
 [^findings-1]: To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.
 
@@ -1026,29 +1026,29 @@ dq.signific <- function(x) {
 }
 #PVALUES LOOPS
 r3 <- 
-r4 <- c(uc.signific(egarch.sgedback),uc.signific(gjrgarch.sgedback),uc.signific(tgarch.sgedback),uc.signific(nagarch.sgedback),uc.signific(avgarch.sgedback))
-r5 <- c(cc.signific(egarch.sgedback),cc.signific(gjrgarch.sgedback),cc.signific(tgarch.sgedback),cc.signific(nagarch.sgedback),cc.signific(avgarch.sgedback))
-r6 <- c(dq.signific(egarch.sgedback),dq.signific(gjrgarch.sgedback),dq.signific(tgarch.sgedback),dq.signific(nagarch.sgedback),dq.signific(avgarch.sgedback))
+r4 <- c(uc.signific(e_sged),uc.signific(gjr_sged),uc.signific(t_sged),uc.signific(na_sged),uc.signific(av_sged))
+r5 <- c(cc.signific(e_sged),cc.signific(gjr_sged),cc.signific(t_sged),cc.signific(na_sged),cc.signific(av_sged))
+r6 <- c(dq.signific(e_sged),dq.signific(gjr_sged),dq.signific(t_sged),dq.signific(na_sged),dq.signific(av_sged))
 
 r9 <- 
-r10 <- c(uc.signific(egarch.gedback),uc.signific(gjrgarch.gedback),uc.signific(tgarch.gedback),uc.signific(nagarch.gedback),uc.signific(avgarch.gedback))
-r11 <- c(cc.signific(egarch.gedback),cc.signific(gjrgarch.gedback),cc.signific(tgarch.gedback),cc.signific(nagarch.gedback),cc.signific(avgarch.gedback))
-r12 <- c(dq.signific(egarch.gedback),dq.signific(gjrgarch.gedback),dq.signific(tgarch.gedback),dq.signific(nagarch.gedback),dq.signific(avgarch.gedback))
+r10 <- c(uc.signific(e_ged),uc.signific(gjr_ged),uc.signific(t_ged),uc.signific(na_ged),uc.signific(av_ged))
+r11 <- c(cc.signific(e_ged),cc.signific(gjr_ged),cc.signific(t_ged),cc.signific(na_ged),cc.signific(av_ged))
+r12 <- c(dq.signific(e_ged),dq.signific(gjr_ged),dq.signific(t_ged),dq.signific(na_ged),dq.signific(av_ged))
 
 r15 <- 
-r16 <- c(uc.signific(egarch.sstdback),uc.signific(gjrgarch.sstdback),uc.signific(tgarch.sstdback),uc.signific(nagarch.sstdback),uc.signific(avgarch.sstdback))
-r17 <- c(cc.signific(egarch.sstdback),cc.signific(gjrgarch.sstdback),cc.signific(tgarch.sstdback),cc.signific(nagarch.sstdback),cc.signific(avgarch.sstdback))
-r18 <- c(dq.signific(egarch.sstdback),dq.signific(gjrgarch.sstdback),dq.signific(tgarch.sstdback),dq.signific(nagarch.sstdback),dq.signific(avgarch.sstdback))
+r16 <- c(uc.signific(e_sstd),uc.signific(gjr_sstd),uc.signific(t_sstd),uc.signific(na_sstd),uc.signific(av_sstd))
+r17 <- c(cc.signific(e_sstd),cc.signific(gjr_sstd),cc.signific(t_sstd),cc.signific(na_sstd),cc.signific(av_sstd))
+r18 <- c(dq.signific(e_sstd),dq.signific(gjr_sstd),dq.signific(t_sstd),dq.signific(na_sstd),dq.signific(av_sstd))
 
 r21 <- 
-r22 <- c(uc.signific(egarch.stdback),uc.signific(gjrgarch.stdback),uc.signific(tgarch.stdback),uc.signific(nagarch.stdback),uc.signific(avgarch.stdback))
-r23 <- c(cc.signific(egarch.stdback),cc.signific(gjrgarch.stdback),cc.signific(tgarch.stdback),cc.signific(nagarch.stdback),cc.signific(avgarch.stdback))
-r24 <- c(dq.signific(egarch.stdback),dq.signific(gjrgarch.stdback),dq.signific(tgarch.stdback),dq.signific(nagarch.stdback),dq.signific(avgarch.stdback))
+r22 <- c(uc.signific(e_std),uc.signific(gjr_std),uc.signific(t_std),uc.signific(na_std),uc.signific(av_std))
+r23 <- c(cc.signific(e_std),cc.signific(gjr_std),cc.signific(t_std),cc.signific(na_std),cc.signific(av_std))
+r24 <- c(dq.signific(e_std),dq.signific(gjr_std),dq.signific(t_std),dq.signific(v),dq.signific(av_std))
 
 r27 <- 
-r28 <- c(uc.signific(egarch.normback),uc.signific(gjrgarch.normback),uc.signific(tgarch.normback),uc.signific(nagarch.normback),uc.signific(avgarch.normback))
-r29 <- c(cc.signific(egarch.normback),cc.signific(gjrgarch.normback),cc.signific(tgarch.normback),cc.signific(nagarch.normback),cc.signific(avgarch.normback))
-r30 <- c(dq.signific(egarch.normback),dq.signific(gjrgarch.normback),dq.signific(tgarch.normback),dq.signific(nagarch.normback),dq.signific(avgarch.normback))
+r28 <- c(uc.signific(e_norm),uc.signific(gjr_norm),uc.signific(t_norm),uc.signific(na_norm),uc.signific(av_norm))
+r29 <- c(cc.signific(e_norm),cc.signific(gjr_norm),cc.signific(t_norm),cc.signific(na_norm),cc.signific(av_norm))
+r30 <- c(dq.signific(e_norm),dq.signific(gjr_norm),dq.signific(t_norm),dq.signific(na_norm),dq.signific(av_norm))
 
 table_tests[2,] <- paste0(round(table_tests[2,],2),"") #placeholder
 table_tests[3,] <- paste0(round(as.numeric(table_tests[3,]),2),r3)
