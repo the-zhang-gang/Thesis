@@ -1341,16 +1341,6 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
 
 
 ```{r eval=FALSE}
-#SIGNbias <- signbias(garchfit.sGARCH[[1]])
-#Nyblom <- nyblom(garchfit.sGARCH[[1]])
-#t.test(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), sd = 1)
-
-jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-qqnorm(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
-qqline(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
-
-plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)))
 #ARCH lm TEST
 
 ARCH.lm.Test <- vector(mode = "list", length = length(Models.garch))
@@ -1415,8 +1405,67 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
   footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+```{r eval=FALSE}
+#SIGNbias <- signbias(garchfit.sGARCH[[1]])
+#Nyblom <- nyblom(garchfit.sGARCH[[1]])
+#t.test(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), sd = 1)
 
+# test <- jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+# lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+# qqnorm(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
+# qqline(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
+# test@test$statistic
+# plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)))
 
+#LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
+JB.test <- vector(mode = "list", length = length(Models.garch))
+names(JB.test) <- Models.garch
+for(i in 1:length(JB.test)){
+  JB.test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
+}
+#create a function to make Lj box test for squared residuals(((Change the number 22 into how many days back you want to test)))
+
+Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
+  tmp.1 <- lillieTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
+  test <- c(tmp.1@test$statistic, tmp.1@test$p.value)
+  return(test)
+}
+
+for(i in 1:length(distributions)){
+  JB.test[[1]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.sGARCH, n.list = i))
+    JB.test[[2]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.eGARCH, n.list = i))
+      JB.test[[3]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i))
+        JB.test[[4]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i))
+          JB.test[[5]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.gjrGARCH, n.list = i))
+            JB.test[[6]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i))
+              JB.test[[7]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.iGARCH, n.list = i))
+                JB.test[[8]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.EWMA, n.list = i))
+}
+
+JB.test <- lapply(JB.test, round, 3)
+
+for(i in 1:length(JB.test)){
+JB.test[[i]][1,which(JB.test[[i]][2,]>=0.10)] <- JB.test[[i]][1,which(JB.test[[i]][2,]>=0.10)]
+JB.test[[i]][1,which(JB.test[[i]][2,]<0.10&JB.test[[i]][2,]>0.05)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<0.10&JB.test[[i]][2,]>0.05)],"*")
+JB.test[[i]][1,which(JB.test[[i]][2,]<=0.05&JB.test[[i]][2,]>0.01)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<=0.05&JB.test[[i]][2,]>0.01)],"**")
+JB.test[[i]][1,which(JB.test[[i]][2,]<=0.01)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<=0.01)],"***")
+JB.test[[i]] <- JB.test[[i]][-2,]
+}
+
+JB.test.matrix <- cbind(JB.test[[1]],JB.test[[2]],JB.test[[3]],JB.test[[4]],JB.test[[5]],JB.test[[6]],JB.test[[7]],JB.test[[8]])
+colnames(JB.test.matrix) <- Models.garch.clean
+JB.test.df <- as.data.frame(JB.test.matrix)
+
+JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
+      label = 'JBTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistics value for the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows: WRITE NULL HYPOTHESIS HERE"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+
+```
 *Residual heteroscedasticity*
 
 Ljung-Box test on the squared or absolute standardized residuals.
