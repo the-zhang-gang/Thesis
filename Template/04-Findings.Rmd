@@ -1231,14 +1231,14 @@ LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.T
 colnames(LJ.test.matrix) <- Models.garch.clean
 LJ.test.df <- as.data.frame(LJ.test.matrix)
 
-LJ.test.df %>% kbl(caption = "Ljung Box Test on standardized residuals in absolute values",
-      label = 'LjboxTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3 )%>%
-  kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the absolute values of the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
+# LJ.test.df %>% kbl(caption = "Ljung Box Test on standardized residuals in absolute values",
+#       label = 'LjboxTable',
+#       booktabs = T,
+#       position = "h!",
+#       digits = 3 )%>%
+#   kable_classic(full_width = F)%>%
+#   footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the absolute values of the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+#   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
 
@@ -1281,14 +1281,18 @@ LJ.Test.2[[i]] <- LJ.Test.2[[i]][-2,]
 LJ.test.matrix.2 <- cbind(LJ.Test.2[[1]],LJ.Test.2[[2]],LJ.Test.2[[3]],LJ.Test.2[[4]],LJ.Test.2[[5]],LJ.Test.2[[6]],LJ.Test.2[[7]],LJ.Test.2[[8]])
 colnames(LJ.test.matrix.2) <- Models.garch.clean
 LJ.test.df.2 <- as.data.frame(LJ.test.matrix.2)
-
-LJ.test.df.2 %>% kbl(caption = "Ljung Box Test on standardized squared residuals",
-      label = 'LjboxTablesquared',
+LJ.test.df.all <- rbind(LJ.test.df, LJ.test.df.2)
+LJ.test.df.all <- as.matrix(LJ.test.df.all)
+rownames(LJ.test.df.all) <- rep(rownames(LJ.test.df),2)
+LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
+      label = 'LjboxTable',
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  pack_rows("Panel A: Ljung Box Test on the standardized absolute values of the residuals", 1,5) %>%
+  pack_rows("Panel B: Ljung Box Test on standardized squared residuals", 6,10) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics for the absolute value of the standardized residuals and for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in Panel A is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$", "The null hypothesis of the test in Panel B is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
