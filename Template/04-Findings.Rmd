@@ -1296,8 +1296,16 @@ $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\
  The description of table 
 
 
-
 ```{r eval=FALSE}
+#SIGNbias <- signbias(garchfit.sGARCH[[1]])
+#Nyblom <- nyblom(garchfit.sGARCH[[1]])
+#t.test(rugarch::residuals(garchfit.sGARCH[[1]], standardize = T), mu = 0)
+#jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+#lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+#WeightedPortTest::Weighted.LM.test(garchfit.eGARCH[[1]]@fit$residuals, garchfit.eGARCH[[1]]@fit$sigma, lag = 22) #Li Mak test
+
+#ARCH lm TEST
+
 archlmtest = function (garchmodel, lags = 22, demean = FALSE, n.list = 1){
   x <- rugarch::residuals(garchmodel[[n.list]], standardize = T) 
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
@@ -1350,6 +1358,102 @@ heterosc.all %>% kbl(caption = "Diagnostic Tests for Heteroscedasticity",
 
 Ljung-Box test on the squared or absolute standardized residuals.
 
+
+```{r}
+.embed<-function(data, k, by = 1, ascending = FALSE)
+{
+	data = matrix(data,ncol=1)
+	n<-dim(data)[1]
+	s <- seq(1,n-k+1,by)
+	lens <- length(s)
+	cols <- if (ascending) 1:k else k:1
+	return(matrix(data[s + rep(cols,rep(lens,k))-1],lens))
+}
+
+.lagx = function(data, n.lag=1, removeNA = FALSE, pad = NA)
+{
+	data = as.matrix(data)
+	n = dim(data)[1]
+	d = dim(data)[2]
+	if(dim(data)[2]==1) data=matrix(data,ncol=1)
+	z = apply(data,2,FUN=function(x) .embed(x,n.lag+1)[,n.lag+1])
+	if(!removeNA) z = rbind(matrix(pad,ncol=d,nrow=n.lag),z)
+	return(z)
+}
+
+.waldcomomtest = function(z, lags, N){
+	f0 = z %*% matrix(1, nrow = 1, ncol = lags)
+	fx = NULL
+	for(i in 1:lags) fx = cbind(fx, .lagx(z, n.lag = i, pad = 0))
+	fx = fx[-c(1:lags), , drop = FALSE]
+	f0 = f0[-c(1:lags), , drop = FALSE]
+	fmat = f0 * fx
+	g = colMeans(fmat)
+	varg = apply(fmat, 2, FUN = function(x) mean(x^2)/N)
+	tval = g/varg
+	h = t(fmat)
+	S = (h%*%t(h))/N
+	joint = N*t(g)%*%solve(S)%*%g
+	tval = c(tval, joint)
+	return(list(tval = tval, h = h, g = g, varg = varg, S = S))
+}
+
+GMMTest.2 = function(z, lags = 22, skew=0, kurt=3, conf.level = 0.95){
+  require(rugarch)
+	if(length(skew)>1) sk = skew[-c(1:lags)] else sk = skew
+	if(length(kurt)>1) ku = kurt[-c(1:lags)] else ku = kurt
+	z = matrix(z, ncol = 1)
+	N = dim(z)[1] - lags #DEGREES OF FREEDOM
+	zlag = z[-c(1:lags), , drop = FALSE]
+	orthmat = matrix(NA, ncol = 8, nrow = 3)
+	colnames(orthmat) = c("E[z]", "E[z^2]-1", "E[z^3]", "E[z^4]-3", "Q2", "Q3", "Q4","J")
+	rownames(orthmat) = c("mean", "var", "t.value")
+	f1 = zlag[,1]
+	orthmat[1:3,1] = c(mean(f1), mean(f1^2)/N, mean(f1)/sqrt(mean(f1^2)/N))
+	f2 = (zlag[,1]^2)-1
+	orthmat[1:3,2] = c(mean(f2), mean(f2^2)/N, mean(f2)/sqrt(mean(f2^2)/N))
+	f3 = zlag[,1]^3-sk
+	orthmat[1:3,3] = c(mean(f3), mean(f3^2)/N, mean(f3)/sqrt(mean(f3^2)/N))
+	f4 = zlag[,1]^4-ku
+	orthmat[1:3,4] = c(mean(f4), mean(f4^2)/N, mean(f4)/sqrt(mean(f4^2)/N))
+	M = rbind(t(f1), t(f2), t(f3), t(f4))
+
+	tmp1 = .waldcomomtest(z[,1]^2-1, lags, N)
+	orthmat[3, 5] = tmp1$tval[lags+1]
+
+	tmp2 = .waldcomomtest(z[,1]^3-skew, lags, N)
+	orthmat[3, 6] = tmp2$tval[lags+1]
+
+	tmp3 = .waldcomomtest(z[,1]^4-kurt, lags, N)
+	orthmat[3, 7] = tmp3$tval[lags+1]
+
+	M = rbind(M, tmp1$h, tmp2$h, tmp3$h)
+	g = c(as.numeric(orthmat[1,1:4]), tmp1$g, tmp2$g, tmp3$g)
+
+	# all moments
+	S = (M %*% t(M))/N
+	jtval = N*t(g)%*%solve(S)%*%g
+	orthmat[3,8] = jtval
+	p = rep(conf.level, 2)
+	df = c(lags, lags, lags, (4+3*lags))
+	critical.values = qchisq(p,df)
+	# i.e. if tval>critical value reject the NULL
+	Decision = NULL
+	Decision[1] = ifelse(orthmat[3, 5]<critical.values[1], "Fail to Reject H0", "Reject H0")
+	Decision[2] = ifelse(orthmat[3, 6]<critical.values[2], "Fail to Reject H0", "Reject H0")
+	Decision[3] = ifelse(orthmat[3, 7]<critical.values[3], "Fail to Reject H0", "Reject H0")
+	Decision[4] = ifelse(orthmat[3, 8]<critical.values[4], "Fail to Reject H0", "Reject H0")
+
+	H0 = "[Q-Moment Conditions] Model is Correctly Specified"
+	moment.mat = orthmat[1:3,1:4]
+	joint.mat = rbind(orthmat[3,5:8], critical.values)
+	rownames(joint.mat) = c("t-value", "critical.value")
+	return(list(joint.mat = joint.mat, moment.mat = moment.mat, H0 = H0, Decision = Decision) )
+}
+```
+
+
+
 *GMM test*
 ```{r gmmtest}
 GMM.test <- vector(mode = "list", length = length(Models.garch))
@@ -1361,8 +1465,8 @@ for(i in 1:length(GMM.test)){
 
 GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
   z = rugarch::residuals(garchmodel[[n.list]],standardize=TRUE)
-  tmp.1 <- rugarch::GMMTest(z, lags = 1)
-  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4]) # t values is row 1
+  tmp.1 <- GMMTest.2(z, lags = 1)
+  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
   return(test)
 }
 
@@ -1380,7 +1484,6 @@ for(i in 1:length(distributions)){
 GMM.test <- lapply(GMM.test, round, 3)
 GMM.test.matrix <- rbind(GMM.test[[1]],GMM.test[[2]],GMM.test[[3]],GMM.test[[4]],GMM.test[[5]],GMM.test[[6]],GMM.test[[7]],GMM.test[[8]])
 
-nrow(GMM.test.matrix)
 GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
       label = 'LjboxTable',
       booktabs = T,
@@ -1399,6 +1502,8 @@ GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
+
+
 ```{r}
 #create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
 
@@ -1409,9 +1514,8 @@ Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
 }
 jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
 
-JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = F))
-
-JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
+JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = T))
+ JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
       label = 'JBTable',
       booktabs = T,
       position = "h!",
@@ -1422,7 +1526,7 @@ JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
 ```
 
 ```{r}
-WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22)
+#WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22)
 ```
 
 
@@ -1439,7 +1543,10 @@ curve(dnorm(x, mean=mean(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standa
 plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
 curve(dnorm(x, mean=0, sd=sd(scale(R))), 
       col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
+
 ```
+
+
 
 zero-mean unit-variance 
 not skewed 
