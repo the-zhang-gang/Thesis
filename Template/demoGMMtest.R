@@ -82,6 +82,9 @@ plot(fit[[5]],which=11)
 
 # TGARCH ====
 fit=garchfit.fGARCH.TGARCH
+z = rugarch::residuals(fit[[2]],standardize=T)
+tmp.4<- rugarch::GMMTest(z)
+tmp.4
 par(mfrow=c(5,1), mar = c(1,1,1,1))
 plot(fit[[1]],which=11)
 plot(fit[[2]],which=11)

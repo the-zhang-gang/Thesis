@@ -340,7 +340,7 @@ kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$
 
 ```{r garchcode, echo=FALSE}
 distributions <- c("norm", "std", "sstd", "ged", "sged")
-Models.garch <- c("sGARCH", "eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
+Models.garch <- c("sGARCH","eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
 Models.garch.clean <-  toupper(gsub("fGARCH.", "", Models.garch)) # we use this for tables
 
 for(i in 1:length(Models.garch)){
@@ -348,6 +348,7 @@ assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = lengt
 assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
 }
+
 
 #.sGARCH--------------------------
 for(i in 1:length(distributions)){
@@ -1233,16 +1234,9 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 
 
 ```{r lbprep, echo=FALSE, results='asis'}
-#LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
+#WEIGHTED LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
 
 #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
-
-Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag = 22){
-  tmp.1 <- Box.test(abs(rugarch::residuals(garchmodel[[n.list]], standardize = T)),n.lag, "Ljung-Box") 
-  test <- c(tmp.1$statistic, tmp.1$p.value)
-  return(test)
-}
-
 Table.tests.function <- function(function.to.apply = Lj.box.test.function, return.matrix = F){
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test) <- Models.garch
@@ -1276,9 +1270,6 @@ colnames(LJ.test.matrix) <- Models.garch.clean
 LJ.test.df <- as.data.frame(LJ.test.matrix)
 if(return.matrix == T){return(LJ.test.matrix)}else{return(LJ.test.df)}
 }
-
-LJ.test.df <- Table.tests.function(Lj.box.test.function, return.matrix = F)
-
 ```
 
 
@@ -1293,9 +1284,8 @@ Lj.box.test.function.2 <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.l
   return(test)
 }
 LJ.test.df.2 <- Table.tests.function(Lj.box.test.function.2, return.matrix = F)
-LJ.test.df.all <- rbind(LJ.test.df, LJ.test.df.2)
+LJ.test.df.all <- LJ.test.df.2
 LJ.test.df.all <- as.matrix(LJ.test.df.all)
-rownames(LJ.test.df.all) <- rep(rownames(LJ.test.df),2)
 ```
 \noindent In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
 $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$. 
@@ -1304,31 +1294,10 @@ $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\
 
 
  The description of table 
-```{r}
-LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
-      label = 'LjboxTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3 )%>%
-  kable_classic(full_width = F)%>%
-  pack_rows("Panel A: Ljung Box Test on the standardized absolute values of the residuals", 1,5) %>%
-  pack_rows("Panel B: Ljung Box Test on standardized squared residuals", 6,10) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics for the absolute value of the standardized residuals and for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in Panel A is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$", "The null hypothesis of the test in Panel B is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
-```
+
 
 
 ```{r eval=FALSE}
-#SIGNbias <- signbias(garchfit.sGARCH[[1]])
-#Nyblom <- nyblom(garchfit.sGARCH[[1]])
-#t.test(rugarch::residuals(garchfit.sGARCH[[1]], standardize = T), mu = 0)
-#jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-#lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-#WeightedPortTest::Weighted.LM.test(garchfit.eGARCH[[1]]@fit$residuals, garchfit.eGARCH[[1]]@fit$sigma^2, lag = 22) #Li Mak test
-
-#ARCH lm TEST
-
-#Create a function to make archlmtest ((((((change lags??????))))))
 archlmtest = function (garchmodel, lags = 22, demean = FALSE, n.list = 1){
   x <- rugarch::residuals(garchmodel[[n.list]], standardize = T) 
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
@@ -1349,7 +1318,7 @@ archlmtest = function (garchmodel, lags = 22, demean = FALSE, n.list = 1){
 	final <- c("Statistic"=result$statistic,"P Value" = result$p.value)
 	return(final)
 }
-ARCH.lm.Test.df <- Table.tests.function(archlmtest, return.matrix = F)
+ARCH.lm.Test.df <- Table.tests.function(archlmtest, return.matrix = T)
 
 ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
       label = 'ARCHLMTable',
@@ -1359,9 +1328,24 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
   kable_classic(full_width = F)%>%
   footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
+
+# install.packages("FinTS")
+# FinTS::ArchTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), lags = 22)
 ```
 
-
+```{r finallb, results='asis'}
+heterosc.all <- rbind(LJ.test.df.all, ARCH.lm.Test.df)
+heterosc.all %>% kbl(caption = "Diagnostic Tests for Heteroscedasticity",
+      label = 'LjboxTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  pack_rows("Panel A: Ljung Box Test on the standardized squared values of the residuals", 1,5) %>% 
+  pack_rows("Panel B: ARCH LM Test on the standardized squared values of the residuals", 6,10) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics and the ARCH LM Test for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in both panels are described as follows:","$H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+```
 *Residual heteroscedasticity*
 
 Ljung-Box test on the squared or absolute standardized residuals.
@@ -1378,7 +1362,7 @@ for(i in 1:length(GMM.test)){
 GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
   z = rugarch::residuals(garchmodel[[n.list]],standardize=TRUE)
   tmp.1 <- rugarch::GMMTest(z, lags = 1)
-  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
+  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4]) # t values is row 1
   return(test)
 }
 
@@ -1414,6 +1398,7 @@ GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
   footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA($H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+
 ```{r}
 #create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
 
@@ -1422,9 +1407,11 @@ Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
   test <- c(tmp.1@test$statistic, tmp.1@test$p.value)
   return(test)
 }
+jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
 
 JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = F))
- JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
+
+JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
       label = 'JBTable',
       booktabs = T,
       position = "h!",
@@ -1434,6 +1421,9 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
+```{r}
+WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22)
+```
 
 
 ```{r}
