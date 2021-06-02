@@ -1420,8 +1420,8 @@ qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
 qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
 qqline(scale(R))
 
-plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
-curve(dnorm(x, , mean=mean(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), sd=sd(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))), 
+plot(density(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
+curve(dnorm(x, mean=mean(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), sd=sd(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))), 
       col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
 plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
 curve(dnorm(x, mean=0, sd=sd(scale(R))), 
