@@ -298,7 +298,7 @@ z_{t} \sim \Delta\left(0,1, \rho_{t}, \zeta_{t}\right), \\
 (\#eq:acd)
 \end{equation}
 ```
-where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $zeta_t$ are respectively the time-varying and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0. 
+where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $zeta_t$ are respectively the time-varying skewness and shape parameter (with shape parameter meaning here the tail-tickness) and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0. 
 
 Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
