@@ -1325,18 +1325,6 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
 #lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
 #WeightedPortTest::Weighted.LM.test(garchfit.eGARCH[[1]]@fit$residuals, garchfit.eGARCH[[1]]@fit$sigma^2, lag = 22) #Li Mak test
 
-par(mfrow = c(1,2))
-qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
-qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
-qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
-qqline(scale(R))
-
-plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
-curve(dnorm(x, , mean=mean(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), sd=sd(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))), 
-      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
-plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
-curve(dnorm(x, mean=0, sd=sd(scale(R))), 
-      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
 #ARCH lm TEST
 
 #Create a function to make archlmtest ((((((change lags??????))))))
@@ -1424,6 +1412,20 @@ GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
     pack_rows("Panel H: EWMA", 29,32) %>%
   footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA($H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
+```
+```{r}
+par(mfrow = c(1,2))
+qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
+qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
+qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
+qqline(scale(R))
+
+plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
+curve(dnorm(x, , mean=mean(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)), sd=sd(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))), 
+      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
+plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
+curve(dnorm(x, mean=0, sd=sd(scale(R))), 
+      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
 ```
 
 zero-mean unit-variance 
