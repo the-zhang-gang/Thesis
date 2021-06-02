@@ -1254,7 +1254,7 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 #WEIGHTED LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
 
 #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
-Table.tests.function <- function(function.to.apply = Lj.box.test.function, return.matrix = F){
+Table.tests.function <- function(function.to.apply, return.matrix = F){
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
 names(LJ.Test) <- Models.garch
 for(i in 1:length(LJ.Test)){
@@ -1377,49 +1377,12 @@ Ljung-Box test on the squared or absolute standardized residuals.
 
 
 ```{r}
-.embed<-function(data, k, by = 1, ascending = FALSE)
-{
-	data = matrix(data,ncol=1)
-	n<-dim(data)[1]
-	s <- seq(1,n-k+1,by)
-	lens <- length(s)
-	cols <- if (ascending) 1:k else k:1
-	return(matrix(data[s + rep(cols,rep(lens,k))-1],lens))
-}
-
-.lagx = function(data, n.lag=1, removeNA = FALSE, pad = NA)
-{
-	data = as.matrix(data)
-	n = dim(data)[1]
-	d = dim(data)[2]
-	if(dim(data)[2]==1) data=matrix(data,ncol=1)
-	z = apply(data,2,FUN=function(x) .embed(x,n.lag+1)[,n.lag+1])
-	if(!removeNA) z = rbind(matrix(pad,ncol=d,nrow=n.lag),z)
-	return(z)
-}
-
-.waldcomomtest = function(z, lags, N){
-	f0 = z %*% matrix(1, nrow = 1, ncol = lags)
-	fx = NULL
-	for(i in 1:lags) fx = cbind(fx, .lagx(z, n.lag = i, pad = 0))
-	fx = fx[-c(1:lags), , drop = FALSE]
-	f0 = f0[-c(1:lags), , drop = FALSE]
-	fmat = f0 * fx
-	g = colMeans(fmat)
-	varg = apply(fmat, 2, FUN = function(x) mean(x^2)/N)
-	tval = g/varg
-	h = t(fmat)
-	S = (h%*%t(h))/N
-	joint = N*t(g)%*%solve(S)%*%g
-	tval = c(tval, joint)
-	return(list(tval = tval, h = h, g = g, varg = varg, S = S))
-}
-
-GMMTest.2 = function(z, lags = 22, skew=0, kurt=3, conf.level = 0.95){
+#GMM test
+GMMTest.2 = function(garchmodel, lags = 22, skew=0, kurt=3, conf.level = 0.95, n.list = 1, col.numb = 1){
   require(rugarch)
 	if(length(skew)>1) sk = skew[-c(1:lags)] else sk = skew
 	if(length(kurt)>1) ku = kurt[-c(1:lags)] else ku = kurt
-	z = matrix(z, ncol = 1)
+	z = matrix(rugarch::residuals(garchmodel[[n.list]],standardize=TRUE), ncol = 1)
 	N = dim(z)[1] - lags #DEGREES OF FREEDOM
 	zlag = z[-c(1:lags), , drop = FALSE]
 	orthmat = matrix(NA, ncol = 4, nrow = 2)
@@ -1434,64 +1397,128 @@ GMMTest.2 = function(z, lags = 22, skew=0, kurt=3, conf.level = 0.95){
 	f4 = zlag[,1]^4-ku
 	orthmat[1:2,4] = c(mean(f4), dt(mean(f1)/sqrt(mean(f1^2)/N), df = N))
 	M = rbind(t(f1), t(f2), t(f3), t(f4))
-
 	# all moments
 	moment.mat = orthmat[1:2,1:4]
-	return(moment.mat)
+	return(moment.mat[,col.numb])
 }
 
-GMMTest.2(rugarch::residuals(garchfit.eGARCH[[1]],standardize=TRUE))
+GMM.table.function <- function(function.to.apply, return.matrix = F, col.numb = 1){
+LJ.Test <- vector(mode = "list", length = length(Models.garch))
+names(LJ.Test) <- Models.garch
+for(i in 1:length(LJ.Test)){
+  LJ.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
+}
+
+for(i in 1:length(distributions)){
+  LJ.Test[[1]][,i] <- function.to.apply(garchmodel = garchfit.sGARCH, n.list = i, col.numb = col.numb)
+    LJ.Test[[2]][,i] <- function.to.apply(garchmodel = garchfit.eGARCH, n.list = i, col.numb = col.numb)
+      LJ.Test[[3]][,i] <- function.to.apply(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i, col.numb = col.numb)
+        LJ.Test[[4]][,i] <- function.to.apply(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i, col.numb = col.numb)
+          LJ.Test[[5]][,i] <- function.to.apply(garchmodel = garchfit.gjrGARCH, n.list = i, col.numb = col.numb)
+            LJ.Test[[6]][,i] <- function.to.apply(garchmodel = garchfit.fGARCH.TGARCH, n.list = i, col.numb = col.numb)
+              LJ.Test[[7]][,i] <- function.to.apply(garchmodel = garchfit.iGARCH, n.list = i, col.numb = col.numb)
+                LJ.Test[[8]][,i] <- function.to.apply(garchmodel = garchfit.EWMA, n.list = i, col.numb = col.numb)
+}
+
+LJ.Test <- lapply(LJ.Test, round, 3)
+
+for(i in 1:length(LJ.Test)){
+LJ.Test[[i]][1,which(LJ.Test[[i]][2,]>=0.10)] <- LJ.Test[[i]][1,which(LJ.Test[[i]][2,]>=0.10)]
+LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<0.10&LJ.Test[[i]][2,]>0.05)] <- paste0(LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<0.10&LJ.Test[[i]][2,]>0.05)],"*")
+LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<=0.05&LJ.Test[[i]][2,]>0.01)] <- paste0(LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<=0.05&LJ.Test[[i]][2,]>0.01)],"**")
+LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<=0.01)] <- paste0(LJ.Test[[i]][1,which(LJ.Test[[i]][2,]<=0.01)],"***")
+LJ.Test[[i]] <- LJ.Test[[i]][-2,]
+}
+
+LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.Test[[5]],LJ.Test[[6]],LJ.Test[[7]],LJ.Test[[8]])
+colnames(LJ.test.matrix) <- Models.garch.clean
+LJ.test.df <- as.data.frame(LJ.test.matrix)
+if(return.matrix == T){return(LJ.test.matrix)}else{return(LJ.test.df)}
+}
+
+GMM.mean <- GMM.table.function(function.to.apply = GMMTest.2, return.matrix = T, col.numb = 1)
+GMM.var <- GMM.table.function(function.to.apply = GMMTest.2, return.matrix = T, col.numb = 2)
+GMM.skew <- GMM.table.function(function.to.apply = GMMTest.2, return.matrix = T, col.numb = 3)
+GMM.kurt <- GMM.table.function(function.to.apply = GMMTest.2, return.matrix = T, col.numb = 4)
+
+GMM.norm <- rbind(GMM.mean[1,],GMM.var[1,],GMM.skew[1,],GMM.kurt[1,])
+GMM.t <- rbind(GMM.mean[2,],GMM.var[2,],GMM.skew[2,],GMM.kurt[2,])
+GMM.st <- rbind(GMM.mean[3,],GMM.var[3,],GMM.skew[3,],GMM.kurt[3,])
+GMM.ged <- rbind(GMM.mean[4,],GMM.var[4,],GMM.skew[4,],GMM.kurt[4,])
+GMM.sged <- rbind(GMM.mean[5,],GMM.var[5,],GMM.skew[5,],GMM.kurt[5,])
+
+rownames(GMM.norm) <- rownames(GMM.t) <- rownames(GMM.st) <- rownames(GMM.ged) <- rownames(GMM.sged) <- c("Mean", "Variance", "Skewness", "Excess Kurtosis")
+GMM.all <- rbind(GMM.sged,GMM.ged,GMM.st,GMM.t,GMM.norm)
+```
+
+DESCRIPTION OF GMM TEST HERE!!!
+
+```{r}
+GMM.all %>% kbl(caption = "GMM Tests",#format = "latex"
+      label = 'GMMtable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  pack_rows("Panel A: SGED", 1,4) %>%
+  pack_rows("Panel B: GED", 5,8) %>%
+  pack_rows("Panel C: ST", 9,12) %>%
+  pack_rows("Panel D: T", 13,16) %>%
+  pack_rows("Panel E: N", 17,20) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA $H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
 
 ```
 
 
 
 *GMM test*
-```{r gmmtest}
-GMM.test <- vector(mode = "list", length = length(Models.garch))
-names(GMM.test) <- Models.garch
-for(i in 1:length(GMM.test)){
-  GMM.test[[i]] <- matrix(NA, nrow = 4, ncol = length(distributions), dimnames = list(c("mean (t)", "variance (t)", "skew (t)","kurt (t)"), names(Table.3)))
-}
-#create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
-
-GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
-  z = rugarch::residuals(garchmodel[[n.list]],standardize=TRUE)
-  tmp.1 <- GMMTest.2(z, lags = 1)
-  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
-  return(test)
-}
-
-for(i in 1:length(distributions)){
-  GMM.test[[1]][,i] <- GMM.test.function(garchmodel = garchfit.sGARCH, n.list = i)
-    GMM.test[[2]][,i] <- GMM.test.function(garchmodel = garchfit.eGARCH, n.list = i)
-      GMM.test[[3]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
-        GMM.test[[4]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
-          GMM.test[[5]][,i] <- GMM.test.function(garchmodel = garchfit.gjrGARCH, n.list = i)
-            GMM.test[[6]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
-              GMM.test[[7]][,i] <- GMM.test.function(garchmodel = garchfit.iGARCH, n.list = i)
-                GMM.test[[8]][,i] <- GMM.test.function(garchmodel = garchfit.EWMA, n.list = i)
-}
-
-GMM.test <- lapply(GMM.test, round, 3)
-GMM.test.matrix <- rbind(GMM.test[[1]],GMM.test[[2]],GMM.test[[3]],GMM.test[[4]],GMM.test[[5]],GMM.test[[6]],GMM.test[[7]],GMM.test[[8]])
-
-GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
-      label = 'LjboxTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3 )%>%
-  kable_classic(full_width = F)%>%
-  pack_rows("Panel A: GARCH", 1,4) %>%
-  pack_rows("Panel B: EGARCH", 5,8) %>%
-  pack_rows("Panel C: AVGARCH", 9,12) %>%
-  pack_rows("Panel D: NAGARCH", 13,16) %>%
-  pack_rows("Panel E: GJRGARCH", 17,20) %>%
-    pack_rows("Panel F: TGARCH", 21,24) %>%
-    pack_rows("Panel G: IGARCH", 25,28) %>%
-    pack_rows("Panel H: EWMA", 29,32) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA($H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
+```{r gmmtest, eval=FALSE}
+# #OLD VERSION
+# GMM.test <- vector(mode = "list", length = length(Models.garch))
+# names(GMM.test) <- Models.garch
+# for(i in 1:length(GMM.test)){
+#   GMM.test[[i]] <- matrix(NA, nrow = 4, ncol = length(distributions), dimnames = list(c("mean (t)", "variance (t)", "skew (t)","kurt (t)"), names(Table.3)))
+# }
+# #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
+# 
+# GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
+#   z = rugarch::residuals(garchmodel[[n.list]],standardize=TRUE)
+#   tmp.1 <- GMMTest.2(z, lags = 1)
+#   test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
+#   return(test)
+# }
+# 
+# for(i in 1:length(distributions)){
+#   GMM.test[[1]][,i] <- GMM.test.function(garchmodel = garchfit.sGARCH, n.list = i)
+#     GMM.test[[2]][,i] <- GMM.test.function(garchmodel = garchfit.eGARCH, n.list = i)
+#       GMM.test[[3]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
+#         GMM.test[[4]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
+#           GMM.test[[5]][,i] <- GMM.test.function(garchmodel = garchfit.gjrGARCH, n.list = i)
+#             GMM.test[[6]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
+#               GMM.test[[7]][,i] <- GMM.test.function(garchmodel = garchfit.iGARCH, n.list = i)
+#                 GMM.test[[8]][,i] <- GMM.test.function(garchmodel = garchfit.EWMA, n.list = i)
+# }
+# 
+# GMM.test <- lapply(GMM.test, round, 3)
+# GMM.test.matrix <- rbind(GMM.test[[1]],GMM.test[[2]],GMM.test[[3]],GMM.test[[4]],GMM.test[[5]],GMM.test[[6]],GMM.test[[7]],GMM.test[[8]])
+# 
+# GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
+#       label = 'LjboxTable',
+#       booktabs = T,
+#       position = "h!",
+#       digits = 3 )%>%
+#   kable_classic(full_width = F)%>%
+#   pack_rows("Panel A: GARCH", 1,4) %>%
+#   pack_rows("Panel B: EGARCH", 5,8) %>%
+#   pack_rows("Panel C: AVGARCH", 9,12) %>%
+#   pack_rows("Panel D: NAGARCH", 13,16) %>%
+#   pack_rows("Panel E: GJRGARCH", 17,20) %>%
+#     pack_rows("Panel F: TGARCH", 21,24) %>%
+#     pack_rows("Panel G: IGARCH", 25,28) %>%
+#     pack_rows("Panel H: EWMA", 29,32) %>%
+#   footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA($H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+#   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
 
@@ -1500,11 +1527,10 @@ GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
 #create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
 
 Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
+  tmp.1 <- jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T))
   test <- c(tmp.1@test$statistic, tmp.1@test$p.value)
   return(test)
 }
-jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
 
 JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = T))
  JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
