@@ -1137,12 +1137,13 @@ plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditio
 ```
 
 ```{r acdbacktest, echo=FALSE, eval=FALSE}
-# cl = makePSOCKcluster(10)
-# rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.start = 2500, refit.every = 500,refit.window = "moving", solver = "hybrid", calculate.VaR = TRUE, VaR.alpha = 0.05, cluster = cl,fit.control = list(), solver.control = list())
-# stopCluster(cl)
-# cl = makePSOCKcluster(10)
-# rollacd = resume(rollacd, solver = 'optim')
-# stopCluster(cl)
+cl = makePSOCKcluster(10)
+rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.start = 2500, refit.every = 22, calculate.VaR = TRUE, VaR.alpha = 0.05, cluster = cl,, refit.window = 'recursive',solver = 'msoptim', solver.control = list(restarts = 10), 
+fixARMA = TRUE, fixGARCH = TRUE, fixUBShape = TRUE, UBSHapeAdd = 3, compareGARCH = 'LL')
+stopCluster(cl)
+cl = makePSOCKcluster(10)
+rollacd = resume(rollacd, solver = 'BFGS')
+stopCluster(cl)
 ```
 
 <!-- ## Backtest -->
