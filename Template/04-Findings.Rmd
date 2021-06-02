@@ -1422,6 +1422,38 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
 Ljung-Box test on the squared or absolute standardized residuals.
 
 *GMM test*
+```{r gmmtest}
+GMM.test <- vector(mode = "list", length = length(Models.garch))
+names(GMM.test) <- Models.garch
+for(i in 1:length(GMM.test)){
+  GMM.test[[i]] <- matrix(NA, nrow = 4, ncol = length(distributions), dimnames = list(c("mean (t)", "variance (t)", "skew (t)","kurt (t)"), names(Table.3)))
+}
+#create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
+
+GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
+  z = rugarch::residuals(fit[[n.list]],standardize=TRUE)
+  tmp.1 <- rugarch::GMMTest(z, lags = 1)
+  test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
+  return(test)
+}
+
+for(i in 1:length(distributions)){
+  GMM.test[[1]][,i] <- GMM.test.function(garchmodel = garchfit.sGARCH, n.list = i)
+    GMM.test[[2]][,i] <- GMM.test.function(garchmodel = garchfit.eGARCH, n.list = i)
+      GMM.test[[3]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
+        GMM.test[[4]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
+          GMM.test[[5]][,i] <- GMM.test.function(garchmodel = garchfit.gjrGARCH, n.list = i)
+            GMM.test[[6]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
+              GMM.test[[7]][,i] <- GMM.test.function(garchmodel = garchfit.iGARCH, n.list = i)
+                GMM.test[[8]][,i] <- GMM.test.function(garchmodel = garchfit.EWMA, n.list = i)
+}
+
+GMM.test <- lapply(GMM.test, round, 3)
+GMM.test.matrix <- cbind(GMM.test[[1]],GMM.test[[2]],GMM.test[[3]],GMM.test[[4]],GMM.test[[5]],GMM.test[[6]],GMM.test[[7]],GMM.test[[8]])
+colnames(GMM.test.matrix) <- Models.garch.clean
+GMM.test.df <- as.data.frame(GMM.test.matrix)
+```
+
 zero-mean unit-variance 
 not skewed 
 no excess kurtosis 

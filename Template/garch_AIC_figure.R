@@ -377,7 +377,7 @@ p5 <- ggplot(df_long5 %>% arrange(type_model),
   geom_point(size = 3.5, alpha = 0.65) + 
   coord_flip()  + 
   theme_bw() +
-  scale_shape_manual(values = c(7, 2, 17)) +
+  scale_shape_manual(values = c(15, 16, 17)) +
   facet_wrap(~name, scales = 'free_x')+
   geom_point(mapping = aes(x = reorder(model_name, order(type_model)),y = value)) +
   guides(colour = guide_legend(override.aes = list(shape = 15)))+
