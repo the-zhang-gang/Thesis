@@ -1321,12 +1321,15 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
 #t.test(rugarch::residuals(garchfit.sGARCH[[1]], standardize = T), mu = 0)
+#jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+#lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
+#WeightedPortTest::Weighted.LM.test(garchfit.eGARCH[[1]]@fit$residuals, garchfit.eGARCH[[1]]@fit$sigma^2, lag = 22) #Li Mak test
 
-jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-
-qqnorm(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
-qqline(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
+par(mfrow = c(1,2))
+qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
+qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
+qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
+qqline(scale(R))
 
 plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)))
 #ARCH lm TEST
