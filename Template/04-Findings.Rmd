@@ -1415,6 +1415,28 @@ GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 ```{r}
+#create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
+
+Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
+  tmp.1 <- jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
+  test <- c(tmp.1@test$statistic, tmp.1@test$p.value)
+  return(test)
+}
+
+JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = F))
+ JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
+      label = 'JBTable',
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistics value for the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows: WRITE NULL HYPOTHESIS HERE"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+```
+
+
+
+```{r}
 par(mfrow = c(1,2))
 qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
 qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
