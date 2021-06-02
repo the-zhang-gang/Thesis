@@ -33,7 +33,7 @@ plot(fit[[5]],which=11)
 # eGARCH ====
 fit=garchfit.eGARCH;n.list = 1
 z = rugarch::residuals(fit[[n.list]],standardize=T)
-tmp.1 <- rugarch::GMMTest(z)
+tmp.1 <- rugarch::GMMTest(z, lags = 22)
 tmp.1
 
 n.list = 2
