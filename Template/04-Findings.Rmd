@@ -957,6 +957,7 @@ av_norm_AE_p <- av_norm_ES[[3]]
 ```
 
 ```{r table4prep, echo=F}
+
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
 e_sstd <- gettests(VaR.sstd.egarch)
@@ -1052,27 +1053,27 @@ ES.signific <- function(x) {
   return(y)
 }
 #PVALUES LOOPS
-r3 <- c(ES.signific(e_sged_AE_ES_p),ES.signific(gjr_sged_AE_ES_p),ES.signific(t_sged_AE_ES_p),ES.signific(na_sged_AE_ES_p),ES.signific(av_sged_AE_ES_p))
+r3 <- c(ES.signific(e_sged_AE_p),ES.signific(gjr_sged_AE_p),ES.signific(t_sged_AE_p),ES.signific(na_sged_AE_p),ES.signific(av_sged_AE_p))
 r4 <- c(uc.signific(e_sged),uc.signific(gjr_sged),uc.signific(t_sged),uc.signific(na_sged),uc.signific(av_sged))
 r5 <- c(cc.signific(e_sged),cc.signific(gjr_sged),cc.signific(t_sged),cc.signific(na_sged),cc.signific(av_sged))
 r6 <- c(dq.signific(e_sged),dq.signific(gjr_sged),dq.signific(t_sged),dq.signific(na_sged),dq.signific(av_sged))
 
-r9 <- c(ES.signific(e_ged_AE_ES_p),ES.signific(gjr_ged_AE_ES_p),ES.signific(t_ged_AE_ES_p),ES.signific(na_ged_AE_ES_p),ES.signific(av_ged_AE_ES_p))
+r9 <- c(ES.signific(e_ged_AE_p),ES.signific(gjr_ged_AE_p),ES.signific(t_ged_AE_p),ES.signific(na_ged_AE_p),ES.signific(av_ged_AE_p))
 r10 <- c(uc.signific(e_ged),uc.signific(gjr_ged),uc.signific(t_ged),uc.signific(na_ged),uc.signific(av_ged))
 r11 <- c(cc.signific(e_ged),cc.signific(gjr_ged),cc.signific(t_ged),cc.signific(na_ged),cc.signific(av_ged))
 r12 <- c(dq.signific(e_ged),dq.signific(gjr_ged),dq.signific(t_ged),dq.signific(na_ged),dq.signific(av_ged))
 
-r15 <- c(ES.signific(e_sstd_AE_ES_p),ES.signific(gjr_sstd_AE_ES_p),ES.signific(t_sstd_AE_ES_p),ES.signific(na_sstd_AE_ES_p),ES.signific(av_sstd_AE_ES_p))
+r15 <- c(ES.signific(e_sstd_AE_p),ES.signific(gjr_sstd_AE_p),ES.signific(t_sstd_AE_p),ES.signific(na_sstd_AE_p),ES.signific(av_sstd_AE_p))
 r16 <- c(uc.signific(e_sstd),uc.signific(gjr_sstd),uc.signific(t_sstd),uc.signific(na_sstd),uc.signific(av_sstd))
 r17 <- c(cc.signific(e_sstd),cc.signific(gjr_sstd),cc.signific(t_sstd),cc.signific(na_sstd),cc.signific(av_sstd))
 r18 <- c(dq.signific(e_sstd),dq.signific(gjr_sstd),dq.signific(t_sstd),dq.signific(na_sstd),dq.signific(av_sstd))
 
-r21 <- c(ES.signific(e_std_AE_ES_p),ES.signific(gjr_std_AE_ES_p),ES.signific(t_std_AE_ES_p),ES.signific(na_std_AE_ES_p),ES.signific(av_std_AE_ES_p))
+r21 <- c(ES.signific(e_std_AE_p),ES.signific(gjr_std_AE_p),ES.signific(t_std_AE_p),ES.signific(na_std_AE_p),ES.signific(av_std_AE_p))
 r22 <- c(uc.signific(e_std),uc.signific(gjr_std),uc.signific(t_std),uc.signific(na_std),uc.signific(av_std))
 r23 <- c(cc.signific(e_std),cc.signific(gjr_std),cc.signific(t_std),cc.signific(na_std),cc.signific(av_std))
-r24 <- c(dq.signific(e_std),dq.signific(gjr_std),dq.signific(t_std),dq.signific(v),dq.signific(av_std))
+r24 <- c(dq.signific(e_std),dq.signific(gjr_std),dq.signific(t_std),dq.signific(na_std),dq.signific(av_std))
 
-r27 <- c(ES.signific(e_norm_AE_ES_p),ES.signific(gjr_norm_AE_ES_p),ES.signific(t_norm_AE_ES_p),ES.signific(na_norm_AE_ES_p),ES.signific(av_norm_AE_ES_p))
+r27 <- c(ES.signific(e_norm_AE_p),ES.signific(gjr_norm_AE_p),ES.signific(t_norm_AE_p),ES.signific(na_norm_AE_p),ES.signific(av_norm_AE_p))
 r28 <- c(uc.signific(e_norm),uc.signific(gjr_norm),uc.signific(t_norm),uc.signific(na_norm),uc.signific(av_norm))
 r29 <- c(cc.signific(e_norm),cc.signific(gjr_norm),cc.signific(t_norm),cc.signific(na_norm),cc.signific(av_norm))
 r30 <- c(dq.signific(e_norm),dq.signific(gjr_norm),dq.signific(t_norm),dq.signific(na_norm),dq.signific(av_norm))
@@ -1110,18 +1111,20 @@ row_group_label_fonts <- list(
 list(bold = T, italic = T)
 )
 df <- as.matrix(df)
-df <- round(df,3)
-rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
+# df <- round(df,3)
+rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE ES","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ")
 ```
 
 <!--# description @stephane -->
-\noindent The description of table \@ref(tab:Table4) is still a work in progress, but the table basically shows the actual over expected exceedance hit for the VaR, the CVaR. The unconditional coverage test by @kupiec1995, the conditional coverage by @christoffersen2001 and the dynamic quantile test of @engle2004. Interpretation will follow and ofcourse formatting etc..
+\noindent Table \@ref(tab:Table4) cointains multiple statistics related to the performance of different combinations of GARCH models and distribution concerning VaR and ES. More specifically, it includes the ratios of actual to expected exceedances for both VaR and ES, the unconditional coverage test by @kupiec1995, the conditional coverage by @christoffersen2001 and the dynamic quantile test of @engle2004. The ES ratio is derived from the ES test statistic by @McNeil2000
+
+`r`
 
 \newpage
 
 ```{r table4, echo=F, results='asis'}
 df %>% kbl(booktabs=T,
-           caption = "VaR and CVaR tests",
+           caption = "VaR and ES test statistics",
       label = 'Table4',row.names = T) %>%
   kable_styling() %>%
   kable_classic(full_width = F)%>%
@@ -1130,7 +1133,7 @@ df %>% kbl(booktabs=T,
   pack_rows("Panel C: ST", 11,15) %>%
   pack_rows("Panel D: T", 16,20) %>%
   pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:17, 18:25)) %>%
-  footnote(general = "Table contains the ... ratio, ... ratio, the ... test statistic, ... test statistic and the ... test statistic. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") 
+  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, ratio, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") 
 ```
 
 \clearpage
