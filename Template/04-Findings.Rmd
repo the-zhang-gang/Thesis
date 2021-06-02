@@ -1228,17 +1228,9 @@ scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" 
 ```
 
 # Robustness checks {#Robustness}
-In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
-$$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$. 
 
-A first test performed is the Ljung-box test on the absolute value of the standardized residuals of the GARCH models.
 ```{r lbprep, echo=FALSE, results='asis'}
 #LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
-LJ.Test <- vector(mode = "list", length = length(Models.garch))
-names(LJ.Test) <- Models.garch
-for(i in 1:length(LJ.Test)){
-  LJ.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
-}
 #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
 
 Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag = 22){
@@ -1246,16 +1238,23 @@ Lj.box.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag
   test <- c(tmp.1$statistic, tmp.1$p.value)
   return(test)
 }
+#Function to make table
+Table.tests.function <- function(imput.function = Lj.box.test.function){
+LJ.Test <- vector(mode = "list", length = length(Models.garch))
+names(LJ.Test) <- Models.garch
+for(i in 1:length(LJ.Test)){
+  LJ.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
+}
 
 for(i in 1:length(distributions)){
-  LJ.Test[[1]][,i] <- Lj.box.test.function(garchmodel = garchfit.sGARCH, n.list = i)
-    LJ.Test[[2]][,i] <- Lj.box.test.function(garchmodel = garchfit.eGARCH, n.list = i)
-      LJ.Test[[3]][,i] <- Lj.box.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
-        LJ.Test[[4]][,i] <- Lj.box.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
-          LJ.Test[[5]][,i] <- Lj.box.test.function(garchmodel = garchfit.gjrGARCH, n.list = i)
-            LJ.Test[[6]][,i] <- Lj.box.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
-              LJ.Test[[7]][,i] <- Lj.box.test.function(garchmodel = garchfit.iGARCH, n.list = i)
-                LJ.Test[[8]][,i] <- Lj.box.test.function(garchmodel = garchfit.EWMA, n.list = i)
+  LJ.Test[[1]][,i] <- imput.function(garchmodel = garchfit.sGARCH, n.list = i)
+    LJ.Test[[2]][,i] <- imput.function(garchmodel = garchfit.eGARCH, n.list = i)
+      LJ.Test[[3]][,i] <- imput.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
+        LJ.Test[[4]][,i] <- imput.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
+          LJ.Test[[5]][,i] <- imput.function(garchmodel = garchfit.gjrGARCH, n.list = i)
+            LJ.Test[[6]][,i] <- imput.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
+              LJ.Test[[7]][,i] <- imput.function(garchmodel = garchfit.iGARCH, n.list = i)
+                LJ.Test[[8]][,i] <- imput.function(garchmodel = garchfit.EWMA, n.list = i)
 }
 
 LJ.Test <- lapply(LJ.Test, round, 3)
@@ -1271,25 +1270,16 @@ LJ.Test[[i]] <- LJ.Test[[i]][-2,]
 LJ.test.matrix <- cbind(LJ.Test[[1]],LJ.Test[[2]],LJ.Test[[3]],LJ.Test[[4]],LJ.Test[[5]],LJ.Test[[6]],LJ.Test[[7]],LJ.Test[[8]])
 colnames(LJ.test.matrix) <- Models.garch.clean
 LJ.test.df <- as.data.frame(LJ.test.matrix)
+return(LJ.test.df)
+}
 
-# LJ.test.df %>% kbl(caption = "Ljung Box Test on standardized residuals in absolute values",
-#       label = 'LjboxTable',
-#       booktabs = T,
-#       position = "h!",
-#       digits = 3 )%>%
-#   kable_classic(full_width = F)%>%
-#   footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics value for the absolute values of the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
-#   kable_styling(latex_options = "scale_down") %>% landscape()
+LJ.test.df <- Table.tests.function(imput.function = Lj.box.test.function)
 ```
 
 
 ```{r lbtable, echo=FALSE, results='asis'}
 #LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
-LJ.Test.2 <- vector(mode = "list", length = length(Models.garch))
-names(LJ.Test.2) <- Models.garch
-for(i in 1:length(LJ.Test.2)){
-  LJ.Test.2[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
-}
+
 #create a function to make Lj box test for squared residuals(((Change the number 22 into how many days back you want to test)))
 
 Lj.box.test.function.2 <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag=22){
@@ -1298,33 +1288,24 @@ Lj.box.test.function.2 <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.l
   return(test)
 }
 
-for(i in 1:length(distributions)){
-  LJ.Test.2[[1]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.sGARCH, n.list = i)
-    LJ.Test.2[[2]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.eGARCH, n.list = i)
-      LJ.Test.2[[3]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
-        LJ.Test.2[[4]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
-          LJ.Test.2[[5]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.gjrGARCH, n.list = i)
-            LJ.Test.2[[6]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
-              LJ.Test.2[[7]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.iGARCH, n.list = i)
-                LJ.Test.2[[8]][,i] <- Lj.box.test.function.2(garchmodel = garchfit.EWMA, n.list = i)
-}
+LJ.test.df.2 <- Table.tests.function(imput.function = Lj.box.test.function.2)
 
-LJ.Test.2 <- lapply(LJ.Test.2, round, 3)
-
-for(i in 1:length(LJ.Test.2)){
-LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]>=0.10)] <- LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]>=0.10)]
-LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<0.10&LJ.Test.2[[i]][2,]>0.05)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<0.10&LJ.Test.2[[i]][2,]>0.05)],"*")
-LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.05&LJ.Test.2[[i]][2,]>0.01)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.05&LJ.Test.2[[i]][2,]>0.01)],"**")
-LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.01)] <- paste0(LJ.Test.2[[i]][1,which(LJ.Test.2[[i]][2,]<=0.01)],"***")
-LJ.Test.2[[i]] <- LJ.Test.2[[i]][-2,]
-}
-
-LJ.test.matrix.2 <- cbind(LJ.Test.2[[1]],LJ.Test.2[[2]],LJ.Test.2[[3]],LJ.Test.2[[4]],LJ.Test.2[[5]],LJ.Test.2[[6]],LJ.Test.2[[7]],LJ.Test.2[[8]])
-colnames(LJ.test.matrix.2) <- Models.garch.clean
-LJ.test.df.2 <- as.data.frame(LJ.test.matrix.2)
 LJ.test.df.all <- rbind(LJ.test.df, LJ.test.df.2)
 LJ.test.df.all <- as.matrix(LJ.test.df.all)
 rownames(LJ.test.df.all) <- rep(rownames(LJ.test.df),2)
+
+```
+
+\noindent In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
+$$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$. 
+
+\@ref(tab:LjboxTable) Panel A displays a first Ljung-box test on the absolute value of the standardized residuals of the GARCH models.
+
+
+ The description of table 
+
+
+```{r}
 LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
       label = 'LjboxTable',
       booktabs = T,
@@ -1335,20 +1316,19 @@ LJ.test.df.all %>% kbl(caption = "Ljung Box Tests",
   pack_rows("Panel B: Ljung Box Test on standardized squared residuals", 6,10) %>%
   footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics for the absolute value of the standardized residuals and for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in Panel A is described as follows:     $H_0$: $Corr$(|$Z_t$|,|$Z_{t-1}$|)=$Corr$(|$Z_t$|,|$Z_{t-2}$|)= $...$ =$Corr$(|$Z_t$|,|$Z_{t-22}$|) = $0$", "The null hypothesis of the test in Panel B is described as follows:     $H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
-
 ```
+
+
+
 
 
 
 ```{r eval=FALSE}
 #ARCH lm TEST
 
-ARCH.lm.Test <- vector(mode = "list", length = length(Models.garch))
-names(ARCH.lm.Test) <- Models.garch
-
 #Create a function to make archlmtest ((((((change lags??????))))))
-archlmtest = function (x, lags = 22, demean = FALSE, n.list = 1){
-  x <- rugarch::residuals(x[[n.list]], standardize = T) 
+archlmtest = function (garchmodel, lags = 22, demean = FALSE, n.list = 1){
+  x <- rugarch::residuals(garchmodel[[n.list]], standardize = T) 
 	if(any(!is.finite(x))) x[!is.finite(x)] = 0
 	x = as.vector(x)
 	if(demean) x = scale(x, center = TRUE, scale = FALSE)
@@ -1367,34 +1347,8 @@ archlmtest = function (x, lags = 22, demean = FALSE, n.list = 1){
 	final <- c("Statistic"=result$statistic,"P Value" = result$p.value)
 	return(final)
 }
-for(i in 1:length(ARCH.lm.Test)){
-  ARCH.lm.Test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
-}
 
-for(i in 1:length(distributions)){
-  ARCH.lm.Test[[1]][,i] <- archlmtest(x = garchfit.sGARCH, n.list = i)
-    ARCH.lm.Test[[2]][,i] <- archlmtest(x = garchfit.eGARCH, n.list = i)
-      ARCH.lm.Test[[3]][,i] <- archlmtest(x = garchfit.fGARCH.AVGARCH, n.list = i)
-        ARCH.lm.Test[[4]][,i] <- archlmtest(x = garchfit.fGARCH.NAGARCH, n.list = i)
-          ARCH.lm.Test[[5]][,i] <- archlmtest(x = garchfit.gjrGARCH, n.list = i)
-            ARCH.lm.Test[[6]][,i] <- archlmtest(x = garchfit.fGARCH.TGARCH, n.list = i)
-              ARCH.lm.Test[[7]][,i] <- archlmtest(x = garchfit.iGARCH, n.list = i)
-                ARCH.lm.Test[[8]][,i] <- archlmtest(x = garchfit.EWMA, n.list = i)
-}
-
-ARCH.lm.Test <- lapply(ARCH.lm.Test, round, 3)
-
-for(i in 1:length(ARCH.lm.Test)){
-ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]>=0.10)] <- ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]>=0.10)]
-ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<0.10&ARCH.lm.Test[[i]][2,]>0.05)] <- paste0(ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<0.10&ARCH.lm.Test[[i]][2,]>0.05)],"*")
-ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<=0.05&ARCH.lm.Test[[i]][2,]>0.01)] <- paste0(ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<=0.05&ARCH.lm.Test[[i]][2,]>0.01)],"**")
-ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<=0.01)] <- paste0(ARCH.lm.Test[[i]][1,which(ARCH.lm.Test[[i]][2,]<=0.01)],"***")
-ARCH.lm.Test[[i]] <- ARCH.lm.Test[[i]][-2,]
-}
-
-ARCH.lm.Test.matrix <- cbind(ARCH.lm.Test[[1]],ARCH.lm.Test[[2]],ARCH.lm.Test[[3]],ARCH.lm.Test[[4]],ARCH.lm.Test[[5]],ARCH.lm.Test[[6]],ARCH.lm.Test[[7]],ARCH.lm.Test[[8]])
-colnames(ARCH.lm.Test.matrix) <- Models.garch.clean
-ARCH.lm.Test.df <- as.data.frame(ARCH.lm.Test.matrix)
+ARCH.lm.Test.df <- Table.tests.function(imput.function = archlmtest)
 
 ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
       label = 'ARCHLMTable',
@@ -1405,56 +1359,33 @@ ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
   footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+
+
+
+
 ```{r eval=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
-#t.test(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), sd = 1)
+#WeightedPortTest::Weighted.LM.test(garchfit.eGARCH[[1]]@fit$residuals, garchfit.eGARCH[[1]]@fit$sigma^2, lag = 22) #Li Mak test
+par(mfrow = c(1,2))
+qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
+qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
 
-# test <- jarqueberaTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-# lillieTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T))
-# qqnorm(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
-# qqline(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T))
-# test@test$statistic
+qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
+qqline(scale(R))
 # plot(density(rugarch::residuals(garchfit.eGARCH[[3]], standardize = T)))
 
-#LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
-JB.test <- vector(mode = "list", length = length(Models.garch))
-names(JB.test) <- Models.garch
-for(i in 1:length(JB.test)){
-  JB.test[[i]] <- matrix(NA, nrow = 2, ncol = length(distributions), dimnames = list(c("Statistic", "P Values"), names(Table.3)))
-}
-#create a function to make Lj box test for squared residuals(((Change the number 22 into how many days back you want to test)))
+#Jarque Bera TEST ON STANDARDIZED RESIDUALS
+
+#create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
 
 Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
-  tmp.1 <- lillieTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
+  tmp.1 <- jarqueberaTest(rugarch::residuals(garchmodel[[n.list]], standardize = T)) 
   test <- c(tmp.1@test$statistic, tmp.1@test$p.value)
   return(test)
 }
 
-for(i in 1:length(distributions)){
-  JB.test[[1]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.sGARCH, n.list = i))
-    JB.test[[2]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.eGARCH, n.list = i))
-      JB.test[[3]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i))
-        JB.test[[4]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i))
-          JB.test[[5]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.gjrGARCH, n.list = i))
-            JB.test[[6]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i))
-              JB.test[[7]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.iGARCH, n.list = i))
-                JB.test[[8]][,i] <- suppressWarnings(Jarque.bera.test.function(garchmodel = garchfit.EWMA, n.list = i))
-}
-
-JB.test <- lapply(JB.test, round, 3)
-
-for(i in 1:length(JB.test)){
-JB.test[[i]][1,which(JB.test[[i]][2,]>=0.10)] <- JB.test[[i]][1,which(JB.test[[i]][2,]>=0.10)]
-JB.test[[i]][1,which(JB.test[[i]][2,]<0.10&JB.test[[i]][2,]>0.05)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<0.10&JB.test[[i]][2,]>0.05)],"*")
-JB.test[[i]][1,which(JB.test[[i]][2,]<=0.05&JB.test[[i]][2,]>0.01)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<=0.05&JB.test[[i]][2,]>0.01)],"**")
-JB.test[[i]][1,which(JB.test[[i]][2,]<=0.01)] <- paste0(JB.test[[i]][1,which(JB.test[[i]][2,]<=0.01)],"***")
-JB.test[[i]] <- JB.test[[i]][-2,]
-}
-
-JB.test.matrix <- cbind(JB.test[[1]],JB.test[[2]],JB.test[[3]],JB.test[[4]],JB.test[[5]],JB.test[[6]],JB.test[[7]],JB.test[[8]])
-colnames(JB.test.matrix) <- Models.garch.clean
-JB.test.df <- as.data.frame(JB.test.matrix)
+JB.test.df <- suppressWarnings(Table.tests.function(imput.function = Jarque.bera.test.function))
 
 JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
       label = 'JBTable',
