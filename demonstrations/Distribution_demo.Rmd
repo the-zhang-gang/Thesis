@@ -9,6 +9,7 @@ Demonstration that xi = lambda + 1
 ```{r}
 require(fitdistrplus)
 require(sgt)
+require(fGarch)
 
 
 
@@ -59,7 +60,7 @@ lines(xvals, dsgt(xvals, mu = 0, sigma = 1, lambda = -0.5, p = 1.38,q=2.5), col=
 
 plot(xvals, dnorm(xvals, mean = 0, sd = 1), col="red", type ="l", main = "Normaldist & SGT with p=2, q=Inf", ylab="Density",ylim = c(0,1))
 lines(xvals, dsgt(xvals, mu = 0, sigma = 1, lambda = 0, p = 2,q=Inf), col="blue", type ="p")
-?sstd
+
 
 
 
@@ -87,17 +88,28 @@ lambda <- -0.06
 
 plot(xvals, dsgt(xvals, mu = 0, sigma = 1, lambda = lambda, p = p,q=q), col="red", type ="p", main = "ST(sgt) & ST(fitdist), nu=p*q, p=2, lambda=-0.06", ylab="Density",ylim=c(0,0.8))
 
-lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = (lambda+1), nu = p*q), col="blue", type ="l", main = "ST", ylab="Density")
+lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = (lambda+1), nu = 2*q), col="blue", type ="l", main = "ST", ylab="Density")
 abline(v=0)
 
 plot(xvals, dsgt(xvals, mu = 0, sigma = 1, lambda = 0.5, p = p,q=q), col="red", type ="p", main = "ST(sgt) & ST(fitdist), nu=p*q, p=2, lambda=0.5", ylab="Density",ylim=c(0,0.8))
 
-lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = 1.5, nu = p*q), col="blue", type ="l", main = "ST", ylab="Density")
+lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = 1.5, nu = 2*q), col="blue", type ="l", main = "ST", ylab="Density")
 
 plot(xvals, dsgt(xvals, mu = 0, sigma = 1, lambda = 0.9, p = p,q=q), col="red", type ="p", main = "ST(sgt) & ST(fitdist), nu=p*q, p=2, lambda=0.9", ylab="Density",ylim=c(0,0.8))
 
-lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = 1.9, nu = p*q), col="blue", type ="l", main = "ST", ylab="Density")
+lines(xvals, dsstd(xvals, mean = 0, sd = 1, xi = 1.9, nu = 2*q), col="blue", type ="l", main = "ST", ylab="Density")
 
 
+```
+```{r}
+par(mfrow= c(2,1))
+plot(xvals, dsgt(xvals, mu = 0.019, sigma = 1.49, lambda = -0.05, p = 2,q=2.79), col="red", type ="p", main = "ST with df= 2*eta, small skew ", ylab="Density",ylim=c(0,0.8))
+
+lines(xvals, dsstd(xvals, mean = 0.019, sd = 1.49, nu = 2*2.79, xi = 0.95), col = "blue")
+
+
+plot(xvals, dsgt(xvals, mu = 0.019, sigma = 1.49, lambda = -0.55, p = 2,q=2.79), col="red", type ="p", main = "ST with df= 2*eta, large skew ", ylab="Density",ylim=c(0,0.8))
+
+lines(xvals, dsstd(xvals, mean = 0.019, sd = 1.49, nu = 2*2.79, xi = 0.45), col = "blue")
 ```
 
