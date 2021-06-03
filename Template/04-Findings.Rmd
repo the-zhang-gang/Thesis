@@ -334,8 +334,8 @@ table2 <- read_excel("findings/table2.xlsx")
 colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
 ```
 
-
 ```{r table2final,echo=FALSE, results='asis'}
+tablenames <- c("SGT","","SGED","","GED","","ST","","T","","N","")
 kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
       label = 'MLEtable',format="latex",
       booktabs = T,
@@ -344,14 +344,14 @@ kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$
     escape=F
       )%>%
   kable_classic(full_width = F)%>%
-  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") %>%
+  footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10, 5 and 1 percent level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+ $5$
+```{=tex}
 \clearpage
-\newpage
-
+```
 ## Constant higher moments
-
 
 ```{r garchcode, eval=FALSE}
 # we need this code for the roll, figures etc.
@@ -584,17 +584,18 @@ for(i in 1:length(distributions)){
 \noindent Table \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for EGARCH and GJRGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in table \@ref(tab:Table3), the model with the highest value is `r toupper(colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))])` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r toupper(colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))])`.
 
 ```{r table3final, echo=F, results='asis'}
-kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",#format="latex",
+kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",format="latex",
       label = 'Table3',
       booktabs = T, row.names = F, escape = F )%>%
   kable_classic(full_width = F)%>%
-  footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes")%>%
+  footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
+```{=tex}
 \clearpage
 \newpage
-
+```
 \noindent As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
 ```{r aictableprep, eval=F}
@@ -651,8 +652,9 @@ aics[,7] <- aic_tGARCH
 aics[,8] <- aic_avgarch
 
 tableAIC <- as.data.frame(round(aics,4))
-# try 2
-tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min(tableAIC$SGARCH), "green", "black"))
+tableAIC <- rbind(tableAIC[5,], tableAIC[4,], tableAIC[3,], tableAIC[2,],tableAIC[1,])
+
+
 
 # for ourselves: quick conditional formatting
 #require(condformat)
@@ -666,7 +668,9 @@ tableAIC$SGARCH = cell_spec(tableAIC$SGARCH, color = ifelse(tableAIC$SGARCH==min
 #   rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
 #   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))
 ```
+
 \newpage
+
 ```{r aictablelatex, echo=F, results='asis'}
 aics %>% kbl(caption = "Model selection according to AIC",
       label = 'aicTable',format="latex",
@@ -705,8 +709,7 @@ ylab = "99% VaR value", col = "darkgray"); lines(VaR01, col = adjustcolor("green
 
 \noindent Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
 
-\noindent Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used instead of a static forecast method.
-\newpage
+\noindent Figure \@ref(fig:figbacktest) shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used instead of a static forecast method. \newpage
 
 ```{r figbacktest, fig.cap = "Selected period to start forecast from",out.width='70%', fig.align='center',fig.pos='h', echo=FALSE}
 par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
@@ -777,6 +780,7 @@ save.image(file='myEnvironment.RData')
 \noindent If we look at the results of the rolling window, we can for example compare as in figure \@ref(fig:figurebacktests2) the EGARCH-ST (with skewed student's t-distribution) with the EGARCH-N (with normal distribution). The EGARCH-N seems to capture the extreme events a bit less compared EGARCH-ST. But let us formally test this. \
 
 \newpage
+
 ```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', fig.pos='h',echo=FALSE, echo=FALSE, out.width="90%"}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(2,1), mar = c(2.5,2.5,1.5,2.5))
@@ -835,7 +839,7 @@ gettests <- function(x) {
 }
 ```
 
-```{r ES_Test}
+```{r ES_Test, eval=F}
 ESTesting <- function(garch.back, var, dist){
   
   roll <- as.data.frame(garch.back, which = "density",)
@@ -965,7 +969,7 @@ av_norm_AE_ES <- av_norm_ES[2]
 av_norm_AE_p <- av_norm_ES[[3]]
 ```
 
-```{r table4prep, echo=F}
+```{r table4prep, eval=F}
 
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
@@ -1127,14 +1131,11 @@ df <- as.matrix(df)
 rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE ES","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ")
 ```
 
-
-
-With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGarch model, with an excess exceedance rate of 24%. The other Garch models still have a positive but slightly lower excess exceedance rate of 21%. The ratio of actual to expected ES exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGarch with 25% and for the other models 21%. These results are significant at the 5% level, except for the NAGarch, which is significant only at the 10% level. This points that the difference between actual and expected exceedances is significantly different from 0.  For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and ES.
+With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGarch model, with an excess exceedance rate of 24%. The other Garch models still have a positive but slightly lower excess exceedance rate of 21%. The ratio of actual to expected ES exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGarch with 25% and for the other models 21%. These results are significant at the 5% level, except for the NAGarch, which is significant only at the 10% level. This points that the difference between actual and expected exceedances is significantly different from 0. For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and ES.
 
 With the Skewed student-t distribution as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the TGarch model, with an excess exceedance rate of 28%. The NAGarch model has the lowest VaR excess exceedance rate of 17%. For the ES excess exceedance rate, there is a similar picture, with the TGarch having an excess exceedance rate of 29% and the NAGarch of 18%. These results are insignificant, thus it cannot be concluded that the excess exceedance for VaR and ES are significantly different from 0. Both the unconditional and conditional cover tests are insignificant. However, the dynamic quantile test is significant at the 10% level for the EGarch and TGarch. This suggests that the Skewed student-t distribution is a good distribution for calculating VaR and ES, though not as good as the SGED.
 
 The GED, symmetric student-t and normal distribution have significant unconditional and conditional and dynamic quantile test statistics for most models, which suggest they are less appropriate for modeling VaR and ES.
-
 
 \newpage
 
@@ -1149,7 +1150,7 @@ df %>% kbl(booktabs=T,
   pack_rows("Panel C: ST", 11,15) %>%
   pack_rows("Panel D: T", 16,20) %>%
   pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:17, 18:25)) %>%
-  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, ratio, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic. Significance levels for the VaR ratio not reported. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") 
+  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, ratio, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic. Significance levels for the VaR ratio not reported. *, ** and *** point out significance at 10, 5 and 1 percent level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:") 
 ```
 
 \clearpage
@@ -1158,7 +1159,7 @@ df %>% kbl(booktabs=T,
 
 ```{r acdcode, eval = FALSE}
 # ACD specification
-sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
+sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 0), shapeOrder = c(1,1,0), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # sGARCH, takes 6 minutes
 fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #very long process: starts from different starting values to find an optimum
@@ -1175,103 +1176,18 @@ plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditio
 
 ```{r acdbacktest, echo=FALSE, eval=FALSE}
 cl = makePSOCKcluster(10)
-rollacd = racd::acdroll(sGARCH_ACDspec, data = R, n.start = 2500, refit.every = 22, calculate.VaR = TRUE, VaR.alpha = 0.05, cluster = cl,, refit.window = 'recursive',solver = 'msoptim', solver.control = list(restarts = 10), 
-fixARMA = TRUE, fixGARCH = TRUE, fixUBShape = TRUE, UBSHapeAdd = 3, compareGARCH = 'LL')
+rollacd = racd::acdroll(sGARCH_ACDspec, data = R, solver="hybrid", cluster =cl, n.start = 2500, refit.every = 250, calculate.VaR = TRUE, VaR.alpha = 0.01,solver.control = list(tol = 1e-12))
 stopCluster(cl)
+racd::convergence(rollacd)
 cl = makePSOCKcluster(10)
-rollacd = resume(rollacd, solver = 'BFGS')
+rollacd = resume(rollacd, solver = 'hybrid', solver.control = list(tol = 1e-12))
 stopCluster(cl)
-```
-
-<!-- ## Backtest -->
-
-```{r eval=FALSE}
-model = c('sGARCH', 'iGARCH', 'eGARCH', 'gjrGARCH', 'fGARCH', 'fGARCH', 'fGARCH')
-submodel = c(NA, NA, NA, NA, 'TGARCH', 'AVGARCH','NAGARCH')
-
-spec1 <-  vector(mode = 'list', length = 7)
-#.norm-----
-for (i in 1:7) {
-  spec1[[i]] = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(model = model[i], submodel = if (i >= 5) submodel[i] else NULL))
-}
-#.ugarchroll-----
-spec = c(spec1)
-cluster = makePSOCKcluster(10)
-clusterExport(cluster, c('spec', 'R'))
-clusterEvalQ(cluster, library(rugarch))
-# Out of sample estimation
-n = length(spec)
-fitlist = vector(mode = 'list', length = n)
-start <- Sys.time()
-for (i in 1:n) {
-tmp = ugarchroll(spec[[i]], R, n.ahead = 1,n.start=2500, forecast.length = 1, refit.every = 252, refit.window = 'moving', solver = 'hybrid', calculate.VaR = FALSE, cluster = cluster, keep.coef = FALSE)
-print(i)
-if (!is.null(tmp@model$noncidx)) {
-tmp = resume(tmp, solver = 'solnp', fit.control = list(scale = 1), solver.control = list(tol = 1e-07, delta = 1e-06), cluster = cluster)
-print(i)
-if (!is.null(tmp@model$noncidx))
-fitlist[[i]] = NA
-print(i)
-} else {
-fitlist[[i]] = as.data.frame(tmp, which = 'density')
-}
-print(i)
-}
-Sys.time() - start
-```
-
-```{r eval=FALSE}
-vmodels = c('SGARCH(1,1)', 'IGARCH(1,1)', 'EGARCH(1,1)', 'GJRGARCH(1,1)', 'TGARCH(1,1)','AVGARCH(1,1)', 'NAGARCH(1,1)')
-modelnames = c(paste(vmodels, '-NORM', sep = ''))
-q1 = q5 = px = matrix(NA, ncol = 7, nrow = 6453)
-dist = c(rep('norm', 7))
-# use apply since nig and gh distributions are not yet vectorized
-for (i in 1:7) {
-q1[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
-q5[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) qdist(dist[i], 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
-px[, i] = as.numeric(apply(fitlist[[i]], 1, function(x) pdist(dist[i], x['Realized'], mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
-}
-VaR1cc = apply(q1, 2, function(x) VaRTest(0.01, actual = fitlist[[1]][, 'Realized'], VaR = x))
-VaR5cc = apply(q5, 2, function(x) VaRTest(0.05, actual = fitlist[[1]][, 'Realized'], VaR = x))
-# VarCC01 = apply(q1, 2, function(x) VaRTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
-# VarCC05 = apply(q5, 2, function(x) VaRTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
-# BT1 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.01)$LRp)
-# BT5 = apply(px, 2, function(x) BerkowitzTest(qnorm(x), tail.test = TRUE, alpha = 0.05)$LRp)
-VTable = cbind(VaR1cc, VaR5cc)
-rownames(VTable) = modelnames
-colnames(VTable) = c('VaR.CC(1%)', 'VaR.CC(5%)')#, 'BT(1%)', 'BT(5%)')
-```
-
-```{r eval=FALSE}
-require(ggplot2)
-dists <- regmatches(rownames(VTable),gregexpr("(?<=-).*",rownames(VTable),perl=T)) %>% unlist
-garchmodel <- gsub("-.*","",rownames(VTable))
-
-VTable <- as.data.frame(VTable)
-V2Table <- VTable %>% mutate(dist = dists, model = garchmodel)
-# V2Table <-V2Table %>% filter(dist != "NORM")
-V2Table_long <- V2Table %>%
-  tidyr::gather("Stat", "Value", -c(dist, model))
-ggplot(V2Table_long, aes(x=model, y = Value, fill=Stat)) +geom_col(position = "dodge") + facet_wrap(~dist) + geom_hline(yintercept=0.05, 
-                color = "blue", size=0.3) + geom_hline(yintercept=0.01,  
-                color = "black", size=0.3) + 
-scale_fill_manual("legend", values = c("VaR.CC(5%)" = "steelblue", "VaR.CC(1%)" = "grey")) + theme_bw() + theme(axis.text.x=element_text(angle = 90)) + theme(
-    legend.position = "top",
-    legend.box.just = "right",
-    legend.margin = margin(1, 1, 1, 1)
-    ) + theme(
-    legend.box.background = element_rect(color="black", size=0.3),
-    legend.box.margin = margin(2, 2, 2, 2)
-) + theme(legend.title = element_blank())
-
+racd::convergence(rollacd)
 ```
 
 # Robustness checks {#Robustness}
 
-
-```{r lbprep, echo=FALSE, results='asis'}
-#WEIGHTED LJUNG-BOX TEST ON STANDARDIZED ABSOLUTE RESIDUALS
-
+```{r tabletestsfunction, echo=FALSE, results='asis'}
 #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
 Table.tests.function <- function(function.to.apply, return.matrix = F){
 LJ.Test <- vector(mode = "list", length = length(Models.garch))
@@ -1308,12 +1224,9 @@ if(return.matrix == T){return(LJ.test.matrix)}else{return(LJ.test.df)}
 }
 ```
 
-
-```{r lbtable, echo=FALSE, results='asis'}
+```{r lbtableprep, echo=FALSE, results='asis'}
 #LJUNG-BOX TEST ON STANDARDIZED SQUARED RESIDUALS
-
 #create a function to make Lj box test for squared residuals(((Change the number 22 into how many days back you want to test)))
-
 Lj.box.test.function.2 <- function(garchmodel = garchfit.sGARCH, n.list = 1, n.lag=22){
   tmp.1 <- Box.test(rugarch::residuals(garchmodel[[n.list]], standardize = T)^2,n.lag, "Ljung-Box") 
   test <- c(tmp.1$statistic, tmp.1$p.value)
@@ -1323,16 +1236,14 @@ LJ.test.df.2 <- Table.tests.function(Lj.box.test.function.2, return.matrix = F)
 LJ.test.df.all <- LJ.test.df.2
 LJ.test.df.all <- as.matrix(LJ.test.df.all)
 ```
-\noindent In order to check if the models are specified correctly, some specification checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: 
-$$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$. 
 
-\@ref(tab:LjboxTable) Panel A displays a first Ljung-box test on the absolute value of the standardized residuals of the GARCH models.
+\noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$.
 
+Table \@ref(tab:LjboxTable) Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted.
 
- The description of table 
+The description of table
 
-
-```{r echo=FALSE}
+```{r archlmtableprep, echo=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
 #t.test(rugarch::residuals(garchfit.sGARCH[[1]], standardize = T), mu = 0)
@@ -1364,20 +1275,20 @@ archlmtest = function (garchmodel, lags = 22, demean = FALSE, n.list = 1){
 }
 ARCH.lm.Test.df <- Table.tests.function(archlmtest, return.matrix = T)
 
-ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
-      label = 'ARCHLMTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3 )%>%
-  kable_classic(full_width = F)%>%
-  footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
+# ARCH.lm.Test.df %>% kbl(caption = "ARCH LM Test",
+#       label = 'ARCHLMTable',
+#       booktabs = T,
+#       position = "h!",
+#       digits = 3 )%>%
+#   kable_classic(full_width = F)%>%
+#   footnote(general = "Notes",number=c("This table shows the ARCH LM statistics value for the respective model", "DESCRIBE PVALUES ***, **, *"),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") %>%
+#   kable_styling(latex_options = "scale_down") %>% landscape()
 
 # install.packages("FinTS")
 # FinTS::ArchTest(rugarch::residuals(garchfit.eGARCH[[1]], standardize = T), lags = 22)
 ```
 
-```{r finallb, results='asis'}
+```{r heterosctable, results='asis'}
 heterosc.all <- rbind(LJ.test.df.all, ARCH.lm.Test.df)
 heterosc.all %>% kbl(caption = "Diagnostic Tests for Heteroscedasticity",
       label = 'LjboxTable',
@@ -1387,15 +1298,11 @@ heterosc.all %>% kbl(caption = "Diagnostic Tests for Heteroscedasticity",
   kable_classic(full_width = F)%>%
   pack_rows("Panel A: Ljung Box Test on the standardized squared values of the residuals", 1,5) %>% 
   pack_rows("Panel B: ARCH LM Test on the standardized squared values of the residuals", 6,10) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics and the ARCH LM Test for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis of the test in both panels are described as follows:","$H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics and the ARCH LM Test for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis of the test in both panels are described as follows:","$H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
-*Residual heteroscedasticity*
 
-Ljung-Box test on the squared or absolute standardized residuals.
-
-
-```{r}
+```{r gmmtestprep, echo=F}
 #GMM test
 GMMTest.2 = function(garchmodel, lags = 22, skew=0, kurt=3, conf.level = 0.95, n.list = 1, col.numb = 1){
   require(rugarch)
@@ -1470,10 +1377,10 @@ rownames(GMM.norm) <- rownames(GMM.t) <- rownames(GMM.st) <- rownames(GMM.ged) <
 GMM.all <- rbind(GMM.sged,GMM.ged,GMM.st,GMM.t,GMM.norm)
 ```
 
-DESCRIPTION OF GMM TEST HERE!!!
+The Generalized Method of Moments (GMM) test by @hansen1982 is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test^[We already looked at the joint conditional moment: serial correlation in the squares or in the variances]. The mean (first moment) should be equal to zero (or or $E\left[z_{t}\right]=0$). The variance (second moment) should be equal to one (or $E\left[z_{t}^2-1\right]=0$). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively $E\left[z_{t}^3\right]=0$ and $E\left[z_{t}^4-3\right] = 0$).
 
-```{r}
-GMM.all %>% kbl(caption = "GMM Tests",#format = "latex"
+```{r gmmtable, echo=F}
+GMM.all %>% kbl(caption = "GMM Tests",format = "latex",
       label = 'GMMtable',
       booktabs = T,
       position = "h!",
@@ -1484,65 +1391,11 @@ GMM.all %>% kbl(caption = "GMM Tests",#format = "latex"
   pack_rows("Panel C: ST", 9,12) %>%
   pack_rows("Panel D: T", 13,16) %>%
   pack_rows("Panel E: N", 17,20) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA $H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the test for each variable are described as follows: $H_0: $ $E[z_{t}] = 0$ for the mean, $H_0: $ $E[z_{t}^2-1] = 0$ for the variance. $H_0: $ $E[z_{t}^3] = 0$ for the skewness and $H_0: $ $E[z_{t}^4-3] = 0$ for the excess kurtosis."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
-
 ```
 
-
-
-*GMM test*
-```{r gmmtest, eval=FALSE}
-# #OLD VERSION
-# GMM.test <- vector(mode = "list", length = length(Models.garch))
-# names(GMM.test) <- Models.garch
-# for(i in 1:length(GMM.test)){
-#   GMM.test[[i]] <- matrix(NA, nrow = 4, ncol = length(distributions), dimnames = list(c("mean (t)", "variance (t)", "skew (t)","kurt (t)"), names(Table.3)))
-# }
-# #create a function to make Lj box test on absolute residuals(((Change the number 1 into how many days back you want to test)))
-# 
-# GMM.test.function <- function(garchmodel=garchfit.eGARCH,n.list = 1){
-#   z = rugarch::residuals(garchmodel[[n.list]],standardize=TRUE)
-#   tmp.1 <- GMMTest.2(z, lags = 1)
-#   test <- c(tmp.1$moment.mat[3,1],tmp.1$moment.mat[3,2],tmp.1$moment.mat[3,3], tmp.1$moment.mat[3,4])
-#   return(test)
-# }
-# 
-# for(i in 1:length(distributions)){
-#   GMM.test[[1]][,i] <- GMM.test.function(garchmodel = garchfit.sGARCH, n.list = i)
-#     GMM.test[[2]][,i] <- GMM.test.function(garchmodel = garchfit.eGARCH, n.list = i)
-#       GMM.test[[3]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.AVGARCH, n.list = i)
-#         GMM.test[[4]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.NAGARCH, n.list = i)
-#           GMM.test[[5]][,i] <- GMM.test.function(garchmodel = garchfit.gjrGARCH, n.list = i)
-#             GMM.test[[6]][,i] <- GMM.test.function(garchmodel = garchfit.fGARCH.TGARCH, n.list = i)
-#               GMM.test[[7]][,i] <- GMM.test.function(garchmodel = garchfit.iGARCH, n.list = i)
-#                 GMM.test[[8]][,i] <- GMM.test.function(garchmodel = garchfit.EWMA, n.list = i)
-# }
-# 
-# GMM.test <- lapply(GMM.test, round, 3)
-# GMM.test.matrix <- rbind(GMM.test[[1]],GMM.test[[2]],GMM.test[[3]],GMM.test[[4]],GMM.test[[5]],GMM.test[[6]],GMM.test[[7]],GMM.test[[8]])
-# 
-# GMM.test.matrix %>% kbl(caption = "Ljung Box Tests",
-#       label = 'LjboxTable',
-#       booktabs = T,
-#       position = "h!",
-#       digits = 3 )%>%
-#   kable_classic(full_width = F)%>%
-#   pack_rows("Panel A: GARCH", 1,4) %>%
-#   pack_rows("Panel B: EGARCH", 5,8) %>%
-#   pack_rows("Panel C: AVGARCH", 9,12) %>%
-#   pack_rows("Panel D: NAGARCH", 13,16) %>%
-#   pack_rows("Panel E: GJRGARCH", 17,20) %>%
-#     pack_rows("Panel F: TGARCH", 21,24) %>%
-#     pack_rows("Panel G: IGARCH", 25,28) %>%
-#     pack_rows("Panel H: EWMA", 29,32) %>%
-#   footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the tests for each variable is described as follows:     FORMULA($H_0$ $=$ $...$ HERE!!!"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
-#   kable_styling(latex_options = "scale_down") %>% landscape()
-```
-
-
-
-```{r}
+```{r JBtable, echo=F, results="asis"}
 #create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
 
 Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
@@ -1552,33 +1405,32 @@ Jarque.bera.test.function <- function(garchmodel = garchfit.sGARCH, n.list = 1){
 }
 
 JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = T))
- JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",
+ JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",format="latex",
       label = 'JBTable',
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistics value for the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows: WRITE NULL HYPOTHESIS HERE"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistics value for the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis is described as follows: WRITE NULL HYPOTHESIS HERE"),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
-```
 
-```{r}
 #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22)
 ```
 
+DESCRIPTION GRAPHS
 
-```{r}
-par(mfrow = c(1,2))
-qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AV GARCH Residuals QQ Plot")
+```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals versus the standardized returns of the series",fig.align='center', out.width="100%",echo=F}
+par(mfrow = c(1,2), mar = c(5.1, 4.1, 2.1, 2.1))
+qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AVGARCH Residuals")
 qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
-qqnorm(scale(R), main = "Raw standardized returns QQ Plot")
+qqnorm(scale(R), main = "Raw standardized returns")
 qqline(scale(R))
 
-plot(density(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
-curve(dnorm(x, mean=mean(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), sd=sd(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))), 
-      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
-plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
-curve(dnorm(x, mean=0, sd=sd(scale(R))), 
-      col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
+# plot(density(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
+# curve(dnorm(x, mean=mean(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), sd=sd(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))), 
+#       col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
+# plot(density(scale(R)), lwd = 2, main = "Raw standardized returns")
+# curve(dnorm(x, mean=0, sd=sd(scale(R))), 
+#       col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
 
 ```

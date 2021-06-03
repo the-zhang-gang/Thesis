@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  3 JUN 2021 09:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  3 JUN 2021 12:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1616,77 +1616,75 @@ Underfull \hbox (badness 10000) in paragraph at lines 184--185
 
 ] [4
 
+] [5
 
 ]
 
-LaTeX Warning: Float too large for page by 87.95158pt on input line 272.
+LaTeX Warning: Float too large for page by 87.95158pt on input line 274.
 
-[5]
+[6]
 
-LaTeX Warning: Reference `goodness-of-fit' on page 6 undefined on input line 27
-8.
+LaTeX Warning: Reference `goodness-of-fit' on page 7 undefined on input line 28
+0.
 
-[6
+[7
 
 
 
-] [7
+] [8
 
 ]
-<04-Findings_files/figure-latex/figVaRinsample-1.pdf, id=94, 407.5225pt x 306.1
-4375pt>
+<04-Findings_files/figure-latex/figVaRinsample-1.pdf, id=102, 407.5225pt x 306.
+14375pt>
 File: 04-Findings_files/figure-latex/figVaRinsample-1.pdf Graphic file (type pd
 f)
 <use 04-Findings_files/figure-latex/figVaRinsample-1.pdf>
 Package pdftex.def Info: 04-Findings_files/figure-latex/figVaRinsample-1.pdf  u
-sed on input line 317.
+sed on input line 319.
 (pdftex.def)             Requested size: 252.66284pt x 189.80714pt.
-[8
+[9
 
 
  <./04-Findings_files/figure-latex/figVaRinsample-1.pdf>]
-<04-Findings_files/figure-latex/figbacktest-1.pdf, id=113, 396.48125pt x 280.04
+<04-Findings_files/figure-latex/figbacktest-1.pdf, id=121, 396.48125pt x 280.04
 625pt>
 File: 04-Findings_files/figure-latex/figbacktest-1.pdf Graphic file (type pdf)
 <use 04-Findings_files/figure-latex/figbacktest-1.pdf>
 Package pdftex.def Info: 04-Findings_files/figure-latex/figbacktest-1.pdf  used
- on input line 331.
+ on input line 332.
 (pdftex.def)             Requested size: 294.76903pt x 208.20952pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 338--339
+Underfull \hbox (badness 10000) in paragraph at lines 339--340
 
  []
 
-[9 <./04-Findings_files/figure-latex/figbacktest-1.pdf>]
-<04-Findings_files/figure-latex/figurebacktests2-1.pdf, id=128, 423.5825pt x 31
+[10 <./04-Findings_files/figure-latex/figbacktest-1.pdf>]
+<04-Findings_files/figure-latex/figurebacktests2-1.pdf, id=136, 423.5825pt x 31
 1.1625pt>
 File: 04-Findings_files/figure-latex/figurebacktests2-1.pdf Graphic file (type 
 pdf)
 <use 04-Findings_files/figure-latex/figurebacktests2-1.pdf>
 Package pdftex.def Info: 04-Findings_files/figure-latex/figurebacktests2-1.pdf 
- used on input line 343.
+ used on input line 345.
 (pdftex.def)             Requested size: 378.98784pt x 278.41512pt.
-[10 <./04-Findings_files/figure-latex/figurebacktests2-1.pdf>] [11]
-Overfull \hbox (9.00665pt too wide) in paragraph at lines 363--409
+[11 <./04-Findings_files/figure-latex/figurebacktests2-1.pdf>] [12]
+Overfull \hbox (9.00665pt too wide) in paragraph at lines 365--411
  [] 
  []
 
-[12] [13
+[13] [14
 
 ]
 Chapter 2.
-[14
-
-] [15
+[15
 
 ] [16
-
 
 ] [17
 
 ]
 
-LaTeX Warning: Float too large for page by 79.57813pt on input line 543.
+LaTeX Warning: Float too large for page by 80.24481pt on input line 514.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -1694,38 +1692,32 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [18] [19
 
 
-] [20
 
 ]
-<04-Findings_files/figure-latex/unnamed-chunk-9-1.pdf, id=198, 469.755pt x 286.
-06876pt>
-File: 04-Findings_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type p
-df)
-<use 04-Findings_files/figure-latex/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/unnamed-chunk-9-1.pdf  
-used on input line 575.
-(pdftex.def)             Requested size: 469.75386pt x 286.06805pt.
-<04-Findings_files/figure-latex/unnamed-chunk-9-2.pdf, id=199, 448.67625pt x 28
-6.06876pt>
-File: 04-Findings_files/figure-latex/unnamed-chunk-9-2.pdf Graphic file (type p
-df)
-<use 04-Findings_files/figure-latex/unnamed-chunk-9-2.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/unnamed-chunk-9-2.pdf  
-used on input line 575.
-(pdftex.def)             Requested size: 448.67516pt x 286.06805pt.
+<04-Findings_files/figure-latex/figuresqq-1.pdf, id=200, 452.69125pt x 301.125p
+t>
+File: 04-Findings_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
+<use 04-Findings_files/figure-latex/figuresqq-1.pdf>
+Package pdftex.def Info: 04-Findings_files/figure-latex/figuresqq-1.pdf  used o
+n input line 548.
+(pdftex.def)             Requested size: 421.10046pt x 280.11226pt.
+[20
 
-Overfull \hbox (66.27821pt too wide) in paragraph at lines 575--576
-[][]
- []
-
-
-Overfull \hbox (27.57469pt too wide) in paragraph at lines 575--576
-[] 
- []
-
-
-LaTeX Warning: Empty bibliography on input line 589.
-
+ <./04-Findings_files/figure-latex/figuresqq-1.pdf>]
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/10.95'.
+(microtype)             Ignoring protrusion settings for this character.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 5
+67.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 567.
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the 04-Findings.maf file.
@@ -1733,45 +1725,47 @@ Package minitoc Info: I0009
 
 [21
 
- <./04-Findings_files/figure-latex/unnamed-chunk-9-1.pdf> <./04-Findings_files/
-figure-latex/unnamed-chunk-9-2.pdf>] (./04-Findings.aux)
+] (./04-Findings.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `04-Findings.out' has not changed.
-(rerunfilecheck)             Checksum: F1128CE4F9C072CD7D9F4E077CFAD940;1138.
+(rerunfilecheck)             Checksum: 050D61D1EB6CA0C8C739631D24BD5800;1233.
 Package logreq Info: Writing requests to '04-Findings.run.xml'.
 \openout1 = `04-Findings.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29511 strings out of 478994
- 488318 string characters out of 5858184
- 1335282 words of memory out of 5000000
- 46107 multiletter control sequences out of 15000+600000
- 485544 words of font info for 146 fonts, out of 8000000 for 9000
+ 29795 strings out of 478994
+ 493400 string characters out of 5858184
+ 1335427 words of memory out of 5000000
+ 46363 multiletter control sequences out of 15000+600000
+ 497948 words of font info for 164 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  86i,14n,89p,2422b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/lo
-cal/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texliv
-e/2021/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-d
-ist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/
+{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
+texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
+21/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-d
+ist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/
 dvips/base/8r.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmb
 x10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/
-texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/202
-1/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-dis
-t/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/typ
-e1/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/l
-m/lmr7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb><
-/usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local
-/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2
-021/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-d
-ist/fonts/type1/adobe/utopia/putb8a.pfb>
-Output written on 04-Findings.pdf (21 pages, 1145905 bytes).
+usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local
+/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2
+021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2021/texmf-d
+ist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
+ype1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public
+/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr7.pf
+b></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/loca
+l/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/
+2021/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2021/texmf
+-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/font
+s/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/pub
+lic/lm/lmtt10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/
+putb8a.pfb>
+Output written on 04-Findings.pdf (21 pages, 1191862 bytes).
 PDF statistics:
- 285 PDF objects out of 1000 (max. 8388607)
- 231 compressed objects within 3 object streams
- 56 named destinations out of 1000 (max. 500000)
- 40018 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 296 PDF objects out of 1000 (max. 8388607)
+ 242 compressed objects within 3 object streams
+ 58 named destinations out of 1000 (max. 500000)
+ 46677 words of extra memory for PDF output out of 51595 (max. 10000000)
 
