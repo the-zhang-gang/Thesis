@@ -319,7 +319,14 @@ table2 <- Eurostoxx$table
 table2[table2 == "(NA)"] <- NA
 colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
+writexl::write_xlsx(table2,"findings/table2.xlsx")
 ```
+
+```{r importtable2, echo=F}
+table2 <- read_excel("findings/table2.xlsx")
+colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
+```
+
 
 ```{r table2final,echo=FALSE, results='asis'}
 kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC") ,caption = "Maximum likelihood estimates of unconditional distribution functions",
@@ -338,7 +345,9 @@ kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$
 
 ## Constant higher moments
 
+
 ```{r garchcode, echo=FALSE}
+# we need this code for the roll, figures etc.
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 Models.garch <- c("sGARCH","eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
 Models.garch.clean <-  toupper(gsub("fGARCH.", "", Models.garch)) # we use this for tables
@@ -1106,13 +1115,17 @@ table_tests[30,] <- paste0(round(as.numeric(table_tests[30,]),2),r30)
 #KABLE OUTPUT
 df <- table_tests[-c(1,7,13,19,25),] %>% as.data.frame()
 colnames(df) <- c("EGARCH", "GJRGARCH", "TGARCH", "NAGARCH", "AVGARCH")
-row_group_label_fonts <- list(
-list(bold = T, italic = T)
-)
+writexl::write_xlsx(df, "findings/table4.xlsx")
+```
+
+```{r importtable4, echo=F}
+df <- read_xlsx("findings/table4.xlsx")
+
 df <- as.matrix(df)
 df <- round(df,3)
 rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
 ```
+
 
 <!--# description @stephane -->
 \noindent The description of table \@ref(tab:Table4) is still a work in progress, but the table basically shows the actual over expected exceedance hit for the VaR, the CVaR. The unconditional coverage test by @kupiec1995, the conditional coverage by @christoffersen2001 and the dynamic quantile test of @engle2004. Interpretation will follow and ofcourse formatting etc..
