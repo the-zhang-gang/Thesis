@@ -360,4 +360,4 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 ```
 #### ES Test
 
-The Expected Shortfall test by @mcneil2000 tests whether the excess conditional shortfall has zero mean. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+The Expected Shortfall test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
