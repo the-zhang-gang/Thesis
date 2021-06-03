@@ -1115,10 +1115,15 @@ df <- as.matrix(df)
 rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE ES","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ")
 ```
 
-<!--# description @stephane -->
+
 \noindent Table \@ref(tab:Table4) cointains multiple statistics related to the performance of different combinations of GARCH models and distribution concerning VaR and ES. More specifically, it includes the ratios of actual to expected exceedances for both VaR and ES, the unconditional coverage test by @kupiec1995, the conditional coverage by @christoffersen2001 and the dynamic quantile test of @engle2004. The ES ratio is derived from the ES test statistic by @McNeil2000
 
-`r`
+With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGarch model, with an excess exceedance rate of 24%. The other Garch models still have a positive but slightly lower excess exceedance rate of 21%. The ratio of actual to expected ES exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGarch with 25% and for the other models 21%. These results are significant at the 5% level, except for the NAGarch, which is significant only at the 10% level. This points that the difference between actual and expected exceedances is significantly different from 0.  For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and ES.
+
+With the Skewed student-t distribution as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the TGarch model, with an excess exceedance rate of 28%. The NAGarch model has the lowest VaR excess exceedance rate of 17%. For the ES excess exceedance rate, there is a similar picture, with the TGarch having an excess exceedance rate of 29% and the NAGarch of 18%. These results are insignificant, thus it cannot be concluded that the excess exceedance for VaR and ES are significantly different from 0. Both the unconditional and conditional cover tests are insignificant. However, the dynamic quantile test is significant at the 10% level for the EGarch and TGarch. This suggests that the Skewed student-t distribution is a good distribution for calculating VaR and ES, though not as good as the SGED.
+
+The GED, symmetric student-t and normal distribution have significant unconditional and conditional and dynamic quantile test statistics for most models, which suggest they are less appropriate for modeling VaR and ES.
+
 
 \newpage
 
@@ -1133,7 +1138,7 @@ df %>% kbl(booktabs=T,
   pack_rows("Panel C: ST", 11,15) %>%
   pack_rows("Panel D: T", 16,20) %>%
   pack_rows("Panel E: N", 21,25) %>% add_indent(c(1:17, 18:25)) %>%
-  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, ratio, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") 
+  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, ratio, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic. Significance levels for the VaR ratio not reported. *, ** and *** point out significance at 10%, 5% and 1% level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes") 
 ```
 
 \clearpage
