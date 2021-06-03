@@ -454,7 +454,7 @@ garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 }
 ```
 
-```{r table3prep, eval=FALSE}
+```{r table3prep, echo=FALSE}
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
 #Making objects to fill   
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
@@ -1582,14 +1582,3 @@ curve(dnorm(x, mean=0, sd=sd(scale(R))),
       col="cornflowerblue", lwd=2, add=TRUE, yaxt="n")
 
 ```
-
-
-
-zero-mean unit-variance 
-not skewed 
-no excess kurtosis 
-no serial correlation in the squares 
-no serial correlation in the cubes 
-no serial correlation in the squares
-
-Other diagnostics? robustness analysis?

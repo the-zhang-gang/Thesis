@@ -57,12 +57,18 @@ There are three building blocks of the ARCH model: returns, the innovation proce
 y_{t} = \alpha_0 + \alpha_1 \times \varepsilon_t
  (\#eq:eq1) 
 \end{equation}
+\vspace{-15mm}
+```
 
+```{=tex}
 \begin{equation}
 \varepsilon_{t} = \sigma_t \times z_t, \ where \ z_t \stackrel{iid}{\sim} (0,1)
  (\#eq:eq2) 
 \end{equation}
+\vspace{-15mm}
+```
 
+```{=tex}
 \begin{equation}
 \sigma_{t}^{2} = \beta_0 + \beta_1 \times  \varepsilon_{t-1}^2 
  (\#eq:eq3)
@@ -75,6 +81,8 @@ The full description of the ARCH model is given in appendix part \@ref(ARCH).
 [^literature-review-4]: *Generalized* as it is a generalization by @bollerslev1986 of the ARCH model of @engle1982. *Autoregressive,* as it is a time series model with an autoregressive form (regression on itself). *Conditional heteroscedasticity,* while time variation in conditional variance is built into the model [@alexander2008].
 
 [^literature-review-5]: which makes the maximum likelihood estimation explained in part \@ref(garch-method) complex with more parameters that have to be estimated.
+
+\newpage
 
 | Author(s)/user(s)               | Model                      |
 |---------------------------------|----------------------------|
