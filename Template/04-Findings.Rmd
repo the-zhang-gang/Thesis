@@ -1159,10 +1159,13 @@ df %>% kbl(booktabs=T,
 
 ```{r acdcode, eval = FALSE}
 # ACD specification
-sGARCH_ACDspec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = FALSE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 0), shapeOrder = c(1,1,0), skewmodel = 'pwl', shapemodel = 'pwl'))
+spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'quad'))
+
+# spec = acdspec(mean.model = list(armaOrder = c(0, 1)), variance.model = list(variance.targeting = TRUE),
+# distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
 
 # sGARCH, takes 6 minutes
-fit = racd::acdfit(sGARCH_ACDspec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #very long process: starts from different starting values to find an optimum
+fit = racd::acdfit(spec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #starts from different starting values to find an optimum
 ```
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE}
@@ -1175,14 +1178,16 @@ plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditio
 ```
 
 ```{r acdbacktest, echo=FALSE, eval=FALSE}
-cl = makePSOCKcluster(10)
-rollacd = racd::acdroll(sGARCH_ACDspec, data = R, solver="hybrid", cluster =cl, n.start = 2500, refit.every = 250, calculate.VaR = TRUE, VaR.alpha = 0.01,solver.control = list(tol = 1e-12))
-stopCluster(cl)
+# cl = makePSOCKcluster(10)
+rollacd = racd::acdroll(spec, R, n.start = 2500, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
+# stopCluster(cl)
 racd::convergence(rollacd)
-cl = makePSOCKcluster(10)
-rollacd = resume(rollacd, solver = 'hybrid', solver.control = list(tol = 1e-12))
-stopCluster(cl)
-racd::convergence(rollacd)
+vartable = as.data.frame(
+  VaRTest(alpha = 0.01, 
+          actual = rollacd@forecast$VaR[,'realized'], 
+          VaR = rollacd@forecast$VaR[, 'alpha(1%)']), 
+  row.names =c('ACD(1%)'))
+print(vartable, digits = 3)
 ```
 
 # Robustness checks {#Robustness}
