@@ -64,6 +64,6 @@ Risk, in general, can be defined as the volatility of unexpected outcomes [@jori
 
 \noindent This paper has two goals. The first goal is to develop a deeper understanding of GARCH models, their mechanics and the properties of these models in regard to risk management. Second, we aim to replicate and update the research made by @bali2008 on US indexes, analyzing the dynamics proposed with a European outlook. Namely, we use GARCH models to predict the volatility of the Euro Stoxx 50 return index. After this estimation, we compute VaR and CVaR and conduct a backtest to see if the GARCH models predict the VaR and CVaR appropriately. This is summarized in our research question:
 
-> > Does the inclusion of higher moments make estimation of 1% VaR and CVaR more accurate?
+> > Do higher moments increase accuracy in the estimation of VaR and cVaR?
 
 \noindent The paper is organized as follows. First, chapter \@ref(lit-rev) discusses the stylized facts, conditional distributions and the GARCH models. Chapter \@ref(dat-and-meth) describes the data used and the methodology followed in modeling the volatility with GARCH models. Then a description is given of the control tests used to evaluate the performances of the different GARCH models and underlying distributions. In chapter \@ref(analysis), the findings are presented and discussed. in chapter \@ref(Robustness) the results of some diagnostic tests are shown and interpreted. Finally, chapter \@ref(Conclusion) summarizes the results and answers the research question.
