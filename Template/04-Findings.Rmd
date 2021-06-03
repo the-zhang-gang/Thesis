@@ -1558,9 +1558,11 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistics value for the residuals of the models analyzed. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is described as follows: WRITE NULL HYPOTHESIS HERE"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $J B=\frac{n}{6}\left(S^{2}+\frac{1}{4}(K-3)^{2}\right)$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\chi^2 with $\nu = 2$. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+^[Note that using monthly returns instead of daily, it cannot be rejected that the residuals are normally distributed.]
+
 
 ```{r}
 #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22)
