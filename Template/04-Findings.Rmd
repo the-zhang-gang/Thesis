@@ -15,7 +15,7 @@ bibliography: references.bib
 
 ## Density of the returns
 
-```{r librariesfindings, include=F}
+```{r librariesfindings, include=F, echo=F}
 require(readxl)
 require(xts)
 require(PerformanceAnalytics)
@@ -26,7 +26,10 @@ require(tree)  # do we need this?
 require(sgt)
 require(devtools)
 require(zoo)
+require(stringr)
 require(rugarch)
+require(plyr)
+require(dplyr)
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
@@ -46,9 +49,13 @@ R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
 R <- na.omit(R) 
 ```
 
+```{r loadenv, echo=F}
+load("myEnvironment.RData")
+```
+
 ### MLE distribution parameters
 
-```{r mlesgt, echo=FALSE, include=FALSE}
+```{r mlesgt, echo=FALSE, eval=FALSE}
 require(sgt)
 require(graphics)
 require(stats)
@@ -312,7 +319,7 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 \noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
-```{r table2prep, include=FALSE, echo=FALSE}
+```{r table2prep, include=FALSE, eval=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
 table2 <- Eurostoxx$table
@@ -322,7 +329,7 @@ colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$",
 writexl::write_xlsx(table2,"findings/table2.xlsx")
 ```
 
-```{r importtable2, echo=F}
+```{r importtable2, eval=F}
 table2 <- read_excel("findings/table2.xlsx")
 colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
 ```
@@ -346,7 +353,7 @@ kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$
 ## Constant higher moments
 
 
-```{r garchcode, echo=FALSE}
+```{r garchcode, eval=FALSE}
 # we need this code for the roll, figures etc.
 distributions <- c("norm", "std", "sstd", "ged", "sged")
 Models.garch <- c("sGARCH","eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
@@ -447,10 +454,7 @@ garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
 }
 ```
 
-```{r table3prep, echo=FALSE}
-require(plyr)
-require(dplyr)
-require(stringr)
+```{r table3prep, eval=FALSE}
 Table.GARCH.function <- function(GARCHfit.object = garchfit.eGARCH){
 #Making objects to fill   
 list.table.3.tmp <- vector(mode = "list", length = length(distributions)*2)
@@ -575,10 +579,6 @@ names(Table.3) <- c("Norm", "T", "ST", "GED", "SGED")
 for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
-#Kabling
-
-fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust $t$ statistics (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 ```
 
 \noindent Table \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for EGARCH and GJRGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in table \@ref(tab:Table3), the model with the highest value is `r toupper(colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))])` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r toupper(colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))])`.
@@ -597,7 +597,7 @@ kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = 
 
 \noindent As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
-```{r aictableprep, echo=F}
+```{r aictableprep, eval=F}
 aic_sGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_sGARCH[i] = infocriteria(garchfit.sGARCH[[i]])[1]
@@ -713,7 +713,7 @@ par(mfrow = c(1,1), mar = c(2, 2, 2, 2))
 xtsExtra::plot.xts(na.omit(Estoxx), col = 'steelblue', screens = 1, blocks = list(start.time = paste(head(tail(index(Estoxx),2500), 1)), end.time = paste(index(tail(Estoxx, 1))), col = 'grey90'), main = 'Euro Stoxx 50', minor.ticks = FALSE)
 ```
 
-```{r garchroll, echo = FALSE}
+```{r garchroll, eval = FALSE}
 # VaR garchroll forecasting and backtesting----
 # x = garchspec.eGARCH[[i]]
 roll <- function(x) { 
@@ -725,7 +725,7 @@ roll <- function(x) {
 # Enjo Timing = first hash
 ```
 
-```{r garchrollegarch, echo = FALSE}
+```{r garchrollegarch, eval = FALSE}
 egarch.normback <- roll(garchspec.eGARCH[[1]]) #37.66 sec
 egarch.stdback <- roll(garchspec.eGARCH[[2]])  #1,3min 
 egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #1.5min
@@ -733,7 +733,7 @@ egarch.gedback <- roll(garchspec.eGARCH[[4]])  #1.1min
 egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #2min 
 ```
 
-```{r garchrollgjrgarch, echo = FALSE}
+```{r garchrollgjrgarch, eval = FALSE}
 gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
 gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
 gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
@@ -741,7 +741,7 @@ gjrgarch.gedback <- roll(garchspec.gjrGARCH[[4]])  #21.13 sec
 gjrgarch.sgedback <- roll(garchspec.gjrGARCH[[5]]) #30.24 sec
 ```
 
-```{r garchrollnagarch, echo = FALSE}
+```{r garchrollnagarch, eval = FALSE}
 nagarch.normback <- roll(garchspec.fGARCH.NAGARCH[[1]]) #14.88 sec
 nagarch.stdback <- roll(garchspec.fGARCH.NAGARCH[[2]])  #20.31 sec
 nagarch.sstdback <- roll(garchspec.fGARCH.NAGARCH[[3]]) #27.25 sec
@@ -749,7 +749,7 @@ nagarch.gedback <- roll(garchspec.fGARCH.NAGARCH[[4]])  #22.39 sec
 nagarch.sgedback <- roll(garchspec.fGARCH.NAGARCH[[5]]) #34.98 sec
 ```
 
-```{r garchrolltgarch, echo = FALSE}
+```{r garchrolltgarch, eval = FALSE}
 tgarch.normback <- roll(garchspec.fGARCH.TGARCH[[1]]) #15.48 sec
 tgarch.stdback <- roll(garchspec.fGARCH.TGARCH[[2]])  #19.32 sec
 tgarch.sstdback <- roll(garchspec.fGARCH.TGARCH[[3]]) #26.27 sec
@@ -757,7 +757,7 @@ tgarch.gedback <- roll(garchspec.fGARCH.TGARCH[[4]])  #20.26 sec
 tgarch.sgedback <- roll(garchspec.fGARCH.TGARCH[[5]]) #29.29 sec
 ```
 
-```{r garchrollavgarch, echo = FALSE}
+```{r garchrollavgarch, eval = FALSE}
 avgarch.normback <- roll(garchspec.fGARCH.AVGARCH[[1]]) #20.65 sec
 avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])  #35.63 sec
 avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]]) #52.54 sec
@@ -770,7 +770,7 @@ avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
 # VaR5cc1 = apply(q5, 2, function(x) VaRTest(0.05, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
 ```
 
-```{r backup, echo=FALSE}
+```{r backup, echo=FALSE, eval=FALSE}
 save.image(file='myEnvironment.RData')
 ```
 
@@ -1329,7 +1329,7 @@ $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\
  The description of table 
 
 
-```{r eval=FALSE}
+```{r echo=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
 #Nyblom <- nyblom(garchfit.sGARCH[[1]])
 #t.test(rugarch::residuals(garchfit.sGARCH[[1]], standardize = T), mu = 0)
