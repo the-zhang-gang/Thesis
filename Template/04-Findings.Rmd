@@ -605,7 +605,7 @@ kbl(Table.3$SGED[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),captio
   footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
-\noindent As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
+
 
 ```{r aictableprep, eval=F}
 aic_sGARCH <- vector(length=length(distributions))
@@ -690,6 +690,11 @@ aics %>% kbl(caption = "Model selection according to AIC",
   footnote(general_title= "Notes",general="This table shows the AIC value for the respective model. With on the rows the distributions. ",threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
+\noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \@ref(tab:aicTable). The smaller the criterium the better.  the AIC for the skewed student's t-distribution (ST) is the lowest for EWMA, EGARCH, GJRGARCH, NAGARCH, TGARCH and AVGARCH. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model. 
+
+Due to \@ref(tab:aicTable) being the result of an in-sample estimation, we will further examine the performance of different GARCH models with the ST and SGED distributions in out-of-sample estimation. 
+
+
 
 ```{=tex}
 \clearpage
