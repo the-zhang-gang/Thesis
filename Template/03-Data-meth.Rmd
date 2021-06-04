@@ -294,7 +294,7 @@ z_{t} \sim \Delta\left(0,1, \rho_{t}, \zeta_{t}\right), \\
 
 \noindent Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
-### Analysis Tests VaR and cVaR
+### Analysis Tests VaR and CVaR
 
 #### Unconditional coverage test of @kupiec1995
 

@@ -996,7 +996,7 @@ av_norm_AE_ES <- av_norm_ES[2]
 av_norm_AE_p <- av_norm_ES[[3]]
 ```
 
-```{r table4prep, eval=F}
+```{r table4prep, echo=F}
 
 e_sged <- gettests(VaR.sged.egarch)
 e_ged <- gettests(VaR.ged.egarch)
@@ -1118,44 +1118,42 @@ r28 <- c(uc.signific(e_norm),uc.signific(gjr_norm),uc.signific(t_norm),uc.signif
 r29 <- c(cc.signific(e_norm),cc.signific(gjr_norm),cc.signific(t_norm),cc.signific(na_norm),cc.signific(av_norm))
 r30 <- c(dq.signific(e_norm),dq.signific(gjr_norm),dq.signific(t_norm),dq.signific(na_norm),dq.signific(av_norm))
 
-table_tests[2,] <- paste0(round(table_tests[2,],2),"") #placeholder
-table_tests[3,] <- paste0(round(as.numeric(table_tests[3,]),2),r3)
-table_tests[4,] <- paste0(round(as.numeric(table_tests[4,]),2),r4)
-table_tests[5,] <- paste0(round(as.numeric(table_tests[5,]),2),r5)
-table_tests[6,] <- paste0(round(as.numeric(table_tests[6,]),2),r6)
-table_tests[8,] <- paste0(round(as.numeric(table_tests[8,]),2),"")
-table_tests[9,] <- paste0(round(as.numeric(table_tests[9,]),2),r9)
-table_tests[10,] <- paste0(round(as.numeric(table_tests[10,]),2),r10)
-table_tests[11,] <- paste0(round(as.numeric(table_tests[11,]),2),r11)
-table_tests[12,] <- paste0(round(as.numeric(table_tests[12,]),2),r12)
-table_tests[14,] <- paste0(round(as.numeric(table_tests[14,]),2),"")
-table_tests[15,] <- paste0(round(as.numeric(table_tests[15,]),2),r15)
-table_tests[16,] <- paste0(round(as.numeric(table_tests[16,]),2),r16)
-table_tests[17,] <- paste0(round(as.numeric(table_tests[17,]),2),r17)
-table_tests[18,] <- paste0(round(as.numeric(table_tests[18,]),2),r18)
-table_tests[20,] <- paste0(round(as.numeric(table_tests[20,]),2),"")
-table_tests[21,] <- paste0(round(as.numeric(table_tests[21,]),2),r21)
-table_tests[22,] <- paste0(round(as.numeric(table_tests[22,]),2),r22)
-table_tests[23,] <- paste0(round(as.numeric(table_tests[23,]),2),r23)
-table_tests[24,] <- paste0(round(as.numeric(table_tests[24,]),2),r24)
-table_tests[26,] <- paste0(round(as.numeric(table_tests[26,]),2),"")
-table_tests[27,] <- paste0(round(as.numeric(table_tests[27,]),2),r27)
-table_tests[28,] <- paste0(round(as.numeric(table_tests[28,]),2),r28)
-table_tests[29,] <- paste0(round(as.numeric(table_tests[29,]),2),r29)
-table_tests[30,] <- paste0(round(as.numeric(table_tests[30,]),2),r30)
+table_tests[2,] <- paste0(round(table_tests[2,],3),"") #placeholder
+table_tests[3,] <- paste0(round(as.numeric(table_tests[3,]),3),r3)
+table_tests[4,] <- paste0(round(as.numeric(table_tests[4,]),3),r4)
+table_tests[5,] <- paste0(round(as.numeric(table_tests[5,]),3),r5)
+table_tests[6,] <- paste0(round(as.numeric(table_tests[6,]),3),r6)
+table_tests[8,] <- paste0(round(as.numeric(table_tests[8,]),3),"")
+table_tests[9,] <- paste0(round(as.numeric(table_tests[9,]),3),r9)
+table_tests[10,] <- paste0(round(as.numeric(table_tests[10,]),3),r10)
+table_tests[11,] <- paste0(round(as.numeric(table_tests[11,]),3),r11)
+table_tests[12,] <- paste0(round(as.numeric(table_tests[12,]),3),r12)
+table_tests[14,] <- paste0(round(as.numeric(table_tests[14,]),3),"")
+table_tests[15,] <- paste0(round(as.numeric(table_tests[15,]),3),r15)
+table_tests[16,] <- paste0(round(as.numeric(table_tests[16,]),3),r16)
+table_tests[17,] <- paste0(round(as.numeric(table_tests[17,]),3),r17)
+table_tests[18,] <- paste0(round(as.numeric(table_tests[18,]),3),r18)
+table_tests[20,] <- paste0(round(as.numeric(table_tests[20,]),3),"")
+table_tests[21,] <- paste0(round(as.numeric(table_tests[21,]),3),r21)
+table_tests[22,] <- paste0(round(as.numeric(table_tests[22,]),3),r22)
+table_tests[23,] <- paste0(round(as.numeric(table_tests[23,]),3),r23)
+table_tests[24,] <- paste0(round(as.numeric(table_tests[24,]),3),r24)
+table_tests[26,] <- paste0(round(as.numeric(table_tests[26,]),3),"")
+table_tests[27,] <- paste0(round(as.numeric(table_tests[27,]),3),r27)
+table_tests[28,] <- paste0(round(as.numeric(table_tests[28,]),3),r28)
+table_tests[29,] <- paste0(round(as.numeric(table_tests[29,]),3),r29)
+table_tests[30,] <- paste0(round(as.numeric(table_tests[30,]),3),r30)
 
 #KABLE OUTPUT
 df <- table_tests[-c(1,7,13,19,25),] %>% as.data.frame()
 colnames(df) <- c("EGARCH", "GJRGARCH", "TGARCH", "NAGARCH", "AVGARCH")
-writexl::write_xlsx(df, "findings/table4.xlsx")
+df <- as.matrix(df)
+rownames(df) <- c("AE VaR","AE CVaR", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE CVaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
+# writexl::write_xlsx(df, "findings/table4.xlsx")
 ```
 
-```{r importtable4, echo=F}
+```{r importtable4, eval=F}
 df <- read_xlsx("findings/table4.xlsx")
-
-df <- as.matrix(df)
-# df <- round(df,3)
-rownames(df) <- c("AE VaR","AE CVaR", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE CVaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
 ```
 
 With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGARCH model, with an excess exceedance rate of 24%. The other GARCH models still have a positive but slightly lower excess exceedance rate of 21%. The ratio of actual to expected CVaR exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGARCH with 25% and for the other models 21%. These results are significant at the 5% level, except for the NAGARCH, which is significant only at the 10% level. This points that the difference between actual and expected exceedances is significantly different from 0. For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and CVaR.
@@ -1217,20 +1215,19 @@ object.df <- rbind(object.df[c(1,2),],object.df[rownames(object.df)=="$\\beta_0$
 ```
 
 
-
-```{r Table5, eval=F}
+```{r Table5, echo=F, results='asis'}
 #require(magrittr)
 fn1.3c <- sprintf(paste0('This table shows the maximum likelihood estimates of the ST-ACD model. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- "The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the model estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis."
 
-table5 <- paste0(object.df[,1]," \\\\\\\\", object.df[,2])
-names(table5) <- rownames(object.df)
-kbl(table5, col.names = toupper(colnames(object.df)[1]),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",format = "latex",
+table5 <- data.frame(paste(object.df[,1]," ", object.df[,2]))
+colnames(table5) <- "ACD-GARCH"
+rownames(table5) <- rownames(object.df) 
+table5 %>% kbl(col.names = toupper(colnames(object.df)[1]),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",#format = "latex",
       label = 'Table5',
-      booktabs = F, row.names = T, escape = F )%>%
-  kable_classic(full_width = F)%>%
-  footnote(general = c(fn1.3b,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
-  kable_styling(latex_options = "scale_down", full_width = F)
+      booktabs = TRUE, row.names = T, escape = F, longtable=T) %>%
+  kable_classic(full_width = T) %>%
+  footnote(general = c(fn1.3b,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")
 ```
 
 The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
