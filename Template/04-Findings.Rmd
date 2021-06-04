@@ -1219,15 +1219,18 @@ object.df <- rbind(object.df[c(1,2),],object.df[rownames(object.df)=="$\\beta_0$
 
 
 ```{r Table5, eval=F}
+#require(magrittr)
 fn1.3c <- sprintf(paste0('This table shows the maximum likelihood estimates of the ST-ACD model. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- "The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the model estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis."
 
-kbl(object.df, col.names = toupper(colnames(object.df)),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",#format = "latex",
+table5 <- paste0(object.df[,1]," \\\\\\\\", object.df[,2])
+names(table5) <- rownames(object.df)
+kbl(table5, col.names = toupper(colnames(object.df)[1]),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",format = "latex",
       label = 'Table5',
-      booktabs = T, row.names = T, escape = F )%>%
+      booktabs = F, row.names = T, escape = F )%>%
   kable_classic(full_width = F)%>%
   footnote(general = c(fn1.3b,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
-  kable_styling(latex_options = "scale_down")
+  kable_styling(latex_options = "scale_down", full_width = F)
 ```
 
 The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
