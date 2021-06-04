@@ -596,6 +596,15 @@ kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = 
 \clearpage
 \newpage
 ```
+
+```{r table3bfinal, echo=F, results='asis'}
+kbl(Table.3$SGED[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),caption = "Maximum likelihood estimates of the SGED-GARCH models with constant skewness and kurtosis parameters",format="latex",
+      label = 'Table3',
+      booktabs = T, row.names = F, escape = F )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general = c(fn1.3,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
+  kable_styling(latex_options = "scale_down") %>% landscape()
+```
 \noindent As you can see in table \@ref(tab:aicTable) the AIC for the skewed student's t-distribution (ST) is the best from all the models. As also shown in appendix part \@ref(goodness-of-fit). The best in all distributions of the GARCH models seems to be the NAGARCH model, but we do not want to overfit our models because of an in-sample estimation. That is why a parsimonous model like the EGARCH (which has the highest maximum likelihood for the standard GARCH models that are considered), but also the model AVGARCH will be examined using the ST distribution while it has the second-best (lowest) AIC.
 
 ```{r aictableprep, eval=F}
@@ -1157,18 +1166,18 @@ df %>% kbl(booktabs=T,
 
 ## Time-varying higher moments
 
-```{r acdcode, eval = FALSE}
+```{r acdcode, echo = FALSE}
 # ACD specification
-spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'quad'))
+spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
+racd::convergence(rollacd)
 
-# spec = acdspec(mean.model = list(armaOrder = c(0, 1)), variance.model = list(variance.targeting = TRUE),
-# distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'quad', shapemodel = 'pwl'))
-
-# sGARCH, takes 6 minutes
+# sGARCH, takes 2.5 minutes
 fit = racd::acdfit(spec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #starts from different starting values to find an optimum
 ```
 
-```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', fig.subcap="This figure plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.", eval=FALSE}
+The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.
+
+```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', echo=FALSE}
 par(mfrow = c(2, 2), mai = c(0.4, 0.75, 0.2, 0.3))
 plot.zoo(fitted(fit),main = 'Conditional Mean', col = 'steelblue',xlab = "Time", ylab = "")
 plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", ylab = "");lines(as.zoo(sigma(fit)),col= 'steelblue'); legend(x="topleft", legend = c("absolute log-returns", "conditional volatility"), col = c('grey', 'steelblue'),lty = c(1,1), bty = 'n', cex = 0.8)
@@ -1176,18 +1185,62 @@ plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", y
 plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditional Skewness',xlab = "Time")
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
+\newpage
+
+\noindent After performing a backtest^[This backtest contains the following features: recursive, window of 2500, refitted every 250 days.], we observe that the ACD model is slightly worse than the GARCH equivalent in estimating the VaR. With a rejection of the
 
 ```{r acdbacktest, echo=FALSE, eval=FALSE}
-# cl = makePSOCKcluster(10)
 rollacd = racd::acdroll(spec, R, n.start = 2500, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
-# stopCluster(cl)
-racd::convergence(rollacd)
-vartable = as.data.frame(
-  VaRTest(alpha = 0.01, 
-          actual = rollacd@forecast$VaR[,'realized'], 
+
+gspec = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE), distribution = 'sstd')
+rollg = ugarchroll(gspec, R, n.start = 2500, refit.every = 250, refit.window = 'recursive')
+
+vartable = rbind(
+  as.data.frame(
+    VaRTest(alpha = 0.01, 
+          actual =rollacd@forecast$VaR[,'realized'], 
           VaR = rollacd@forecast$VaR[, 'alpha(1%)']), 
-  row.names =c('ACD(1%)'))
-print(vartable, digits = 3)
+  row.names =c('ACD(1%)')),
+  as.data.frame(
+    VaRTest(alpha = 0.01, 
+            actual = rollg@forecast$VaR[, 'realized'],
+            VaR = rollg@forecast$VaR[, 'alpha(1%)']), 
+    row.names = c('GARCH(1%)')))
+
+print(vartable, digits = 6)
+vartable2 <- vartable %>% mutate(AE = actual.exceed/expected.exceed)
+vartable2 <- vartable2 %>% select(AE, uc.LRstat, uc.LRp, cc.LRstat, cc.LRp)
+vartable2 <- round(vartable2,3)
+uc.signific <- function(x) {
+  if(x$uc[2]<0.1)  y = "*"
+  if(x$uc[2]<0.05) y = "**"
+  if(x$uc[2]<0.01) y = "***"
+  else if(x$uc[2]>0.1) y = ""
+  return(y)
+}
+vartable2 <- vartable2 %>% mutate(uc.LRstat = paste0(uc.LRstat,signif()))
+VarACDtable <- matrix(nrow = )
+
+ESTestingACD <- function(acd.back, var, dist){
+  roll <- rollacd@forecast$density
+  f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
+  #VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
+  # VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
+  ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
+    integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
+  names(ES) <- "ES"
+  ESTest_object <- ESTest(0.01, R[-c(1:2500),], ES[,1], var, conf.level = 0.99, boot = T)
+  # length(R)
+  # nrow(ES)
+  # length(VaR.sstd.egarch)
+  AE_ES <- as.numeric(ESTest_object[2])/as.numeric(ESTest_object[1])
+  AE_ES.p <- ESTest_object[4] #bootstrapped p-value
+  return(list(ES,AE_ES,AE_ES.p))
+}
+
+
+ESTestingACD(rollacd, var = as.vector(rollacd@forecast$VaR$`alpha(1%)`), "sstd")
+ESTesting(rollg, var = rollg@forecast$VaR$`alpha(1%)`, "sstd")
 ```
 
 # Robustness checks {#Robustness}
