@@ -347,10 +347,11 @@ kbl(table2,col.names= c("$dist$", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$
   footnote(general = "Table contains parameter estimates for SGT-distribution and some of its limiting cases. The underlying data is the daily return series of the Euro Stoxx 50 for the period between December 31. 1986 and April 27. 2021. Standard errors are reported between brackets. $LLH$ is the maximum log-likelihood value. *, ** and *** point out significance at 10, 5 and 1 percent level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:") %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
- $5$
-```{=tex}
+
+$5$
+
 \clearpage
-```
+
 ## Constant higher moments
 
 ```{r garchcode, eval=FALSE}
@@ -579,9 +580,16 @@ names(Table.3) <- c("Norm", "T", "ST", "GED", "SGED")
 for(i in 1:length(distributions)){
   Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
 }
-
+Table.3$ST[15,-1] <- as.numeric(Table.3$ST[15,-1])/2
+Table.3$ST[15,]
+patterns <- str_count(Table.3$ST[16,-1], "\\*")
+numbers <- extract_numeric()/2
+for (i in 1:length(patterns)){
+   Table.3$ST[16,i+1] <- paste0("(", numbers[i], ")", paste(rep("*",patterns[i]),collapse = ""))
+} 
+ 
 fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust $t$ statistics (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 ```
 
 \noindent Table \@ref(tab:Table3) presents the maximum likelihood estimates for `r ncol(Table.3$ST)-1` symmetric and asymmetric GARCH models based on the ST distribution with constant skewness and kurtosis parameters ($t$ values are presented in parenthesis). The parameters in the conditional mean equations ($\alpha_0$) are all statistically significant with $t$ values from `r min(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[2,-1], "[()]")))`. The AR(1) coefficient, $\alpha_1$, has parameters going from `r min(as.numeric(Table.3$ST[3,-1]))` to `r max(as.numeric(Table.3$ST[3,-1]))` with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` to `r max(as.numeric(str_remove_all(Table.3$ST[4,-1], "[()]")))` not suggesting a high significance and indicating slight negative autocorrelation. The GARCH parameters in the conditional variance equations ($\beta_0$) are generally statistically significant with $t$ values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[6,-1], "[()]")), na.rm = TRUE)`. The results of $\beta_1$ and $\beta_2$ show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50 Price Index daily returns, in fact, the sum of $\beta_1$ and $\beta_2$ for the GARCH parameters is close to one (from `r min(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(as.numeric(Table.3$ST[7,-1])+as.numeric(Table.3$ST[9,-1]), "[()]")), na.rm = TRUE)`), suggesting the presence of persistence in the volatility of the returns. The parameter $\xi$ is highly significant for all the `r ncol(Table.3$ST)-1` models tested with values ranging from `r min(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` to `r max(as.numeric(str_remove_all(Table.3$ST[11,-1], "[()]")), na.rm = TRUE)` confirming the presence of Skewness in the returns. The shape parameter $\eta$, which, in our case, measures the number of degrees of freedom, determining the tail behavior, is significant for all the models and ranges between `r min(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)` and `r max(as.numeric(str_remove_all(Table.3$ST[15,-1], "[()]")), na.rm = TRUE)`. The parameter $\gamma$, which is present only for EGARCH and GJRGARCH is significant and with values around `r round(mean(as.numeric(str_remove_all(Table.3$ST[17,-1], "[()]")), na.rm = TRUE),2)`. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the $shift$ and the $rot$ parameters whose values are always positive and statistically significant. According to the log likelihood values ($LLH$), displayed in table \@ref(tab:Table3), the model with the highest value is `r toupper(colnames(Table.3$ST[,-1])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-1], "[()]")))])` while, excluding the non-standard GARCH models from the analysis, the model that performs best is `r toupper(colnames(Table.3$ST[,-c(1,7,8,9)])[which.max(as.numeric(str_remove_all(Table.3$ST[23,-c(1,7,8,9)], "[()]")))])`.
@@ -599,10 +607,9 @@ kbl(Table.3$ST[-c(13,14),], col.names = toupper(colnames(Table.3$ST)),caption = 
 \clearpage
 \newpage
 ```
-
 ```{r table3bfinal, echo=F, results='asis'}
 fn1.3b <- sprintf(paste0('This table shows the maximum likelihood estimates of various SGED-GARCH models. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust $t$ statistics (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
 kbl(Table.3$SGED[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),caption = "Maximum likelihood estimates of the SGED-GARCH models with constant skewness and kurtosis parameters",format = "latex",
       label = 'Table3b',
       booktabs = T, row.names = F, escape = F )%>%
@@ -700,11 +707,10 @@ aics %>% kbl(caption = "Model selection according to AIC",
   footnote(general_title= "Notes",general="This table shows the AIC value for the respective model. With on the rows the distributions. ",threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
-\noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \@ref(tab:aicTable). The smaller the criterium the better.  the AIC for the skewed student's t-distribution (ST) is the lowest for EWMA, EGARCH, GJRGARCH, NAGARCH, TGARCH and AVGARCH. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model. 
 
-Due to \@ref(tab:aicTable) being the result of an in-sample estimation, we will further examine the performance of different GARCH models with the ST and SGED distributions in out-of-sample estimation. 
+\noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \@ref(tab:aicTable). The smaller the criterium the better. the AIC for the skewed student's t-distribution (ST) is the lowest for EWMA, EGARCH, GJRGARCH, NAGARCH, TGARCH and AVGARCH. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model.
 
-
+Due to \@ref(tab:aicTable) being the result of an in-sample estimation, we will further examine the performance of different GARCH models with the ST and SGED distributions in out-of-sample estimation.
 
 ```{=tex}
 \clearpage
@@ -1152,7 +1158,7 @@ df <- read_xlsx("findings/table4.xlsx")
 
 df <- as.matrix(df)
 # df <- round(df,3)
-rownames(df) <- c("AE VaR","AE ES", "UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE ES","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ","AE VaR","AE ES","UC","CC","DQ")
+rownames(df) <- c("AE VaR","AE CVaR", "UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE CVaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ","AE VaR","AE CVaR","UC","CC","DQ")
 ```
 
 With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGarch model, with an excess exceedance rate of 24%. The other Garch models still have a positive but slightly lower excess exceedance rate of 21%. The ratio of actual to expected ES exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGarch with 25% and for the other models 21%. These results are significant at the 5% level, except for the NAGarch, which is significant only at the 10% level. This points that the difference between actual and expected exceedances is significantly different from 0. For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and ES.
@@ -1181,29 +1187,34 @@ df %>% kbl(booktabs=T,
 
 ## Time-varying higher moments
 
-```{r acdcode, echo = FALSE}
+As we already pointed out in part \@ref(lit-rev), it might also be interesting to look at time-varying moments and check if there is an improvement for estimating the VaR and CVaR as @bali2008 did for example.
+
+```{r acdcode, eval = FALSE}
 # ACD specification
 spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
-racd::convergence(rollacd)
 
 # sGARCH, takes 2.5 minutes
 fit = racd::acdfit(spec, R, solver = 'msoptim', solver.control = list(restarts = 10)) #starts from different starting values to find an optimum
 ```
 
-Filippo can you maybe make the table like you did with table.3? it's similar but we don't need a list.
+```{r avoidacdcode, echo=F}
+# save.image("envplusacd.RData")
+load("envplusacd.RData")
+```
+
+<!--# Filippo can you maybe make the table like you did with table.3? it's similar but we don't need a list. -->
+
 ```{r Table5prep, echo=F}
 object <- fit@fit$robust.matcoef
 rownames(object) <- revalue(rownames(object),c("mu"="$\\alpha_0$", "ar1"="$\\alpha_1$", "omega"= "$\\beta_0$", "alpha1"="$\\beta_1$", "beta1"="$\\beta_2$", "skcons"="$\\chi_0$", "skalpha1"="$\\chi_1$", "skgamma1"="$\\chi_2$", "skbeta1"="$\\xi_1$", "shcons" = "$\\kappa_{0}$","shalpha1"="$\\kappa_{1}$","shgamma1"= "$\\kappa_{2}$",  "shbeta1"="$\\psi_{1}$"))
 object <- object[,-3]
-se_acdfit <- paste0("(",round(object[,2]), ")", apply(object[,4], 2, signific))
+round(object,3)
 ```
 
-
-
-```{r Table5, echo=F}
+```{r Table5, eval=F}
 fn1.3c <- sprintf(paste0('This table shows the maximum likelihood estimates of the ST-ACD model. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust $t$ statistics (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
-kbl(Table.5[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",format = "latex",
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+kbl(Table.5, col.names = toupper(colnames(Table.5)),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",format = "latex",
       label = 'Table5',
       booktabs = T, row.names = F, escape = F )%>%
   kable_classic(full_width = F)%>%
@@ -1211,7 +1222,7 @@ kbl(Table.5[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),caption = "
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
-The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewwness and excess kurtosis for the Euro Stoxx 50 series.
+The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
 
 ```{r figureACDmoments, fig.cap = "Dynamics of the ACD model", fig.align='center', echo=FALSE}
 par(mfrow = c(2, 2), mai = c(0.4, 0.75, 0.2, 0.3))
@@ -1221,19 +1232,24 @@ plot(as.zoo(abs(R)), main = 'Conditional Sigma',col = c('grey'),xlab = "Time", y
 plot(as.zoo(racd::skewness(fit)), col = 'steelblue', ylab = "", main = 'Conditional Skewness',xlab = "Time")
 plot(as.zoo(racd::kurtosis(fit)), col = 'steelblue', ylab = "", main = 'Conditional Excess Kurtosis',xlab = "Time")
 ```
+
 \newpage
 
-\noindent After performing a backtest^[This backtest contains the following features: recursive, window of 2500, refitted every 250 days.], we observe that the ACD model is slightly worse than the GARCH equivalent in estimating the VaR. With a rejection of the
+\noindent After performing a backtest[^findings-2], we observe that the ACD model is slightly worse than the GARCH equivalent in estimating the VaR. Although there are much less models tested here because of the difficulty of the procedure of ACD models, we find less convincing evidence of the merit of using conditional higher moments in VaR and CVaR estimation. So contrary to @bali2008, we find that the ACD models seem to underperform to the GARCH model. With a rejection of unconditional coverage test statistic at 10% significance level. It is not surprising that the GARCH model performs bad as well looking at the rejection of the dynamic quantile test and the CVaR test.
 
-```{r acdbacktest, echo=FALSE, eval=FALSE}
+[^findings-2]: This backtest contains the following features: recursive, window of 2500, refitted every 250 trading days (approximately one year).
+
+```{r acdbacktest, eval=FALSE}
+spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # Backtest ----
 rollacd = racd::acdroll(spec, R, n.start = 2500, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
-
 # Benchmark ----
 gspec = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE), distribution = 'sstd')
 rollg = ugarchroll(gspec, R, n.start = 2500, refit.every = 250, refit.window = 'recursive')
+```
 
+```{r acdbacktestresults, echo=FALSE}
 # Table
 # VaRTest----
 vartable = rbind(
@@ -1248,7 +1264,6 @@ vartable = rbind(
             VaR = rollg@forecast$VaR[, 'alpha(1%)']), 
     row.names = c('GARCH(1%)')))
 
-print(vartable, digits = 6)
 vartable2 <- vartable %>% mutate(AE = actual.exceed/expected.exceed)
 vartable2 <- vartable2 %>% select(AE, uc.LRstat, uc.LRp, cc.LRstat, cc.LRp)
 vartable2 <- round(vartable2,3)
@@ -1306,7 +1321,7 @@ DQ_ACD_stat <- paste0(round(DQ_ACD$stat,3), signific(DQ_ACD$pvalue))
 DQ_nonacd_stat <- paste0(round(DQ_nonacd$stat,3), signific(DQ_nonacd$pvalue))
 
 table_tests_acd <- matrix(nrow=5,ncol=2)
-rownames(table_tests_acd) <- c("AE VaR","AE ES", "UC","CC", "DQ")
+rownames(table_tests_acd) <- c("AE VaR","AE CVaR", "UC","CC", "DQ")
 colnames(table_tests_acd) <- c("ACD", "GARCH")
 
 table_tests_acd[1,] <- vartable2[,1]
@@ -1321,10 +1336,9 @@ table_tests_acd %>% kbl(booktabs=T,
            caption = "VaR and ES test statistics (ACD-ST vs GARCH-ST)",format="latex",
       label = 'tableACDBacktest',row.names = T) %>%
   kable_styling() %>%
-  kable_classic(full_width = T)%>%
-  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic for VaR. Significance levels for the VaR ratio not reported. *, ** and *** point out significance at 10, 5 and 1 percent level.",threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")
+  kable_classic(full_width = F)%>%
+  footnote(general = "Table contains the ratio of actual to expected exceedances for VaR and Expected Shortfall, the unconditional and conditional coverage test statistic and the dynamic quantile test statistic for VaR. Significance levels for the VaR ratio not reported. *, ** and *** point out significance at 10, 5 and 1 percent level.",threeparttable = T, footnote_as_chunk = F, escape=F, general_title = "Notes:") %>% landscape()
 ```
-
 
 # Robustness checks {#Robustness}
 
@@ -1518,7 +1532,9 @@ rownames(GMM.norm) <- rownames(GMM.t) <- rownames(GMM.st) <- rownames(GMM.ged) <
 GMM.all <- rbind(GMM.sged,GMM.ged,GMM.st,GMM.t,GMM.norm)
 ```
 
-The Generalized Method of Moments (GMM) test by @hansen1982 is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test^[We already looked at the joint conditional moment: serial correlation in the squares or in the variances]. The mean (first moment) should be equal to zero (or or $E\left[z_{t}\right]=0$). The variance (second moment) should be equal to one (or $E\left[z_{t}^2-1\right]=0$). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively $E\left[z_{t}^3\right]=0$ and $E\left[z_{t}^4-3\right] = 0$).
+The Generalized Method of Moments (GMM) test by @hansen1982 is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test[^findings-3]. The mean (first moment) should be equal to zero (or or $E\left[z_{t}\right]=0$). The variance (second moment) should be equal to one (or $E\left[z_{t}^2-1\right]=0$). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively $E\left[z_{t}^3\right]=0$ and $E\left[z_{t}^4-3\right] = 0$).
+
+[^findings-3]: We already looked at the joint conditional moment: serial correlation in the squares or in the variances
 
 ```{r gmmtable, echo=F}
 GMM.all %>% kbl(caption = "GMM Tests",format = "latex",
@@ -1555,14 +1571,18 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
   footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $J B=\frac{n}{6}\left(S^{2}+\frac{1}{4}(K-3)^{2}\right)$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\chi^2 with $\nu = 2$. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10%, 5% and 1% level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
-^[Note that using monthly returns instead of daily, it cannot be rejected that the residuals are normally distributed.]
+
+[^findings-4]
+
+[^findings-4]: Note that using monthly returns instead of daily, it cannot be rejected that the residuals are normally distributed.
 
 <!-- #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22) -->
+
 <!-- ``` -->
 
 DESCRIPTION GRAPHS
 
-```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals versus the standardized returns of the series",fig.align='center', out.width="100%",echo=F}
+```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals versus the standardized returns of the series",fig.align='center', out.width="100%",fig.pos="h",echo=F}
 par(mfrow = c(1,2), mar = c(5.1, 4.1, 2.1, 2.1))
 qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AVGARCH Residuals")
 qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
