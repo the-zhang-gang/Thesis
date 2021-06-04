@@ -387,9 +387,9 @@ The time-varying skewness parameter in the ACD specification following a piecewi
 
 \noindent A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[Among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns. Additionally, a point of interest is the predictability of stock prices \autocite{fama1965,Fama1970,welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices. ~
 
-Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement. The tool of VaR has become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 1\% VaR can be defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 1\% while the Conditional Value at Risk (CVaR) can be defined as the average of the events that are lower than the VaR. \textcite{bali2008} explains that many implementations of the CVaR have the assumption that asset and portfolio's returns are normally distributed but that this is inconsistent with the evidence. Empiric evidence outlines returns to follow a more skewed distribution with fatter tails than expected under normality. Thus, assuming normality can lead to incorrect numbers, underestimating the probability of extreme events happening and ultimately risks faced by banks.
+Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. The measure Value at Risk (VaR), developed in response to the financial disaster events of the early 1990s, has been very important in the financial world. Corporations have to manage their risks and thereby include a future risk measurement. The tool of VaR has become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 1\% VaR can be defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 1\% while the Conditional Value at Risk (cVaR) can be defined as the average of the events that are lower than the VaR. \textcite{bali2008} explains that many implementations of the cVaR have the assumption that asset and portfolio's returns are normally distributed but that this is inconsistent with the evidence. Empiric evidence outlines returns to follow a more skewed distribution with fatter tails than expected under normality. Thus, assuming normality can lead to incorrect numbers, underestimating the probability of extreme events happening and ultimately risks faced by banks.
 
-\noindent This paper has two goals. The first goal is to develop a deeper understanding of GARCH models, their mechanics and the properties of these models in regard to risk management. Second, we aim to replicate and update the research made by \textcite{bali2008} on US indexes, analyzing the dynamics proposed with a European outlook. Namely, we use GARCH models to predict the volatility of the Euro Stoxx 50 return index. After this estimation, we compute VaR and CVaR and conduct a backtest to see if the GARCH models predict the VaR and CVaR appropriately. This is summarized in our research question:
+\noindent This paper has two goals. The first goal is to develop a deeper understanding of GARCH models, their mechanics and the properties of these models in regard to risk management. Second, we aim to replicate and update the research made by \textcite{bali2008} on US indexes, analyzing the dynamics proposed with a European outlook. Namely, we use GARCH models to predict the volatility of the Euro Stoxx 50 return index. After this estimation, we compute VaR and cVaR and conduct a backtest to see if the GARCH models predict the VaR and cVaR appropriately. This is summarized in our research question:
 
 \begin{quote}
 \begin{quote}
@@ -1070,23 +1070,6 @@ The GED, symmetric student-t and normal distribution have significant unconditio
 \section{Time-varying higher moments}\label{time-varying-higher-moments}}
 
 As we already pointed out in part \ref{lit-rev}, it might also be interesting to look at time-varying moments and check if there is an improvement for estimating the VaR and CVaR as \textcite{bali2008} did for example.
-
-\begin{verbatim}
-##                Estimate  Std. Error Pr(>|t|)
-## $\\alpha_0$       0.054       0.111    0.624
-## $\\alpha_1$      -0.044       0.216    0.839
-## $\\beta_1$        0.098       0.002    0.000
-## $\\beta_2$        0.892       0.009    0.000
-## $\\chi_0$        -1.548      13.208    0.907
-## $\\chi_1$         0.046       0.401    0.908
-## $\\chi_2$         0.032       0.488    0.948
-## $\\xi_1$          0.563       3.778    0.881
-## $\\kappa_{0}$     0.127       0.196    0.517
-## $\\kappa_{1}$     0.000       0.175    0.999
-## $\\kappa_{2}$     1.000       0.249    0.000
-## $\\psi_{1}$       0.788       0.101    0.000
-## $\\beta_0$        0.020          NA       NA
-\end{verbatim}
 
 The following figure \ref{fig:figureACDmoments} plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
 
