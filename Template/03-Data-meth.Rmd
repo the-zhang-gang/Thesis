@@ -238,7 +238,7 @@ title("ACF (Squared prediction errors)")
 
 ### Garch models {#garch-method}
 
-\noindent As already mentioned in part \@ref(univ-garch), the following models: symmetric GARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood[^data-meth-3]. \
+\noindent As already mentioned in part \@ref(univ-garch), the following models: SGARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, student-t distribution, skewed student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood[^data-meth-3]. \
 
 [^data-meth-3]: As already mentioned, fortunately, @alexios2020 has made it easy for us to implement this methodology in the R language[\^data-meth-4] [@Rteam] with the package "rugarch" v.1.4-4 (*R univariate garch*), which gives us a bit more time to focus on the results and the interpretation.
 
