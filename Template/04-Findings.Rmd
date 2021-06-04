@@ -1203,19 +1203,31 @@ fit = racd::acdfit(spec, R, solver = 'msoptim', solver.control = list(restarts =
 ```{r Table5prep, echo=F}
 object <- fit@fit$robust.matcoef
 rownames(object) <- revalue(rownames(object),c("mu"="$\\alpha_0$", "ar1"="$\\alpha_1$", "omega"= "$\\beta_0$", "alpha1"="$\\beta_1$", "beta1"="$\\beta_2$", "skcons"="$\\chi_0$", "skalpha1"="$\\chi_1$", "skgamma1"="$\\chi_2$", "skbeta1"="$\\xi_1$", "shcons" = "$\\kappa_{0}$","shalpha1"="$\\kappa_{1}$","shgamma1"= "$\\kappa_{2}$",  "shbeta1"="$\\psi_{1}$"))
-object <- object[,-3]
-round(object,3)
+object <- round(object[,-3],3)
+
+object[which(object[,3]>=0.10),2] <- paste0("(",object[which(object[,3]>=0.10),2],")")
+object[which(object[,3]<0.10&object[,3]>0.05),2] <- paste0("(",object[which(object[,3]<0.10&object[,3]>0.05),2],")*")
+object[which(object[,3]<=0.05&object[,3]>0.01),2] <- paste0("(",object[which(object[,3]<=0.05&object[,3]>0.01),2],")**")
+object[which(object[,3]<=0.01),2] <- paste0("(",object[which(object[,3]<=0.01),2],")***")
+object.df <- as.data.frame(object[,-3])
+object.df[is.na(object.df)] <- ""
+colnames(object.df) <- c("ACD GARCH" , "")
+
+object.df <- rbind(object.df[c(1,2),],object.df[rownames(object.df)=="$\\beta_0$",],object.df[-c(1,2,rownames(object.df)=="$\\beta_0$"),])[-nrow(rbind(object.df[c(1,2),],object.df[rownames(object.df)=="$\\beta_0$",],object.df[-c(1,2,rownames(object.df)=="$\\beta_0$"),])),]
 ```
+
+
 
 ```{r Table5, eval=F}
 fn1.3c <- sprintf(paste0('This table shows the maximum likelihood estimates of the ST-ACD model. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
-fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
-kbl(Table.5, col.names = toupper(colnames(Table.5)),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",format = "latex",
+fn2.3 <- "The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the model estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis."
+
+kbl(object.df, col.names = toupper(colnames(object.df)),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",#format = "latex",
       label = 'Table5',
-      booktabs = T, row.names = F, escape = F )%>%
+      booktabs = T, row.names = T, escape = F )%>%
   kable_classic(full_width = F)%>%
   footnote(general = c(fn1.3b,fn2.3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
+  kable_styling(latex_options = "scale_down")
 ```
 
 The following figure \@ref(fig:figureACDmoments) plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
