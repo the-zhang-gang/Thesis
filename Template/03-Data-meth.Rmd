@@ -141,7 +141,7 @@ fn2 <- paste("The standardized residual is derived from a maximum likelihood est
 fn3 <- '*, **, *** represent significance levels at the 5%, 1% and <1%.'
 ```
 
-\noindent The arithmetic mean of the series is `r round(as.numeric(levels(table1[1,2][,drop=T])),2)`% with a standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T])),2)`% and a median of `r round(as.numeric(levels(table1[2,2][,drop=T])),2)` which translate to an annualized mean of `r round(as.numeric(levels(table1[1,2][,drop=T]))*252,2)`% and an annualized standard deviation of `r round(as.numeric(levels(table1[5,2][,drop=T]))*sqrt(252),2)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(levels(table1[6,2][,drop=T])),2)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(levels(table1[8,2][,drop=T])),2)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(stdret.R)$statistic,2)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.
+\noindent The arithmetic mean of the series is `r round(as.numeric(table1[1,2]),2)`% with a standard deviation of `r round(as.numeric(table1[5,2]),2)`% and a median of `r round(as.numeric(table1[2,2]),2)` which translate to an annualized mean of `r round(as.numeric(table1[1,2])*252,2)`% and an annualized standard deviation of `r round(as.numeric(table1[5,2])*sqrt(252),2)`%. The skewness statistic is highly significant and negative at `r round(as.numeric(table1[6,2]),2)` and the excess kurtosis is also highly significant and positive at `r round(as.numeric(table1[8,2]),2)`. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at `r round(normtest::jb.norm.test(stdret.R)$statistic,2)` and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis. \
 
 ```{r stats, echo=F, results='asis'}
 table1 %>% kbl(caption = "Summary statistics of the returns","latex",
@@ -153,7 +153,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
   footnote(general = "Notes",number=c(fn1,fn2,fn3),threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "") 
 ```
 
-\noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2. Again, Skewness statistic at `r round(as.numeric(levels(table1[6,3][,drop=T])),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(levels(table1[8,3][,drop=T])),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(normtest::jb.norm.test(R)$statistic,3)`, given its high significance, confirms the rejection of the normality assumption. \
+\noindent The right column of table \@ref(tab:dsTable) displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2. Again, Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(normtest::jb.norm.test(R)$statistic,3)`, given its high significance, confirms the rejection of the normality assumption. \
 
 \noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with its peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
@@ -211,8 +211,6 @@ knitr::include_graphics('figures/vol-clustering-finalized-RI.png')
 
 chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7, ylim=c(0,0.8)) 
 ```
-
-\newpage
 
 \noindent In figure \@ref(fig:acfplots) the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this, while in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component[^data-meth-2] $\alpha_0$ is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.
 
@@ -273,13 +271,7 @@ $$\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)$$
 \end{equation}
 ```
 
-After estimation of the GARCH models in-sample, out-sample analysis is done by performing a rolling window approach. With assumptions: a window of 2500 observations and re-estimation every year.
-
-[\|**Note for profs: choices**:\
--- n.start = 2500 ==\> sample = 2500 observations to forecast the next,\
--- refit.every = 252 (trading days in a year) ==\> so recompute the parameters every year,\
--- solver = hybrid using cluster = 10 to run on 10 cores to speed up the process of estimation of the roll object (took 5-10 minutes per backtest with some solvers, now with parallel package...)\
--- forecast.length = 1 ==\> length of total forecast for which out of sample data from dataset will be used for testing \|]{highlight="pink"}
+\noindent After estimation of the GARCH models in-sample, out-sample analysis is done by performing a rolling window approach. With assumptions: a window of 2500 observations and re-estimation every year.
 
 ### ACD models {#acd-models-meth}
 
@@ -298,9 +290,9 @@ z_{t} \sim \Delta\left(0,1, \rho_{t}, \zeta_{t}\right), \\
 (\#eq:acd)
 \end{equation}
 ```
-where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $zeta_t$ are respectively the time-varying skewness and shape parameter (with shape parameter meaning here the tail-tickness) and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0. 
+\noindent where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $\zeta_t$ are respectively the time-varying skewness and shape parameter (with shape parameter meaning here the tail-tickness) and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0. 
 
-Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
+\noindent Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
 ### Analysis Tests VaR and cVaR
 
@@ -358,6 +350,6 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 (\#eq:dq3)
 \end{align}
 ```
-#### ES Test
+#### CVaR Test
 
-The Expected Shortfall test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+The Expected Shortfall (or CVaR) test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.

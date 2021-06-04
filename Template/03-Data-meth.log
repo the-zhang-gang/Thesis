@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  4 JUN 2021 15:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  4 JUN 2021 16:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**04-Findings.tex
-(./04-Findings.tex
+**03-Data-meth.tex
+(./03-Data-meth.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-02-18> (./templates/ociamthesis.cls
 Document Class: templates/ociamthesis 2015/04/30 Oxford thesis class
@@ -430,19 +430,19 @@ Package minitoc Info: I0003
 \mtc@hstrutbox=\box110
 Package minitoc Info: I0002
 (minitoc)             Autoconfiguration of extensions.
-\openout3 = `04-Findings.mtc0'.
+\openout3 = `03-Data-meth.mtc0'.
 
-\openout3 = `04-Findings.mtc'.
+\openout3 = `03-Data-meth.mtc'.
 
-(./04-Findings.mtc0)
+(./03-Data-meth.mtc0)
 Package minitoc Info: I0012
 (minitoc)             Long extensions (Unix-like) will be used.
 Package minitoc Info: I0031
 (minitoc)             ==> this version is configured for UNIX-like 
 (minitoc)                 (long extensions) file names.
-\openout3 = `04-Findings.mtc'.
+\openout3 = `03-Data-meth.mtc'.
 
-\openout3 = `04-Findings.mtc0'.
+\openout3 = `03-Data-meth.mtc0'.
 
 \c@mtc=\count308
 \c@minitocdepth=\count309
@@ -1376,8 +1376,8 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'english'.
-(./04-Findings.aux)
-\openout1 = `04-Findings.aux'.
+(./03-Data-meth.aux)
+\openout1 = `03-Data-meth.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 157.
 LaTeX Font Info:    ... okay on input line 157.
@@ -1508,9 +1508,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 157.
 LaTeX Info: Redefining \pageref on input line 157.
 LaTeX Info: Redefining \nameref on input line 157.
-(./04-Findings.out) (./04-Findings.out)
+(./03-Data-meth.out) (./03-Data-meth.out)
 \@outlinefile=\write6
-\openout6 = `04-Findings.out'.
+\openout6 = `03-Data-meth.out'.
 
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
@@ -1539,11 +1539,11 @@ Package biblatex Info: ... and expl3
 (/usr/local/texlive/2021/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
 Package: blx-case-expl3 2020/12/31 v3.16 expl3 case changing code for biblatex
 )
-\openout5 = `04-Findings.bcf'.
+\openout5 = `03-Data-meth.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file '04-Findings.bbl' found.
-(./04-Findings.bbl)
+Package biblatex Info: ... file '03-Data-meth.bbl' found.
+(./03-Data-meth.bbl)
 Package biblatex Info: Reference section=0 on input line 157.
 Package biblatex Info: Reference segment=0 on input line 157.
 Chapter 1.
@@ -1557,41 +1557,41 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 Package minitoc Info: I0006
-(minitoc)             04-Findings.mtc1 is empty on input line 177.
+(minitoc)             03-Data-meth.mtc1 is empty on input line 179.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-84.
+83.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-84.
+83.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-184.
+183.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-184.
+183.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 184.
+(Font)              <12> on input line 183.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 184.
+(Font)              <8> on input line 183.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 184.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 184
+(Font)              <6> on input line 183.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 183
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 184
+LaTeX Font Info:    Trying to load font information for U+msb on input line 183
 .
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1599,91 +1599,95 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 184.
+(Font)              <10> on input line 183.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 184.
+(Font)              <7> on input line 183.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 184.
+(Font)              <5> on input line 183.
 
-Underfull \hbox (badness 10000) in paragraph at lines 184--185
+Underfull \hbox (badness 10000) in paragraph at lines 183--184
 
  []
 
 [1
 
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
 
-] [4
+ []
 
-]
 
-LaTeX Warning: Float too large for page by 84.74715pt on input line 272.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[5]
 
-LaTeX Warning: Float too large for page by 88.61827pt on input line 321.
+Underfull \hbox (badness 10000) in paragraph at lines 220--221
 
-[6]
+ []
 
-LaTeX Warning: Reference `goodness-of-fit' on page 7 undefined on input line 32
-7.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
+22.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+<03-Data-meth_files/figure-latex/plot1-1.pdf, id=54, 436.63126pt x 283.0575pt>
+File: 03-Data-meth_files/figure-latex/plot1-1.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/plot1-1.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot1-1.pdf  used on i
+nput line 226.
+(pdftex.def)             Requested size: 400.04414pt x 259.34059pt.
+[2]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/vol-clustering-finalized-RI.png, id=69, 505.89pt x 505.89pt>
+File: figures/vol-clustering-finalized-RI.png Graphic file (type png)
+<use figures/vol-clustering-finalized-RI.png>
+Package pdftex.def Info: figures/vol-clustering-finalized-RI.png  used on input
+ line 237.
+(pdftex.def)             Requested size: 294.76903pt x 294.77498pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[3] [4 <./03-Data-meth_files/figure-latex/plot1-1.pdf> <./figures/vol-clusterin
+g-finalized-RI.png>]
+
+LaTeX Warning: Reference `styl-facts' on page 5 undefined on input line 247.
+
+<03-Data-meth_files/figure-latex/plot4-1.pdf, id=93, 436.63126pt x 282.05376pt>
+
+File: 03-Data-meth_files/figure-latex/plot4-1.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/plot4-1.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/plot4-1.pdf  used on i
+nput line 251.
+(pdftex.def)             Requested size: 315.82535pt x 204.01677pt.
+[5
+
+ <./03-Data-meth_files/figure-latex/plot4-1.pdf>]
+<03-Data-meth_files/figure-latex/acfplots-1.pdf, id=110, 454.69875pt x 303.1325
+pt>
+File: 03-Data-meth_files/figure-latex/acfplots-1.pdf Graphic file (type pdf)
+<use 03-Data-meth_files/figure-latex/acfplots-1.pdf>
+Package pdftex.def Info: 03-Data-meth_files/figure-latex/acfplots-1.pdf  used o
+n input line 264.
+(pdftex.def)             Requested size: 421.10046pt x 280.73546pt.
+[6 <./03-Data-meth_files/figure-latex/acfplots-1.pdf>]
+
+LaTeX Warning: Reference `univ-garch' on page 7 undefined on input line 279.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 279--280
+
+ []
 
 [7
 
-
-
-
-
-
-] [8
-
-] [9
-
-]
-<04-Findings_files/figure-latex/figVaRinsample-1.pdf, id=110, 407.5225pt x 306.
-14375pt>
-File: 04-Findings_files/figure-latex/figVaRinsample-1.pdf Graphic file (type pd
-f)
-<use 04-Findings_files/figure-latex/figVaRinsample-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/figVaRinsample-1.pdf  u
-sed on input line 370.
-(pdftex.def)             Requested size: 252.66284pt x 189.80714pt.
-[10
-
- <./04-Findings_files/figure-latex/figVaRinsample-1.pdf>]
-<04-Findings_files/figure-latex/figbacktest-1.pdf, id=129, 396.48125pt x 280.04
-625pt>
-File: 04-Findings_files/figure-latex/figbacktest-1.pdf Graphic file (type pdf)
-<use 04-Findings_files/figure-latex/figbacktest-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/figbacktest-1.pdf  used
- on input line 383.
-(pdftex.def)             Requested size: 294.76903pt x 208.20952pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 390--391
-
- []
-
-[11 <./04-Findings_files/figure-latex/figbacktest-1.pdf>]
-<04-Findings_files/figure-latex/figurebacktests2-1.pdf, id=144, 423.5825pt x 31
-1.1625pt>
-File: 04-Findings_files/figure-latex/figurebacktests2-1.pdf Graphic file (type 
-pdf)
-<use 04-Findings_files/figure-latex/figurebacktests2-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/figurebacktests2-1.pdf 
- used on input line 396.
-(pdftex.def)             Requested size: 378.98784pt x 278.41512pt.
-[12 <./04-Findings_files/figure-latex/figurebacktests2-1.pdf>] [13]
-Overfull \hbox (17.49263pt too wide) in paragraph at lines 416--462
- [] 
- []
-
-[14]
-
-LaTeX Warning: Reference `lit-rev' on page 15 undefined on input line 469.
-
+] [8] [9] [10] [11]
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/10.95'.
+(microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
-71.
+07.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1691,103 +1695,62 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<04-Findings_files/figure-latex/figureACDmoments-1.pdf, id=172, 418.56375pt x 3
-16.18124pt>
-File: 04-Findings_files/figure-latex/figureACDmoments-1.pdf Graphic file (type 
-pdf)
-<use 04-Findings_files/figure-latex/figureACDmoments-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/figureACDmoments-1.pdf 
- used on input line 492.
-(pdftex.def)             Requested size: 418.56271pt x 316.18047pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[15
-
-] [16 <./04-Findings_files/figure-latex/figureACDmoments-1.pdf>] [17]
-Chapter 2.
-[18
-
-] [19
-
-] [20
-
-]
-
-LaTeX Warning: Float too large for page by 80.24481pt on input line 621.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[21] [22
-
-
-
-]
-<04-Findings_files/figure-latex/figuresqq-1.pdf, id=235, 452.69125pt x 301.125p
-t>
-File: 04-Findings_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
-<use 04-Findings_files/figure-latex/figuresqq-1.pdf>
-Package pdftex.def Info: 04-Findings_files/figure-latex/figuresqq-1.pdf  used o
-n input line 657.
-(pdftex.def)             Requested size: 421.10046pt x 280.11226pt.
-[23
-
- <./04-Findings_files/figure-latex/figuresqq-1.pdf>]
-Package microtype Info: Character `029' is missing
-(microtype)             in font `T1/lmr/m/sc/10.95'.
-(microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 676.
+(Font)              <10.95> on input line 407.
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
-(minitoc)             Creating the 04-Findings.maf file.
-\openout3 = `04-Findings.maf'.
+(minitoc)             Creating the 03-Data-meth.maf file.
+\openout3 = `03-Data-meth.maf'.
 
-[24
+[12
 
-] (./04-Findings.aux)
+] (./03-Data-meth.aux)
 
 LaTeX Warning: There were undefined references.
 
-Package rerunfilecheck Info: File `04-Findings.out' has not changed.
-(rerunfilecheck)             Checksum: B5FE48A6C2847A27AB9A96DD4111DE0C;1233.
-Package logreq Info: Writing requests to '04-Findings.run.xml'.
-\openout1 = `04-Findings.run.xml'.
+Package rerunfilecheck Info: File `03-Data-meth.out' has not changed.
+(rerunfilecheck)             Checksum: 7941277B482AF7B417DB9603ECC0C9E6;872.
+Package logreq Info: Writing requests to '03-Data-meth.run.xml'.
+\openout1 = `03-Data-meth.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 29865 strings out of 478994
- 494525 string characters out of 5858184
- 1336777 words of memory out of 5000000
- 46399 multiletter control sequences out of 15000+600000
- 499270 words of font info for 176 fonts, out of 8000000 for 9000
+ 29874 strings out of 478994
+ 495613 string characters out of 5858184
+ 1325276 words of memory out of 5000000
+ 46434 multiletter control sequences out of 15000+600000
+ 501744 words of font info for 167 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,14n,89p,2422b,1683s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,17n,89p,1690b,1742s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
-texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
-21/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-d
-ist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/
-dvips/base/8r.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmb
-x10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local
-/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2
-021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2021/texmf-d
-ist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public
-/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr7.pf
-b></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/loca
-l/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/
-2021/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2021/texmf
--dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/font
-s/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/pub
-lic/lm/lmtt10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmt
-t12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb
->
-Output written on 04-Findings.pdf (24 pages, 1358053 bytes).
+texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021/
+texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2021/texmf-dist/fon
+ts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvi
+ps/lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-m
+athex.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr
+/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/tex
+live/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2021/
+texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2021/texmf-dis
+t/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
+pe1/public/lm/lmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public
+/lm/lmmi12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi6.
+pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/l
+ocal/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texliv
+e/2021/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texm
+f-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/font
+s/type1/public/lm/lmr6.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/publ
+ic/lm/lmr7.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.p
+fb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/l
+ocal/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texli
+ve/2021/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2021/tex
+mf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2021/texmf-dist/fon
+ts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/p
+ublic/amsfonts/symbols/msam10.pfb></usr/local/texlive/2021/texmf-dist/fonts/typ
+e1/adobe/utopia/putb8a.pfb>
+Output written on 03-Data-meth.pdf (12 pages, 586693 bytes).
 PDF statistics:
- 337 PDF objects out of 1000 (max. 8388607)
- 276 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
- 47194 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 317 PDF objects out of 1000 (max. 8388607)
+ 268 compressed objects within 3 object streams
+ 62 named destinations out of 1000 (max. 500000)
+ 52813 words of extra memory for PDF output out of 61914 (max. 10000000)
 
