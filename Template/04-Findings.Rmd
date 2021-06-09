@@ -818,7 +818,7 @@ fn2.3 <- "The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1
 table5 <- data.frame(paste(object.df[,1]," ", object.df[,2]))
 colnames(table5) <- "ACD-GARCH"
 rownames(table5) <- rownames(object.df) 
-table5 %>% kbl(col.names = toupper(colnames(object.df)[1]),caption = "Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters",#format = "latex",
+table5 %>% kbl(col.names = toupper(colnames(object.df)[1]),caption = "Maximum likelihood estimates of the ST-ACD model with constant skewness and kurtosis parameters",#format = "latex",
       label = 'Table5',
       booktabs = TRUE, row.names = T, escape = F, longtable=T) %>%
   kable_classic(full_width = T) %>%
