@@ -9,6 +9,17 @@ output:
 
 \listoftables
 
+<!-- Steps
+1. change title in YAML
+2. change data for DAX (in line 38, remember: datasheet 3 or "DAX") 
++ change l44 indices[,XXX] for the column with your data
+3. ctrl + f FRANCE CAC 40 and change it 3 times in the footnotes
+4. run all
+5. check rollacd, if no convergence change n.start to larger number than 2500. Run again
+6. l1064: save.image using name DAX.RData, run and comment out
+7. l136: add code load("DAX.RData")
+8. knit
+-->
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
@@ -41,7 +52,7 @@ data <- suppressWarnings(read_excel("data/Price_Return.xlsx",
                                                                     "numeric"))) #warnings are NA's
 colnames(data) <- c("Date", colnames(data)[-1])
 indices <- as.xts(data[,-1], order.by = data$Date)
-Estoxx <- indices[,2] #CAC40
+Estoxx <- indices[,3] #BEL20
 Estoxx <- na.omit(Estoxx)
 
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
