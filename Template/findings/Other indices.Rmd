@@ -1,0 +1,320 @@
+---
+title: "Other indices"
+author: "Enjo Faes"
+date: "6/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+```{r data}
+data <- suppressWarnings(read_excel("data/Price_Return.xlsx", 
+                                    sheet = "Return", col_types = c("date", 
+                                                                    "numeric", "numeric", "numeric", 
+                                                                    "numeric"))) #warnings are NA's
+colnames(data) <- c("Date", colnames(data)[-1])
+indices <- as.xts(data[,-1], order.by = data$Date)
+Estoxx <- indices[,2] #CAC40
+Estoxx <- na.omit(Estoxx)
+
+R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
+R <- na.omit(R) 
+```
+
+
+```{r garch}
+# GARCHCODE ===========
+distributions <- c("norm", "std", "sstd", "ged", "sged")
+Models.garch <- c("sGARCH","eGARCH","fGARCH.AVGARCH","fGARCH.NAGARCH", "gjrGARCH", "fGARCH.TGARCH", "iGARCH", "EWMA")
+Models.garch.clean <-  toupper(gsub("fGARCH.", "", Models.garch)) # we use this for tables
+
+for(i in 1:length(Models.garch)){
+  assign(paste0("garchspec.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+  assign(paste0("garchfit.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+  assign(paste0("stdret.",Models.garch[i]),vector(mode = "list", length = length(distributions)))
+}
+
+
+#.sGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.sGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                      variance.model = list(model = "sGARCH", garchOrder = c(1,1), variance.targeting = F),
+                                      distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.sGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.sGARCH[[i]])
+}
+#.eGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.eGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                      variance.model = list(model = "eGARCH", variance.targeting = F),
+                                      distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.eGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.eGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#.fGARCH.NAGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.fGARCH.NAGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                              variance.model = list(model = "fGARCH", submodel = "NAGARCH", variance.targeting = F),
+                                              distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.fGARCH.NAGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.NAGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#.fGARCH.AVGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.fGARCH.AVGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                              variance.model = list(model = "fGARCH", submodel = "AVGARCH", variance.targeting = F),
+                                              distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.fGARCH.AVGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.AVGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#.gjrGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.gjrGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                        variance.model = list(model = "gjrGARCH", variance.targeting = F),
+                                        distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.gjrGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.gjrGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#fGARCH.TGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.fGARCH.TGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                             variance.model = list(model = "fGARCH", submodel = "TGARCH", variance.targeting = F),
+                                             distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.fGARCH.TGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.fGARCH.TGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#.iGARCH
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.iGARCH[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                      variance.model = list(model = "iGARCH", variance.targeting = F),
+                                      distribution.model = distributions[i])
+  # Estimate the model
+  garchfit.iGARCH[[i]] <- ugarchfit(data = R, spec = garchspec.iGARCH[[i]])
+  # Compute stdret using residuals()
+}
+
+#.EWMA
+for(i in 1:length(distributions)){
+  # Specify a GARCH model with constant mean
+  garchspec.EWMA[[i]] <- ugarchspec(mean.model = list(armaOrder = c(1,0)),
+                                    variance.model = list(model = "iGARCH", variance.targeting = F),
+                                    distribution.model = distributions[i], fixed.pars = list(omega=0))
+  # Estimate the model
+  garchfit.EWMA[[i]] <- ugarchfit(data = R, spec = garchspec.EWMA[[i]])
+  # Compute stdret using residuals()
+}
+```
+
+
+```{r table3aplusb}
+# TABLE GARCHCODE ----
+Table.3.iGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.iGARCH)
+Table.3.eGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.eGARCH)
+Table.3.gjrGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.gjrGARCH)
+Table.3.sGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.sGARCH)
+Table.3.EWMA <- Table.GARCH.function(GARCHfit.object = garchfit.EWMA)
+Table.3.fGARCH.AVGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.AVGARCH)
+Table.3.fGARCH.NAGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.NAGARCH)
+Table.3.fGARCH.TGARCH <- Table.GARCH.function(GARCHfit.object = garchfit.fGARCH.TGARCH)
+Table.3 <- vector(mode = "list", length = length(distributions))
+names(Table.3) <- c("Norm", "T", "ST", "GED", "SGED")
+for(i in 1:length(distributions)){
+  Table.3[[i]] <- suppressMessages(Table.3.function(distribution = distributions[i]))
+}
+Table.3$ST[15,-1] <- as.numeric(Table.3$ST[15,-1])/2
+patterns <- str_count(Table.3$ST[16,-1], "\\*")
+numbers <- tidyr::extract_numeric(Table.3$ST[16,-1])/2
+for (i in 1:length(patterns)){
+  Table.3$ST[16,i+1] <- paste0("(", numbers[i], ")", paste(rep("*",patterns[i]),collapse = ""))
+} 
+
+fn1.3 <- sprintf(paste0('This table shows the maximum likelihood estimates of various ST-GARCHmodels.
+                        The daily returns used on the ',toupper(gsub(pattern = '\\.', replacement=' ',colnames(R)))," cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
+fn2.3 <- sprintf("The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$ Where, in the %s GARCH models estimated, $\\\\gamma$ is the asymmetry in volatility, $\\\\xi, \\\\kappa$ and $\\\\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.", ncol(Table.3$ST)-1)
+
+kable(Table.3$ST[-c(13,14),], 
+    col.names = toupper(colnames(Table.3$ST)),
+    caption = "Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters",
+    format="latex",
+    label = 'Table3',
+    booktabs = T, row.names = F, escape = F )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general = c(fn1.3,fn2.3),
+           threeparttable = T,
+           footnote_as_chunk = F, 
+           escape=F,
+           general_title = "Notes:")%>%
+  kable_styling(latex_options = "scale_down")
+
+
+fn1.3b <- sprintf(paste0('This table shows the maximum likelihood estimates of various SGED-    \\\\\\\\ GARCH models.
+                        The daily returns used on the ',toupper(gsub(pattern = '\\.', replacement=' ',colnames(R)))," cover   \\\\\\\\ the period
+                        from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
+
+kable(Table.3$SGED[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),caption = "Maximum likelihood estimates of the SGED-GARCH models with constant skewness and kurtosis parameters",format = "latex",
+    label = 'Table3b',
+    booktabs = T, row.names = F, escape = F )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general = fn1.3b,threeparttable = T,footnote_as_chunk = F, escape=F, general_title = "Notes:")%>%
+  kable_styling(latex_options = "scale_down")
+```
+
+```{r aictableprep, eval=F}
+aic_sGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_sGARCH[i] = infocriteria(garchfit.sGARCH[[i]])[1]
+}
+
+aic_iGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_iGARCH[i] = infocriteria(garchfit.iGARCH[[i]])[1]
+}
+
+aic_EWMA <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_EWMA[i] = infocriteria(garchfit.EWMA[[i]])[1]
+}
+
+aic_eGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_eGARCH[i] = infocriteria(garchfit.eGARCH[[i]])[1]
+}
+
+aic_gjrGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_gjrGARCH[i] = infocriteria(garchfit.gjrGARCH[[i]])[1]
+}
+
+aic_naGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_naGARCH[i] = infocriteria(garchfit.fGARCH.NAGARCH[[i]])[1]
+}
+
+aic_tGARCH <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_tGARCH[i] = infocriteria(garchfit.fGARCH.TGARCH[[i]])[1]
+}
+
+aic_avgarch <- vector(length=length(distributions))
+for (i in 1:length(distributions)) {
+  aic_avgarch[i] = infocriteria(garchfit.fGARCH.AVGARCH[[i]])[1]
+}
+
+aics <- matrix(ncol=length(Models.garch), nrow = length(distributions))
+rownames(aics) <- c("N", "T", "ST", "GED", "SGED")
+colnames(aics) <- Models.garch.clean[c(1,7,8,2,5,4,6,3)]
+aics[,1] <- aic_sGARCH
+aics[,2] <- aic_iGARCH
+aics[,3] <- aic_EWMA
+aics[,4] <- aic_eGARCH
+aics[,5] <- aic_gjrGARCH
+aics[,6] <- aic_naGARCH
+aics[,7] <- aic_tGARCH
+aics[,8] <- aic_avgarch
+
+tableAIC <- as.data.frame(round(aics,4))
+tableAIC <- rbind(tableAIC[5,], tableAIC[4,], tableAIC[3,], tableAIC[2,],tableAIC[1,])
+
+
+
+# for ourselves: quick conditional formatting
+#require(condformat)
+# cf <-  condformat(tableAIC) %>%
+#   rule_fill_discrete(SGARCH,expression =SGARCH==min(SGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(IGARCH,expression =IGARCH==min(IGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(EWMA,expression =EWMA==min(EWMA), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(EGARCH,expression =EGARCH==min(EGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(GJRGARCH,expression =GJRGARCH==min(GJRGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(NAGARCH,expression =NAGARCH==min(NAGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))  %>%
+#   rule_fill_discrete(TGARCH,expression =TGARCH==min(TGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen")) %>%
+#   rule_fill_discrete(AVGARCH,expression =AVGARCH==min(AVGARCH), colours = c("FALSE" = "white", "TRUE" = "lightgreen"))
+```
+
+```{r aictablelatex, echo=F, results='asis'}
+aics %>% kbl(caption = "Model selection according to AIC",
+      label = 'aicTable',format="latex",
+      booktabs = T,
+      position = "h!",
+      digits = 3 )%>%
+  kable_classic(full_width = F)%>%
+  footnote(general_title= "Notes",general="This table shows the AIC value for the respective model. With on the rows the distributions. ",threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  kable_styling(latex_options = "scale_down") 
+```
+
+```{r garchroll, eval = FALSE}
+# VaR garchroll forecasting and backtesting----
+# x = garchspec.eGARCH[[i]]
+roll <- function(x) { 
+  cl = makePSOCKcluster(10)
+  result = ugarchroll(x,data = R,n.ahead = 1,n.start = 2500,forecast.length=1,refit.every = 22,solver = "hybrid",refit.window="moving",calculate.VaR=TRUE,VaR.alpha=0.01, cluster = cl, keep.coef=TRUE)
+  stopCluster(cl)
+  return(result)
+}
+# Enjo Timing = first hash
+```
+
+```{r garchrollegarch, eval = FALSE}
+egarch.normback <- roll(garchspec.eGARCH[[1]]) #37.66 sec
+egarch.stdback <- roll(garchspec.eGARCH[[2]])  #1,3min 
+egarch.sstdback <- roll(garchspec.eGARCH[[3]]) #1.5min
+egarch.gedback <- roll(garchspec.eGARCH[[4]])  #1.1min
+egarch.sgedback <- roll(garchspec.eGARCH[[5]]) #2min 
+```
+
+```{r garchrollgjrgarch, eval = FALSE}
+gjrgarch.normback <- roll(garchspec.gjrGARCH[[1]]) #14.23 sec
+gjrgarch.stdback <- roll(garchspec.gjrGARCH[[2]])  #19.36 sec
+gjrgarch.sstdback <- roll(garchspec.gjrGARCH[[3]]) #24.75 sec
+gjrgarch.gedback <- roll(garchspec.gjrGARCH[[4]])  #21.13 sec
+gjrgarch.sgedback <- roll(garchspec.gjrGARCH[[5]]) #30.24 sec
+```
+
+```{r garchrollnagarch, eval = FALSE}
+nagarch.normback <- roll(garchspec.fGARCH.NAGARCH[[1]]) #14.88 sec
+nagarch.stdback <- roll(garchspec.fGARCH.NAGARCH[[2]])  #20.31 sec
+nagarch.sstdback <- roll(garchspec.fGARCH.NAGARCH[[3]]) #27.25 sec
+nagarch.gedback <- roll(garchspec.fGARCH.NAGARCH[[4]])  #22.39 sec
+nagarch.sgedback <- roll(garchspec.fGARCH.NAGARCH[[5]]) #34.98 sec
+```
+
+```{r garchrolltgarch, eval = FALSE}
+tgarch.normback <- roll(garchspec.fGARCH.TGARCH[[1]]) #15.48 sec
+tgarch.stdback <- roll(garchspec.fGARCH.TGARCH[[2]])  #19.32 sec
+tgarch.sstdback <- roll(garchspec.fGARCH.TGARCH[[3]]) #26.27 sec
+tgarch.gedback <- roll(garchspec.fGARCH.TGARCH[[4]])  #20.26 sec
+tgarch.sgedback <- roll(garchspec.fGARCH.TGARCH[[5]]) #29.29 sec
+```
+
+```{r garchrollavgarch, eval = FALSE}
+avgarch.normback <- roll(garchspec.fGARCH.AVGARCH[[1]]) #20.65 sec
+avgarch.stdback <- roll(garchspec.fGARCH.AVGARCH[[2]])  #35.63 sec
+avgarch.sstdback <- roll(garchspec.fGARCH.AVGARCH[[3]]) #52.54 sec
+avgarch.gedback <- roll(garchspec.fGARCH.AVGARCH[[4]])  #42.59 sec
+avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
+# q1 = q5 = px = matrix(NA, ncol = 1, nrow = 6453)
+# q1[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.01, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+# q5[, 1] = as.numeric(apply(egarch.normback@forecast$density, 1, function(x) qdist("norm", 0.05, mu = x['Mu'], sigma = x['Sigma'], skew = x['Skew'], shape = x['Shape'])))
+# VaR1cc1 = apply(q1, 2, function(x) VaRTest(0.01, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
+# VaR5cc1 = apply(q5, 2, function(x) VaRTest(0.05, actual = egarch.normback@forecast$VaR[, 'realized'], VaR = x))
+```
