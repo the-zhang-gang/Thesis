@@ -133,7 +133,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 \clearpage
 
 ```{r}
-#load("CAC40.RData")
+load("CAC40.RData")
 source("Custom_Functions.R")
 ```
 
