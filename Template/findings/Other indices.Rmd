@@ -1,6 +1,6 @@
 ---
 title: "Other indices"
-author: "Enjo Faes"
+author: "Enjo, Filippo, Stephane "
 date: "6/9/2021"
 output: html_document
 ---
@@ -12,13 +12,34 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 ```{r data}
-data <- suppressWarnings(read_excel("data/Price_Return.xlsx", 
+require(readxl)
+require(xts)
+require(PerformanceAnalytics)
+require(kableExtra)
+require(fitdistrplus)
+require(fGarch)
+require(tree)  # do we need this?
+require(sgt)
+require(devtools)
+require(zoo)
+require(stringr)
+require(rugarch)
+require(plyr)
+require(dplyr)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+suppressMessages(install_bitbucket("alexiosg/racd"))
+options(knitr.kable.NA = "")
+remotes::install_github("R-Finance/xtsExtra")
+source("~/GitHub/hypothesis/Template/scripts_and_filters/Custom_Functions.R")
+data <- suppressWarnings(read_excel("~/GitHub/hypothesis/Template/data/Price_Return.xlsx", 
                                     sheet = "Return", col_types = c("date", 
                                                                     "numeric", "numeric", "numeric", 
                                                                     "numeric"))) #warnings are NA's
 colnames(data) <- c("Date", colnames(data)[-1])
 indices <- as.xts(data[,-1], order.by = data$Date)
-Estoxx <- indices[,2] #CAC40
+Estoxx <- indices[,4] #CAC40
 Estoxx <- na.omit(Estoxx)
 
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
@@ -180,7 +201,7 @@ kable(Table.3$SGED[-c(13,14),], col.names = toupper(colnames(Table.3$SGED)),capt
   kable_styling(latex_options = "scale_down")
 ```
 
-```{r aictableprep, eval=F}
+```{r aictableprep, echo=F}
 aic_sGARCH <- vector(length=length(distributions))
 for (i in 1:length(distributions)) {
   aic_sGARCH[i] = infocriteria(garchfit.sGARCH[[i]])[1]
