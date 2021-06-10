@@ -847,17 +847,27 @@ spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = li
 
 # Backtest ----
 rollacd = racd::acdroll(spec, R, n.start = 8100, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
-#racd::convergence(rollacd)
+
+rollacd1 <- rollacd
+for(i in seq(from = 3000, to = 5000, by = 200)){
+  tmp.roll <- racd::acdroll(spec, R, n.start = i, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
+  if(racd::convergence(tmp.roll)==0){
+    rollacd1<-tmp.roll
+    print(paste0("Convergence FOUND for n.start = ", i))
+    break}else{print(paste0("Convergence not found for n.start = ", i))}
+}
+nstart <- rollacd1@model$n.start
+#racd::convergence(rollacd1)
 # Benchmark ----
 gspec = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE), distribution = 'sstd')
-rollg = ugarchroll(gspec, R, n.start = 8100, refit.every = 250, refit.window = 'recursive')
+rollg = ugarchroll(gspec, R, n.start = nstart, refit.every = 250, refit.window = 'recursive')
 ```
 
 ```{r acdbacktestresults, echo=FALSE}
 # Table
 require(dplyr)
 # VaRTest----
-vartable = rbind(as.data.frame(VaRTest(alpha = 0.01,actual =rollacd@forecast$VaR[,'realized'],VaR=rollacd@forecast$VaR[,'alpha(1%)']),row.names =c('ACD(1%)')),
+vartable = rbind(as.data.frame(VaRTest(alpha = 0.01,actual =rollacd1@forecast$VaR[,'realized'],VaR=rollacd1@forecast$VaR[,'alpha(1%)']),row.names =c('ACD(1%)')),
   as.data.frame(VaRTest(alpha=0.01,actual=rollg@forecast$VaR[,'realized'],VaR=rollg@forecast$VaR[,'alpha(1%)']),row.names=c('GARCH(1%)')))
 
 vartable2 <- vartable %>% 
@@ -875,14 +885,14 @@ vartable2 <- vartable2 %>% select(AE,uc.LRstat, cc.LRstat)
 
 # ESTest modified----
 ESTestingACD <- function(acd.back, var, dist){
-  roll <- rollacd@forecast$density
+  roll <- rollacd1@forecast$density
   f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
   #VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
   # VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:8100),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:nstart),], ES[,1], var, conf.level = 0.99, boot = T)
   # length(R)
   # nrow(ES)
   # length(VaR.sstd.egarch)
@@ -890,7 +900,7 @@ ESTestingACD <- function(acd.back, var, dist){
   AE_ES.p <- ESTest_object[4] #bootstrapped p-value
   return(list(ES,AE_ES,AE_ES.p))
 }
-sacd_sstd_ES <- ESTestingACD(rollacd, var = as.vector(rollacd@forecast$VaR$`alpha(1%)`), "sstd")
+sacd_sstd_ES <- ESTestingACD(rollacd1, var = as.vector(rollacd1@forecast$VaR$`alpha(1%)`), "sstd")
 
 ESTesting2 <- function(garch.back, var, dist){
   
@@ -901,7 +911,7 @@ ESTesting2 <- function(garch.back, var, dist){
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:8100),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:nstart),], ES[,1], var, conf.level = 0.99, boot = T)
   # length(R)
   # nrow(ES)
   # length(VaR.sstd.egarch)
@@ -920,8 +930,8 @@ sgarchnonacd_sstd_AE_p <- sgarchnonacd_sstd_ES[[3]]
 sgarchnonacd_sstd_AE_ES <-paste0(round(sgarchnonacd_sstd_AE_ES[[1]],3), signific(sgarchnonacd_sstd_AE_p))
 
 # DQ Test
-DQ_ACD <- GAS::BacktestVaR(R[8101:nrow(R)],rollacd@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
-DQ_nonacd <- GAS::BacktestVaR(R[8101:nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_ACD <- GAS::BacktestVaR(R[(nstart+1):nrow(R)],rollacd1@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_nonacd <- GAS::BacktestVaR(R[(nstart+1):nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
 
 DQ_ACD_stat <- paste0(round(DQ_ACD$stat,3), signific(DQ_ACD$pvalue))
 DQ_nonacd_stat <- paste0(round(DQ_nonacd$stat,3), signific(DQ_nonacd$pvalue))
