@@ -199,7 +199,7 @@ knitr::include_graphics('figures/vol-clustering-finalized-RI.png')
 ```
 \noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed.
 
-```{r plot4, echo=F,fig.cap='Density vs. Normal Euro Stoxx 50 log returns)', out.width= "75%", fig.align='center', fig.pos='h'}
+```{r plot4, echo=F,fig.cap='Density vs. Normal Euro Stoxx 50 log returns', out.width= "75%", fig.align='center', fig.pos='h'}
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,

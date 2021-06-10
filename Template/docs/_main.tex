@@ -644,7 +644,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 
 }
 
-\caption{Density vs. Normal Euro Stoxx 50 log returns)}\label{fig:plot4}
+\caption{Density vs. Normal Euro Stoxx 50 log returns}\label{fig:plot4}
 \end{figure}
 
 \noindent In figure \ref{fig:acfplots} the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this, while in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component\footnote{\(\alpha_0\) is most of the time referred to as the \(\mu\) in the conditional mean equation. Here we have followed \textcite{bali2008}.} \(\alpha_0\) is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.
@@ -830,7 +830,7 @@ Normal & 0.01 & 1.439 & 0 & 2 & Inf & -9477.660 & 18959.32\\
 \hypertarget{constant-higher-moments}{%
 \section{Constant higher moments}\label{constant-higher-moments}}
 
-\noindent Table \ref{tab:Table3} presents the maximum likelihood estimates for 8 GARCH models based on the ST distribution with constant skewness and kurtosis parameters (robust white errors are presented in parenthesis). The parameter \(\alpha_0\) are only statistically significant for the SGARCH, IGARCH and EWMA model with a value close to 0. The AR(1) coefficient, \(\alpha_1\), has parameters going from -0.049 to -0.032 with \(t\) values ranging from NA to NA not suggesting a high significance and indicating very small negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant except for the EGARCH model. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 0.827 to 1), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 0.885 to 0.918 confirming the presence of Skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom divided by two, determining the tail behavior, is significant for all the models and ranges between 3.153 and 4.0635. The parameter \(\gamma\), which is present only for EGARCH and GJRGARCH is significant and with values around 0.14. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in table \ref{tab:Table3}, the model with the highest value is AVGARCH while, excluding the non-standard GARCH models from the analysis, the model that performs best is EGARCH.~\\
+\noindent Table \ref{tab:Table3} presents the maximum likelihood estimates for 8 GARCH models based on the ST distribution with constant skewness and kurtosis parameters (robust white errors are presented in parenthesis). The parameter \(\alpha_0\) are only statistically significant for the SGARCH, IGARCH and EWMA model with a value close to 0. The AR(1) coefficient, \(\alpha_1\), has parameters going from -0.049 to -0.032 with \(p\) values ranging from 0.011 to 0.014 suggesting significance, but indicating very small negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant except for the EGARCH model. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 0.827 to 1), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 0.885 to 0.918 confirming the presence of skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom divided by two, determining the tail behavior, is significant for all the models and ranges between 3.153 and 4.0635. The parameter \(\gamma\), which is present only for EGARCH and GJRGARCH is significant and with values around 0.14. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in table \ref{tab:Table3}, the model with the highest value is AVGARCH while, excluding the non-standard GARCH models from the analysis, the model that performs best is EGARCH.~\\
 
 \noindent Table \ref{tab:Table3b} shows a very similar picture for the GARCH-SGED models as the GARCH-ST models.
 
@@ -873,7 +873,7 @@ $LLH$ & -8303.694 & -8304.437 & -8158.11 & -8186.06 & -8328.667 & -8143.563 & -8
 \end{tabular}}
 \begin{tablenotes}
 \item \textit{Notes:} 
-\item This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the Euro Stoxx 50 Price index cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
+\item This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the Euro Stoxx 50 cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
 \item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility, $\xi, \kappa$ and $\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.
 \end{tablenotes}
 \end{threeparttable}
@@ -1078,7 +1078,7 @@ As we already pointed out in part \ref{lit-rev}, it might also be interesting to
 \item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t$ Where, in the model estimated, $\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis.
 \end{TableNotes}
 \begin{longtabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
-\caption{\label{tab:Table5}Maximum likelihood estimates of the ST-ACD models with constant skewness and kurtosis parameters}\\
+\caption{\label{tab:Table5}Maximum likelihood estimates of the ST-ACD model with constant skewness and kurtosis parameters}\\
 \toprule
   & ACD GARCH\\
 \midrule
