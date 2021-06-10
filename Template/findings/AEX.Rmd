@@ -867,7 +867,7 @@ rollg = ugarchroll(gspec, R, n.start = nstart, refit.every = 250, refit.window =
 # Table
 require(dplyr)
 # VaRTest----
-vartable = rbind(as.data.frame(VaRTest(alpha = 0.01,actual =rollacd@forecast$VaR[,'realized'],VaR=rollacd@forecast$VaR[,'alpha(1%)']),row.names =c('ACD(1%)')),
+vartable = rbind(as.data.frame(VaRTest(alpha = 0.01,actual =rollacd1@forecast$VaR[,'realized'],VaR=rollacd1@forecast$VaR[,'alpha(1%)']),row.names =c('ACD(1%)')),
   as.data.frame(VaRTest(alpha=0.01,actual=rollg@forecast$VaR[,'realized'],VaR=rollg@forecast$VaR[,'alpha(1%)']),row.names=c('GARCH(1%)')))
 
 vartable2 <- vartable %>% 
@@ -885,7 +885,7 @@ vartable2 <- vartable2 %>% select(AE,uc.LRstat, cc.LRstat)
 
 # ESTest modified----
 ESTestingACD <- function(acd.back, var, dist){
-  roll <- rollacd@forecast$density
+  roll <- rollacd1@forecast$density
   f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
   #VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
   # VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
@@ -900,7 +900,7 @@ ESTestingACD <- function(acd.back, var, dist){
   AE_ES.p <- ESTest_object[4] #bootstrapped p-value
   return(list(ES,AE_ES,AE_ES.p))
 }
-sacd_sstd_ES <- ESTestingACD(rollacd, var = as.vector(rollacd@forecast$VaR$`alpha(1%)`), "sstd")
+sacd_sstd_ES <- ESTestingACD(rollacd1, var = as.vector(rollacd1@forecast$VaR$`alpha(1%)`), "sstd")
 
 ESTesting2 <- function(garch.back, var, dist){
   
@@ -930,7 +930,7 @@ sgarchnonacd_sstd_AE_p <- sgarchnonacd_sstd_ES[[3]]
 sgarchnonacd_sstd_AE_ES <-paste0(round(sgarchnonacd_sstd_AE_ES[[1]],3), signific(sgarchnonacd_sstd_AE_p))
 
 # DQ Test
-DQ_ACD <- GAS::BacktestVaR(R[(nstart+1):nrow(R)],rollacd@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_ACD <- GAS::BacktestVaR(R[(nstart+1):nrow(R)],rollacd1@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
 DQ_nonacd <- GAS::BacktestVaR(R[(nstart+1):nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
 
 DQ_ACD_stat <- paste0(round(DQ_ACD$stat,3), signific(DQ_ACD$pvalue))
