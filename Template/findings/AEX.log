@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  9 JUN 2021 17:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  10 JUN 2021 12:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -777,56 +777,61 @@ l.298 \clearpage
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
 l.298 \clearpage
-                ] [7
+                ] [7pdfTeX warning (ext4): destination with the same identifier
+ (name{table.6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.325 \begin{landscape}
+                       \begin{table}[h!]] [8
 
 
-pdfTeX warning (ext4): destination with the same identifier (name{table.6}) has
+pdfTeX warning (ext4): destination with the same identifier (name{table.7}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.337 \end{landscape}
+l.360 \end{landscape}
                      ]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[8pdfTeX warning (ext4): destination with the same identifier (name{table.7}) h
+[9pdfTeX warning (ext4): destination with the same identifier (name{table.8}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.388 \end{landscape}
-                     ] [9
+l.411 \end{landscape}
+                     ] [10
 
 
 
 
-pdfTeX warning (ext4): destination with the same identifier (name{table.8}) has
+pdfTeX warning (ext4): destination with the same identifier (name{table.9}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.415 \end{landscape}
+l.438 \end{landscape}
                      ]
-<AEX_files/figure-latex/figuresqq-1.pdf, id=74, 469.755pt x 325.215pt>
+<AEX_files/figure-latex/figuresqq-1.pdf, id=80, 469.755pt x 325.215pt>
 File: AEX_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
 <use AEX_files/figure-latex/figuresqq-1.pdf>
 Package pdftex.def Info: AEX_files/figure-latex/figuresqq-1.pdf  used on input 
-line 419.
+line 442.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10
+[11
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.426 \end{document}
+l.449 \end{document}
                      <./AEX_files/figure-latex/figuresqq-1.pdf>] (./AEX.aux)
 Package rerunfilecheck Info: File `AEX.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13207 strings out of 480703
- 200534 string characters out of 5899788
- 550576 words of memory out of 5000000
- 30239 multiletter control sequences out of 15000+600000
+ 13210 strings out of 480703
+ 200570 string characters out of 5899788
+ 549645 words of memory out of 5000000
+ 30240 multiletter control sequences out of 15000+600000
  456850 words of font info for 110 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  60i,14n,63p,391b,395s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -846,10 +851,10 @@ a/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/huawei/Ap
 pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/hua
 wei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Use
 rs/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on AEX.pdf (10 pages, 1211381 bytes).
+Output written on AEX.pdf (11 pages, 1212438 bytes).
 PDF statistics:
- 135 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
- 21 named destinations out of 1000 (max. 500000)
+ 141 PDF objects out of 1000 (max. 8388607)
+ 113 compressed objects within 2 object streams
+ 23 named destinations out of 1000 (max. 500000)
  28678 words of extra memory for PDF output out of 29859 (max. 10000000)
 
