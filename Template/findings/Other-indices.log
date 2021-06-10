@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  9 JUN 2021 16:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.11)  10 JUN 2021 11:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -628,29 +628,27 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 \tf@lot=\write3
 \openout3 = `Other-indices.lot'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 [1
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2pdfTe
-X warning (ext4): destination with the same identifier (name{table.1}) has been
- already used, duplicate ignored
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
+
+pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
+ been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.121 \clearpage
-                ] [3pdfTeX warning (ext4): destination with the same identifier
- (name{table.2}) has been already used, duplicate ignored
+l.120 \end{landscape}
+                     ] [3pdfTeX warning (ext4): destination with the same ident
+ifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.168 \end{landscape}
+l.169 \end{landscape}
                      ] [4pdfTeX warning (ext4): destination with the same ident
 ifier (name{table.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.217 \end{landscape}
+l.218 \end{landscape}
                      ]
-Overfull \hbox (31.5044pt too wide) in paragraph at lines 226--243
+Overfull \hbox (31.5044pt too wide) in paragraph at lines 227--244
  [] 
  []
 
@@ -662,26 +660,27 @@ Overfull \hbox (31.5044pt too wide) in paragraph at lines 226--243
 
 
 
+
 pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.298 \clearpage
+l.299 \clearpage
                 ] [6pdfTeX warning (ext4): destination with the same identifier
  (name{table.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.298 \clearpage
+l.299 \clearpage
                 ] [7pdfTeX warning (ext4): destination with the same identifier
  (name{table.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.361 \begin{landscape}
+l.362 \begin{landscape}
                        \begin{table}[h!]pdfTeX warning (ext4): destination with
  the same identifier (name{table.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.361 \begin{landscape}
+l.362 \begin{landscape}
                        \begin{table}[h!]] [8
 
 
@@ -689,7 +688,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{table.8}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.396 \end{landscape}
+l.397 \end{landscape}
                      ]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -698,7 +697,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.447 \end{landscape}
+l.448 \end{landscape}
                      ] [10
 
 
@@ -708,14 +707,14 @@ pdfTeX warning (ext4): destination with the same identifier (name{table.10}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.474 \end{landscape}
+l.475 \end{landscape}
                      ]
 <Other-indices_files/figure-latex/figuresqq-1.pdf, id=83, 452.69125pt x 301.125
 pt>
 File: Other-indices_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
 <use Other-indices_files/figure-latex/figuresqq-1.pdf>
 Package pdftex.def Info: Other-indices_files/figure-latex/figuresqq-1.pdf  used
- on input line 478.
+ on input line 479.
 (pdftex.def)             Requested size: 452.73158pt x 301.15181pt.
 [11
 
@@ -723,15 +722,15 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.485 \end{document}
+l.486 \end{document}
                      <./Other-indices_files/figure-latex/figuresqq-1.pdf>] (./O
 ther-indices.aux) ) 
 Here is how much of TeX's memory you used:
  14000 strings out of 478994
- 207335 string characters out of 5858184
- 567718 words of memory out of 5000000
+ 207329 string characters out of 5858184
+ 567673 words of memory out of 5000000
  31097 multiletter control sequences out of 15000+600000
- 456850 words of font info for 110 fonts, out of 8000000 for 9000
+ 456897 words of font info for 110 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  85i,15n,88p,518b,387s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec
@@ -748,7 +747,7 @@ exlive/2021/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2021
 fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type
 1/public/lm/lmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/l
 m/lmsy7.pfb>
-Output written on Other-indices.pdf (11 pages, 1186767 bytes).
+Output written on Other-indices.pdf (11 pages, 1157822 bytes).
 PDF statistics:
  146 PDF objects out of 1000 (max. 8388607)
  117 compressed objects within 2 object streams

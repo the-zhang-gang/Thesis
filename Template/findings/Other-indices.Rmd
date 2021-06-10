@@ -1,5 +1,5 @@
 ---
-title: "FRANCE CAC 40 index"
+title: "BEL 20 index"
 author: 'Enjo, Filippo, Stephane '
 date: "6/9/2021"
 output:
@@ -13,7 +13,7 @@ output:
 1. change title in YAML
 2. change data for DAX (in line 38, remember: datasheet 3 or "DAX") 
 + change l44 indices[,XXX] for the column with your data
-3. ctrl + f FRANCE CAC 40 and change it 3 times in the footnotes
+3. ctrl + f BEL 20 and change it 3 times in the footnotes
 4. run all
 5. check rollacd, if no convergence change n.start to larger number than 2500. Run again
 6. l1064: save.image using name DAX.RData, run and comment out
@@ -144,7 +144,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 \clearpage
 
 ```{r}
-#load("CAC40.RData")
+load("BEL20.RData")
 source("Custom_Functions.R")
 ```
 
@@ -846,11 +846,12 @@ table5 %>% kbl(col.names = toupper(colnames(object.df)[1]),caption = "Maximum li
 spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # Backtest ----
-rollacd = racd::acdroll(spec, R, n.start = 2800, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
-# racd::convergence(rollacd)
+rollacd = racd::acdroll(spec, R, n.start = 7500, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
+##rollacd = resume(rollacd, solver = "gosolnp")
+##racd::convergence(rollacd)
 # Benchmark ----
 gspec = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE), distribution = 'sstd')
-rollg = ugarchroll(gspec, R, n.start = 2800, refit.every = 250, refit.window = 'recursive')
+rollg = ugarchroll(gspec, R, n.start = 7500, refit.every = 250, refit.window = 'recursive')
 ```
 
 ```{r acdbacktestresults, echo=FALSE}
@@ -889,7 +890,7 @@ ESTestingACD <- function(acd.back, var, dist){
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:2800),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:7500),], ES[,1], var, conf.level = 0.99, boot = T)
   # length(R)
   # nrow(ES)
   # length(VaR.sstd.egarch)
@@ -908,7 +909,7 @@ ESTesting2 <- function(garch.back, var, dist){
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:2800),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:7500),], ES[,1], var, conf.level = 0.99, boot = T)
   # length(R)
   # nrow(ES)
   # length(VaR.sstd.egarch)
@@ -927,8 +928,8 @@ sgarchnonacd_sstd_AE_p <- sgarchnonacd_sstd_ES[[3]]
 sgarchnonacd_sstd_AE_ES <-paste0(round(sgarchnonacd_sstd_AE_ES[[1]],3), signific(sgarchnonacd_sstd_AE_p))
 
 # DQ Test
-DQ_ACD <- BacktestVaR(R[2801:nrow(R)],rollacd@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
-DQ_nonacd <- BacktestVaR(R[2801:nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_ACD <- BacktestVaR(R[7501:nrow(R)],rollacd@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_nonacd <- BacktestVaR(R[7501:nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
 
 DQ_ACD_stat <- paste0(round(DQ_ACD$stat,3), signific(DQ_ACD$pvalue))
 DQ_nonacd_stat <- paste0(round(DQ_nonacd$stat,3), signific(DQ_nonacd$pvalue))
@@ -992,14 +993,14 @@ ARCH.lm.Test.df <- Table.tests.function(archlmtest, return.matrix = T)
 ```{r heterosctable, results='asis'}
 heterosc.all <- rbind(LJ.test.df.all, ARCH.lm.Test.df)
 heterosc.all %>% kbl(caption = "Diagnostic Tests for Heteroscedasticity",
-      label = 'LjboxTable',
+      label = 'LjboxTable',format="latex",
       booktabs = T,
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
   pack_rows("Panel A: Ljung Box Test on the standardized squared values of the residuals", 1,5) %>% 
   pack_rows("Panel B: ARCH LM Test on the standardized squared values of the residuals", 6,10) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics and the ARCH LM Test for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the France CAC 40 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis of the test in both panels are described as follows:","$H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Ljung box statistics and the ARCH LM Test for the standardized squared residuals of the models analyzed. The underlying data is the daily return series of the BEL 20 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis of the test in both panels are described as follows:","$H_0$: $Corr$($Z_t^2$,$Z_{t-1}^2$)=$Corr$($Z_t^2$,$Z_{t-2}^2$)= $...$ =$Corr$($Z_t^2$,$Z_{t-22}^2$) = $0$"),threeparttable = T,footnote_as_chunk = F, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
@@ -1032,7 +1033,7 @@ GMM.all %>% kbl(caption = "GMM Tests",format = "latex",
   pack_rows("Panel C: ST", 9,12) %>%
   pack_rows("Panel D: T", 13,16) %>%
   pack_rows("Panel E: N", 17,20) %>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the France CAC 40 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the test for each variable are described as follows: $H_0: $ $E[z_{t}] = 0$ for the mean, $H_0: $ $E[z_{t}^2-1] = 0$ for the variance. $H_0: $ $E[z_{t}^3] = 0$ for the skewness and $H_0: $ $E[z_{t}^4-3] = 0$ for the excess kurtosis."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the GMM test statistics for the standardized residuals. The underlying data is the daily return series of the BEL 20 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "The null hypothesis of the test for each variable are described as follows: $H_0: $ $E[z_{t}] = 0$ for the mean, $H_0: $ $E[z_{t}^2-1] = 0$ for the variance. $H_0: $ $E[z_{t}^3] = 0$ for the skewness and $H_0: $ $E[z_{t}^4-3] = 0$ for the excess kurtosis."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
@@ -1046,7 +1047,7 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
       position = "h!",
       digits = 3 )%>%
   kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $JB=\\\\frac{n}{6}(S^{2}+\\\\frac{1}{4}(K-3)^{2})$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\\\\chi^2$ with $\\\\nu = 2$. The underlying data is the daily return series of the France CAC 40 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
+  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $JB=\\\\frac{n}{6}(S^{2}+\\\\frac{1}{4}(K-3)^{2})$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\\\\chi^2$ with $\\\\nu = 2$. The underlying data is the daily return series of the BEL 20 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
@@ -1072,6 +1073,6 @@ qqline(scale(R))
 ```
 
 ```{r}
-#save.image(file='CAC40.RData')
+#save.image(file='BEL20.RData')
 ```
 
