@@ -834,11 +834,20 @@ table5 %>% kbl(col.names = toupper(colnames(object.df)[1]),caption = "Maximum li
 spec = racd::acdspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE),distribution.model = list(model = 'sstd', skewOrder = c(1, 1, 1), shapeOrder = c(1,1,1), skewmodel = 'pwl', shapemodel = 'pwl'))
 
 # Backtest ----
-rollacd = racd::acdroll(spec, R, n.start = 12000, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
-# racd::convergence(rollacd)
+# rollacd = racd::acdroll(spec, R, n.start = 12000, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
+# rollacd1 <- rollacd
+for(i in seq(from = 8000, to = 11800, by = 200)){
+  tmp.roll <- racd::acdroll(spec, R, n.start = i, refit.every = 250, refit.window = 'recursive', calculate.VaR = TRUE, VaR.alpha = 0.01)
+  if(racd::convergence(tmp.roll)==0){
+    rollacd1<-tmp.roll
+    print(paste0("Convergence FOUND for n.start = ", i))
+    break}else{print(paste0("Convergence not found for n.start = ", i))}
+}
+nstart <- rollacd1@model$n.start
+racd::convergence(rollacd1)
 # Benchmark ----
 gspec = ugarchspec(mean.model = list(armaOrder = c(1, 0)), variance.model = list(variance.targeting = TRUE), distribution = 'sstd')
-rollg = ugarchroll(gspec, R, n.start = 12000, refit.every = 250, refit.window = 'recursive')
+rollg = ugarchroll(gspec, R, n.start = nstart, refit.every = 250, refit.window = 'recursive')
 
 
 ```
@@ -849,8 +858,8 @@ rollg = ugarchroll(gspec, R, n.start = 12000, refit.every = 250, refit.window = 
 vartable = rbind(
   as.data.frame(
     VaRTest(alpha = 0.01, 
-          actual =rollacd@forecast$VaR[,'realized'], 
-          VaR = rollacd@forecast$VaR[, 'alpha(1%)']), 
+          actual =rollacd1@forecast$VaR[,'realized'], 
+          VaR = rollacd1@forecast$VaR[, 'alpha(1%)']), 
   row.names =c('ACD(1%)')),
   as.data.frame(
     VaRTest(alpha = 0.01, 
@@ -858,8 +867,10 @@ vartable = rbind(
             VaR = rollg@forecast$VaR[, 'alpha(1%)']), 
     row.names = c('GARCH(1%)')))
 
-vartable2 <- vartable %>% mutate(AE = actual.exceed/expected.exceed)
-vartable2 <- vartable2 %>% select(AE, uc.LRstat, uc.LRp, cc.LRstat, cc.LRp)
+vartable2 <- vartable %>% 
+  mutate(AE = actual.exceed/expected.exceed)
+#vartable2 <- vartable2 %>% select(AE, uc.LRstat, uc.LRp, cc.LRstat, cc.LRp)
+vartable2 <- vartable2[,c(13,4,6,9,11)]
 vartable2 <- round(vartable2,3)
 
 vartable2[1,2] <- paste0(vartable2[1,2],signific(vartable2[1,3]))
@@ -868,18 +879,18 @@ vartable2[2,2] <- paste0(vartable2[2,2],signific(vartable2[2,3]))
 vartable2[1,4] <- paste0(vartable2[1,4],signific(vartable2[1,4]))
 vartable2[2,4] <- paste0(vartable2[2,4],signific(vartable2[2,4]))
 
-vartable2 <- vartable2 %>% select(AE,uc.LRstat, cc.LRstat)
+vartable2 <- vartable2[,c(1,2,4)] #%>% select(AE,uc.LRstat, cc.LRstat)
 
 # ESTest modified----
 ESTestingACD <- function(acd.back, var, dist){
-  roll <- rollacd@forecast$density
+  roll <- rollacd1@forecast$density
   f <- function(x, skew, shape) qdist(dist, p = x, mu = 0, sigma = 1, skew = skew, shape = shape)
   #VaR in same fashion as ES below, and gives the same VaR as previously found so it is redundant.
   # VaR <- roll[,'Mu'] + qdist(dist, 0.01, mu = 0, sigma =1, skew = roll[,'Skew'], shape = roll[,'Shape']) * roll[,'Sigma']
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:12000),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:nstart),], ES[,1], var, conf.level = 0.99, boot = T)
 
 
   # length(R)
@@ -889,9 +900,9 @@ ESTestingACD <- function(acd.back, var, dist){
   AE_ES.p <- ESTest_object[4] #bootstrapped p-value
   return(list(ES,AE_ES,AE_ES.p))
 }
-sacd_sstd_ES <- ESTestingACD(rollacd, var = as.vector(rollacd@forecast$VaR$`alpha(1%)`), "sstd")
+sacd_sstd_ES <- ESTestingACD(rollacd1, var = as.vector(rollacd1@forecast$VaR$`alpha(1%)`), "sstd")
 # #length var
-length(as.vector(rollacd@forecast$VaR$`alpha(1%)`))
+length(as.vector(rollacd1@forecast$VaR$`alpha(1%)`))
 length(ES[,1])
 # #length actual returns
 # length(R[-c(1:2800),])
@@ -905,7 +916,7 @@ ESTesting2 <- function(garch.back, var, dist){
   ES <- roll['Mu'] + roll['Sigma']*apply(roll, 1, function(x)
     integrate(f,0,0.01, skew = x['Skew'], shape = x['Shape'])$value/0.01)
   names(ES) <- "ES"
-  ESTest_object <- ESTest(0.01, R[-c(1:12000),], ES[,1], var, conf.level = 0.99, boot = T)
+  ESTest_object <- ESTest(0.01, R[-c(1:nstart),], ES[,1], var, conf.level = 0.99, boot = T)
   # length(R)
   # nrow(ES)
   # length(VaR.sstd.egarch)
@@ -914,7 +925,7 @@ ESTesting2 <- function(garch.back, var, dist){
   return(list(ES,AE_ES,AE_ES.p))
 }
 sgarchnonacd_sstd_ES <- ESTesting2(rollg, var = rollg@forecast$VaR$`alpha(1%)`, "sstd")
-length(rollg@forecast$VaR$`alpha(1%)`)
+#length(rollg@forecast$VaR$`alpha(1%)`)
 
 
 sacd_sstd_AE_ES <- sacd_sstd_ES[2]
@@ -926,8 +937,8 @@ sgarchnonacd_sstd_AE_p <- sgarchnonacd_sstd_ES[[3]]
 sgarchnonacd_sstd_AE_ES <-paste0(round(sgarchnonacd_sstd_AE_ES[[1]],3), signific(sgarchnonacd_sstd_AE_p))
 
 # DQ Test
-DQ_ACD <- BacktestVaR(R[12001:nrow(R)],rollacd@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
-DQ_nonacd <- BacktestVaR(R[12001:nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_ACD <- BacktestVaR(R[(nstart+1):nrow(R)],rollacd1@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
+DQ_nonacd <- BacktestVaR(R[(nstart+1):nrow(R)],rollg@forecast$VaR$`alpha(1%)`,0.01, 5)$DQ
 
 DQ_ACD_stat <- paste0(round(DQ_ACD$stat,3), signific(DQ_ACD$pvalue))
 DQ_nonacd_stat <- paste0(round(DQ_nonacd$stat,3), signific(DQ_nonacd$pvalue))
