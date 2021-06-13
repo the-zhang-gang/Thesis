@@ -827,7 +827,7 @@ object.df <- rbind(object.df[c(1,2),],object.df[rownames(object.df)=="$\\beta_0$
 ```
 
 
-```{r Table5, eval=F, results='asis'}
+```{r Table5, echo=F, results='asis'}
 #require(magrittr)
 fn1.3c <- sprintf(paste0('This table shows the maximum likelihood estimates of the ST-ACD model. The daily returns used on the ',stringr::str_to_title(gsub(pattern = '\\.', replacement=' ',colnames(R)))," Price index cover the period from ",gsub(" UTC", "",format(min(index(R)), '%d %B, %Y'))," to ",gsub(" UTC", "",format(max(index(R)),'%d %B, %Y')), " (", nrow(R)," observations)."))
 fn2.3 <- "The mean process is modeled as follows: $R_t= \\\\alpha_0+ \\\\alpha_1 \\\\times R_{t-1}+ \\\\varepsilon_t$. Where, in the model estimated, $\\\\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis."
