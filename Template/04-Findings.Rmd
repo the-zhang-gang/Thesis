@@ -459,7 +459,7 @@ avgarch.sgedback <- roll(garchspec.fGARCH.AVGARCH[[5]]) #1.03 min
 
 \newpage
 
-```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-NAGARCH-N", fig.align='center', fig.pos='h',echo=FALSE, echo=FALSE, out.width="90%"}
+```{r figurebacktests2,fig.cap = "Comparison between VaR-EGARCH-ST and VaR-EGARCH-N", fig.align='center', fig.pos='h',echo=FALSE, echo=FALSE, out.width="90%"}
 # EGARCH with sstd vs NAGARCH with sstd
 par(mfrow = c(2,1), mar = c(2.5,2.5,1.5,2.5))
 # EGARCH with SSTD

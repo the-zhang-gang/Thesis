@@ -510,10 +510,10 @@ An extension to GARCH models was proposed by \textcite{hansen1994}, the autoregr
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
 
-Value-at-Risk (VaR) is a risk metric developed simultaniously by \textcite{markowitz1952} and Roy1952 to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the \emph{1996 RiskMetrics Technical Document}, composed by RiskMetrics\footnote{RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries \autocite{alexander2008}.}, \textcite{morganguarantytrustcompany1996} (part of JP Morgan), gives a good overview of the computation, but also made use of the name ``value-at-risk'' over equivalents like ``dollars-at-risk'' (DaR), ``capital-at-risk'' (CaR), ``income-at-risk'' (IaR) and ``earnings-at-risk'' (EaR). According to \textcite{holton2002} VaR gained traction in the last decade of the 20\textsuperscript{th} century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\theta_t\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}. Christofferson2001 puts forth a general framework for specifying VaR models and comparing between two alternatives models.
+Value-at-Risk (VaR) is a risk metric developed simultaniously by \textcite{markowitz1952} and Roy1952 to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the \emph{1996 RiskMetrics Technical Document}, composed by RiskMetrics\footnote{RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries \autocite{alexander2008}.}, \textcite{morganguarantytrustcompany1996} (part of JP Morgan), gives a good overview of the computation, but also made use of the name ``value-at-risk'' over equivalents like ``dollars-at-risk'' (DaR), ``capital-at-risk'' (CaR), ``income-at-risk'' (IaR) and ``earnings-at-risk'' (EaR). According to \textcite{holton2002} VaR gained traction in the last decade of the 20\textsuperscript{th} century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\alpha\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}. Christofferson2001 puts forth a general framework for specifying VaR models and comparing between two alternatives models.
 
 \begin{align}
-Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \phi
+Pr(y_t \le \alpha | \Omega_{t-1}) \equiv \phi
  \label{eq:eq22}
 \end{align}
 
@@ -524,10 +524,10 @@ With \(y_t\) expected returns in period t, \(\Omega_{t-1}\) the information set 
 
 One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. As VaR lacks subadditivity of different percentile outcomes, {[}Artzner1998{]} reject it as a coherent measure of risk. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, they provide a conceptual idea of a Conditional VaR (CVaR) which quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was written out in the form it is used by today by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.
 
-To calculate \(\theta_t\), VaR and CVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
+To calculate \(\alpha\), VaR and CVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
 
 \begin{align}
-Pr(y_t \le \theta_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\theta_t} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \phi
+Pr(y_t \le \alpha | \Omega_{t-1}) \equiv \int_{-\infty}^{\alpha} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \phi
  \label{eq:eq23}
 \end{align}
 
@@ -732,7 +732,7 @@ L R^{u c}=-2 \ln \left(\frac{(1-p)^{N-X} p^{X}}{\left(1-\frac{X}{N}\right)^{N-X}
 \hypertarget{conditional-coverage-test-of-christoffersen2001}{%
 \subsubsection{\texorpdfstring{Conditional coverage test of \textcite{christoffersen2001}}{Conditional coverage test of @christoffersen2001}}\label{conditional-coverage-test-of-christoffersen2001}}
 
-\noindent \textcite{christoffersen2001} proposed the conditional coverage test. It is tests for unconditional covrage and serial independence. The serial independence is important while the \(L R^{u c}\) can give a false picture while at any point in time it classifies inaccurate VaR estimates as ``acceptably accurate'' \autocite{bali2007}. For a certain VaR estimate an indicator variable, \(I_t(\alpha)\), is computed as equation \eqref{eq:ccov}.
+\noindent \textcite{christoffersen2001} proposed the conditional coverage test. It is tests for unconditional coverage and serial independence. The serial independence is important while the \(L R^{u c}\) can give a false picture while at any point in time it classifies inaccurate VaR estimates as ``acceptably accurate'' \autocite{bali2007}. For a certain VaR estimate an indicator variable, \(I_t(\alpha)\), is computed as equation \eqref{eq:ccov}.
 
 \begin{align}
 I_{t}(\alpha)=\left\{\begin{array}{ll}
@@ -1481,7 +1481,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 \noindent The standard GARCH model \autocite{bollerslev1986} is written consistent with \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
 
 \begin{align}
-\sigma_t^2 = \beta_0  +  {\beta_1}\varepsilon _{t-j}^2 + {\beta_2}\sigma_{t-j}^2
+\sigma_t^2 = \beta_0  +  {\beta_1}\varepsilon _{t-1}^2 + {\beta_2}\sigma_{t-1}^2
  \label{eq:eq13}
 \end{align}
 
@@ -1526,7 +1526,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 \noindent The EGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16}. The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
 \begin{align}
-\log_e(\sigma_t^2) = \beta_0 + \beta_1 z_{t-1} + \gamma_1 (|z_{t-1}| - E|z_{t-1}|)+ \beta_2 \log_e(\sigma_{t-j}^2)
+\log_e(\sigma_t^2) = \beta_0 + \beta_1 z_{t-1} + \gamma_1 (|z_{t-1}| - E|z_{t-1}|)+ \beta_2 \log_e(\sigma_{t-1}^2)
  \label{eq:eq16}
 \end{align}
 
@@ -1550,11 +1550,11 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 \noindent The TGARCH or threshold model \autocite{zakoian1994} also models asymmetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
 
 \begin{align}
-\sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ \beta_1^{-} + \varepsilon_{t-1}^{-} + \beta_2 \sigma_{t-1}
+\sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ - \beta_1^{-} \varepsilon_{t-1}^{-} + \beta_2 \sigma_{t-1}
  \label{eq:eq19}
 \end{align}
 
-\noindent where \(\varepsilon_{t-j}^+\) is equal to \(\varepsilon_{t-j}\) if the term is negative and equal to 0 if the term is positive. The reverse applies to \(\varepsilon_{t-j}^-\). They cite \textcite{davidian1987} who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
+\noindent where \(\varepsilon_{t-1}^+\) is equal to \(\varepsilon_{t-1}\) if the term is negative and equal to 0 if the term is positive. The reverse applies to \(\varepsilon_{t-1}^-\). They cite \textcite{davidian1987} who find that using volatility instead of variance as scaling input variable gives better variance estimates. This is due to absolute residuals (contrary to squared residuals with variance) more closely predicting variance for non-normal distributions.
 
 \hypertarget{tsgarch-model}{%
 \subparagraph{TSGARCH model}\label{tsgarch-model}}
@@ -1569,14 +1569,14 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 \hypertarget{ewma}{%
 \subparagraph{EWMA}\label{ewma}}
 
-\noindent An alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\xi\) more weight is assigned to recent periods than distant periods. The \(\xi\) must be less than 1. It is specified as in \eqref{eq:eq21}.
+\noindent An alternative to the series of GARCH models is the exponentially weighted moving average or EWMA model. This model calculates conditional variance based on the shocks from previous periods. The idea is that by including a smoothing parameter \(\lambda\) more weight is assigned to recent periods than distant periods. The \(\lambda\) must be less than 1. It is specified as in \eqref{eq:eq21}.
 
 \begin{align}
-\sigma_t^2 = (1-\xi) \sum\limits_{j=1}^\infty (\xi^j \varepsilon_{t-j}^2)
+\sigma_t^2 = (1-\lambda) \sum\limits_{j=1}^\infty (\lambda^j \varepsilon_{t-j}^2)
  \label{eq:eq21}
 \end{align}
 
-In practice a \(\xi\) of 0.94 is often used, such as by the financial risk management company RiskMetrics\(^{TM}\) model of J.P. Morgan \autocite{morganguarantytrustcompany1996}.
+In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk management company RiskMetrics\(^{TM}\) model of J.P. Morgan \autocite{morganguarantytrustcompany1996}.
 
 \newpage
 
