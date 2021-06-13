@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  13 JUN 2021 17:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.22)  13 JUN 2021 17:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**AEX.tex
-(./AEX.tex
+**BEL20.tex
+(./BEL20.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-05-11> (c:/Users/huawei/AppData/Roaming/TinyTeX/texm
 f-dist/tex/latex/base/article.cls
@@ -573,8 +573,8 @@ nd-pdftex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count301
 \l__pdf_internal_box=\box67
-) (./AEX.aux)
-\openout1 = `AEX.aux'.
+) (./BEL20.aux)
+\openout1 = `BEL20.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
 LaTeX Font Info:    ... okay on input line 84.
@@ -641,9 +641,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 84.
 LaTeX Info: Redefining \pageref on input line 84.
 LaTeX Info: Redefining \nameref on input line 84.
-(./AEX.out) (./AEX.out)
+(./BEL20.out) (./BEL20.out)
 \@outlinefile=\write3
-\openout3 = `AEX.out'.
+\openout3 = `BEL20.out'.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -722,7 +722,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.
 cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) (./AEX.lot
+) (./BEL20.lot
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 1.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -731,7 +731,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 1.
 )
 \tf@lot=\write4
-\openout4 = `AEX.lot'.
+\openout4 = `BEL20.lot'.
 
 [1
 
@@ -815,11 +815,11 @@ s been already used, duplicate ignored
                                                   
 l.474 \end{landscape}
                      ]
-<AEX_files/figure-latex/figuresqq-1.pdf, id=83, 469.755pt x 325.215pt>
-File: AEX_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
-<use AEX_files/figure-latex/figuresqq-1.pdf>
-Package pdftex.def Info: AEX_files/figure-latex/figuresqq-1.pdf  used on input 
-line 478.
+<BEL20_files/figure-latex/figuresqq-1.pdf, id=83, 469.755pt x 325.215pt>
+File: BEL20_files/figure-latex/figuresqq-1.pdf Graphic file (type pdf)
+<use BEL20_files/figure-latex/figuresqq-1.pdf>
+Package pdftex.def Info: BEL20_files/figure-latex/figuresqq-1.pdf  used on inpu
+t line 478.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [11
 
@@ -828,18 +828,19 @@ s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
 l.485 \end{document}
-                     <./AEX_files/figure-latex/figuresqq-1.pdf>] (./AEX.aux)
-Package rerunfilecheck Info: File `AEX.out' has not changed.
+                     <./BEL20_files/figure-latex/figuresqq-1.pdf>] (./BEL20.aux
+)
+Package rerunfilecheck Info: File `BEL20.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13214 strings out of 480703
- 200612 string characters out of 5899788
- 550763 words of memory out of 5000000
+ 13212 strings out of 480703
+ 200650 string characters out of 5899788
+ 550796 words of memory out of 5000000
  30241 multiletter control sequences out of 15000+600000
- 456933 words of font info for 111 fonts, out of 8000000 for 9000
+ 456897 words of font info for 110 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 60i,15n,63p,391b,395s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,15n,63p,393b,395s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.
 enc}{c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-m
 athsy.enc}{c:/Users/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/l
@@ -856,7 +857,7 @@ a/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/huawei/Ap
 pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/hua
 wei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Use
 rs/huawei/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on AEX.pdf (11 pages, 1214017 bytes).
+Output written on BEL20.pdf (11 pages, 1157181 bytes).
 PDF statistics:
  144 PDF objects out of 1000 (max. 8388607)
  116 compressed objects within 2 object streams
