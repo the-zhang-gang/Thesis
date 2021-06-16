@@ -324,10 +324,10 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 
 ```{=tex}
 \begin{align}
-Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(1-\alpha)\right)-1-\alpha,
+Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(1-\alpha)\right)-(1-\alpha),
 (\#eq:dq1)
 \end{align}
-\vspace{-15mm}
+\vspace{-20mm}
 ```
 ```{=tex}
 \begin{align}
@@ -344,7 +344,7 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 \end{array}\right.$$
 
 ```{=tex}
-\vspace{-15mm}
+\vspace{-5mm}
 \begin{align}
 \frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{1-\alpha(\alpha)} \sim \chi^{2}(m)
 (\#eq:dq3)
@@ -352,4 +352,4 @@ $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
 ```
 #### CVaR Test
 
-The Expected Shortfall (or CVaR) test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+\noindent The Expected Shortfall (or CVaR) test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
