@@ -101,7 +101,7 @@ legend("topleft",legend = c("Actual distribution","Theoretical distribution"), c
 
 
 plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0.012, sigma = 1.635, lambda = -0.043, p =2 , q = 2.817), col = "red")
+lines(xvals, dsgt(xvals, mu = 0.012, sigma = 1.635, lambda = -0.043, p =2 , q = 2.817/2), col = "red")
 legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
 
 # plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
