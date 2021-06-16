@@ -47,7 +47,8 @@ indices <- as.xts(data[,-1], order.by = data$Date)
 Estoxx <- indices[,1] #see if price index
 Estoxx <- na.omit(Estoxx)
 R <- diff(Estoxx, log = TRUE, na.pad = FALSE)*100
-R <- na.omit(R) 
+R <- na.omit(R)
+write.csv(R,"front-and-back-matter/Rdata")
 ```
 
 ```{r loadenv, echo=F}
@@ -81,44 +82,9 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 [^findings-1]: To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are available on request.
 
-\noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns and reported in the appendix. We see that the normal distribution is not a good approximation. The other theoretical distributions are closer to the actual data, except that they are somewhat too peaked. This phenomenon is the least present for the SGT distribution. 
-
-```{r}
+\noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns and reported in the appendix. We find that the normal distribution is not a good approximation. The theoretical SGT, SGED and GED distributions are closer to the actual data, except that they somewhat overestimate peakedness. The theoretical skewed and symmetric Student-t distributions on the other hand underestimate peakedness. Visually, the best match seems to be the SGT distribution, which is to be expected as it has the highest log likelihood score.
 
 
-plot(density(R), main = "Fit of SGT distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-xvals = seq(min(R),max(R),by=0.01)
-lines(xvals, dsgt(xvals, mu = 0.014, sigma = 1.441, lambda = -0.02, p =1.233 , q = 4.959), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-plot(density(R), main = "Fit of SGED distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0.015, sigma = 1.42, lambda = -0.008, p =0.898 , q = Inf), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-plot(density(R), main = "Fit of GED distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0, sigma = 1.418, lambda = 0, p =0.899 , q = Inf), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-
-plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0.012, sigma = 1.635, lambda = -0.043, p =2 , q = 2.817/2), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-# plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-# lines(xvals, dsstd(xvals, mean = 0.012, sd = 1.635, xi = (1-0.043), nu = 2*2.817), col = "red")
-
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-
-plot(density(R), main = "Fit of T distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0.045, sigma = 1.64, lambda = 0, p =2 , q = 1.403), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-plot(density(R), main = "Fit of Normal distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
-lines(xvals, dsgt(xvals, mu = 0.01, sigma = 1.439, lambda = 0, p =2 , q = Inf), col = "red")
-legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
-
-```
 
 
 ```{r table2prep, include=FALSE, eval=FALSE}
@@ -128,6 +94,7 @@ table2 <- Eurostoxx$table
 table2[table2 == "(NA)"] <- NA
 colnames(table2) <- c("", "$\\alpha$","$\\beta$","$\\xi$","$\\kappa$","$\\eta$","$LLH$","AIC")
 # table2 <-  data.frame(table2, check.names = F, fix.empty.names = FALSE)
+
 writexl::write_xlsx(table2,"findings/table2.xlsx")
 ```
 

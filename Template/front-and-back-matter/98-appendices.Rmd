@@ -301,9 +301,57 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 
 # Appendix to findings
 
+```{r, include=FALSE}
+require(readr)
+R <- suppressWarnings(as.matrix(read_csv("Rdata")[,-1]))
+```
+
+
+### MLE fitted distributions
+
+Below are the plots of the distributions fitted to the Eurostoxx 50 data using Maximum Likelihood Estimation.
+
+```{r mle plots, echo=FALSE}
+
+
+
+plot(density(R), main = "Fit of SGT distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+xvals = seq(min(R),max(R),by=0.01)
+lines(xvals, dsgt(xvals, mu = 0.014, sigma = 1.441, lambda = -0.02, p =1.233 , q = 4.959), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+plot(density(R), main = "Fit of SGED distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+lines(xvals, dsgt(xvals, mu = 0.015, sigma = 1.42, lambda = -0.008, p =0.898 , q = Inf), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+plot(density(R), main = "Fit of GED distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+lines(xvals, dsgt(xvals, mu = 0, sigma = 1.418, lambda = 0, p =0.899 , q = Inf), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+
+plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+lines(xvals, dsgt(xvals, mu = 0.012, sigma = 1.635, lambda = -0.043, p =2 , q = 	1.409), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+# plot(density(R), main = "Fit of ST distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+# lines(xvals, dsstd(xvals, mean = 0.012, sd = 1.635, xi = (1-0.043), nu = 2*2.817), col = "red")
+
+# legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+
+plot(density(R), main = "Fit of T distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+lines(xvals, dsgt(xvals, mu = 0.045, sigma = 1.64, lambda = 0, p =2 , q = 1.403), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+plot(density(R), main = "Fit of Normal distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
+lines(xvals, dsgt(xvals, mu = 0.01, sigma = 1.439, lambda = 0, p =2 , q = Inf), col = "red")
+legend("topleft",legend = c("Actual distribution","Theoretical distribution"), col = c("black","red"), pch=1)
+
+```
+
 #### Goodness of fit {#goodness-of-fit}
 
-\noindent As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 140 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined.  \
+\noindent As already mentioned, next to testing the models in part \@ref(analysis), we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 140 models that were estimated. This can lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined.  \
 
 \newpage
 First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the general error distribution (GED) seems to perform slightly better than the the T distribution. While the student's t distribution (T) performs better than the normal distribution (NORM) according to the AIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
@@ -327,13 +375,13 @@ knitr::include_graphics("figures/aicfigures/asymmetric aics.pdf")
 ```
 \newpage
 \clearpage
-\noindent Then, in figure \@ref(fig:aic4) the same patter arises as in figure \@ref(fig:aic2), the skewed student's t distribution again seems to be the most optimal one to use. Therefore the ST distribution is chosen as final model for the Euro Stoxx 50 index.
+\noindent Then, in figure \@ref(fig:aic4) the same patter arises as in figure \@ref(fig:aic2), the skewed student's t distribution again seems to be the most optimal one to use. Therefore the ST distribution is chosen as the most suited model for the Euro Stoxx 50 index.
 ```{r aic4, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='90%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/asymmetric aics2.pdf")
 ```
 \noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above[^appendices-5].
 
 
-[^appendices-5]: Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.
+[^appendices-5]: We have to note that for some models like TGARCH and AVGARCH with SGED distribution the AIC was double of other models and therefore these models seem to work very poorly or are misspecified.
 
 

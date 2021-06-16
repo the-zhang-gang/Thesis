@@ -259,7 +259,7 @@ DistMLE <- function(R=R) {
   Table2[4,1:2] <- ST_result$estimate[1:2]
   Table2[4,3] <- ST_result$estimate[4] - 1
   Table2[4,4] <- 2
-  Table2[4,5] <- ST_result$estimate[3] # eta parameter is not exactly true here... See formula SGT package
+  Table2[4,5] <- ST_result$estimate[3]/2 # eta parameter is not exactly true here... See formula SGT package
   Table2[4,6] <- ST_result$loglik
   Table2[4,7] <- ST_result$aic
   # "alpha","beta","xi","kappa","nu","L","AIC"
