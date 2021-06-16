@@ -1010,7 +1010,7 @@ rownames(GMM.norm) <- rownames(GMM.t) <- rownames(GMM.st) <- rownames(GMM.ged) <
 GMM.all <- rbind(GMM.sged,GMM.ged,GMM.st,GMM.t,GMM.norm)
 ```
 
-The Generalized Method of Moments (GMM) test by @hansen1982 is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test[^findings-3]. The mean (first moment) should be equal to zero (or or $E\left[z_{t}\right]=0$). The variance (second moment) should be equal to one (or $E\left[z_{t}^2-1\right]=0$). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively $E\left[z_{t}^3\right]=0$ and $E\left[z_{t}^4-3\right] = 0$).
+The Generalized Method of Moments (GMM) test by @hansen1982 is also a test that checks if the model is correctly specified or not. Here only the t-test results of the GMM test for the four individual moments are examined [^findings-3]. The mean (first moment) should be equal to zero (or or $E\left[z_{t}\right]=0$). The variance (second moment) should be equal to one (or $E\left[z_{t}^2-1\right]=0$). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively $E\left[z_{t}^3\right]=0$ and $E\left[z_{t}^4-3\right] = 0$).
 
 [^findings-3]: We already looked at the joint conditional moment: serial correlation in the squares or in the variances
 
@@ -1044,9 +1044,8 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
-[^findings-4]
 
-[^findings-4]: Note that using monthly returns instead of daily, it cannot be rejected that the residuals are normally distributed.
+[^findings-4]: Note that using monthly returns instead of daily, we could not reject that the residuals are normally distributed.
 
 <!-- #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22) -->
 
