@@ -385,34 +385,19 @@ The time-varying skewness parameter in the ACD specification following a piecewi
 \adjustmtc
 \markboth{Introduction}{}
 
-\noindent A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[Among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns. Additionally, a point of interest is the predictability of stock prices \autocite{fama1965,Fama1970,welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices. ~
+\noindent A general assumption in finance is that stock returns are normally distributed. However, various authors have shown that this assumption does not hold in practice: stock returns are not normally distributed \autocites[among which][]{theodossiou2000,subbotin1923,theodossiou2015}. For example, \textcite{theodossiou2000} mentions that ``empirical distributions of log-returns of several financial assets exhibit strong higher-order moment dependencies which exist mainly in daily and weekly log-returns and prevent monthly, bimonthly and quarterly log-returns from obeying the normality law implied by the central limit theorem. As a consequence, price changes do not follow the geometric Brownian motion.'' So in reality, stock returns exhibit fat-tails and peakedness \autocite{Officer1972}, these are some of the so-called stylized facts of returns. Additionally, a point of interest is the predictability of stock prices \autocite{fama1965,Fama1970,welch2008}. This makes it difficult for corporations to manage market risk, i.e.~the variability of stock prices.~\\
 
-Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. Corporations have to manage their risks both for their own sake and due to regulatory requirements. Consequentially, the Value at Risk metric (VaR), developed in response to the financial disaster events of the early 1990s, has been very influential in the financial world. The tool of VaR has become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 1\% VaR can be defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 1\% while the Conditional Value at Risk (CVaR) can be defined as the average of the events that are lower than the VaR. \textcite{bali2008} explains that many implementations of the CVaR have the assumption that asset and portfolio's returns are normally distributed but that this is inconsistent with the evidence. Empiric evidence outlines that stock market returns follow a distribution that is negatively skewed and have fatter tails than expected under normality. Thus, assuming normality can lead to incorrect VaR and CVaR numbers, an underestimation of the probability of extreme events happening and ultimately a poor understanding of risk exposure.
+\noindent Risk, in general, can be defined as the volatility of unexpected outcomes \autocite{jorion2007}. Corporations have to manage their risks both for their own sake and due to regulatory requirements. Consequentially, the Value at Risk metric (VaR), developed in response to the financial disaster events of the early 1990s, has been very influential in the financial world. The tool of VaR has become a standard measure of risk for many financial institutions going from banks, that use VaR to calculate the adequacy of their capital structure, to other financial services companies to assess the exposure of their positions and portfolios. The 1\% VaR can be defined as the maximum loss of a portfolio, during a time horizon, excluding all the negative events with a combined probability lower than 1\% while the Conditional Value at Risk (CVaR) can be defined as the average of the events that are lower than the VaR. Also \textcite{bali2008} explains that many implementations of the CVaR have the assumption that asset and portfolio's returns are normally distributed but that this is inconsistent with the evidence. Assuming normality can lead to incorrect VaR and CVaR numbers, an underestimation of the probability of extreme events happening and ultimately a poor understanding of risk exposure.~\\
 
-\noindent This paper has two goals. The first goal is to develop a deeper understanding of GARCH models, their mechanics and the properties of these models in regard to risk management. Second, we aim to replicate and update the research made by \textcite{bali2008} on US indexes, analyzing the dynamics proposed with a European outlook. Namely, we use GARCH models to predict the volatility of the Euro Stoxx 50 return index. After this estimation, we compute VaR and CVaR and conduct a backtest to see if the GARCH models predict the VaR and CVaR appropriately. This is summarized in our research question:
+\noindent This paper has \emph{two goals}. The first goal is to \emph{develop a deeper understanding of GARCH models}, their mechanics and the properties of these models in regard to risk management. Second, we aim to \emph{replicate and update the research made by \textcite{bali2008} on U.S. indexes, analyzing the dynamics proposed with a European outlook}. Namely, we use GARCH models to predict the volatility of the Euro Stoxx 50 return index. After this estimation, we compute VaR and CVaR and conduct a backtest to see if the GARCH models predict the VaR and CVaR appropriately. This is summarized in our research question:
 
 \begin{quote}
 \begin{quote}
-Do higher moments increase accuracy in the estimation of VaR and CVaR?
+\textbf{Do higher moments increase accuracy in the estimation of VaR and CVaR?}
 \end{quote}
 \end{quote}
 
-\noindent The paper is organized as follows. First, chapter \ref{lit-rev} discusses the stylized facts, conditional distributions and the GARCH models. Chapter \ref{dat-and-meth} describes the data used and the methodology followed in modeling the volatility with GARCH models. Then a description is given of the control tests used to evaluate the performances of the different GARCH models and underlying distributions. In chapter \ref{analysis}, the findings are presented and discussed. in chapter \ref{Robustness} the results of some diagnostic tests are shown and interpreted. Finally, chapter \ref{Conclusion} summarizes the results and answers the research question.
-
-\begin{savequote}
-Volatility is unobservable. We can only ever estimate and forecast
-volatility, and this only within the context of an assumed statistical
-model. So there is no absolute `true' volatility: what is `true' depends
-only on the assumed model\ldots{}
-
-Moreover, volatility is only a sufficient statistic for the dispersion
-of the returns distribution when we make a normality assumption. In
-other words, volatility does not provide a full description of the risks
-that are taken by the investment unless we assume the investment returns
-are normally distributed.
-\qauthor{--- Alexander (2008) in \emph{Market Risk Analysis Practical Financial Econometrics}}\end{savequote}
-
-
+\noindent The paper is organized as follows. First, chapter \ref{lit-rev} discusses the stylized facts, conditional distributions and the GARCH models. Chapter \ref{dat-and-meth} describes the data used and the methodology followed in modeling the volatility with GARCH models. Then a description is given of the control tests used to evaluate the performances of the different GARCH models and underlying distributions. In chapter \ref{analysis}, the findings are presented and discussed. In chapter \ref{Robustness} the results of some diagnostic tests are shown and interpreted. Finally, chapter \ref{Conclusion} summarizes the results and answers the research question.
 
 \hypertarget{lit-rev}{%
 \chapter{Literature review}\label{lit-rev}}
@@ -422,14 +407,14 @@ are normally distributed.
 \hypertarget{styl-facts}{%
 \section{Stylized facts of returns}\label{styl-facts}}
 
-\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are i.i.d., or independently and identically distributed. Another assumption is that they are normally distributed. These assumptions might not be grounded in reality. Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
+\noindent When analyzing returns as a time-series, we look at log returns. The log returns are similar to simple returns, so the stylized facts of returns apply to both. One assumption that is made often in financial applications is that returns are i.i.d., or independently and identically distributed. Another assumption is that they are normally distributed. These assumptions might not be reasonable in reality. Below the stylized facts\footnote{Stylized facts are the statistical properties that appear to be present in many empirical asset returns (across time and markets)} following \textcite{annaert2021} for returns are given.
 
 \begin{itemize}
 \tightlist
 \item
   Returns are \emph{small and volatile} (with the standard deviation being larger than the mean on average).
 \item
-  Returns have very little serial correlation, as mentioned by for example \textcite{bollerslev1987}.
+  Returns have very \emph{little serial correlation}, as mentioned by for example \textcite{bollerslev1987}.
 \item
   Returns exhibit conditional heteroskedasticity, or \emph{volatility clustering}. This effect goes back to \textcite{mandelbrot1963}. There is no constant variance (homoskedasticity). Instead it is time-varying. \textcite{bollerslev1987} describes this phenomenon as ``rates of return data are characterized by volatile and tranquil periods''. \textcite{alexander2008} argues this to have implications for risk models: following a large shock to the market, the volatility changes and the probability of another large shock is increased significantly.
 \item
@@ -438,7 +423,7 @@ are normally distributed.
   Returns are \emph{not normally distributed}, as found by early work of \textcite{fama1965}. Returns have tails fatter than a normal distribution (they are leptokurtotic) and thus carry more risk. Log returns however \textbf{can} be assumed to be normally distributed. We will examine this in our empirical analysis. This makes that simple returns follow a log-normal distribution, a skewed density distribution. A good summary is given by \textcite{alexander2008} : ``In general, we need to know more about the distribution of returns than its expected return and its volatility. Volatility tells us the \emph{scale} and the mean tells us the \emph{location}, but the dispersion also depends on the \textbf{\emph{shape}} of the distribution. The best dispersion metric would be based on the entire distribution function of returns.''
 \end{itemize}
 
-\noindent Firms holding a portfolio of various stocks or other investments have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or so called density function of returns . What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix part \ref{conditional-distributions} we summarize some alternative distributions (SGT, SGED, GED, Skewed Student-t, and Symmetric Student-t) that might better approximate the actual distribution of returns than the normal one.
+\noindent Firms holding a portfolio of various stocks or other investments have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or so called density function of returns. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix part \ref{conditional-distributions} we summarize some alternative distributions (SGT, SGED, GED, Skewed Student-t, and Symmetric Student-t) that might better approximate the actual distribution of returns than the normal one.
 
 \newpage
 
@@ -448,14 +433,14 @@ are normally distributed.
 \hypertarget{rolling-volatility}{%
 \subsection{Rolling volatility}\label{rolling-volatility}}
 
-\noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. \textcite{engle2001} explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations\footnote{For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean (i.e.~residuals) from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined.}. Engle regards this formulation as the first ARCH model.
+\noindent When volatility needs to be estimated on a specific trading day, the method used as a descriptive tool would be to use rolling standard deviations. \textcite{engle2001} explains the calculation of rolling standard deviations, as the standard deviation over a fixed number of the most recent observations\footnote{For example, for the past month it would then be calculated as the equally weighted average of the squared deviations from the mean from the last 22 observations (the average amount of trading or business days in a month). All these deviations are thus given an equal weight. Also, only a fixed number of past recent observations is examined.}. Engle regards this formulation as the first ARCH model.
 
 \hypertarget{univ-garch}{%
 \subsection{From ARCH to GARCH models}\label{univ-garch}}
 
-\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, was in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling.
+\noindent Autoregressive Conditional Heteroscedasticity (ARCH) models, proposed by \textcite{engle1982}, were in the first case not used in financial markets but on inflation. Since then, it has been used as one of the workhorses of volatility modeling.~\\
 
-There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\alpha_0\)) and an unexpected part, called noise or the innovation process. The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (\textbf{i}id), notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is not yet assumed. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\omega\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
+\noindent There are three building blocks of the ARCH model: returns, the innovation process and the variance process (or volatility function), written out for an ARCH(1) in respectively equation \eqref{eq:eq1}, \eqref{eq:eq2} and \eqref{eq:eq3}. Returns are written as a constant part (\(\alpha_0\)) and an unexpected part, called noise or the innovation process (\(\alpha_1 \times \varepsilon_t\)). The innovation process is the volatility (\(\sigma_t\)) times \(z_t\), which is an independent identically distributed random variable with a mean of 0 (zero-mean) and a variance of 1 (unit-variance). The independent (\textbf{i}id), notes the fact that the \(z\)-values are not correlated, but completely independent of each other. The distribution is one of the distributions listed in appendix part \ref{conditional-distributions}. The third component is the variance process or the expression for the volatility. The variance is given by a constant \(\beta_0\), plus the random part which depends on the return shock of the previous period squared (\(\varepsilon_{t-1}^2\)). In that sense when the uncertainty or surprise in the last period increases, then the variance becomes larger in the next period. The element \(\sigma_t^2\) is thus known at time \(t-1\), while it is a deterministic function of a random variable observed at time \(t-1\) (i.e.~\(\varepsilon_{t-1}^2\)).
 
 \begin{equation} 
 y_{t} = \alpha_0 + \alpha_1 \times \varepsilon_t
@@ -474,20 +459,20 @@ y_{t} = \alpha_0 + \alpha_1 \times \varepsilon_t
  \label{eq:eq3}
 \end{equation}
 
-The full description of the ARCH model is given in appendix part \ref{ARCH}.
+\noindent The full description of the ARCH model is given in appendix part \ref{ARCH}.~\\
 
-\noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)\footnote{\emph{Generalized} as it is a generalization by \textcite{bollerslev1986} of the ARCH model of \textcite{engle1982}. \emph{Autoregressive,} as it is a time series model with an autoregressive form (regression on itself). \emph{Conditional heteroscedasticity,} while time variation in conditional variance is built into the model \autocite{alexander2008}.}. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \ref{conditional-distributions} will be used. As \textcite{alexander2008} explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function\footnote{which makes the maximum likelihood estimation explained in part \ref{garch-method} complex with more parameters that have to be estimated.}. An overview (of a selection) of investigated GARCH models is given in the following table.
+\noindent An improvement of the ARCH model is the Generalized Autoregressive Conditional Heteroscedasticity (GARCH)\footnote{Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.}. This model and its variants come in to play because of the fact that calculating standard deviations through rolling periods, gives an equal weight to distant and nearby periods, by such not taking into account empirical evidence of volatility clustering, which can be identified as positive autocorrelation in the absolute returns. GARCH models are an extension to ARCH models, as they incorporate both a novel moving average term (not included in ARCH) and the autoregressive component. Furthermore, a second extension is changing the assumption of the underlying distribution. As already explained, the normal distribution is an unrealistic assumption, so other distributions which are described in part \ref{conditional-distributions} will be used. As \textcite{alexander2008} explains, this does not change the formulae of computing the volatility forecasts but it changes the functional form of the likelihood function\footnote{which makes the maximum likelihood estimation explained in part \ref{garch-method} complex with more parameters that have to be estimated.}. An overview (of a selection) of investigated GARCH models is given in the following table.
 
 \newpage
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{GARCH models, the founders}\tabularnewline
 \toprule
-Author(s)/user(s) & Model\tabularnewline
+Author(s) & Model\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Author(s)/user(s) & Model\tabularnewline
+Author(s) & Model\tabularnewline
 \midrule
 \endhead
 \textcite{engle1982} & ARCH model\tabularnewline
@@ -505,40 +490,42 @@ Author(s)/user(s) & Model\tabularnewline
 \hypertarget{acd-models}{%
 \section{ACD models}\label{acd-models}}
 
-An extension to GARCH models was proposed by \textcite{hansen1994}, the autoregressive conditional density estimation model (referred to as ACD models, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED, SGT), or a model that allows to model these higher moments. However, \textcite{ghalanos2016} mentions that these models also assume the shape and skewness parameters to be constant (not time varying). As Ghalanos mentions: ``the research on time varying higher moments has mostly explored different parametrizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR.'' Also one could question the marginal benefits of the ACD, while the estimation procedure is not simple (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skewness (skewness parameter) and kurtosis ( shape parameters) time varying? The literature investigating higher moments has arguments for and against this statement. In part \ref{acd-models-meth} the specification is given.
+\noindent An extension to GARCH models was proposed by \textcite{hansen1994}, namely the autoregressive conditional density estimation model (referred to as ACD model, sometimes ARCD). It focuses on time variation in higher moments (skewness and kurtosis), because the degree and frequency of extreme events seem to be not expected by traditional models. Some GARCH models are already able to capture the dynamics by relying on a different unconditional distribution than the normal distribution (for example skewed distributions like the SGED or SGT), or a model that allows to incorporate these higher moments. However, \textcite{ghalanos2016} mentions that these models also assume the shape and skewness parameters to be constant (not time-varying). As Ghalanos mentions: ``the research on time-varying higher moments has mostly explored different parametrizations in terms of dynamics and distributions with little attention to the performance of the models out-of-sample and ability to outperform a GARCH model with respect to VaR.'' Also one could question the marginal benefits of the ACD, while the estimation procedure is rather sophisticated (nonlinear bounding specification of higher moment distribution parameters and interaction). So, are skew (skewness parameter) and kurtosis (shape parameter or parameters) time-varying? The literature investigating higher moments has arguments for and against this statement. In part \ref{acd-models-meth} the specification is given.
 
 \hypertarget{value-at-risk}{%
 \section{Value at Risk}\label{value-at-risk}}
 
-Value-at-Risk (VaR) is a risk metric developed simultaniously by \textcite{markowitz1952} and Roy1952 to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the \emph{1996 RiskMetrics Technical Document}, composed by RiskMetrics\footnote{RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries \autocite{alexander2008}.}, \textcite{morganguarantytrustcompany1996} (part of JP Morgan), gives a good overview of the computation, but also made use of the name ``value-at-risk'' over equivalents like ``dollars-at-risk'' (DaR), ``capital-at-risk'' (CaR), ``income-at-risk'' (IaR) and ``earnings-at-risk'' (EaR). According to \textcite{holton2002} VaR gained traction in the last decade of the \(20^{th}\) century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(\alpha\). Put differently, in 1\% of cases the loss would be greater than this amount.It is specified as in \eqref{eq:eq22}. Christofferson2001 puts forth a general framework for specifying VaR models and comparing between two alternatives models.
+\noindent Value at Risk (VaR) is a risk metric developed simultaneously by \textcite{markowitz1952} and \textcite{roy1952} to calculate how much money an investment, portfolio, department or institution such as a bank could lose in a market downturn, though in this period it remained mostly a theoretical discussion due to lacking processing power and industry demand for risk management measures. Another important document in literature is the \emph{1996 RiskMetrics Technical Document}, composed by RiskMetrics\footnote{RiskMetrics Group was the market leader in market and credit risk data and modeling for banks, corporate asset managers and financial intermediaries \autocite{alexander2008}.} (\textcite{morganguarantytrustcompany1996}, part of JP Morgan), which gives a good overview of the computation, but also made use of the name ``value-at-risk'' over equivalents like ``dollars-at-risk'' (DaR), ``capital-at-risk'' (CaR), ``income-at-risk'' (IaR) and ``earnings-at-risk'' (EaR). According to \textcite{holton2002} VaR gained traction in the last decade of the \(20^{th}\) century when financial institutions started using it to determine their regulatory capital requirements. A \(VaR_{99}\) finds the amount that would be the greatest possible loss in 99\% of cases. It can be defined as the threshold value \(F_t\). Put differently, in 1\% of cases the loss would be greater than this amount. It is specified as in \eqref{eq:eq22}. \textcite{christoffersen2001} puts forth a general framework for specifying VaR models and comparing between two alternatives models.
 
 \begin{align}
-Pr(y_t \le \alpha | \Omega_{t-1}) \equiv \phi
+Pr(y_t \le F_t | \Omega_{t-1}) \equiv \alpha
  \label{eq:eq22}
 \end{align}
 
-With \(y_t\) expected returns in period t, \(\Omega_{t-1}\) the information set available in the previous period and \(\phi\) the chosen confidence level.
+\noindent With \(y_t\) expected returns in period t, \(\Omega_{t-1}\) the information set available in the previous period and \(\alpha\) the chosen quantile.
+
+\newpage
 
 \hypertarget{conditional-value-at-risk}{%
 \section{Conditional Value at Risk}\label{conditional-value-at-risk}}
 
-One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. As VaR lacks subadditivity of different percentile outcomes, {[}Artzner1998{]} reject it as a coherent measure of risk. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, they provide a conceptual idea of a Conditional VaR (CVaR) which quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(cVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was written out in the form it is used by today by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.
+\noindent One major shortcoming of the VaR is that it does not provide information on the probability distribution of losses beyond the threshold amount. As VaR lacks subadditivity of different percentile outcomes, \textcite{artzner1996} rejects it as a coherent measure of risk. This is problematic, as losses beyond this amount would be more problematic if there is a large probability distribution of extreme losses, than if losses follow say a normal distribution. To solve this issue, they provide a conceptual idea of a Conditional VaR (CVaR) which quantifies the average loss one would expect if the threshold is breached, thereby taking the distribution of the tail into account. Mathematically, a \(CVaR_{99}\) is the average of all the \(VaR\) with a confidence level equal to or higher than 99. It is commonly referred to as expected shortfall (ES) sometimes and was written out in the form it is used by today by \autocite{bertsimas2004}. It is specified as in \eqref{eq:eq23}.~\\
 
-To calculate \(\alpha\), VaR and CVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
+\noindent To calculate \(F_t\), VaR and CVaR require information on the expected distribution mean, variance and other parameters, to be calculated using the previously discussed GARCH models and distributions.
 
 \begin{align}
-Pr(y_t \le \alpha | \Omega_{t-1}) \equiv \int_{-\infty}^{\alpha} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \phi
+Pr(y_t \le F_t | \Omega_{t-1}) \equiv \int_{-\infty}^{\alpha} \! f(y_t | \Omega_{t-1}) \, \mathrm{d}y_t = \alpha
  \label{eq:eq23}
 \end{align}
 
-With the same notations as before, and \(f\) the (conditional) probability density function of \(y_t\).
+\noindent With the same notations as before, and \(f\) the (conditional) probability density function of \(y_t\).
 
-According to the BIS framework, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations \autocite{baselcommitteeonbankingsupervision2016}. Whenever a daily loss is recorded, this has to be registered as an exception. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach.Similarly, banks must calculate \(CVaR_{97.5}\).
+\noindent According to the BIS framework, banks need to calculate both \(VaR_{99}\) and \(VaR_{97.5}\) daily to determine capital requirements for equity, using a minimum of one year of daily observations \autocite{baselcommitteeonbankingsupervision2016}. Whenever a daily loss is recorded, this has to be registered as an exception or exceedance. Banks can use an internal model to calculate their VaRs, but if they have more than 12 exceptions for their \(VaR_{99}\) or 30 exceptions for their \(VaR_{97.5}\) they have to follow a standardized approach. Similarly, banks must calculate \(CVaR_{97.5}\).
 
 \hypertarget{past-lit}{%
 \section{Past literature on the consequences of higher moments for VaR determination}\label{past-lit}}
 
-Here comes the discussion about studies that have looked at higher moments and VaR determination. Also a summary of studies that discusses time-varying higher moments, but not a big part, while it is also only a small part of the empirical findings (couple of GARCH-ACD models).
+A small description of the higher moments and VaR determination is given below. A small overview table is given:
 
 \begin{longtable}[]{@{}ll@{}}
 \caption{Higher moments and VaR}\tabularnewline
@@ -556,11 +543,11 @@ Author & Higher moments\tabularnewline
 \bottomrule
 \end{longtable}
 
-\noindent While it is relatively straightforward to include unconditional higher-moments in VaR and CVaR calculations, it is less simple to do so when the higher moments (in addition to the variance) are time-varying. \textcite{hansen1994} extends the ARCH model to include time-varying moments beyond mean and variance. While mean returns and variance are usually the parameters of most interest, disregarding these higher moments could provide an incomplete description of a conditional distribution. The model proposed by \textcite{hansen1994} allows for skewness and shape parameters to vary in a skewed-t density function through specifying them as functions of their errors in previous periods (in an similar way how variance is estimated). Applications on U.S. Treasuries and exchange rates are discussed.~\textbackslash{}
+\noindent While it is relatively straightforward to include unconditional higher-moments in VaR and CVaR calculations, it is less simple to do so when the higher moments (in addition to the variance) are time-varying. \textcite{hansen1994} extended the ARCH model to include time-varying moments beyond mean and variance. While mean and variance of returns are usually the parameters of most interest, disregarding these higher moments could provide an incomplete description of a conditional distribution. The model proposed by \textcite{hansen1994} allows for skewness and shape parameters to vary in a skewed-t density function through specifying them as functions of their errors in previous periods (in a similar way how variance is estimated). Applications on U.S. Treasuries and exchange rates are discussed by Hansen.~\\
 
-\noindent \textcite{harvey1999} extends a GARCH(1,1) model to include time varying skewness by estimating it jointly with time varying variance using a skewed Student-t distribution. They find a significant impact of skewness on conditional volatility, suggesting that these moments should be jointly estimated for efficiency. Changes in conditional skewness have an impact on the persistence of volatility shocks. They also find that including skewness causes the leverage effects of variance to disappear. They apply their methods on different stock indices (both developed and emerging) at daily, weekly and monthly frequency.~\textbackslash{}
+\noindent \textcite{harvey1999} extended a GARCH(1,1) model to include time-varying skewness by estimating it jointly with time-varying variance using a skewed Student-t distribution. They found a significant impact of skewness on conditional volatility, suggesting that these moments should be jointly estimated for efficiency. Changes in conditional skewness have an impact on the persistence of volatility shocks. They also found that including skewness causes the leverage effects of variance to disappear. They applied their methods on different stock indices (both developed and emerging) at daily, weekly and monthly frequency.~\\
 
-\noindent \textcite{brooks2005} proposes a model based on a Student-t distribution that allows for both the variance and the degrees of freedom to be time-varying, independently from each other. Their model allows for both asymmetric variance and kurtosis through an indicator function (which has a positive effect on these moments only when the shock is in the right tail). They apply their model on different financial assets in the U.S. and U.K. at daily frequency.
+\noindent \textcite{brooks2005} proposed a model based on a Student-t distribution that allows for both the variance and the degrees of freedom to be time-varying, independently from each other. Their model allows for both asymmetric variance and kurtosis through an indicator function (which has a positive effect on these moments only when the shock is in the right tail). They applied their model on different financial assets in the U.S. and U.K. at daily frequency.
 
 \hypertarget{dat-and-meth}{%
 \chapter{Data and methodology}\label{dat-and-meth}}
@@ -572,11 +559,11 @@ Author & Higher moments\tabularnewline
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Return Index\footnote{The same analysis has been performed for the FTSE, CAC 40, BEL 20 and the DAX 30 return indices and yielded the same/different conclusions. The findings of these researches are available upon requests.} retrieved from Datastream denoted in EUR from 02 January, 2001 to 19 May, 2021. The choice of daily data is motivated as follows. The primary interest in this paper is (C)VaR models for banks internal trading desks. Their positions are usually short-term, making risk management at the daily level the most appropriate. As such, in reference to the literature review, regulators require VaR forecast for one day in advance. All following analysis could be applied on monthly returns as well. To get some intuition on how returns differ at a wider aggregation, table X in the appendix shows summary statistics for monthly data instead of daily. The Euro Stoxx 50 is the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. Given that in the 20th century computing return series was time consuming, the Eurostoxx 50 Return index is shorter than the Euro Stoxx 50 Price index (going back to 2001). As a robustness check, we ran all subsequent analysis for the longer price index as well. This did not yield a qualitative difference in terms of most efficient model(s).~\\
+\noindent We worked with daily returns on the Euro Stoxx 50 Return Index\footnote{The same analysis has been performed for the FTSE, CAC 40, BEL 20 and the DAX 30 return indices and yielded the same/different conclusions. The findings of these researches are available upon requests.} retrieved from Datastream denoted in EUR from 02 January, 2001 to 19 May, 2021. The choice of daily data is motivated as follows. The primary interest in this paper is (C)VaR models for banks' (or financial institutions') internal trading desks. Their positions are usually short-term, making risk management at the daily level the most appropriate. As such, in reference to the literature review, regulators require VaR forecast for one day in advance. All following analysis could be applied on monthly returns as well. The Euro Stoxx 50, the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. Given that in the 20th century computing return series was time consuming, the Eurostoxx 50 Return index is shorter than the Euro Stoxx 50 Price index (going back to 2001). As a robustness check, we ran all subsequent analysis for the longer price index as well. This did not yield a qualitative difference in terms of most efficient model(s).~\\
 
 \noindent Table \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).~\\
 
-\noindent The arithmetic mean of the series is 0.01\% with a standard deviation of 1.44\% and a median of 0.02 which translate to an annualized mean of 2.57\% and an annualized standard deviation of 22.85\%. The skewness statistic is highly significant and negative at -0.22 and the excess kurtosis is also highly significant and positive at 6.54. These 2 statistics give an overview of the distribution of the returns which has thicker tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 739.89 and a high statistical significance, confirms the non normality feeling given by the Skewness and Kurtosis.~\\
+\noindent The arithmetic mean of the series is 0.01\% with a standard deviation of 1.44\% and a median of 0.02 which translate to an annualized mean of 2.57\% and an annualized standard deviation of 22.85\%. The skewness statistic is highly significant and negative at -0.22 and the excess kurtosis is also highly significant and positive at 6.54. These 2 statistics give an overview of the distribution of the returns which has fatter tails than the normal distribution with a higher presence of left tail observations. A formal test such as the Jarque-Bera one with its statistic at 739.89 and a high statistical significance, confirms the non-normality.~\\
 
 \begin{table}[h!]
 
@@ -603,17 +590,19 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 \begin{tablenotes}
 \item Notes
 \item[1] This table shows the descriptive statistics of the daily percentage returns of Euro Stoxx 50 over the period 2001-01-03 to 2021-05-19 (5316 observations). Including arithmetic mean, median, maximum, minimum, standard deviation. The skewness, excess kurtosis with p-value and signicance and the Jarque-Bera test with significance.
-\item[2] The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+z_t \sigma_t \\ \sigma_t^2=\beta_0+\beta_1 \sigma_{t-1}^2 z_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $z$ is the standard residual (assumed to have a normal distribution).
-\item[3] *, **, *** represent significance levels at the 5%, 1% and <1%.
+\item[2] The standardized residual is derived from a maximum likelihood estimation (simple GARCH model) as follows:  $ R_t=\alpha_0+\alpha_1 R_{t-1}+ \varepsilon_t \\ \sigma_t^2=\beta_0+\beta_1 \varepsilon_{t-1}^2+\beta_2 \sigma_{t-1}^2, \\$ Where $\varepsilon_t$ is given by $z_t \sigma_t$
+\item[3] *, **, *** represent significance levels at the 5, 1 and <1 procent.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
-\noindent The right column of table \ref{tab:dsTable} displays the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2. Again, Skewness statistic at -0.328 with a high statistical significance level and the excess Kurtosis at 1.706 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at 9511.18, given its high significance, confirms the rejection of the normality assumption.~\\
+\noindent The right column of table \ref{tab:dsTable} exhibits the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \ref{tab:dsTable} in Note 2. Again, Skewness statistic at -0.328 with a high statistical significance level and the excess Kurtosis at 1.706 also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at 9511.18, given its high significance, confirms the rejection of the normality assumption.~\\
+
+\clearpage
 
 \noindent As can be seen in figure \ref{fig:plot1} the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech (``dot com'') bubble reaching an ATH of €1734.84. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at 12 March, 2003 of €405.23. There is an improvement, but then the European debt crisis, with its peak in 2010-2012, occurred. From then there was some improvement until the ``health crisis'', which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
-\begin{figure}[h]
+\begin{figure}[!ht]
 
 {\centering \includegraphics[width=0.95\linewidth]{_main_files/figure-latex/plot1-1} 
 
@@ -621,10 +610,11 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 
 \caption{Euro Stoxx 50 prices}\label{fig:plot1}
 \end{figure}
+\clearpage
 
 \noindent In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
-\begin{figure}[h]
+\begin{figure}[!ht]
 
 {\centering \includegraphics[width=0.7\linewidth]{figures/vol-clustering-finalized-RI} 
 
@@ -633,12 +623,9 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 \caption{Euro Stoxx 50 log returns}\label{fig:plot2}
 \end{figure}
 
-\clearpage
-\newpage
+\noindent In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed.~\\
 
-\noindent In figure \ref{fig:plot4} the density distribution of the log returns are examined. As can be seen, as already mentioned in part \ref{styl-facts}, log returns are not really normally distributed.
-
-\begin{figure}[h]
+\begin{figure}[!ht]
 
 {\centering \includegraphics[width=0.75\linewidth]{_main_files/figure-latex/plot4-1} 
 
@@ -647,9 +634,9 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 \caption{Density vs. Normal Euro Stoxx 50 log returns}\label{fig:plot4}
 \end{figure}
 
-\noindent In figure \ref{fig:acfplots} the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this as in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component\footnote{\(\alpha_0\) is most of the time referred to as the \(\mu\) in the conditional mean equation. Here we have followed \textcite{bali2008}.} \(\alpha_0\) is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.
+\noindent In figure \ref{fig:acfplots} the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this as in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component\footnote{\(\alpha_0\) is most of the time referred to as the \(\mu\) in the conditional mean equation. Here we have followed \textcite{bali2008}.} \(\alpha_0\) is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters.~\\
 
-\begin{figure}[h]
+\begin{figure}[!ht]
 
 {\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/acfplots-1} 
 
@@ -681,6 +668,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
  \label{eq:logl}
 \end{align}
+\vspace{-15mm}
 
 \[\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)\]
 
@@ -688,6 +676,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 \theta^{*} = arg \max_{\theta} [ L] 
  \label{eq:optim}
 \end{equation}
+\vspace{-15mm}
 
 \begin{equation} 
 \theta^{*} = arg \max_{\theta} [\log(L)]
@@ -750,9 +739,10 @@ I_{t}(\alpha)=\left\{\begin{array}{ll}
 \noindent \textcite{engle2004} provides an alternative test to specify if a VaR model is appropriately specified by proposing the dynamic quantile test. This test specifies the occurrence of an exceedance (here hit) as in \eqref{eq:dq1}, with \(I(.)\) a function that indicates when there is a hit, based on the actual return being lower than the predicted VaR. \(\theta\) is the confidence level. They test jointly \(H_0\) that the expected value of hit is zero and that it is uncorrelated with any variables known at the beginning of the period (\(B\)), notably the current VaR estimate and hits in previous periods, specified as lagged hits. This is done by regressing hit on these variables as in \eqref{eq:dq2}. \(X\delta\) corresponds to the matrix notation. Under \(H_0\), this regression should have no explanatory power. As a final step, a \(\chi^2\)-distributed test statistic with \(m\) degrees of freedom equal to the parameters to be estimated (constant, number of hits and VaR estimate) is constructed as in \eqref{eq:dq3}.
 
 \begin{align}
-Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(\theta)\right)-\theta,
+Hit_{t}=I\left(R_{t}<-\operatorname{VaR}_{t}(1-\alpha)\right)-(1-\alpha),
 \label{eq:dq1}
 \end{align}
+\vspace{-20mm}
 
 \begin{align}
 \begin{array}{c}
@@ -760,21 +750,23 @@ Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+
 \delta_{p+2} I_{year1, t}+\ldots+\delta_{p+2+n} I_{year n, t}+u_{t} \end{array}
 \label{eq:dq2}
 \end{align}
+\vspace{-15mm}
 
 \[Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
--\theta & \text { prob }(1-\theta) \\
-(1-\theta) & \text { prob } \theta
+\alpha-1 & \text { prob }\alpha \\
+\alpha & \text { prob } (1-\alpha)
 \end{array}\right.\]
 
+\vspace{-5mm}
 \begin{align}
-\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{\theta(1-\theta)} \sim \chi^{2}(m)
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{(1-\alpha)\alpha} \sim \chi^{2}(m)
 \label{eq:dq3}
 \end{align}
 
 \hypertarget{cvar-test}{%
 \subsubsection{CVaR Test}\label{cvar-test}}
 
-The Expected Shortfall (or CVaR) test by \textcite{mcneil2000} tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+\noindent The Expected Shortfall (or CVaR) test by \textcite{mcneil2000} tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
 
 \hypertarget{analysis}{%
 \chapter{Empirical Findings}\label{analysis}}
@@ -787,7 +779,7 @@ The Expected Shortfall (or CVaR) test by \textcite{mcneil2000} tests whether the
 \hypertarget{mle-distribution-parameters}{%
 \subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
 
-In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. Note that the Student-t and skewed Student-t distribution are usually noted with degrees of freedom as parameters. For consistency, we have parameterized them using limiting cases of the SGT-distribution. Note that to read the degrees of freedom for the two distributions, it is simply \(2\eta\). They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) is reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one parameter less, which could possibly result in less errors due to misspecification and easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the GFC (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples. Results are reported in the appendix.} ~\\
+In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. Note that the Student-t and skewed Student-t distribution are usually noted with degrees of freedom as parameters. For consistency, we have parameterized them using limiting cases of the SGT-distribution. Note that to read the degrees of freedom for the two distributions, it is simply \(2\eta\). They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) are reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one parameter less, which results in easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) (\(\eta\)) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the Global Financial Crisis (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples.} ~\\
 
 \noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
 
@@ -830,7 +822,7 @@ Normal & 0.01 & 1.439 & 0 & 2 & Inf & -9477.660 & 18959.32\\
 \hypertarget{constant-higher-moments}{%
 \section{Constant higher moments}\label{constant-higher-moments}}
 
-\noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \ref{tab:aicTable}. The smaller the criterium the better. As you can see in table \ref{tab:aicTable} the AIC for the skewed Student-t distribution (ST) is the best for almost all the models. As also shown in appendix part \ref{goodness-of-fit}. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model.
+\noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \ref{tab:aicTable}. The smaller the criterium the better. As you can see in table \ref{tab:aicTable} the AIC for the skewed Student-t distribution (ST) is the best for almost all the models. As also shown in appendix part \ref{goodness-of-fit}. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model.~\\
 
 \noindent  Due to \ref{tab:aicTable} being the result of an in-sample estimation, we will further examine the performance five different GARCH models (EGARCH, GJRGARCH, NAGARCH, AVGARCH and TGARCH).
 
@@ -853,7 +845,7 @@ SGED & 3.125 & 3.126 & 3.136 & 3.075 & 3.084 & 3.069 & 3.073 & 3.069\\
 \end{tabular}}
 \begin{tablenotes}
 \item \textit{Notes} 
-\item This table shows the AIC value for the respective model. With on the rows the distributions. 
+\item This table shows the AIC value for the respective model. \\ With on the rows the distributions. 
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -861,7 +853,7 @@ SGED & 3.125 & 3.126 & 3.136 & 3.075 & 3.084 & 3.069 & 3.073 & 3.069\\
 \clearpage
 \newpage
 
-\noindent Table \ref{tab:Table3} presents the maximum likelihood estimates for 8 GARCH models based on the ST distribution with constant skewness and kurtosis parameters (robust white errors are presented in parenthesis). The parameter \(\alpha_0\) are only statistically significant for the SGARCH, IGARCH and EWMA model with a value close to 0. The AR(1) coefficient, \(\alpha_1\), has parameters going from -0.049 to -0.032 with \(p\) values ranging from 0.011 to 0.014 suggesting significance, but indicating very small negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant except for the EGARCH model. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 0.827 to 1), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 0.885 to 0.918 confirming the presence of skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom divided by two, determining the tail behavior, is significant for all the models and ranges between 3.153 and 4.0635. The parameter \(\gamma\), which is present only for EGARCH and GJRGARCH is significant and with values around 0.14. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in table \ref{tab:Table3}, the model with the highest value is AVGARCH while, excluding the non-standard GARCH models from the analysis, the model that performs best is EGARCH.~\\
+\noindent Table \ref{tab:Table3} presents the maximum likelihood estimates for 8 GARCH models based on the ST distribution with constant skewness and kurtosis parameters (robust white errors are presented in parenthesis). The parameter \(\alpha_0\) is only statistically significant for the SGARCH, IGARCH and EWMA model with a value close to 0. The AR(1) coefficient, \(\alpha_1\), has parameters going from -0.049 to -0.032 with \(p\) values ranging from 0.011 to 0.014 suggesting significance, but indicating very small negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant except for the EGARCH model. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 0.827 to 1), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 0.885 to 0.918 confirming the presence of skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom divided by two, determining the tail behavior, is significant for all the models and ranges between 3.153 and 4.0635. The parameter \(\gamma\), which is present only for EGARCH and GJRGARCH is significant and with values around 0.14. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in table \ref{tab:Table3}, the model with the highest value is AVGARCH, while excluding the non-standard (or family) GARCH models from the analysis, the model that performs best is EGARCH.~\\
 
 \noindent Table \ref{tab:Table3b} shows a very similar picture for the GARCH-SGED models as the GARCH-ST models.
 
@@ -977,7 +969,7 @@ $LLH$ & -8300.515 & -8302.804 & -8164.576 & -8189.218 & -8330.811 & -8149.596 & 
 \caption{Value-at-Risk (in-sample) for the EGARCH-ST model}\label{fig:figVaRinsample}
 \end{figure}
 
-\noindent Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results with re-estimating parameters every year.
+\noindent Let us examine this further using a rolling window approach whilst forecasting 1-day ahead results (using a sample data of 2500 observations or approximately 10 years) with re-estimating parameters every year.~\\
 
 \noindent Figure \ref{fig:figbacktest} shows that choosing an appropriate forecast period is important (with here the Eurobond crisis, the Brexit and Covid-crisis), so in order to avoid a look-ahead bias this rolling window approach was used instead of a static forecast method. \newpage
 
@@ -1003,11 +995,11 @@ $LLH$ & -8300.515 & -8302.804 & -8164.576 & -8189.218 & -8330.811 & -8149.596 & 
 \caption{Comparison between VaR-EGARCH-ST and VaR-EGARCH-N}\label{fig:figurebacktests2}
 \end{figure}
 
-With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGARCH model, with an excess exceedance rate of 24\%. The other GARCH models still have a positive but slightly lower excess exceedance rate of 21\%. The ratio of actual to expected CVaR exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGARCH with 25\% and for the other models 21\%. These results are significant at the 5\% level, except for the NAGARCH, which is significant only at the 10\% level. This points that the difference between actual and expected exceedances is significantly different from 0. For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and CVaR.
+\noindent In table \ref{tab:Table4} the results of these tests are given. With the SGED as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the GJRGARCH model, with an excess exceedance rate of 24\%. The other GARCH models still have a positive but slightly lower excess exceedance rate of 21\%. The ratio of actual to expected CVaR exceedances gives a similar picture, with the highest excess exceedance rate being the GJRGARCH with 25\% and for the other models 21\%. These results are significant at the 5\% level, except for the NAGARCH, which is significant only at the 10\% level. This points that the difference between actual and expected exceedances is significantly different from 0. For all models under the SGED, the unconditional and conditional cover test and the dynamic quantile test statistics are insignificant. This suggests that the SGED is a good distribution for calculating VaR and CVaR.~\\
 
-With the ST as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the TGARCH model, with an excess exceedance rate of 28\%. The NAGARCH model has the lowest VaR excess exceedance rate of 17\%. For the CVaR excess exceedance rate, there is a similar picture, with the TGARCH having an excess exceedance rate of 29\% and the NAGARCH of 18\%. These results are insignificant, thus it cannot be concluded that the excess exceedance for VaR and CVaR are significantly different from 0. Both the unconditional and conditional cover tests are insignificant. However, the dynamic quantile test is significant at the 10\% level for the EGARCH and TGARCH. This suggests that the ST distribution is a good distribution for calculating VaR and CVaR, though not as good as the SGED.
+\noindent With the ST as underlying distribution, the ratio of actual to expected VaR exceedances is highest for the TGARCH model, with an excess exceedance rate of 28\%. The NAGARCH model has the lowest VaR excess exceedance rate of 17\%. For the CVaR excess exceedance rate, there is a similar picture, with the TGARCH having an excess exceedance rate of 29\% and the NAGARCH of 18\%. These results are insignificant, thus it cannot be concluded that the excess exceedance for VaR and CVaR are significantly different from 0. Both the unconditional and conditional cover tests are insignificant. However, the dynamic quantile test is significant at the 10\% level for the EGARCH and TGARCH. This suggests that the ST distribution is a good distribution for calculating VaR and CVaR, though not as good as the SGED.~\\
 
-The GED, T and normal distribution have significant unconditional and conditional and dynamic quantile test statistics for most models, which suggest they are less appropriate for modeling VaR and CVaR.
+\noindent The GED, T and Normal distribution have significant unconditional and conditional and dynamic quantile test statistics for most models, which suggest they are less appropriate for modeling VaR and CVaR.
 
 \newpage
 
@@ -1069,7 +1061,7 @@ The GED, T and normal distribution have significant unconditional and conditiona
 \hypertarget{time-varying-higher-moments}{%
 \section{Time-varying higher moments}\label{time-varying-higher-moments}}
 
-As we already pointed out in part \ref{lit-rev}, it might also be interesting to look at time-varying moments and check if there is an improvement for estimating the VaR and CVaR as \textcite{bali2008} did for example.
+As we already pointed out in part \ref{acd-models}, it might also be interesting to look at time-varying moments and check if there is an improvement for estimating the VaR and CVaR as \textcite{bali2008} did for example.
 
 \begin{ThreePartTable}
 \begin{TableNotes}
@@ -1102,7 +1094,7 @@ $\psi_{1}$ & 0.788   (0.101)***\\
 \end{longtabu}
 \end{ThreePartTable}
 
-The following figure \ref{fig:figureACDmoments} plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series.
+\noindent The following figure \ref{fig:figureACDmoments} plots the conditional mean, the conditional volatility. The implied conditional time varying skewness and excess kurtosis for the Euro Stoxx 50 series, which are similar to illustrations given by Galanos\footnote{\url{http://www.unstarched.net/2013/04/22/time-varying-higher-moments-with-the-racd-package/}}.
 
 \begin{figure}[h]
 
@@ -1115,7 +1107,7 @@ The following figure \ref{fig:figureACDmoments} plots the conditional mean, the 
 
 \newpage
 
-\noindent After performing a backtest\footnote{This backtest contains the following features: recursive, window of 2500, refitted every 250 trading days (approximately one year).}, we observe that the ACD model is slightly worse than the GARCH equivalent in estimating the VaR. Although there are much less models tested here because of the difficulty of the procedure of ACD models, we find less convincing evidence of the merit of using conditional higher moments in VaR and CVaR estimation. So contrary to \textcite{bali2008}, we find that the ACD models seem to underperform to the GARCH model. With a rejection of unconditional coverage test statistic at 10\% significance level. It is not surprising that the GARCH model performs bad as well looking at the rejection of the dynamic quantile test and the CVaR test.
+\noindent After performing a backtest\footnote{This backtest contains the following features: recursive, window of 2500, refitted every 250 trading days (approximately one year).}, we observe that the ACD model is slightly worse than the GARCH equivalent in estimating the VaR. Although there are much less models tested here because of the difficulty of the procedure of ACD models, we find less convincing evidence of the merit of using conditional higher moments in VaR and CVaR estimation. So contrary to \textcite{bali2008}, we find that the ACD models seem to underperform relative to the GARCH model. With a rejection of unconditional coverage test statistic at 10\% significance level. It is not surprising that the GARCH model performs bad as well looking at the rejection of the dynamic quantile test and the CVaR test.
 
 \newpage
 
@@ -1144,7 +1136,7 @@ DQ & 16.118** & 14.587*\\
 
 \noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: \[ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}\].
 
-Table \ref{tab:LjboxTable} Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted.
+\noindent Table \ref{tab:LjboxTable} Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted.
 
 The description of table
 
@@ -1185,7 +1177,7 @@ The description of table
 \end{table}
 \end{landscape}
 
-The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test\footnote{We already looked at the joint conditional moment: serial correlation in the squares or in the variances}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
+\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test\footnote{We already looked at the joint conditional moment: serial correlation in the squares or in the variances}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1281,27 +1273,19 @@ DESCRIPTION GRAPHS
 \hypertarget{Conclusion}{%
 \chapter{Conclusion}\label{Conclusion}}
 
-This paper tested whether including higher-order moments in VaR and cVaR would make for more accurate risk measurement. The starting point for this was that there is a strong body of literature that suggests market returns are leptokurtotic and right-skewed. We chose to focus on daily data and forecast one period ahead, as this is the most relevant for short-term trading desks and the requirements of regulators.
+This paper tested whether including higher-order moments in VaR and CVaR would make for more accurate risk measurement. The starting point for this was that there is a strong body of literature that suggests market returns are leptokurtic and right-skewed. We chose to focus on daily data and forecast one period ahead, as this is the most relevant for short-term trading desks and the requirements of regulators. Inspired by Bali, we selected 5 different distributions and 8 different GARCH models, for a total of 40 combinations, to estimate VaR and CVaR (different variations of ARMA order shown in the appendix \ref{goodness-of-fit} suggest that this only slighlthy affects results in comparison with the choice of the underlying distribution or GARCH model choice). We used daily data from the Euro Stoxx 50 return index between 2001 and 2021, a period which includes both major market crises from the 21th century: the Global Financial Crisis and the Covid-19 pandemic. ~\\
 
-Inspired by Bali, we selected 5 different distributions and 8 different GARCH models, for a total of 40 combinations, to estimate VaR and cVaR. We used daily data from the Eurostoxx 50 log return index between 2001 and 2021, a period which includes both major market crises from the 21th century: the Global Financial Crisis and the Covid-19 pandemic.
+\noindent Our studied distributions are all limiting cases of the SGT-distribution studied by Bali, namely the SGED, GED, ST, T and normal distribution. To provide some intuition on which distributions most closely match the observed log returns, we performed maximum likelihood estimation and compared the Aikaike Information Criterions to penalize complexity. We found that the SGED distribution is as good as the SGT (due to having one less parameter to estimate, even though it fits the data slightly worse). The normal distribution fitted the observed returns the worst, with both the maximum likelihood score and the AIC underperforming the other distributions. This affirmed previous literature that the normal distribution is inadequate to model returns.~\\
 
-Our studied distributions are all limiting cases of the SGT-distribution studied by Bali, namely the SGED, GED, ST, T and Normal distribution. To provide some intuition on which distributions most closely match the observed log returns, we performed maximum likelihood estimation and compared the Aikaike Information Criterions to penalize complexity. We found that the SGED distribution is as good as the SGT (due to having one less parameter to estimate, even though it fits the data slightly worse). The normal distribution fitted the observed returns the worst, with both the maximum likelihood score and the AIC underperforming the other distributions. This affirmed previous literature that the normal distribution is inadequate to model returns.
+\noindent As a second step we estimated the 8 GARCH models (SGARCH, IGARCH, EGARCH, EWMA, GJRGARCH, NAGARCH, TGARCH and AVGARCH) with the 5 underlying distributions in-sample and again reported the AIC. We found that the best model to forecast 1 day returns was the AVGARCH-ST. The ST distribution is generally the most performing over all GARCH models, with SGED being slightly better only for the SGARCH and IGARCH. We reported on the parameters of the different GARCH models for these two distributions, and find that the skewness and shape parameters are highly significant, suggesting that indeed higher order moments are relevant for estimating VaR and CVaR.~\\
 
-As a second step we estimated the 8 GARCH models (SGARCH, IGARCH, EGARCH, EWMA, GJRGARCH, NAGARCH, TGARCH and AVGARCH) with the 5 underlying distributions in-sample and again reported the AIC. We found that the best model to forecast 1 day returns was the AVGARCH-ST. The ST distribution is generally the most performant over all GARCH models, with SGED being slightly better only for the SGARCH and IGARCH.
+\noindent To avoid look-ahead bias as introduced by in-sample estimation, we applied a rolling window technique to 25 combinations (selecting the 5 best GARCH models on the basis of AIC). Here we refitted every 22 trading days and forecast 1 trading day. Subsequently we computed the VaR and cVaR and compared results for 4 performance tests: the ESTest \textcite{mcneil2000}, Unconditional Coverage test, Conditional Coverage test and Dynamic Quantile test. We found that the smallest difference between predicted and actual exceedances over the \(VaR_{99}\) was for the NAGARCH-ST. For most other models the SGED distribution has the smallest difference. For the \(CVaR_{99}\) and associated ESTest, the results are that the SGED distribution gives the smallest difference between predicted and actual exceedances for the TGARCH and the AVGARCH and the same as the ST distribution for EGARCH and GJRGARCH. For both distributions, the uc, cc and dq are insignificant. The other distributions have significant values for the cc and uc test and for the most part for the dq test and are thus not as suitable for (C)VaR estimation.~\\
 
-In a third step, we reported on the parameters of the different GARCH models for these two distributions, and find that the skewness and shape parameters are highly significant, suggesting that indeed higher order moments are relevant for estimating VaR and cVaR.
+\noindent To our knowledge, there has been little research on including time-varying moments beyond the variance in (C)VaR estimation. We allow for skewness and shape parameters to vary using an ACD model as proposed by \textcite{ghalanos2016} We compared the results of the SGARCH-ST model with the ACD-ST model and concluded that allowing higher moments to vary over time gives better goodness-of-fit in terms of maximum log-likelihood and AIC and more parameters (especially the shape parameters) significant. However it did not improve the (C)VaR estimation for any of the 4 performance tests. Future research might study ACD models for different GARCH models, than the standard one, better (C)VaR tests.~\\
 
-To avoid look-ahead bias as introduced by in-sample estimation, we applied a rolling window technique to 25 combinations (selecting the 5 best GARCH models on the basis of AIC). Here we refitted every 22 trading days and forecast 1 trading day. Subsequently we computed the VaR and cVaR and compared results for 4 performance tests: the ESTest \textcite{Mcneil}, Unconditional Coverage test, Conditional Coverage test and Dynamic Quantile test. We found that the smallest difference between predicted and actual exceedances over the \(VaR_{0.01}\) was for the NAGARCH-ST. For most other models the SGED distribution has the smallest difference. For the \(cVaR_{0.01}\) and associated ESTest, the results are that the SGED distribution gives the smallest difference between predicted and actual exceedances for the TGARCH and the AVGARCH and the same as the ST distribution for EGARCH and GJRGARCH. For both distributions, the uc, cc and dq are insignificant. The other distributions have significant values for the cc and uc test and for the most part for the dq test and are thus not as suitable for (c)VaR estimation.
+\noindent We performed 4 different robustness checks on the in-sample GARCH estimations to test if the residuals are normally distributed. First, we performed the Ljung-Box Test on the residuals and reject the null-hypothesis that there is no serial correlation of variance. Second, we applied the ARCH LM test on absolute, and squared residuals of our GARCH models and came to the same conclusion as with the Ljung-Box test (these are similar tests, except that the former tests the ARMA process and the latter the ARCH process). Third, we performed the GMM test to see if the residuals have moments equal to those of of the normal distribution. We find that this hypothesis can be rejected with high significance. Last, we performed the Jarque-Bera test to test if the kurtosis and skewness matches the normal distribution. We reject this hypothesis as well. There is thus ample evidence that the residuals are non-normal.~\\
 
-To our knowledge, there has been little research on including time-varying moments beyond the variance in (c)VaR estimation. We allow for skewness and shape parameters to vary using an ACD model as proposed by \textcite{Ghalanos}. We compared the results of the SGARCH model with the ACD model and concluded that allowing higher moments to vary over time gives better goodness-of-fit in terms of maximum log-likelihood and AIC and more parameters (especially the shape parameter) significant. However it did not improve the (c)VaR estimation for any of the 4 performance tests. Future research might study ACD models for different GARCH models, than the standard one, better (c)VaR tests.
-
-We performed 4 different robustness checks on the in-sample GARCH estimations to test if the residuals are normally distributed. First, we performed the Ljung-Box Test on the residuals and reject the null-hypothesis that there is no serial correlation of variance. Second, we applied the ARCH LM test on absolute, and squared residuals of our GARCH models and came to the same conclusion as with the Ljung-Box test (these are similar tests, except that the former tests the ARMA process and the latter the ARCH process). Third, we performed the GMM test to see if the residuals have moments equal to those of of the normal distribution. We find that this hypothesis can be rejected with high significance. Last, we performed the Jarque-Bera test to test if the kurtosis and skewness matches the normal distribution. We reject this hypothesis as well. There is thus ample evidence that the residuals are non-normal.
-
-To study the external validity of our research, we also applied our methodology to 3 further datasets: the Eurostoxx 50 Price index (which goes back to 1987), CAC40 return index, BEL20 return index and FTSE100 return index, to estimate if the combination of models and distribution we found to be the most efficient models to calculate (c)VaR over a wide range of European markets stays the same. We found that XXX.
-
-Different scenarios of ARMA order variation suggest that this does not affect results as much as the distribution or GARCH model choice.
-
-To conclude by answering the research question ``Do higher moments increase accuracy in the estimation of VaR and cVaR?'', we can answer in the positive, though caution that more model complexity might not always mean better VaR and cVaR estimation.
+\noindent To conclude by answering the research question ``Do higher moments increase accuracy in the estimation of VaR and CVaR?'', we can answer in the positive, though caution that more model complexity might not always mean better VaR and cVaR estimation.
 
 \startappendices
 

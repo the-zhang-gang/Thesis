@@ -156,6 +156,7 @@ table1 %>% kbl(caption = "Summary statistics of the returns","latex",
 \noindent The right column of table \@ref(tab:dsTable) exhibits the same descriptive statistics but for the standardizes residuals obtained from a simple GARCH model as mentioned in table \@ref(tab:dsTable) in Note 2. Again, Skewness statistic at `r round(as.numeric(table1[6,3]),3)` with a high statistical significance level and the excess Kurtosis at `r round(as.numeric(table1[8,3]),3)` also with a high statistical significance, suggest a non normal distribution of the standardized residuals and the Jarque-Bera statistic at `r round(normtest::jb.norm.test(R)$statistic,3)`, given its high significance, confirms the rejection of the normality assumption. \
 
 \clearpage
+
 \noindent As can be seen in figure \@ref(fig:plot1) the Euro area equity and later, since 1999 the Euro Stoxx 50, went up during the tech ("dot com") bubble reaching an ATH of €`r max(Estoxx)`. Then, there was a correction to boom again until the burst of the 2008 financial crisis. After which it decreased significantly. With an ATL at `r format(index(Estoxx)[Estoxx == min(Estoxx["2000/"])], '%d %B, %Y')` of €`r min(Estoxx["2000/"])`. There is an improvement, but then the European debt crisis, with its peak in 2010-2012, occurred. From then there was some improvement until the "health crisis", which arrived in Europe, February 2020. This crisis recovered very quickly reaching already values higher then the pre-COVID crisis level.
 
 ```{r plot1, echo=F, fig.cap='Euro Stoxx 50 prices', fig.align='center', out.width="95%", fig.pos='!ht'}
@@ -175,7 +176,9 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2011-01-03"]),lty = 2); text(index(Estox
 
 abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estoxx$`EURO STOXX 50`["2019-08-27"]), y = 1480,"COVID-19 crisis", cex=0.7, srt =90,font=4); 
 ```
+
 \clearpage
+
 \noindent In figure \@ref(fig:plot2) the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
 
 ```{r plot2, echo=F, fig.cap='Euro Stoxx 50 log returns', fig.align='center', out.width="70%", fig.pos='!ht'}
@@ -185,14 +188,16 @@ abline(v= index(Estoxx$`EURO STOXX 50`["2020-02-20"]),lty = 2); text(index(Estox
 knitr::include_graphics('figures/vol-clustering-finalized-RI.png')
 ```
 
-<!-- \noindent In figure \@ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days), annualized 252 days. As in figure \@ref(fig:plot2), you can see again the pattern of volatility clustering arise. -->
+<!-- \noindent In figure @ref(fig:plot3) you can see a proxy for risk, the rolling volatility over one month (22 trading days), annualized 252 days. As in figure @ref(fig:plot2), you can see again the pattern of volatility clustering arise. -->
 
+```{=html}
 <!-- # ```{r plot3, echo=F, fig.cap='Euro Stoxx 50 rolling volatility (22 days, calculated over 252 days)', out.width= "65%", fig.align='center', fig.pos='h'} #Plotting volatility
 # par(mfrow = c(1,1))
 # realized.vol <- xts(apply(R,2,runSD,n=22), index(R))*sqrt(252)
 # plot.zoo(realized.vol, screen = 1, col = "steelblue", xlab = "Date", ylab = "Annualized 22-day volatility",main = "Euro Stoxx 50 rolling 22-day volatility (annualized)");grid()
 # chart.RollingPerformance(R = R, width = 22,FUN = "sd.annualized", scale = 252, main = "One month rolling volatility", colorset="steelblue")
 ```-->
+```
 \noindent In figure \@ref(fig:plot4) the density distribution of the log returns are examined. As can be seen, as already mentioned in part \@ref(styl-facts), log returns are not really normally distributed. \
 
 ```{r plot4, echo=F,fig.cap='Density vs. Normal Euro Stoxx 50 log returns', out.width= "75%", fig.align='center', fig.pos="!ht"}
@@ -207,6 +212,7 @@ knitr::include_graphics('figures/vol-clustering-finalized-RI.png')
 
 chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7, ylim=c(0,0.8)) 
 ```
+
 \noindent In figure \@ref(fig:acfplots) the prediction errors (in absolute values and squared) are visualized in autocorrelation function plots. It is common practice to check this as in GARCH models the variance is for a large extent driven by the square of the prediction errors. The first component[^data-meth-2] $\alpha_0$ is set equal to the sample average. As can be seen there is presence of large positive autocorrelation. This reflects, again, the presence of volatility clusters. \
 
 [^data-meth-2]: $\alpha_0$ is most of the time referred to as the $\mu$ in the conditional mean equation. Here we have followed @bali2008.
@@ -267,7 +273,6 @@ $$\log(L(\theta)) = \sum^N_{i=1} \log f(y_i |\theta)$$
 \theta^{*} = arg \max_{\theta} [\log(L)]
 \end{equation}
 ```
-
 \noindent After estimation of the GARCH models in-sample, out-sample analysis is done by performing a rolling window approach. With assumptions: a window of 2500 observations and re-estimation every year.
 
 ### ACD models {#acd-models-meth}
@@ -287,7 +292,7 @@ z_{t} \sim \Delta\left(0,1, \rho_{t}, \zeta_{t}\right), \\
 (\#eq:acd)
 \end{equation}
 ```
-\noindent where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $\zeta_t$ are respectively the time-varying skewness and shape parameter (with shape parameter meaning here the tail-tickness) and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0. 
+\noindent where $y_t$, $z_t$ and $\sigma_t$ are familiar from GARCH models. $\rho_t$ and $\zeta_t$ are respectively the time-varying skewness and shape parameter (with shape parameter meaning here the tail-tickness) and the standardized residuals $z_t$ follows a distribution $\Delta$ that has a skewness and shape parameter. $\rho_t$ and $zeta_t$ are following a piecewise linear dynamic with $I$ the indicator variable (taking one if the underlying expression is true, 0 otherwise). $x$ is a treshold value set to 0.
 
 \noindent Again @ghalanos2016 makes it easier to implement the somewhat complex ACD models using the R language with package "racd".
 
@@ -339,17 +344,17 @@ Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+
 \vspace{-15mm}
 ```
 $$Hit_{t}=X \delta+u_{t} \quad u_{t}=\left\{\begin{array}{ll}
--(1-\alpha) & \text { prob }(\alpha) \\
-(\alpha) & \text { prob } 1-\alpha
+\alpha-1 & \text { prob }\alpha \\
+\alpha & \text { prob } (1-\alpha)
 \end{array}\right.$$
 
 ```{=tex}
 \vspace{-5mm}
 \begin{align}
-\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{1-\alpha(\alpha)} \sim \chi^{2}(m)
+\frac{\hat{\delta}_{O L S}^{\prime} X^{\prime} X \hat{\delta}_{O L S}^{a}}{(1-\alpha)\alpha} \sim \chi^{2}(m)
 (\#eq:dq3)
 \end{align}
 ```
 #### CVaR Test
 
-\noindent The Expected Shortfall (or CVaR) test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+\noindent The Expected Shortfall (or CVaR) test by @mcneil2000 tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal. This test is performed as in @ardia2019.

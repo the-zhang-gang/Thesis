@@ -308,27 +308,27 @@ In practice a $\lambda$ of 0.94 is often used, such as by the financial risk man
 \newpage
 First, in figure \@ref(fig:aic1), symmetric GARCH with symmetric distributions are looked at. As you can see the general error distribution (GED) seems to perform slightly better than the the T distribution. While the student's t distribution (T) performs better than the normal distribution (NORM) according to the AIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
-```{r aic1, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='90%',fig.pos='h', echo=F}
+```{r aic1, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and distributions', out.width='100%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
 ```
 \clearpage
 \newpage
 \noindent Second, in figure \@ref(fig:aic2), symmetric GARCH models with the best symmetric distribution (T) and other distributions (SGED, ST) are looked at. As you can see the SGED seems to perform better than the skewed student's t distribution (ST) and the latter is better than the T distribution. This is consistent with @giot2003 that the skewed student's t (ST) distribution outperforms the symmetric distributions.
 
-```{r aic2, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and other distributions', out.width='90%',fig.pos='h', echo=F}
+```{r aic2, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and other distributions', out.width='100%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics2.pdf")
 ```
 \clearpage
 \newpage
 \noindent In figure \@ref(fig:aic3) you can see the same patter as in figure \@ref(fig:aic1), the student's t distribution performs best among the symmetric distributions.
 
-```{r aic3, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='90%',fig.pos='h', echo=F}
+```{r aic3, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='100%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/asymmetric aics.pdf")
 ```
 \newpage
 \clearpage
 \noindent Then, in figure \@ref(fig:aic4) the same patter arises as in figure \@ref(fig:aic2), the skewed student's t distribution again seems to be the most optimal one to use. Therefore the ST distribution is chosen as final model for the Euro Stoxx 50 index.
-```{r aic4, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='90%',fig.pos='h', echo=F}
+```{r aic4, fig.align='center',fig.cap='Goodness of fit asymmetric GARCH and symmetric distributions', out.width='100%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/asymmetric aics2.pdf")
 ```
 \noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above[^appendices-5].
