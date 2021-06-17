@@ -2,18 +2,18 @@
 bibliography: references.bib
 ---
 
-First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors Zhang ^[https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang], Annaert^[https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert] and De Ceuster^[https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster] for the valuable insights during courses you have given us in preparation of this thesis, the dozens of assignments using the R language and the many questions answered this year. We must be grateful for the classes of R programming by prof Zhang.  \
+First of all, we want to acknowledge the support during the writing of this thesis, given to us by our families and loved ones. Secondly, we are gratefull to our professors Jan Annaert^[https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert], Marc De Ceuster^[https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster] and Hairui Zhang^[https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang] for all the valuable insights during our courses at AMS and dozens of assignments using the R language. We are especially gratefull that they patiently answered all our questions throughout the year. \
 
-\noindent Secondly, we must say thanks to [Ulrik Lyngs](https://www.cs.ox.ac.uk/people/ulrik.lyngs/) who made it a bit easier to work together in R with a pre-build template for the university of Oxford, also without which this thesis could not have been written in this format [@lyngsOxforddown2019].  \
+\noindent Secondly, we want to extend our appreciation to [Ulrik Lyngs](https://www.cs.ox.ac.uk/people/ulrik.lyngs/) who made it easier to work together in R with a pre-build template for the university of Oxford, without which this thesis could not have been written in this format [@lyngsOxforddown2019].  \
 
-\noindent Finally, we thank [Alexios Ghalanos](https://www.linkedin.com/in/alexios-galanos-64309165/) for making the implementation of GARCH models integrated in R via his package "rugarch". By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis.  \
+\noindent Finally, we thank [Alexios Ghalanos](https://www.linkedin.com/in/alexios-galanos-64309165/) for making the implementation of GARCH models integrated in R via his package "rugarch". By doing this,he facilitated the quantitative analysis we did in our methodology.  \
 
 ```{=tex}
 \begin{flushright}
 Enjo Faes, \\
-Stephane Mertens de Wilmars, \\
+Stéphane Mertens de Wilmars, \\
 Filippo Pratesi \\
 Antwerp Management School, Antwerp \\
-27 June 2021
+17 June 2021
 \end{flushright}
 ```
