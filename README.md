@@ -1,5 +1,7 @@
 # Thesis template for AMS
+
 ![](templates/amslogo.pdf)
+
 The Template folder contains all our code for the thesis.
 
 In instruction pdf you can find the instruction manual we made for the template. 
