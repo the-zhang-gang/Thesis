@@ -249,7 +249,7 @@
 
 %%%%% ABSTRACT -- Nothing to do here except comment out if you don't want it.
 \begin{abstract}
-	The greatest abstract all times
+	This paper examines the importance of higher-order moments in the estimation of Value at Risk (VaR) and Conditional Value At Risk (CVaR). We use 5 limitations of the Skewed Generalized T-distribution SGT distributions: the SGED, the GED, the Skewed T (ST), the T and Normal distribution. We examine the performance of 8 GARCH models and observe that the skewed distributions SGED and ST are the best performing models in terms of the Akaike Information Criterion (AIC), which is consistent with previous research for US indices. Using a rolling window approach for the out-of-sample (OOS) analysis we find that again this pattern appearing with the ST the best and the SGED a close second best distribution. Next to this, we also explore the Autoregressive Conditional Density model, which allows the higher-order moments to be time-varying (in contrast with constant skewness and kurtosis with GARCH models). The model in-sample provides a better fit according to the AIC, however the complexity of the estimation procedure is in our opinion not the best if we follow the results of our OOS. According to our OOS, we find that the ACD model with a Skewed T-distribution (ST) does not necessarily forecast the VaR and CVaR better than its non time-varying GARCH equivalent. Overall we do found that inclusion of higher-order moments matters in the estimation of VaR and CVaR.
 \end{abstract}
 
 %%%%% MINI TABLES
@@ -1178,7 +1178,7 @@ The description of table
 \end{table}
 \end{landscape}
 
-\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test{[}\^{}findings-3{]}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
+\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test{[}\^{}findings-3{]}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero (respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1337,6 +1337,7 @@ f(x; \mu, \sigma,\nu) = \dfrac{\Gamma(\dfrac{\nu+1}{2})}{\Gamma(\dfrac{\nu}{2})\
 
 \noindent Unlike the normal distribution, which depends on two parameters only, the student t distribution allows for fatter tails. This kurtosis coefficient is given by equation \eqref{eq:kurt} if \(\nu>4\). This is useful while the standardized residuals of stock returns appear to have fatter tails than the normal distribution following \textcite{bollerslev2008}.
 
+\vspace{-5mm}
 \begin{align}
 kurt = 3 + \dfrac{6}{\nu-4}
  \label{eq:kurt}
@@ -1347,6 +1348,7 @@ kurt = 3 + \dfrac{6}{\nu-4}
 
 \noindent The GED distribution is nested in the generalized t distribution by \textcite{mcdonald1988} and is used in the GED-GARCH model by \textcite{nelson1991} to model stock market returns. This model replaced the assumption of conditional normally distributed error terms by standardized innovations that following a generalized error distribution. It is a symmetric, uni-modal distribution (location parameter is the mode, median and mean). This is also sometimes called the exponential power distribution \autocite{bollerslev2008}. The conditional density (pdf) is given by equation \eqref{eq:ged} following \textcite{ghalanos2020}.
 
+\vspace{-5mm}
 \begin{align}
 f(x; \mu, \sigma, \kappa) = \dfrac{\kappa e^{-\frac{1}{2}\left|\dfrac{x-\mu}{\sigma}\right|^\kappa}}{2^{1+1/\kappa}\sigma\Gamma(1/\kappa)}
  \label{eq:ged}
@@ -1359,6 +1361,7 @@ where \(\mu, \sigma\) and \(\kappa\) are respectively the mean, scale and shape 
 
 \noindent The density function can be derived following \textcite{fernández1998} who showed how to introduce skewness into uni-modal standardized distributions \autocite{trottier2015}. The first equation from \textcite{trottier2015}, here equation \eqref{eq:skeweddist} presents the skewed t-distribution.
 
+\vspace{-5mm}
 \begin{align}
 f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right), \quad z_{\xi} \equiv\left\{\begin{array}{ll}
 \xi^{-1}\left(\sigma_{\xi} z+\mu_{\xi}\right) & \text { if } z \geq-\mu_{\xi} / \sigma_{\xi} \\
@@ -1395,6 +1398,7 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
  \label{eq:eq4}
 \end{align} 
 
+\vspace{-5mm}
 \begin{align} 
 \mathbb{E}_{t-1}(y_{t}) = \alpha_0 + \mathbb{E}_{t-1}(\varepsilon_{t}) = \alpha_0
  \label{eq:eq5}
@@ -1402,11 +1406,13 @@ f_{\xi}(z) \equiv \frac{2 \sigma_{\xi}}{\xi+\xi^{-1}} f_{1}\left(z_{\xi}\right),
 
 \noindent For the conditional variance, knowing everything that happened until and including period \(t-1\) the conditional innovation variance is given by equation \eqref{eq:eq6}. This is equal to \(\sigma_t^2\), while the variance of \(z_t\) is equal to 1. Then it is easy to derive the conditional variance of returns in equation \eqref{eq:eq7}, that is why equation \eqref{eq:eq3} is called the variance equation.
 
+\vspace{-5mm}
 \begin{align} 
 var_{t-1}(\varepsilon_t) = \mathbb{E}_{t-1}(\varepsilon_{t}^2) = \mathbb{E}_{t-1}(\sigma_t^2 \times z_t^2) = \sigma_t^2\mathbb{E}_{t-1}(z_t^2) = \sigma_t^2
  \label{eq:eq6}
 \end{align} 
 
+\vspace{-5mm}
 \begin{align} 
 var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
  \label{eq:eq7}
@@ -1414,6 +1420,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 
 \noindent The unconditional variance is also interesting to derive, while this is the long-run variance, which will be derived in equation \eqref{eq:eq11}. After deriving this using the law of iterated expectations and assuming stationarity for the variance process, one would get equation \eqref{eq:eq8} for the unconditional variance, equal to the constant \(\beta_0\) and divided by \(1-\beta_1\), the slope of the variance equation.
 
+\vspace{-5mm}
 \begin{align} 
 \sigma^2 = \dfrac{\beta_0}{1-\beta_1}
  \label{eq:eq8}
@@ -1421,6 +1428,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 
 \noindent This leads to the properties of ARCH models: Stationarity\footnote{Stationarity implies that the series on which the ARCH model is used does not have any trend and has a constant expected mean. Only the conditional variance is changing.} condition for variance: \(\beta_0>0\) and \(0 \le \beta_1 < 1\). But also, zero-mean innovations and uncorrelated innovations. Thus a weak white noise process \(\varepsilon_t\). The unconditional 4th moment, kurtosis \(\mathbb{E}(\varepsilon_t^4)/\sigma^4\) of an ARCH model is given by equation \eqref{eq:eq9}. This term is larger than 3, which implicates fat-tails.
 
+\vspace{-5mm}
 \begin{align} 
 3\dfrac{1-\beta_1^2}{1-3\beta_1^2}
  \label{eq:eq9}
@@ -1428,6 +1436,7 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 
 \noindent Another property of ARCH models is that it takes into account volatility clustering. Because we know that \(var(\varepsilon_t) = \mathbb{E}(\varepsilon_t^2) = \sigma^2 = \beta_0/(1-\beta_1)\), we can plug in \(\beta_0\) for the conditional variance \(var_t(\varepsilon_{t+1}) = \mathbb{E}(\varepsilon_{t+1}^2) = \sigma_{t+1}^2 = \beta_0 + \beta_1\times\varepsilon_t^2\). Thus it follows that equation \eqref{eq:eq10} displays volatility clustering. If we examine the RHS, as \(\beta_1>0\) (condition for stationarity), when shock \(\varepsilon_t^2\) is larger than what you expect it to be on average \(\sigma^2\) the LHS will also be positive. Then the conditional variance will be larger than the unconditional variance. Briefly, large shocks will be followed by more large shocks.
 
+\vspace{-5mm}
 \begin{align} 
 \sigma_{t+1}^2 - \sigma^2 = \beta_1\times(\varepsilon_t^2 - \sigma^2)
  \label{eq:eq10}
@@ -1456,13 +1465,14 @@ var_{t-1}(y_t) = var_{t-1}(\varepsilon_t)= \sigma_t^2
 \hypertarget{garch-models}{%
 \subsubsection{GARCH models}\label{garch-models}}
 
-All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model mathematically ensures the output is positive.
+\noindent All the GARCH models are estimated using the package ``rugarch'' by \textcite{alexios2020}. We use specifications similar to \textcite{ghalanos2020}. Parameters have to be restricted so that the variance output always is positive, except for the EGARCH model, as this model mathematically ensures the output is positive.
 
 \hypertarget{symmetric-normal-garch-model}{%
 \subparagraph{Symmetric (normal) GARCH model}\label{symmetric-normal-garch-model}}
 
 \noindent The standard GARCH model \autocite{bollerslev1986} is written consistent with \textcite{ghalanos2020} as in equation \eqref{eq:eq13} without external regressors.
 
+\vspace{-5mm}
 \begin{align}
 \sigma_t^2 = \beta_0  +  {\beta_1}\varepsilon _{t-1}^2 + {\beta_2}\sigma_{t-1}^2
  \label{eq:eq13}
@@ -1470,6 +1480,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent where \(\sigma_t^2\) denotes the conditional variance, \(\beta_0\) the intercept and \(\varepsilon_t^2\) the residuals from the used mean process. The GARCH order is defined by \((q, p)\) (ARCH, GARCH), which is here \((1, 1)\). As \textcite{ghalanos2020} describes: "one of the key features of the observed behavior of financial data which GARCH models capture is volatility clustering which may be quantified in the persistence parameter \(\hat{P}\) specified as in equation \eqref{eq:eq14} for a GARCH model of order \((1,1)\).
 
+\vspace{-5mm}
 \begin{align}
 \hat{P} =  \beta_1  + \beta_2.
  \label{eq:eq14}
@@ -1477,6 +1488,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent The unconditional variance of the standard GARCH model of Bollerslev is very similar to the ARCH model, but with the Garch parameter (\(\beta_2\)) included as in equation \eqref{eq:eq15}.
 
+\vspace{-5mm}
 \begin{equation}
 \begin{split}
 \hat{\sigma}^2 
@@ -1496,6 +1508,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent The GJRGARCH model \autocite{glosten1993}, which is an alternative for the asymmetric GARCH (AGARCH) by \textcite{engle1990} and \textcite{engle1993}, models both positive as negative shocks on the conditional variance asymmetrically by using an indicator variable \(I_t-1\), it is specified as in equation \eqref{eq:eq17}.
 
+\vspace{-5mm}
 \begin{align}
 \sigma_t^2 = \beta_0 + \beta_1 \varepsilon_{t-1}^2 + \gamma_j I_{t-1} \varepsilon_{t-1}^2 + \beta_2 \sigma_{t-1}^2
  \label{eq:eq17}
@@ -1508,6 +1521,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent The EGARCH model or exponential GARCH model \autocite{nelson1991} is defined as in equation \eqref{eq:eq16}. The advantage of the EGARCH model is that there are no parameter restrictions, since the output is log variance (which cannot be negative mathematically), instead of variance.
 
+\vspace{-5mm}
 \begin{align}
 \log_e(\sigma_t^2) = \beta_0 + \beta_1 z_{t-1} + \gamma_1 (|z_{t-1}| - E|z_{t-1}|)+ \beta_2 \log_e(\sigma_{t-1}^2)
  \label{eq:eq16}
@@ -1520,6 +1534,7 @@ All the GARCH models are estimated using the package ``rugarch'' by \textcite{al
 
 \noindent The NAGARCH or nonlinear asymmetric model \autocite{engle1993}. It is specified as in equation \eqref{eq:eq18}. The model is \emph{asymmetric} as it allows for positive and negative shocks to differently affect conditional variance and \emph{nonlinear} because a large shock is not a linear transformation of a small shock.
 
+\vspace{-5mm}
 \begin{align}
 \sigma_t^2 = \beta_0 + \beta_1 (\varepsilon_{t-1}+ \gamma_1 \sqrt{\sigma_{t-1}})^2 + \beta_2 \sigma_{t-1}^2
  \label{eq:eq18}
@@ -1532,6 +1547,7 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 
 \noindent The TGARCH or threshold model \autocite{zakoian1994} also models asymmetries in volatility depending on the sign of the shock, but contrary to the GJRGARCH model it uses the conditional standard deviation instead of conditional variance. It is specified as in \eqref{eq:eq19}.
 
+\vspace{-5mm}
 \begin{align}
 \sigma_t = \beta_0 + \beta_1^+ \varepsilon_{t-1}^+ - \beta_1^{-} \varepsilon_{t-1}^{-} + \beta_2 \sigma_{t-1}
  \label{eq:eq19}
@@ -1544,6 +1560,7 @@ As before, \(\gamma_1\) represents the \emph{leverage} term.
 
 \noindent The absolute value Garch model or TS-Garch model, as named after \textcite{taylor1986} and \textcite{schwert1989}, models the conditional standard deviation and is intuitively specified like a normal GARCH model, but with the absolute value of the shock term. It is specified as in \eqref{eq:eq20}.
 
+\vspace{-5mm}
 \begin{align}
 \sigma_t = \beta_0 + \beta_1 \left|\varepsilon_{t-1}\right| + \beta_2 \sigma_{t-1}
  \label{eq:eq20}
@@ -1576,6 +1593,8 @@ In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk m
 \includegraphics{_main_files/figure-latex/mleplots-1.pdf}
 \caption{\label{fig:mleplots}Theoretical (red) vs.~Actual (black)}
 \end{figure}
+
+\newpage
 
 \hypertarget{goodness-of-fit}{%
 \subsubsection{Goodness of fit}\label{goodness-of-fit}}

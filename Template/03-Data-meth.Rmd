@@ -252,6 +252,7 @@ title("ACF (Squared prediction errors)")
   y_i \sim f(y|\theta)
  (\#eq:pdf)
 \end{align}
+\vspace{-15mm}
 ```
 ```{=tex}
 \begin{align} 

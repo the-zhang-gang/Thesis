@@ -1043,8 +1043,6 @@ JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, r
 ```
 
 
-[^findings-4]: Note that using monthly returns instead of daily, we could not reject that the residuals are normally distributed.
-
 <!-- #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22) -->
 
 <!-- ``` -->
