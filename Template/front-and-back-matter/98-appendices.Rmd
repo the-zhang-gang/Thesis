@@ -307,14 +307,11 @@ R <- suppressWarnings(as.matrix(read_csv("Rdata")[,-1]))
 ```
 
 
-### MLE fitted distributions
+#### MLE fitted distributions
 
 Below are the plots of the distributions fitted to the Eurostoxx 50 data using Maximum Likelihood Estimation.
 
 ```{r mle plots, echo=FALSE}
-
-
-
 plot(density(R), main = "Fit of SGT distribution",ylim=c(0,0.55), xlim=c(min(R),max(R)), xlab=NA)
 xvals = seq(min(R),max(R),by=0.01)
 lines(xvals, dsgt(xvals, mu = 0.014, sigma = 1.441, lambda = -0.02, p =1.233 , q = 4.959), col = "red")

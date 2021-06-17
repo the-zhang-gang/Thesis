@@ -82,6 +82,8 @@ In table \@ref(tab:MLEtable) we can see the estimated parameters of the uncondit
 
 [^findings-1]: To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the Global Financial Crisis (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples.
 
+\noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns and reported in the appendix. We find that the normal distribution is not a good approximation. The theoretical SGT, SGED and GED distributions are closer to the actual data, except that they somewhat overestimate peakedness. The theoretical skewed and symmetric Student-t distributions on the other hand underestimate peakedness. Visually, the best match seems to be the SGT distribution, which is to be expected as it has the highest log likelihood score.
+
 ```{r table2prep, include=FALSE, eval=FALSE}
 # par(mfrow = c(3,2), mar = c(1,4,3,3))
 Eurostoxx <- DistMLE(R)
