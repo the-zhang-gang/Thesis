@@ -559,7 +559,7 @@ Author & Higher moments\tabularnewline
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-\noindent We worked with daily returns on the Euro Stoxx 50 Return Index\footnote{The same analysis has been performed for the FTSE, CAC 40, BEL 20 and the DAX 30 return indices and yielded the same/different conclusions. The findings of these researches are available upon requests.} retrieved from Datastream denoted in EUR from 02 January, 2001 to 19 May, 2021. The choice of daily data is motivated as follows. The primary interest in this paper is (C)VaR models for banks' (or financial institutions') internal trading desks. Their positions are usually short-term, making risk management at the daily level the most appropriate. As such, in reference to the literature review, regulators require VaR forecast for one day in advance. All following analysis could be applied on monthly returns as well. The Euro Stoxx 50, the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. Given that in the 20th century computing return series was time consuming, the Eurostoxx 50 Return index is shorter than the Euro Stoxx 50 Price index (going back to 2001). As a robustness check, we ran all subsequent analysis for the longer price index as well. This did not yield a qualitative difference in terms of most efficient model(s).~\\
+\noindent We worked with daily returns on the Euro Stoxx 50 Return Index\footnote{The same analysis has been performed for the FTSE 100, CAC 40, BEL 20 and the DAX 30 return indices and yielded broadly similar conclusions. The findings of these researches are available upon requests.} retrieved from Datastream denoted in EUR from 02 January, 2001 to 19 May, 2021. The choice of daily data is motivated as follows. The primary interest in this paper is (C)VaR models for banks' (or financial institutions') internal trading desks. Their positions are usually short-term, making risk management at the daily level the most appropriate. As such, in reference to the literature review, regulators require VaR forecast for one day in advance. All following analysis could be applied on monthly returns as well. The Euro Stoxx 50, the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet \autocite{EUROSTOXXFactSheet}. Given that in the 20th century computing return series was time consuming, the Eurostoxx 50 Return index is shorter than the Euro Stoxx 50 Price index (going back to 2001). As a robustness check, we ran all subsequent analysis for the longer price index as well. This did not yield a qualitative difference in terms of most efficient model(s).~\\
 
 \noindent Table \ref{tab:dsTable} provides the main statistics describing the return series analyzed. Let daily returns be computed as \(R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)\),where \(P_{t}\) is the index price at time \(t\) and \(P_{t-1}\) is the index price at \(t-1\).~\\
 
@@ -610,6 +610,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 
 \caption{Euro Stoxx 50 prices}\label{fig:plot1}
 \end{figure}
+
 \clearpage
 
 \noindent In figure \ref{fig:plot2} the daily log-returns are visualized. A stylized fact that is observable is the volatility clustering. As can be seen: periods of large volatility are mostly followed by large volatility and small volatility by small volatility.
@@ -766,7 +767,7 @@ Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+
 \hypertarget{cvar-test}{%
 \subsubsection{CVaR Test}\label{cvar-test}}
 
-\noindent The Expected Shortfall (or CVaR) test by \textcite{mcneil2000} tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal.
+\noindent The Expected Shortfall (or CVaR) test by \textcite{mcneil2000} tests whether the excess conditional shortfall has a mean of zero. Under the alternative hypothesis, this mean is greater than zero. This test uses a one sided t-statistic and bootstrapped p-values, as the distribution of the excess conditional shortfall is not assumed to be normal. This test is performed as in \textcite{ardia2019}.
 
 \hypertarget{analysis}{%
 \chapter{Empirical Findings}\label{analysis}}
@@ -779,9 +780,9 @@ Hit_{t}=\delta_{0}+\delta_{1} H i t_{t-1}+\ldots+\delta_{p} Hit_{t-p}+\delta_{p+
 \hypertarget{mle-distribution-parameters}{%
 \subsection{MLE distribution parameters}\label{mle-distribution-parameters}}
 
-In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. Note that the Student-t and skewed Student-t distribution are usually noted with degrees of freedom as parameters. For consistency, we have parameterized them using limiting cases of the SGT-distribution. Note that to read the degrees of freedom for the two distributions, it is simply \(2\eta\). They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) are reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one parameter less, which results in easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(q\) (\(\eta\)) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the Global Financial Crisis (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples.} ~\\
+In table \ref{tab:MLEtable} we can see the estimated parameters of the unconditional distribution functions. Note that the Student-t and skewed Student-t distribution are usually noted with degrees of freedom as parameters. For consistency, we have parameterized them using limiting cases of the SGT-distribution. Note that to read the degrees of freedom for the two distributions, it is simply \(2\eta\). They are presented for the Skewed Generalized T-distribution (SGT) and limiting cases thereof previously discussed. Additionally, maximum likelihood score and the Akaike Information Criterion (AIC) are reported to compare goodness of fit of the different distributions but also taking into account simplicity of the models. We find that the SGT-distribution has the highest maximum likelihood score of all. All other distributions have relatively similar likelihood scores, though slightly lower and are therefore not the optimal distributions. However, when considering AIC it is a tie between SGT and SGED. This provides some indication that we have a valid case to test the suitability of different SGED-GARCH VaR models as an alternative for the SGT-GARCH VaR models. While sacrificing some goodness of fit, the SGED distribution has the advantage of requiring one parameter less, which results in easier implementation. For the SGT parameters the standard deviation and skewness are both significant at the 1\% level. For the SGED parameters, the standard deviation and the skewness are both significant at respectively the 1\% and 5\% level. Both distributions are right-skewed. For both distributions the shape parameters are significant at the 1\% level, though the \(\eta\) parameter was not estimated as it is by design set to infinity due to the SGED being a limiting case of SGT.\footnote{To check whether the relative ranking of distributions still holds in different periods, we have calculated the maximum likelihood score and AIC for three smaller periods: The period up to the dotcom collapse (1987-2001), up to the Global Financial Crisis (2002-2009) and up to the present Covid-crash (2009-2021). There is no qualitative difference in relative ranking with these subsamples.} ~\\
 
-\noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns. We see that except for the normal distribution which is quite off, the theoretical distributions are close to the actual data, except that they are too peaked. This problem is the least present for the SGT distribution.
+\noindent Additionally, for every distribution fitted with MLE, plots are generated to compare the theoretical distribution with the observed returns and reported in the appendix. We find that the normal distribution is not a good approximation. The theoretical SGT, SGED and GED distributions are closer to the actual data, except that they somewhat overestimate peakedness. The theoretical skewed and symmetric Student-t distributions on the other hand underestimate peakedness. Visually, the best match seems to be the SGT distribution, which is to be expected as it has the highest log likelihood score.
 
 \begin{landscape}\begin{table}[h!]
 
@@ -824,7 +825,7 @@ Normal & 0.01 & 1.439 & 0 & 2 & Inf & -9477.660 & 18959.32\\
 
 \noindent To compare the goodness-of-fit of different combinations of GARCH models and distributions, we have portrayed the AICs in table \ref{tab:aicTable}. The smaller the criterium the better. As you can see in table \ref{tab:aicTable} the AIC for the skewed Student-t distribution (ST) is the best for almost all the models. As also shown in appendix part \ref{goodness-of-fit}. Only for the SGARCH and IGARCH the SGED distribution has a lower AIC. The best goodness-of-fit over all distributions seems to be the NAGARCH model.~\\
 
-\noindent  Due to \ref{tab:aicTable} being the result of an in-sample estimation, we will further examine the performance five different GARCH models (EGARCH, GJRGARCH, NAGARCH, AVGARCH and TGARCH).
+\noindent  Due to \ref{tab:aicTable} being the result of an in-sample estimation, we will further examine the five best performing GARCH models according to the AIC (EGARCH, GJRGARCH, NAGARCH, AVGARCH and TGARCH).
 
 \begin{table}[h!]
 
@@ -855,11 +856,11 @@ SGED & 3.125 & 3.126 & 3.136 & 3.075 & 3.084 & 3.069 & 3.073 & 3.069\\
 
 \noindent Table \ref{tab:Table3} presents the maximum likelihood estimates for 8 GARCH models based on the ST distribution with constant skewness and kurtosis parameters (robust white errors are presented in parenthesis). The parameter \(\alpha_0\) is only statistically significant for the SGARCH, IGARCH and EWMA model with a value close to 0. The AR(1) coefficient, \(\alpha_1\), has parameters going from -0.049 to -0.032 with \(p\) values ranging from 0.011 to 0.014 suggesting significance, but indicating very small negative autocorrelation. The GARCH parameters in the conditional variance equations (\(\beta_0\)) are generally statistically significant except for the EGARCH model. The results of \(\beta_1\) and \(\beta_2\) show the presence of significant time-variation in the conditional volatility of the Euro Stoxx 50, in fact, the sum of \(\beta_1\) and \(\beta_2\) for the GARCH parameters is close to one (from 0.827 to 1), suggesting the presence of persistence in the volatility of the returns. The parameter \(\xi\) is highly significant for all the 8 models tested with values ranging from 0.885 to 0.918 confirming the presence of skewness in the returns. The shape parameter \(\eta\), which, in our case, measures the number of degrees of freedom divided by two, determining the tail behavior, is significant for all the models and ranges between 3.153 and 4.0635. The parameter \(\gamma\), which is present only for EGARCH and GJRGARCH is significant and with values around 0.14. The absolute value function in family GARCH models (NAGARCH, TGARCH and AVGARCH) is subject to the \(shift\) and the \(rot\) parameters whose values are always positive and statistically significant. According to the log likelihood values (\(LLH\)), displayed in table \ref{tab:Table3}, the model with the highest value is AVGARCH, while excluding the non-standard (or family) GARCH models from the analysis, the model that performs best is EGARCH.~\\
 
-\noindent Table \ref{tab:Table3b} shows a very similar picture for the GARCH-SGED models as the GARCH-ST models.
+\noindent Table \ref{tab:Table3b} shows a very similar picture for the GARCH-SGED models. Compared to the GARCH-ST models
 
 \begin{landscape}\begin{table}
 
-\caption{\label{tab:Table3}Maximum likelihood estimates of the ST-GARCH models with constant skewness and kurtosis parameters}
+\caption{\label{tab:Table3}Maximum likelihood estimates of the GARCH-ST models with constant skewness and kurtosis parameters}
 \centering
 \begin{threeparttable}
 \resizebox{\linewidth}{!}{
@@ -896,7 +897,7 @@ $LLH$ & -8303.694 & -8304.437 & -8158.11 & -8186.06 & -8328.667 & -8143.563 & -8
 \end{tabular}}
 \begin{tablenotes}
 \item \textit{Notes:} 
-\item This table shows the maximum likelihood estimates of various ST-GARCH models. The daily returns used on the Euro Stoxx 50 cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
+\item This table shows the maximum likelihood estimates of various GARCH-ST models. The daily returns used on the Euro Stoxx 50 cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
 \item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility, $\xi, \kappa$ and $\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.
 \end{tablenotes}
 \end{threeparttable}
@@ -908,7 +909,7 @@ $LLH$ & -8303.694 & -8304.437 & -8158.11 & -8186.06 & -8328.667 & -8143.563 & -8
 
 \begin{landscape}\begin{table}
 
-\caption{\label{tab:Table3b}Maximum likelihood estimates of the SGED-GARCH models with constant skewness and kurtosis parameters}
+\caption{\label{tab:Table3b}Maximum likelihood estimates of the GARCH-SGED models with constant skewness and kurtosis parameters}
 \centering
 \begin{threeparttable}
 \resizebox{\linewidth}{!}{
@@ -945,7 +946,7 @@ $LLH$ & -8300.515 & -8302.804 & -8164.576 & -8189.218 & -8330.811 & -8149.596 & 
 \end{tabular}}
 \begin{tablenotes}
 \item \textit{Notes:} 
-\item This table shows the maximum likelihood estimates of various SGED-GARCH models. The daily returns used on the Euro Stoxx 50 Price index cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
+\item This table shows the maximum likelihood estimates of various GARCH-SGED models. The daily returns used on the Euro Stoxx 50 Price index cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
 \item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t$ Where, in the 8 GARCH models estimated, $\gamma$ is the asymmetry in volatility, $\xi, \kappa$ and $\eta$ are constant and robust standard errors based on the method of White (1982)) are displayed in parenthesis. $LLH$ is the maximized log likelihood value.
 \end{tablenotes}
 \end{threeparttable}
@@ -958,7 +959,7 @@ $LLH$ & -8300.515 & -8302.804 & -8164.576 & -8189.218 & -8330.811 & -8149.596 & 
 \hypertarget{value-at-risk-1}{%
 \subsection{Value-at-risk}\label{value-at-risk-1}}
 
-\noindent As already mentioned 2 candidate models seem to be very appropriate. This includes the EGARCH and the NAGARCH So to check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique. A simple graph is shown in figure \ref{fig:figVaRinsample} for the EGARCH-ST model. It seems that the VaR model for \(\alpha=0.05\) underestimates the downside events, while the VaR model for \(\alpha=0.01\) captures more of the downside events.
+\noindent As already mentioned 2 candidate models seem to be most appropriate: EGARCH and NAGARCH. To check if they perform well out-of-sample we conduct a backtest by using a rolling forecasting technique. A simple graph is shown in figure \ref{fig:figVaRinsample} for the EGARCH-ST model. It seems that the VaR model for \(\alpha=0.05\) underestimates the downside events, while the VaR model for \(\alpha=0.01\) captures more of the downside events.
 
 \begin{figure}[h]
 
@@ -982,7 +983,7 @@ $LLH$ & -8300.515 & -8302.804 & -8164.576 & -8189.218 & -8330.811 & -8149.596 & 
 \caption{Selected period to start forecast from}\label{fig:figbacktest}
 \end{figure}
 
-\noindent If we look at the results of the rolling window, we can for example compare as in figure \ref{fig:figurebacktests2} the EGARCH-ST (with skewed Student-t distribution) with the EGARCH-N (with normal distribution). The EGARCH-N seems to capture the extreme events a bit less compared EGARCH-ST. But let us formally test this.~\\
+\noindent If we look at the results of the rolling window, we can for example compare as in figure \ref{fig:figurebacktests2} the EGARCH-ST (with skewed Student-t distribution) with the EGARCH-N (with normal distribution). The EGARCH-N seems to capture the extreme events a bit less compared to EGARCH-ST. Next, we will apply some diagnostic tests to investigate this formally.~\\
 
 \newpage
 
@@ -1066,7 +1067,7 @@ As we already pointed out in part \ref{acd-models}, it might also be interesting
 \begin{ThreePartTable}
 \begin{TableNotes}
 \item \textit{Notes:} 
-\item This table shows the maximum likelihood estimates of various SGED-GARCH models. The daily returns used on the Euro Stoxx 50 Price index cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
+\item This table shows the maximum likelihood estimates of various GARCH-SGED models. The daily returns used on the Euro Stoxx 50 Price index cover the period from 03 January, 2001 to 19 May, 2021 (5316 observations).
 \item The mean process is modeled as follows: $R_t= \alpha_0+ \alpha_1 \times R_{t-1}+ \varepsilon_t$ Where, in the model estimated, $\gamma$ is the asymmetry in volatility,  (calculated using robust standard errors based on the method of White (1982)) are displayed in parenthesis.
 \end{TableNotes}
 \begin{longtabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
@@ -1177,7 +1178,7 @@ The description of table
 \end{table}
 \end{landscape}
 
-\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test\footnote{We already looked at the joint conditional moment: serial correlation in the squares or in the variances}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
+\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test{[}\^{}findings-3{]}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero ( respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1256,8 +1257,6 @@ SGED & 803.315*** & 758.538*** & 810.37*** & 811.343*** & 684.155*** & 691.427**
 \end{threeparttable}
 \end{table}
 \end{landscape}
-
-\footnote{Note that using monthly returns instead of daily, it cannot be rejected that the residuals are normally distributed.}
 
 DESCRIPTION GRAPHS
 
@@ -1567,18 +1566,29 @@ In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk m
 \hypertarget{appendix-to-findings}{%
 \chapter{Appendix to findings}\label{appendix-to-findings}}
 
+\hypertarget{mle-fitted-distributions}{%
+\subsubsection{MLE fitted distributions}\label{mle-fitted-distributions}}
+
+Below are the plots of the distributions fitted to the Eurostoxx 50 data using Maximum Likelihood Estimation.
+
+\begin{figure}
+\centering
+\includegraphics{_main_files/figure-latex/mle plots-1.pdf}
+\caption{(\#fig:mle plots) Theoretical (red) vs.~Actual (black)}
+\end{figure}
+
 \hypertarget{goodness-of-fit}{%
 \subsubsection{Goodness of fit}\label{goodness-of-fit}}
 
-\noindent As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 140 models that were estimated. This can ofcourse lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. ~\\
+\noindent As already mentioned, next to testing the models in part \ref{analysis}, we also tested other models using the different distributions. This we did in order to check if distributions that capture the higher moment effects are really better in terms of goodness of fit. We did a small data mining experiment with 140 models that were estimated. This can lead to overfitting because of the fit in-sample. However, we can decide if there is a trend using the different distributions for the several GARCH models. Thus, in this experiment, our rule of thumb was to examine general trends. Six cases were examined. ~\\
 
 \newpage
 
-First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions are looked at. As you can see the general error distribution (GED) seems to perform slightly better than the the T distribution. While the student's t distribution (T) performs better than the normal distribution (NORM) according to the AIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
+\noindent First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions are looked at. As you can see the general error distribution (GED) seems to perform slightly better than the the T distribution. While the student's t distribution (T) performs better than the normal distribution (NORM) according to the AIC. Which is consistent with the literature that found that the assumption of the normal distribution is a rather poor assumption.
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/symmetric aics} 
+{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/symmetric aics} 
 
 }
 
@@ -1591,7 +1601,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/symmetric aics2} 
+{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/symmetric aics2} 
 
 }
 
@@ -1604,7 +1614,7 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/asymmetric aics} 
+{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/asymmetric aics} 
 
 }
 
@@ -1617,14 +1627,14 @@ First, in figure \ref{fig:aic1}, symmetric GARCH with symmetric distributions ar
 
 \begin{figure}[h]
 
-{\centering \includegraphics[width=0.9\linewidth]{figures/aicfigures/asymmetric aics2} 
+{\centering \includegraphics[width=1\linewidth]{figures/aicfigures/asymmetric aics2} 
 
 }
 
 \caption{Goodness of fit asymmetric GARCH and symmetric distributions}\label{fig:aic4}
 \end{figure}
 
-\noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above\footnote{Although we have to note that for some models like TGARCH and AVGARCH with SGED distribution the AIC was double of other models and therefore these models seem to work very poorly or are mispecified.}.
+\noindent In two additional figures the family garch models (TGARCH, NAGARCH and AVGARCH) are examined, the same patterns were observed as above\footnote{We have to note that for some models like TGARCH and AVGARCH with SGED distribution the AIC was double of other models and therefore these models seem to work very poorly or are misspecified.}.
 
 
 %%%%% REFERENCES
