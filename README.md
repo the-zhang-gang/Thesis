@@ -12,3 +12,8 @@ Or on [Enjo's channel](https://www.youtube.com/channel/UChGfng0ChNfPHGCLiRvt8yg)
 The __main.pdf__ here in this depository is the original file name by Ulrik Lyngs which can be examined (it includes some tips you can go through). Ours can be found in Template/docs/_main.pdf
 
 ![](Template/templates/amslogo.png)
+
+Best regards, 
+Faes Enjo
+Mertens De Wilmars Stephane
+& Pratesi Filippo
