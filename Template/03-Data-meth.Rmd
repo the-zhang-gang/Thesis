@@ -65,7 +65,7 @@ Rbali <- window(R, end = "2004-12-31") #up till end of balis dataset
 
 \noindent We worked with daily returns on the Euro Stoxx 50 Return Index[^data-meth-1] retrieved from Datastream denoted in EUR from `r format(index(head(Estoxx,1)), '%d %B, %Y')` to `r format(index(tail(Estoxx,1)),'%d %B, %Y')`. The choice of daily data is motivated as follows. The primary interest in this paper is (C)VaR models for banks' (or financial institutions') internal trading desks. Their positions are usually short-term, making risk management at the daily level the most appropriate. As such, in reference to the literature review, regulators require VaR forecast for one day in advance. All following analysis could be applied on monthly returns as well. The Euro Stoxx 50, the leading blue-chip index of the Eurozone, was founded in 1999 and covers 50 of the most liquid and largest (in terms of free-float market capitalization) stocks. For its composition and computation we refer to the factsheet [@EUROSTOXXFactSheet]. Given that in the 20th century computing return series was time consuming, the Eurostoxx 50 Return index is shorter than the Euro Stoxx 50 Price index (going back to `r  format(index(head(Estoxx,1)), '%Y')`). As a robustness check, we ran all subsequent analysis for the longer price index as well. This did not yield a qualitative difference in terms of most efficient model(s). \
 
-[^data-meth-1]: The same analysis has been performed for the FTSE, CAC 40, BEL 20 and the DAX 30 return indices and yielded the same/different conclusions. The findings of these researches are available upon requests.
+[^data-meth-1]: The same analysis has been performed for the FTSE 100, CAC 40, BEL 20 and the DAX 30 return indices and yielded broadly similar conclusions. The findings of these researches are available upon requests.
 
 \noindent Table \@ref(tab:dsTable) provides the main statistics describing the return series analyzed. Let daily returns be computed as $R_{t}=100\left(\ln P_{t}-\ln P_{t-1}\right)$,where $P_{t}$ is the index price at time $t$ and $P_{t-1}$ is the index price at $t-1$. \
 
@@ -204,10 +204,10 @@ knitr::include_graphics('figures/vol-clustering-finalized-RI.png')
 #Histogram to eyeball normality
 
 # h <- hist(R, breaks = 75, density = 10,
-#           col = "lightgray", xlab = "Accuracy", main = "Barplot") 
-# xfit <- seq(min(R), max(R), length = 40) 
-# yfit <- dnorm(xfit, mean = mean(R), sd = sd(R)) 
-# yfit <- yfit * diff(h$mids[1:2]) * length(R) 
+#           col = "lightgray", xlab = "Accuracy", main = "Barplot")
+# xfit <- seq(min(R), max(R), length = 40)
+# yfit <- dnorm(xfit, mean = mean(R), sd = sd(R))
+# yfit <- yfit * diff(h$mids[1:2]) * length(R)
 # lines(xfit, yfit, col = "black", lwd = 1)
 
 chart.Histogram(R = R, methods = c("add.normal"), breaks = 100, main = "Returns Histogram Vs. Normal", colorset = c("steelblue","black", "black"), cex.legend = 0.7, ylim=c(0,0.8)) 
