@@ -945,7 +945,7 @@ LJ.test.df.all <- as.matrix(LJ.test.df.all)
 
 \noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$.
 
-\noindent Table \@ref(tab:LjboxTable) Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen in the table the EGARCH, AVGARCH, NAGARCH and TGARCH do not display any problems concerning the 2 tests.
+\noindent Table \@ref(tab:LjboxTable) Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen for both tests, the EGARCH, AVGARCH, NAGARCH and TGARCH do not suffer from any correlation in the squared residuals. For EWMA there is highly significant correlation of the residuals for all underlying distributions, suggesting that the model is inappropriate for VaR and CVaR estimation. 
 
 ```{r archlmtableprep, echo=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
