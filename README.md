@@ -1,6 +1,6 @@
 # Thesis template for AMS
 
-![](Thesis/Template/templates/amslogo.pdf)
+![](Thesis/Template/templates/AMSLOGO.jpg)
 
 The Template folder contains all our code for the thesis.
 
