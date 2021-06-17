@@ -945,9 +945,7 @@ LJ.test.df.all <- as.matrix(LJ.test.df.all)
 
 \noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: $$ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}$$.
 
-\noindent Table \@ref(tab:LjboxTable) Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted.
-
-The description of table
+\noindent Table \@ref(tab:LjboxTable) Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen in the table the EGARCH, AVGARCH, NAGARCH and TGARCH do not display any problems concerning the 2 tests.
 
 ```{r archlmtableprep, echo=FALSE}
 #SIGNbias <- signbias(garchfit.sGARCH[[1]])
@@ -1028,33 +1026,37 @@ GMM.all %>% kbl(caption = "GMM Tests",format = "latex",
   kable_styling(latex_options = "scale_down") %>% landscape()
 ```
 
-```{r JBtable, echo=F, results="asis"}
-#create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test)))
-
-JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = T))
- JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",format="latex",
-      label = 'JBTable',
-      booktabs = T,
-      position = "h!",
-      digits = 3 )%>%
-  kable_classic(full_width = F)%>%
-  footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $JB=\\\\frac{n}{6}(S^{2}+\\\\frac{1}{4}(K-3)^{2})$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\\\\chi^2$ with $\\\\nu = 2$. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = T, escape=F) %>%
-  kable_styling(latex_options = "scale_down") %>% landscape()
-```
+<!-- # ```{r JBtable, echo=F, results="asis"} -->
+<!-- # #create a function to make JB test for residuals(((Change the number 22 into how many days back you want to test))) -->
+<!-- #  -->
+<!-- # JB.test.df <- suppressWarnings(Table.tests.function(Jarque.bera.test.function, return.matrix = T)) -->
+<!-- #  JB.test.df %>% kbl(caption = "Jarque-Bera Test on standardized residuals",format="latex", -->
+<!-- #       label = 'JBTable', -->
+<!-- #       booktabs = T, -->
+<!-- #       position = "h!", -->
+<!-- #       digits = 3 )%>% -->
+<!-- #   kable_classic(full_width = F)%>% -->
+<!-- #   footnote(general_title = "Notes",general=c(paste0("Table displays the Jarque-Bera statistic $JB=\\\\frac{n}{6}(S^{2}+\\\\frac{1}{4}(K-3)^{2})$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\\\\chi^2$ with $\\\\nu = 2$. The underlying data is the daily return series of the Euro Stoxx 50 for the period between ", format(min(index(R)))," and ",format(max(index(R))),"."), "*, ** and *** point out respectively significance at 10, 5 and 1 percent level.", "The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3)."),threeparttable = T,footnote_as_chunk = T, escape=F) %>% -->
+<!-- #   kable_styling(latex_options = "scale_down") %>% landscape() -->
+<!-- # ``` -->
 
 
 <!-- #WeightedPortTest::Weighted.LM.test(rugarch::residuals(garchfit.eGARCH[[1]]), sigma(garchfit.eGARCH[[1]]), lag = 22) -->
 
 <!-- ``` -->
 
-DESCRIPTION GRAPHS
+Figure \@ref(fig:figuresqq) shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the SSTD and the SGED. Ofcourse this is just eye-balling, but it should be noted that our results all speak in the same direction: skewed distributions seem to model the data better. 
+```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals using various distributions",fig.align='center', out.width="100%",fig.pos="h",echo=F}
+knitr::include_graphics("figures/qqplots.png")
+# par(mfrow = c(3,2), mar = c(5.1, 4.1, 2.1, 2.1))
+# plot(garchfit.fGARCH.AVGARCH[[1]], which = 9)
+# plot(garchfit.fGARCH.AVGARCH[[2]], which = 9)
+# plot(garchfit.fGARCH.AVGARCH[[3]], which = 9)
+# plot(garchfit.fGARCH.AVGARCH[[4]], which = 9)
+# plot(garchfit.fGARCH.AVGARCH[[5]], which = 9)
 
-```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals versus the standardized returns of the series",fig.align='center', out.width="100%",fig.pos="h",echo=F}
-par(mfrow = c(1,2), mar = c(5.1, 4.1, 2.1, 2.1))
-qqnorm(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T), main = "AVGARCH Residuals")
-qqline(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))
-qqnorm(scale(R), main = "Raw standardized returns")
-qqline(scale(R))
+# qqnorm(scale(R), main = "Raw standardized returns")
+# qqline(scale(R))
 
 # plot(density(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), lwd = 2, main = "AV GARCH Residuals")
 # curve(dnorm(x, mean=mean(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T)), sd=sd(rugarch::residuals(garchfit.fGARCH.AVGARCH[[4]], standardize = T))), 

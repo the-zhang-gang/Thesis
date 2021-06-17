@@ -664,6 +664,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
   y_i \sim f(y|\theta)
  \label{eq:pdf}
 \end{align}
+\vspace{-15mm}
 
 \begin{align} 
  L(\theta) = \prod^N_{i=1}f(y_i|\theta)
@@ -1137,9 +1138,7 @@ DQ & 16.118** & 14.587*\\
 
 \noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: \[ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}\].
 
-\noindent Table \ref{tab:LjboxTable} Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted.
-
-The description of table
+\noindent Table \ref{tab:LjboxTable} Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen in the table the EGARCH, AVGARCH, NAGARCH and TGARCH do not display any problems concerning the 2 tests.
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1231,34 +1230,7 @@ The description of table
 \end{table}
 \end{landscape}
 
-\begin{landscape}\begin{table}[h!]
-
-\caption{\label{tab:JBTable}Jarque-Bera Test on standardized residuals}
-\centering
-\begin{threeparttable}
-\resizebox{\linewidth}{!}{
-\begin{tabular}[t]{lllllllll}
-\toprule
-  & SGARCH & EGARCH & AVGARCH & NAGARCH & GJRGARCH & TGARCH & IGARCH & EWMA\\
-\midrule
-Norm & 739.888*** & 735.992*** & 791.977*** & 784.475*** & 676.533*** & 679.569*** & 804.423*** & 1382.222***\\
-T & 822.929*** & 789.877*** & 839.862*** & 845.41*** & 703.17*** & 718.176*** & 851.465*** & 1350.929***\\
-ST & 845.468*** & 787.192*** & 833.066*** & 842.468*** & 700.469*** & 712.976*** & 884.557*** & 1360.366***\\
-GED & 785.374*** & 759.794*** & 810.002*** & 811.834*** & 685.775*** & 697.098*** & 841.477*** & 1367.132***\\
-SGED & 803.315*** & 758.538*** & 810.37*** & 811.343*** & 684.155*** & 691.427*** & 869.762*** & 1372.361***\\
-\bottomrule
-\end{tabular}}
-\begin{tablenotes}[para]
-\item \textit{Notes} 
-\item Table displays the Jarque-Bera statistic $JB=\frac{n}{6}(S^{2}+\frac{1}{4}(K-3)^{2})$ with $n$ the sample size, $K$ the kurtosis and $S$ the skewness for the residuals of the models. The JB statistic is distributed $\chi^2$ with $\nu = 2$. The underlying data is the daily return series of the Euro Stoxx 50 for the period between 2001-01-03 and 2021-05-19.
-\item *, ** and *** point out respectively significance at 10, 5 and 1 percent level.
-\item The null hypothesis is that $S$ and $K$ are not significantly different than what would be found under normality (0 and 3).
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
-\end{landscape}
-
-DESCRIPTION GRAPHS
+Figure \ref{fig:figuresqq} shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the SSTD and the SGED. Ofcourse this is just eye-balling, but it should be noted that our results all speak in the same direction: skewed distributions seem to model the data better.
 
 \begin{figure}[h]
 
@@ -1266,7 +1238,7 @@ DESCRIPTION GRAPHS
 
 }
 
-\caption{QQ plots of AVGARCH residuals versus the standardized returns of the series}\label{fig:figuresqq}
+\caption{QQ plots of AVGARCH residuals using various distributions}\label{fig:figuresqq}
 \end{figure}
 
 \hypertarget{Conclusion}{%
@@ -1591,7 +1563,7 @@ In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk m
 \begin{figure}
 \centering
 \includegraphics{_main_files/figure-latex/mleplots-1.pdf}
-\caption{\label{fig:mleplots}Theoretical (red) vs.~Actual (black)}
+\caption{\label{fig:mleplots}Theoretical (red) vs.~Actual (black) distributions of Euro Stoxx 50}
 \end{figure}
 
 \newpage
