@@ -1045,7 +1045,7 @@ GMM.all %>% kbl(caption = "GMM Tests",format = "latex",
 
 <!-- ``` -->
 
-Figure \@ref(fig:figuresqq) shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the SSTD and the SGED. Ofcourse this is just eye-balling, but it should be noted that our results all speak in the same direction: skewed distributions seem to model the data better. 
+Figure \@ref(fig:figuresqq) shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the ST and the SGED. While this is just eye-balling, it should be noted that our results point in the same direction: skewed distributions seem to model the data better. 
 ```{r figuresqq, fig.cap="QQ plots of AVGARCH residuals using various distributions",fig.align='center', out.width="100%",fig.pos="h",echo=F}
 knitr::include_graphics("figures/qqplots.png")
 # par(mfrow = c(3,2), mar = c(5.1, 4.1, 2.1, 2.1))
