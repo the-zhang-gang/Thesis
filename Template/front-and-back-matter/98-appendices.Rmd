@@ -370,7 +370,7 @@ knitr::include_graphics("figures/aicfigures/symmetric aics.pdf")
 ```
 \clearpage
 \newpage
-\noindent Second, in figure \@ref(fig:aic2), symmetric GARCH models with the best symmetric distribution (T) and other distributions (SGED, ST) are looked at. As you can see the SGED seems to perform better than the skewed student's t distribution (ST) and the latter is better than the T distribution. This is consistent with @giot2003 that the skewed student's t (ST) distribution outperforms the symmetric distributions.
+\noindent Second, in figure \@ref(fig:aic2), symmetric GARCH models with the best symmetric distribution (T) and other distributions (SGED, ST) are looked at. As you can see the SGED seems to perform better than the skewed student's t distribution (ST) and the latter is better than the scaled T distribution. This is consistent with @giot2003 that the skewed student's t (ST) distribution outperforms the symmetric distributions.
 
 ```{r aic2, fig.align='center',fig.cap='Goodness of fit symmetric GARCH and other distributions', out.width='100%',fig.pos='h', echo=F}
 knitr::include_graphics("figures/aicfigures/symmetric aics2.pdf")
