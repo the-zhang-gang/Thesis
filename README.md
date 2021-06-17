@@ -1,7 +1,5 @@
 # Thesis template for AMS
 
-![](Template/templates/amslogo.png)
-
 The Template folder contains all our code for the thesis.
 
 In instruction pdf you can find the instruction manual we made for the template. 
@@ -12,3 +10,5 @@ Or on [Enjo's channel](https://www.youtube.com/channel/UChGfng0ChNfPHGCLiRvt8yg)
 - [Part 2: template in practice](https://www.youtube.com/watch?v=5PdNQk-jte0&t=296s)
 
 The __main.pdf__ here in this depository is the original file name by Ulrik Lyngs which can be examined (it includes some tips you can go through). Ours can be found in Template/docs/_main.pdf
+
+![](Template/templates/amslogo.png)
