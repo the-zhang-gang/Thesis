@@ -6,7 +6,7 @@ First of all, we want to acknowledge the support during the writing of this thes
 
 \noindent Secondly, we want to extend our appreciation to [Ulrik Lyngs](https://www.cs.ox.ac.uk/people/ulrik.lyngs/) who made it easier to work together in R with a pre-build template for the university of Oxford, without which this thesis could not have been written in this format [@lyngsOxforddown2019].  \
 
-\noindent Finally, we thank [Alexios Ghalanos](https://www.linkedin.com/in/alexios-galanos-64309165/) for making the implementation of GARCH models integrated in R via his package "rugarch". By doing this,he facilitated the quantitative analysis we did in our methodology.  \
+\noindent Finally, we thank [Alexios Ghalanos](https://www.linkedin.com/in/alexios-galanos-64309165/) for making the implementation of GARCH models integrated in R via his package "rugarch". By doing this, he facilitated the quantitative analysis we did in our methodology.  \
 
 ```{=tex}
 \begin{flushright}

@@ -231,25 +231,25 @@
 
 %%%%% ACKNOWLEDGEMENTS -- Nothing to do here except comment out if you don't want it.
 \begin{acknowledgements}
- 	First of all, many thanks to our families and loved ones that supported us during the writing of this thesis. Secondly, thank you professors Zhang \footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}}, Annaert\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}} and De Ceuster\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}} for the valuable insights during courses you have given us in preparation of this thesis, the dozens of assignments using the R language and the many questions answered this year. We must be grateful for the classes of R programming by prof Zhang. ~\\
+ 	First of all, we want to acknowledge the support during the writing of this thesis, given to us by our families and loved ones. Secondly, we are gratefull to our professors Jan Annaert\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/jan-annaert}}, Marc De Ceuster\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/marc-de-ceuster}} and Hairui Zhang\footnote{\url{https://www.antwerpmanagementschool.be/nl/faculty/hairui-zhang}} for all the valuable insights during our courses at AMS and dozens of assignments using the R language. We are especially gratefull that they patiently answered all our questions throughout the year.~\\
 
-  \noindent Secondly, we must say thanks to \href{https://www.cs.ox.ac.uk/people/ulrik.lyngs/}{Ulrik Lyngs} who made it a bit easier to work together in R with a pre-build template for the university of Oxford, also without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
+  \noindent Secondly, we want to extend our appreciation to \href{https://www.cs.ox.ac.uk/people/ulrik.lyngs/}{Ulrik Lyngs} who made it easier to work together in R with a pre-build template for the university of Oxford, without which this thesis could not have been written in this format \autocite{lyngsOxforddown2019}. ~\\
 
-  \noindent Finally, we thank \href{https://www.linkedin.com/in/alexios-galanos-64309165/}{Alexios Ghalanos} for making the implementation of GARCH models integrated in R via his package ``rugarch''. By doing this, he facilitated the process of understanding the whole process and doing the analysis for our thesis. ~\\
+  \noindent Finally, we thank \href{https://www.linkedin.com/in/alexios-galanos-64309165/}{Alexios Ghalanos} for making the implementation of GARCH models integrated in R via his package ``rugarch''. By doing this, he facilitated the quantitative analysis we did in our methodology. ~\\
 
   \begin{flushright}
   Enjo Faes, \\
-  Stephane Mertens de Wilmars, \\
+  Stéphane Mertens de Wilmars, \\
   Filippo Pratesi \\
   Antwerp Management School, Antwerp \\
-  27 June 2021
+  17 June 2021
   \end{flushright}
 \end{acknowledgements}
 
 
 %%%%% ABSTRACT -- Nothing to do here except comment out if you don't want it.
 \begin{abstract}
-	This paper examines the importance of higher-order moments in the estimation of Value at Risk (VaR) and Conditional Value At Risk (CVaR). We use 5 limitations of the Skewed Generalized T-distribution SGT distributions: the SGED, the GED, the Skewed T (ST), the T and Normal distribution. We examine the performance of 8 GARCH models and observe that the skewed distributions SGED and ST are the best performing models in terms of the Akaike Information Criterion (AIC), which is consistent with previous research for US indices. Using a rolling window approach for the out-of-sample (OOS) analysis we find that again this pattern appearing with the ST the best and the SGED a close second best distribution. Next to this, we also explore the Autoregressive Conditional Density model, which allows the higher-order moments to be time-varying (in contrast with constant skewness and kurtosis with GARCH models). The model in-sample provides a better fit according to the AIC, however the complexity of the estimation procedure is in our opinion not the best if we follow the results of our OOS. According to our OOS, we find that the ACD model with a Skewed T-distribution (ST) does not necessarily forecast the VaR and CVaR better than its non time-varying GARCH equivalent. Overall we do found that inclusion of higher-order moments matters in the estimation of VaR and CVaR.
+	This paper examines the importance of higher-order moments in the estimation of Value at Risk (VaR) and Conditional Value At Risk (CVaR) for the European markets. We use 5 limited cases of the Skewed Generalized T-distribution SGT distributions: the SGED, the GED, the Skewed Student-t (ST), the symmetric Student-t (T) and Normal distribution. We examine the performance of 8 commonly used GARCH models and observe that the skewed distributions SGED and ST are the best performing models in terms of the Akaike Information Criterion (AIC), which is consistent with previous research on US indices. Using a rolling window approach for the out-of-sample (OOS) analysis we find that again this pattern appeared with the ST the best and the SGED a close second best distribution. Next to this, we also explore the Autoregressive Conditional Density (ACD) model, which allows the higher-order moments to be time-varying. The model in-sample provides a better fit according to the AIC, however the complexity of the estimation procedure is in our opinion not the best if we follow the results of our OOS. According to our OOS, we find that the ACD model with a Skewed T-distribution (ST) does not necessarily forecast the VaR and CVaR better than its non time-varying GARCH equivalent. Overall we do found that inclusion of higher-order moments matters in the estimation of VaR and CVaR.@
 \end{abstract}
 
 %%%%% MINI TABLES
@@ -423,7 +423,7 @@ The time-varying skewness parameter in the ACD specification following a piecewi
   Returns are \emph{not normally distributed}, as found by early work of \textcite{fama1965}. Returns have tails fatter than a normal distribution (they are leptokurtotic) and thus carry more risk. Log returns however \textbf{can} be assumed to be normally distributed. We will examine this in our empirical analysis. This makes that simple returns follow a log-normal distribution, a skewed density distribution. A good summary is given by \textcite{alexander2008} : ``In general, we need to know more about the distribution of returns than its expected return and its volatility. Volatility tells us the \emph{scale} and the mean tells us the \emph{location}, but the dispersion also depends on the \textbf{\emph{shape}} of the distribution. The best dispersion metric would be based on the entire distribution function of returns.''
 \end{itemize}
 
-\noindent Firms holding a portfolio of various stocks or other investments have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or so called density function of returns. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix part \ref{conditional-distributions} we summarize some alternative distributions (SGT, SGED, GED, Skewed Student-t, and Symmetric Student-t) that might better approximate the actual distribution of returns than the normal one.
+\noindent Firms holding a portfolio of various stocks or other investments have a lot of things to consider: expected return of a portfolio, the probability to get a return lower than some threshold, the probability that an asset in the portfolio drops in value when the market crashes. All the previous requires information about the return distribution or so called density function of returns. What we know from the stylized facts of returns that the normal distribution is not appropriate for returns. In appendix part \ref{conditional-distributions} we summarize some alternative distributions (SGT, SGED, GED, Skewed Student-t, and Student-t) that might better approximate the actual distribution of returns than the normal one.
 
 \newpage
 
@@ -654,7 +654,7 @@ Jarque-Bera & 9511.1796*** & 739.8884***\\
 \hypertarget{garch-method}{%
 \subsection{Garch models}\label{garch-method}}
 
-\noindent As already mentioned in part \ref{univ-garch}, the following models: SGARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, Student-t distribution, skewed Student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. They will be estimated using maximum likelihood\footnote{As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language{[}\^{}data-meth-4{]} \autocite{Rteam} with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.}.~\\
+\noindent As already mentioned in part \ref{univ-garch}, the following models: SGARCH, EGARCH, IGARCH, GJRGARCH, NGARCH, TGARCH and NAGARCH (or TSGARCH) will be estimated. Additionally the distributions will be examined as well, including the normal, Student-t distribution, skewed Student-t distribution, generalized error distribution, skewed generalized error distribution and the skewed generalized t distribution. Distributions other than the normal are scaled to zero mean and unit variance. They will be estimated using maximum likelihood\footnote{As already mentioned, fortunately, \textcite{alexios2020} has made it easy for us to implement this methodology in the R language{[}\^{}data-meth-4{]} \autocite{Rteam} with the package ``rugarch'' v.1.4-4 (\emph{R univariate garch}), which gives us a bit more time to focus on the results and the interpretation.}.~\\
 
 \noindent Maximum likelihood estimation is a method to find the distribution parameters that best fit the observed data, through maximization of the likelihood function, or the computationally more efficient log-likelihood function (by taking the natural logarithm). It is assumed that the return data is i.i.d. and that there is some underlying parametrized density function \(f\) with one or more parameters that generate the data, defined as a vector \(\theta\) in equation \eqref{eq:pdf}. These functions are based on the joint probability distribution of the observed data as in equation \eqref{eq:logl}. Subsequently, the (log)likelihood function is maximized using an optimization algorithm shown inequation \eqref{eq:optim}.
 
@@ -1138,7 +1138,7 @@ DQ & 16.118** & 14.587*\\
 
 \noindent In order to check if the models are specified correctly, some diagnostic checks have to be performed. The specification checks have to be done on the standardized residuals of the estimated GARCH model given by the following equation: \[ \hat{Z_t} = \dfrac{\hat{\varepsilon_t}}{\hat{\sigma_t}} = \dfrac{R_t - \hat{\mu}}{\hat{\sigma_t}}\].
 
-\noindent Table \ref{tab:LjboxTable} Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen in the table the EGARCH, AVGARCH, NAGARCH and TGARCH do not display any problems concerning the 2 tests.
+\noindent Table \ref{tab:LjboxTable} contains the results of two tests. Panel A displays the Ljung-box test on the squared standardized residuals of the GARCH models. Panel B displays the ARCH LM test on the squared standardized residuals. The ARCH LM test checks if the ARCH process is adequately fitted. As can be seen for both tests, the EGARCH, AVGARCH, NAGARCH and TGARCH do not suffer from any correlation in the squared residuals. For EWMA there is highly significant correlation of the residuals for all underlying distributions, suggesting that the model is inappropriate for VaR and CVaR estimation.
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1177,7 +1177,7 @@ DQ & 16.118** & 14.587*\\
 \end{table}
 \end{landscape}
 
-\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not. Here only the results of the t-tests for the four individual moments are examined from the GMM test{[}\^{}findings-3{]}. The mean (first moment) should be equal to zero (or or \(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (or \(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero (respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)).
+\noindent The Generalized Method of Moments (GMM) test by \textcite{hansen1982} is also a test that checks if the model is correctly specified or not, by examining the moments of the standardized residuals. Here only the results of the t-tests for the four individual moments are examined from the GMM test{[}\^{}findings-3{]}. The mean (first moment) should be equal to zero (\(E\left[z_{t}\right]=0\)). The variance (second moment) should be equal to one (\(E\left[z_{t}^2-1\right]=0\)). The skewness should be equal to zero and the excess kurtosis (third and fourth moment) should be equal to zero (respectively \(E\left[z_{t}^3\right]=0\) and \(E\left[z_{t}^4-3\right] = 0\)). Table \ref{tab:GMMtable} portrays the results of the GMM test. Only the AVGARCH and NAGARCH models fail to reject the null-hypothesis that the moments are significantly different from the normal distribution for all underlying distributions. TGARCH fails to reject the null-hypothesis for all distributions, except for the Student-t. Similarly, EGARCH fails to reject it for the GED and Student-t. The SGARCH, IGARCH and EWMA reject the null-hypothesis with high significance for all distributions and are thus not suited for VaR and CVaR estimation.
 
 \begin{landscape}\begin{table}[h!]
 
@@ -1230,7 +1230,7 @@ DQ & 16.118** & 14.587*\\
 \end{table}
 \end{landscape}
 
-Figure \ref{fig:figuresqq} shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the SSTD and the SGED. Ofcourse this is just eye-balling, but it should be noted that our results all speak in the same direction: skewed distributions seem to model the data better.
+Figure \ref{fig:figuresqq} shows again that the normal distribution is not a good choice as an assumption for the innovation process. The best models seem to be the ST and the SGED. While this is just eye-balling, it should be noted that our results point in the same direction: skewed distributions seem to model the data better.
 
 \begin{figure}[h]
 
@@ -1588,7 +1588,7 @@ In practice a \(\lambda\) of 0.94 is often used, such as by the financial risk m
 \clearpage
 \newpage
 
-\noindent Second, in figure \ref{fig:aic2}, symmetric GARCH models with the best symmetric distribution (T) and other distributions (SGED, ST) are looked at. As you can see the SGED seems to perform better than the skewed student's t distribution (ST) and the latter is better than the T distribution. This is consistent with \textcite{giot2003} that the skewed student's t (ST) distribution outperforms the symmetric distributions.
+\noindent Second, in figure \ref{fig:aic2}, symmetric GARCH models with the best symmetric distribution (T) and other distributions (SGED, ST) are looked at. As you can see the SGED seems to perform better than the skewed student's t distribution (ST) and the latter is better than the scaled T distribution. This is consistent with \textcite{giot2003} that the skewed student's t (ST) distribution outperforms the symmetric distributions.
 
 \begin{figure}[h]
 
