@@ -1,6 +1,6 @@
 # Thesis template for AMS
 
-The Template folder contains all our code for the thesis.
+This Thesis has been written with analysis performed mostly in R. The Template folder contains all our code for the thesis.
 
 In instruction pdf you can find the instruction manual we made for the template. 
 
